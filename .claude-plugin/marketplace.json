@@ -1,0 +1,22 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "tomerhayundev-skills",
+  "description": "Claude Code plugins by Tomer Hayun — including codex-loop, an iterative Codex CLI loop with Claude as orchestrator",
+  "owner": {
+    "name": "Tomer Hayun",
+    "url": "https://github.com/tomerhayundev"
+  },
+  "plugins": [
+    {
+      "name": "codex-loop",
+      "description": "Iterative Codex CLI loop with Claude as orchestrator. Runs codex exec across multiple iterations, using a Stop-hook loop engine to persist state and Claude to evaluate results each round.",
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "source": "./plugins/codex-loop",
+      "category": "development",
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/codex-loop"
+    }
+  ]
+}
