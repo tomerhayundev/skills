@@ -6,6 +6,24 @@
 
 set -euo pipefail
 
+# JSON helper: JSON-encode a string (stdin → quoted JSON string)
+json_encode_str() {
+  if command -v node &>/dev/null; then
+    printf '%s' "$1" | node -e "
+      let d='';
+      process.stdin.on('data',c=>d+=c);
+      process.stdin.on('end',()=>process.stdout.write(JSON.stringify(d)));
+    " 2>/dev/null
+  elif command -v python3 &>/dev/null; then
+    printf '%s' "$1" | python3 -c "import sys,json; sys.stdout.write(json.dumps(sys.stdin.read()))" 2>/dev/null
+  elif command -v python &>/dev/null; then
+    printf '%s' "$1" | python -c "import sys,json; sys.stdout.write(json.dumps(sys.stdin.read()))" 2>/dev/null
+  else
+    # Basic fallback: escape backslashes and double quotes only
+    printf '"%s"' "$(printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g')"
+  fi
+}
+
 # Read hook input from stdin (advanced stop hook API)
 HOOK_INPUT=$(cat)
 
@@ -52,10 +70,29 @@ if [[ $MAX_ITERATIONS -gt 0 ]] && [[ $ITERATION -ge $MAX_ITERATIONS ]]; then
   exit 0
 fi
 
-# Get transcript path from hook input
-TRANSCRIPT_PATH=$(echo "$HOOK_INPUT" | jq -r '.transcript_path')
+# Get transcript path from hook input — use node/python instead of jq
+TRANSCRIPT_PATH=""
+if command -v node &>/dev/null; then
+  TRANSCRIPT_PATH=$(printf '%s' "$HOOK_INPUT" | node -e "
+    let d='';
+    process.stdin.on('data',c=>d+=c);
+    process.stdin.on('end',()=>{
+      try { console.log(JSON.parse(d).transcript_path||''); }
+      catch { console.log(''); }
+    });
+  " 2>/dev/null) || true
+elif command -v python3 &>/dev/null; then
+  TRANSCRIPT_PATH=$(printf '%s' "$HOOK_INPUT" | python3 -c "import sys,json; print(json.load(sys.stdin).get('transcript_path',''))" 2>/dev/null) || true
+elif command -v python &>/dev/null; then
+  TRANSCRIPT_PATH=$(printf '%s' "$HOOK_INPUT" | python -c "import sys,json; print(json.load(sys.stdin).get('transcript_path',''))" 2>/dev/null) || true
+else
+  echo "⚠️  Codex Loop: No JSON parser available (jq, node, python3, or python required)" >&2
+  echo "   Install jq: winget install jqlang.jq  OR ensure node/python is in PATH" >&2
+  rm "$STATE_FILE"
+  exit 0
+fi
 
-if [[ ! -f "$TRANSCRIPT_PATH" ]]; then
+if [[ -z "$TRANSCRIPT_PATH" ]] || [[ ! -f "$TRANSCRIPT_PATH" ]]; then
   echo "⚠️  Codex Loop: Transcript file not found" >&2
   echo "   Expected: $TRANSCRIPT_PATH" >&2
   echo "   Codex Loop is stopping." >&2
@@ -80,18 +117,44 @@ if [[ -z "$LAST_LINE" ]]; then
   exit 0
 fi
 
-# Parse JSON with error handling
-LAST_OUTPUT=$(echo "$LAST_LINE" | jq -r '
-  .message.content |
-  map(select(.type == "text")) |
-  map(.text) |
-  join("\n")
-' 2>&1)
-
-if [[ $? -ne 0 ]]; then
-  echo "⚠️  Codex Loop: Failed to parse assistant message JSON" >&2
-  echo "   Error: $LAST_OUTPUT" >&2
-  echo "   Codex Loop is stopping." >&2
+# Parse assistant message content — use node/python instead of jq
+LAST_OUTPUT=""
+if command -v node &>/dev/null; then
+  LAST_OUTPUT=$(printf '%s' "$LAST_LINE" | node -e "
+    let d='';
+    process.stdin.on('data',c=>d+=c);
+    process.stdin.on('end',()=>{
+      try {
+        const obj=JSON.parse(d);
+        const content=(obj.message&&obj.message.content)||[];
+        const texts=content.filter(x=>x.type==='text').map(x=>x.text);
+        process.stdout.write(texts.join('\n'));
+      } catch(e) {
+        process.stderr.write('parse error: '+e.message+'\n');
+        process.exit(1);
+      }
+    });
+  " 2>/dev/null) || true
+elif command -v python3 &>/dev/null; then
+  LAST_OUTPUT=$(printf '%s' "$LAST_LINE" | python3 -c "
+import sys, json
+d = sys.stdin.read()
+obj = json.loads(d)
+content = obj.get('message', {}).get('content', [])
+texts = [x['text'] for x in content if x.get('type') == 'text']
+sys.stdout.write('\n'.join(texts))
+" 2>/dev/null) || true
+elif command -v python &>/dev/null; then
+  LAST_OUTPUT=$(printf '%s' "$LAST_LINE" | python -c "
+import sys, json
+d = sys.stdin.read()
+obj = json.loads(d)
+content = obj.get('message', {}).get('content', [])
+texts = [x['text'] for x in content if x.get('type') == 'text']
+sys.stdout.write('\n'.join(texts))
+" 2>/dev/null) || true
+else
+  echo "⚠️  Codex Loop: No JSON parser available (jq, node, python3, or python required)" >&2
   rm "$STATE_FILE"
   exit 0
 fi
@@ -103,10 +166,18 @@ if [[ -z "$LAST_OUTPUT" ]]; then
   exit 0
 fi
 
-# Check for completion promise (only if set)
-if [[ "$COMPLETION_PROMISE" != "null" ]] && [[ -n "$COMPLETION_PROMISE" ]]; then
-  PROMISE_TEXT=$(echo "$LAST_OUTPUT" | perl -0777 -pe 's/.*?<promise>(.*?)<\/promise>.*/$1/s; s/^\s+|\s+$//g; s/\s+/ /g' 2>/dev/null || echo "")
+# Check for completion promise
+# Extract any <promise>...</promise> tag from the output
+PROMISE_TEXT=$(echo "$LAST_OUTPUT" | perl -0777 -pe 's/.*?<promise>(.*?)<\/promise>.*/$1/s; s/^\s+|\s+$//g; s/\s+/ /g' 2>/dev/null || echo "")
 
+if [[ "$COMPLETION_PROMISE" = "null" ]]; then
+  # No explicit promise set — Claude can terminate by outputting <promise>null</promise>
+  if [[ "$PROMISE_TEXT" = "null" ]]; then
+    echo "✅ Codex Loop: Task marked complete by Claude"
+    rm "$STATE_FILE"
+    exit 0
+  fi
+elif [[ -n "$COMPLETION_PROMISE" ]]; then
   if [[ -n "$PROMISE_TEXT" ]] && [[ "$PROMISE_TEXT" = "$COMPLETION_PROMISE" ]]; then
     echo "✅ Codex Loop: Detected <promise>$COMPLETION_PROMISE</promise>"
     rm "$STATE_FILE"
@@ -140,14 +211,9 @@ else
   SYSTEM_MSG="🔄 Codex Loop iteration $NEXT_ITERATION | Model: $CODEX_MODEL | Effort: $CODEX_EFFORT | Sandbox: $CODEX_SANDBOX | No completion promise — loop until max iterations"
 fi
 
-# Block the stop and feed prompt back to Claude
-jq -n \
-  --arg prompt "$PROMPT_TEXT" \
-  --arg msg "$SYSTEM_MSG" \
-  '{
-    "decision": "block",
-    "reason": $prompt,
-    "systemMessage": $msg
-  }'
+# Block the stop and feed prompt back to Claude — use node/python instead of jq
+PROMPT_JSON=$(json_encode_str "$PROMPT_TEXT")
+MSG_JSON=$(json_encode_str "$SYSTEM_MSG")
+printf '{"decision":"block","reason":%s,"systemMessage":%s}\n' "$PROMPT_JSON" "$MSG_JSON"
 
 exit 0

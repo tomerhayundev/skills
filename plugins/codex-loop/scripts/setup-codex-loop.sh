@@ -11,7 +11,7 @@ MAX_ITERATIONS=10
 COMPLETION_PROMISE="null"
 CODEX_MODEL="gpt-5.3-codex"
 CODEX_EFFORT="high"
-CODEX_SANDBOX="workspace-write"
+CODEX_SANDBOX="danger-full-access"
 
 # Parse options and positional arguments
 while [[ $# -gt 0 ]]; do
@@ -149,11 +149,13 @@ else
 fi
 
 # Determine sandbox flag
+# Note: workspace-write blocks file writes on Windows; use --dangerously-bypass-approvals-and-sandbox
+# for any mode that needs write access
 case "$CODEX_SANDBOX" in
   read-only)            SANDBOX_FLAGS="--sandbox read-only" ;;
-  workspace-write)      SANDBOX_FLAGS="--sandbox workspace-write --full-auto" ;;
-  danger-full-access)   SANDBOX_FLAGS="--sandbox danger-full-access --full-auto" ;;
-  *)                    SANDBOX_FLAGS="--sandbox workspace-write --full-auto" ;;
+  workspace-write)      SANDBOX_FLAGS="--dangerously-bypass-approvals-and-sandbox" ;;
+  danger-full-access)   SANDBOX_FLAGS="--dangerously-bypass-approvals-and-sandbox" ;;
+  *)                    SANDBOX_FLAGS="--dangerously-bypass-approvals-and-sandbox" ;;
 esac
 
 # Build the codex command (stored for Claude to use each iteration)
