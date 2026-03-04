@@ -37,6 +37,16 @@ Production-grade deployment pipeline setup for web applications. Implements qual
 claude skill add --url https://github.com/tomerhayundev/skills/tree/main/skills/deploy-production-level
 ```
 
+### stackgrid-packing-algorithm
+
+Deep knowledge of the StackGrid packing algorithm system — the proprietary core of the container/pallet optimization engine.
+
+**Install:**
+
+```bash
+claude skill add --url https://github.com/tomerhayundev/skills/tree/main/skills/stackgrid-packing-algorithm
+```
+
 ---
 
 ## What are Plugins vs Skills?
