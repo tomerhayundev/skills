@@ -2,7 +2,7 @@
 description: "Start a Codex Loop — iterative codex exec driven by Claude as orchestrator"
 argument-hint: "PROMPT [--model MODEL] [--effort EFFORT] [--sandbox MODE] [--max-iterations N] [--completion-promise TEXT]"
 allowed-tools: ["Bash(${CLAUDE_PLUGIN_ROOT}/scripts/setup-codex-loop.sh:*)"]
-hide-from-slash-command-tool: "true"
+hide-from-slash-command-tool: "false"
 ---
 
 # Codex Loop Command
