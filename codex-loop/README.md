@@ -48,7 +48,7 @@ User → /codex-loop "Build a REST API" --completion-promise "ALL TESTS PASSING"
 Run this inside Claude Code (the `/plugin` command):
 
 ```
-/plugin install codex-loop@tomerhayundev
+/plugin install codex-loop@tomerhayundev-skills
 ```
 
 Or install directly from GitHub:
@@ -66,7 +66,14 @@ After installing, these commands should be available in Claude Code:
 /cancel-codex-loop
 ```
 
-If commands aren't showing, try restarting Claude Code.
+If commands aren't showing after restarting Claude Code, manually enable the plugin:
+
+1. Open `~/.claude/settings.json`
+2. Add this entry to `enabledPlugins`:
+   ```json
+   "codex-loop@tomerhayundev-skills": true
+   ```
+3. Restart Claude Code
 
 ### Gitignore the state file (recommended)
 
