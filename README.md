@@ -34,7 +34,7 @@ Production-grade deployment pipeline setup for web applications. Implements qual
 **Install:**
 
 ```bash
-claude skill add --url https://github.com/tomerhayundev/skills/tree/main/deploy-production-level
+claude skill add --url https://github.com/tomerhayundev/skills/tree/main/skills/deploy-production-level
 ```
 
 ---
