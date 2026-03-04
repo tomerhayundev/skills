@@ -4,6 +4,10 @@ A Claude Code plugin that runs `codex exec` iteratively across multiple iteratio
 
 **Claude orchestrates. Codex codes.**
 
+```bash
+claude plugin install https://github.com/tomerhayundev/skills/tree/main/codex-loop
+```
+
 ---
 
 ## How It Works
