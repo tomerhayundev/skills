@@ -1,0 +1,10 @@
+{
+  "name": "codex-loop",
+  "version": "1.0.0",
+  "description": "Iterative Codex CLI loop with Claude as orchestrator. Runs codex exec across multiple iterations, using a Stop-hook loop engine to persist state and Claude to evaluate results each round.",
+  "author": {
+    "name": "Tomer Hayun",
+    "url": "https://github.com/tomerhayundev"
+  },
+  "keywords": ["codex", "loop", "iterative", "ai", "openai", "automation"]
+}
