@@ -14,6 +14,16 @@ Production-grade deployment pipeline setup for web applications. Implements qual
 claude skill add --url https://github.com/tomerhayundev/skills/tree/main/deploy-production-level
 ```
 
+### codex-loop
+
+Iterative Codex CLI loop with Claude as orchestrator. Runs `codex exec` across multiple iterations — Claude evaluates each result and loops until the task is genuinely complete.
+
+**Install:**
+
+```bash
+claude plugin install https://github.com/tomerhayundev/skills/tree/main/codex-loop
+```
+
 ---
 
 ## What are Skills?

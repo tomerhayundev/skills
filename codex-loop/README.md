@@ -30,11 +30,47 @@ User → /codex-loop "Build a REST API" --completion-promise "ALL TESTS PASSING"
 
 ## Installation
 
-```bash
-claude plugin install https://github.com/tomerhayundev/skills/codex-loop
+### Prerequisites
+
+1. **Claude Code** — [Install guide](https://docs.anthropic.com/en/docs/claude-code)
+2. **Codex CLI** — Install from [github.com/openai/codex](https://github.com/openai/codex):
+   ```bash
+   npm install -g @openai/codex
+   ```
+   Verify: `codex --version`
+
+### Install the plugin
+
+Run this inside Claude Code (the `/plugin` command):
+
+```
+/plugin install codex-loop@tomerhayundev
 ```
 
-**Requirements:** `codex` CLI binary must be installed and on `$PATH`.
+Or install directly from GitHub:
+
+```bash
+claude plugin install https://github.com/tomerhayundev/skills/tree/main/codex-loop
+```
+
+### Verify installation
+
+After installing, these commands should be available in Claude Code:
+
+```
+/codex-loop --help
+/cancel-codex-loop
+```
+
+If commands aren't showing, try restarting Claude Code.
+
+### Gitignore the state file (recommended)
+
+Add this to your `.gitignore` so the loop state file isn't committed:
+
+```
+.claude/codex-loop.local.md
+```
 
 ---
 
