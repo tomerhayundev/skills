@@ -5,7 +5,8 @@ A Claude Code plugin that runs `codex exec` iteratively across multiple iteratio
 **Claude orchestrates. Codex codes.**
 
 ```bash
-claude plugin install https://github.com/tomerhayundev/skills/tree/main/codex-loop
+claude plugin marketplace add tomerhayundev/skills
+claude plugin install codex-loop@tomerhayundev-skills
 ```
 
 ---
@@ -54,7 +55,8 @@ Run this inside Claude Code (the `/plugin` command):
 Or install directly from GitHub:
 
 ```bash
-claude plugin install https://github.com/tomerhayundev/skills/tree/main/codex-loop
+claude plugin marketplace add tomerhayundev/skills
+claude plugin install codex-loop@tomerhayundev-skills
 ```
 
 ### Verify installation
