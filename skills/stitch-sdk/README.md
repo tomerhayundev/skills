@@ -38,14 +38,14 @@ export STITCH_API_KEY="your-api-key"
 |-------------|---------|------------|
 | **Node.js** | 18+ | [nodejs.org](https://nodejs.org) |
 | **npm** | 8+ | Comes with Node.js |
-| **Stitch API Key** | — | [Google AI Studio](https://aistudio.google.com/apikey) |
+| **Stitch API Key** | — | [stitch.withgoogle.com](https://stitch.withgoogle.com) |
 | **Claude Code** | Latest | [claude.ai/claude-code](https://claude.ai/claude-code) |
 
 ## Getting Your API Key
 
-1. Go to [Google AI Studio](https://aistudio.google.com/apikey)
+1. Go to [stitch.withgoogle.com](https://stitch.withgoogle.com)
 2. Sign in with your Google account
-3. Click **"Create API Key"** or select an existing one
+3. Go to your account settings and generate an API key
 4. Copy the key
 
 ### Set it in your environment:

@@ -33,7 +33,7 @@ Set your API key:
 export STITCH_API_KEY="your-api-key"
 ```
 
-Get an API key from [Google AI Studio](https://aistudio.google.com/apikey).
+Get your API key from [stitch.withgoogle.com](https://stitch.withgoogle.com) — go to your account settings to generate one.
 
 ## Core Pattern: Generate → Edit → Extract
 
