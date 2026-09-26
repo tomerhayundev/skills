@@ -34,7 +34,7 @@ is the last resort.
 | Scene registry | Metadata (duration, focus rects, caption key, persist rect) in a module Node can load; components in a separate map. A scene's `.tsx` must never be reachable from the render script's import path. |
 | Manifest | `{ id, scenes: [{ scene, from?, to?, captionOverride?, captionTiming?, musicLift? }], aspects?, locales?, loop?, posterFrame }` |
 | `expand()` | Rows x aspects x locales into compositions. Validates windows, the grid, the poster frame, and the music. Throws rather than renders something wrong. |
-| Chain | Hard cut between scenes by default; a short shared-element overlap when both scenes share an element. Declared duration and rendered timeline come from one function. |
+| Chain | No visible cuts. A shared-element overlap when both scenes share an element; a flood (a disc grows from one scene's anchor, covers the cut, contracts into the next scene's anchor) everywhere else. Declared duration and rendered timeline come from one function. |
 | Grid | Every duration is a multiple of one grid unit (15 frames at 30fps). It is also one beat at 120 BPM, which is what makes the music free. |
 | Tokens | One source for every color, size and duration. One accent color, nothing competes with it. |
 
@@ -49,6 +49,7 @@ is the last resort.
 | Fake company names next to fabricated metrics | A real employer beside an invented score fails ad review. |
 | Show the real product | Render the app's real components in the video (import them), not screenshots of them. |
 | Loops carry no music | A track cannot loop seamlessly inside a short loop, and in-page loops play muted anyway. |
+| Every scene is made out of the previous one | No hard cuts, no crossfades. `frame-pops.mjs` fails a render with a cut in it. |
 | Load fonts explicitly and prove it | A missing font falls back to system-ui silently and still looks plausible. Keep a render test that fails on the fallback. |
 
 ## Music bed (the one layer silent pipelines miss)
@@ -82,6 +83,7 @@ keywords that did not match their own CV. Details: [verification](references/ver
 ```bash
 npx remotion still src/index.ts <composition-id> out/check.png --frame=120
 node ${CLAUDE_SKILL_DIR}/scripts/audio-check.mjs out/promo/<id>.mp4 [--reference=approved.mp4]
+node ${CLAUDE_SKILL_DIR}/scripts/frame-pops.mjs out/promo/<id>.mp4
 ```
 
 - Read the PNG. Tile several frames per cut with ffmpeg `tile` or `xstack`.
@@ -90,6 +92,9 @@ node ${CLAUDE_SKILL_DIR}/scripts/audio-check.mjs out/promo/<id>.mp4 [--reference
 - Audio: a Remotion render always has an audio stream, so "has audio" proves
   nothing. `audio-check` flags a silent track, reports LUFS and peak, and shows
   where the lift lands. Target about -16 LUFS, peak under -1 dBFS.
+- Pops: `frame-pops.mjs` flags any frame that changes 3x more than its neighbours (a cut,
+  a flood that fills too fast, an element blinking in). It is how the first flood
+  implementation was caught covering 30% of the screen in one frame.
 - Frame 0 is the thumbnail on platforms that don't take a poster. Check it; if it
   is an empty stage, bake the poster frame in (see verification).
 
@@ -113,8 +118,10 @@ The short version; the reasoning and sources are in [creative-rules](references/
 - The first 2 seconds decide if anyone keeps watching. Plan the hook first.
 - A short cut needs a narrative (build, multiply, improve, brand), not a montage.
 - One shot, one idea, the key object centered, room to breathe.
-- Eased motion only (one critically damped spring for everything); overlap
-  transitions for continuity, hard cuts otherwise; vary the rhythm.
+- **Every scene is made out of the previous one:** nothing fades, blurs or cuts;
+  objects change shape. Shared elements carry across, a flood covers every other
+  boundary. Recipe: [architecture](references/architecture.md#transitions).
+- Eased motion only (one critically damped spring for everything); vary the rhythm.
 - Show 3 or 4 examples, never all of them: more reads as a blur.
 - Sound with restraint: one music bed, at most a few effects that match the motion.
   If an effect feels loud or out of place, cut it.

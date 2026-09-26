@@ -36,6 +36,18 @@ Check per aspect:
 - text legible at the aspect's real size (tall and square shrink everything);
 - RTL: layout genuinely mirrored, numbers and percentages still left to right.
 
+## Pops
+
+```bash
+node ${CLAUDE_SKILL_DIR}/scripts/frame-pops.mjs out/promo/<id>.mp4 [--factor=3]
+```
+
+Measures how much each frame changes from the last (on a downscaled grey copy, so grain
+averages out) and flags any frame that changes 3x more than its neighbours: a hard cut, a
+transition that covers too much in one frame, an element that blinks in. Exit 1 on any.
+It reports whether each pop sits on the beat grid. Run it on every cut before publishing,
+and after changing a transition.
+
 ## Frame 0 is a thumbnail
 
 Platforms without a separate poster upload (and chat previews) show frame 0. A

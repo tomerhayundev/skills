@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "remotion-video-pipeline",
-      "description": "Build or extend a production Remotion pipeline for product promo videos: manifest-driven clips, four aspect ratios, RTL locales, a beat-locked music bed, measured verification, and publishing. Ships a beat-grid fitter, an audio checker, and a CC BY 4.0 120 BPM track.",
+      "description": "A production Remotion pipeline for product promo videos: clips as manifest rows, four aspect ratios, RTL locales, no visible cuts (shared elements and a flood that turns each scene into the next), a beat-locked music bed whose lift lands on the payoff, measured verification, publishing. Ships a beat-grid fitter, an audio checker, a frame-pop checker and a CC BY 4.0 120 BPM track.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -26,7 +26,8 @@
         "promo",
         "marketing",
         "music",
-        "rtl"
+        "rtl",
+        "transitions"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/remotion-video-pipeline",
       "license": "MIT"

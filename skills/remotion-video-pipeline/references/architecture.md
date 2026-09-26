@@ -128,7 +128,7 @@ only at runtime, never in a unit test).
 
 ## Chain layout
 
-Consecutive scenes hard-cut by default. When both neighbours declare `persist`
+Nothing hard-cuts (see [Transitions](#transitions)). When both neighbours declare `persist`
 (the same element on screen, e.g. the product page), they overlap by one grid unit:
 the outgoing scene's chrome fades out, the incoming fades in, and a floating copy
 of the shared element glides between the two cameras' settled rects. Reuse each
@@ -139,6 +139,45 @@ duration, so the declared length can never disagree with what renders.
 A windowed first entry is rendered with a negative `Sequence.from`, so the scene's
 own clock starts mid-animation. Its `durationInFrames` must grow by the same
 amount, or the back half of the clip goes black.
+
+## Transitions
+
+**Every scene is made out of the previous one.** Two mechanisms, chosen per boundary:
+
+1. **Shared element** (both scenes declare `persist`): the element glides from one
+   scene's framing into the next, as above.
+2. **Flood** (every other boundary): a disc in the accent grows from the outgoing
+   scene's anchor until it covers the frame, the cut happens underneath, and it contracts
+   into the incoming scene's anchor. The next scene's key element grows out of where the
+   last one was. Pure math in `assets/templates/flood.ts` (with tests).
+
+Getting the flood right:
+
+- **Ease the coverage, not the radius.** Visible area grows with r squared and then clips
+  at the frame edges, so a radius eased over 9 frames covers most of the screen in two
+  frames: a pop. Pick the share of the frame covered per frame (an ease-in-out on
+  coverage), then solve for the radius by bisection on the circle/rectangle overlap.
+  Result: no frame changes more than about 18% of the screen.
+- **About 0.3s each way** (9 frames at 30fps), full cover on both frames around the cut,
+  and a reach 1.15x past the farthest corner.
+- **Anchors.** A scene's anchor is where its eye goes, in canvas coords, mapped through
+  the same camera fit and RTL mirroring as the scene (`focus.to` for the outgoing
+  scene, `focus.from` for the incoming one). Default: the focus rect's centre. Declare
+  one when the key element sits elsewhere, or the disc contracts beside it.
+- **Automatic.** Derive flood boundaries from the chain (every boundary that isn't a
+  shared-element overlap), so a new cut can never ship as a hard cut.
+- Other shape changes that read the same way: text rising out of a mask line, icons
+  popping from zero on a spring, bars drawing across, a page pushing the last one out.
+
+**A value with several targets over time** (a counter that retargets, a card that moves
+twice): make it the base value plus one spring per change, each starting at its own
+frame: `v(f) = v0 + sum(delta_i * spring(f - start_i))`. It stays a pure function of the
+frame, with no state carried between frames.
+
+**Motion blur** for fast shape changes: `@remotion/motion-blur` (`<CameraMotionBlur>`)
+renders subframes and blends them; the ffmpeg equivalent is rendering at 4x the frame rate
+and blending with `tmix`. It multiplies render time, so apply it around floods, not to
+the whole film.
 
 ## Captions
 

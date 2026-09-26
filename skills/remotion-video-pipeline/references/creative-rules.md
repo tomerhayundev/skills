@@ -43,12 +43,26 @@ survived review in a shipped promo system. Paraphrased; the reasoning is the poi
 - If a requested length forces dead air or an unreadable caption, push back with
   the length that works.
 
+## Continuity
+
+- **Every scene is made out of the previous one.** Nothing fades, blurs or cuts; objects
+  change shape instead. The eye never has to find its place again.
+- **Banned:** crossfades, blur-ins, 3D flips, particles, glows, brightness "developing",
+  holds longer than about 1s with nothing moving, anything that looks like a template.
+- **Something happens on every beat.** Map the beats before building (a table of beat,
+  time, what changes) and render 3 or 4 stills of the key moments for sign-off first.
+- **Big moments on the music:** the zoom or payoff on the drop, a quiet scene in the
+  breakdown, the brand returning with the beat.
+- **A cursor drives the product:** real clicks, drags and long-presses, with the camera
+  zooming in so each moment fills the frame and the cursor scaling with it.
+- **Loops:** make the last frame the first frame.
+
 ## Motion
 
 - **Eased, never linear.** One critically damped spring for everything makes
   independently built scenes read as one system.
-- **Transitions that belong:** carry a shared element across the cut when two
-  scenes share one; otherwise a clean hard cut. Avoid decorative transitions.
+- **Transitions that belong:** carry a shared element across when two scenes share
+  one; otherwise flood from one scene's anchor into the next. Never a visible cut.
 - **Adaptive rhythm:** not every beat the same length. Speed up through the
   familiar, slow down for the payoff.
 - **Readable:** pace comes from motion and cuts, never from pulling text away
