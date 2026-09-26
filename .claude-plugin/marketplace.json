@@ -12,52 +12,104 @@
       "description": "Build or extend a production Remotion pipeline for product promo videos: manifest-driven clips, four aspect ratios, RTL locales, a beat-locked music bed, measured verification, and publishing. Ships a beat-grid fitter, an audio checker, and a CC BY 4.0 120 BPM track.",
       "source": "./",
       "strict": false,
-      "skills": ["./skills/remotion-video-pipeline"],
-      "author": { "name": "Tomer Hayun", "url": "https://github.com/tomerhayundev" },
+      "skills": [
+        "./skills/remotion-video-pipeline"
+      ],
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
       "category": "media",
-      "keywords": ["remotion", "video", "promo", "marketing", "music", "rtl"],
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/remotion-video-pipeline"
+      "keywords": [
+        "remotion",
+        "video",
+        "promo",
+        "marketing",
+        "music",
+        "rtl"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/remotion-video-pipeline",
+      "license": "MIT"
     },
     {
       "name": "deploy-production-level",
       "description": "Production-grade deployment pipeline for web apps on GitHub Actions and Cloudflare: quality-gate CI, PR previews, automated production deploys, git-tag releases, one-click rollback, and a human setup guide. Invoke explicitly.",
       "source": "./",
       "strict": false,
-      "skills": ["./skills/deploy-production-level"],
-      "author": { "name": "Tomer Hayun", "url": "https://github.com/tomerhayundev" },
+      "skills": [
+        "./skills/deploy-production-level"
+      ],
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
       "category": "development",
-      "keywords": ["deployment", "ci", "github-actions", "cloudflare", "rollback"],
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/deploy-production-level"
+      "keywords": [
+        "deployment",
+        "ci",
+        "github-actions",
+        "cloudflare",
+        "rollback"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/deploy-production-level",
+      "license": "MIT"
     },
     {
       "name": "codex-loop",
       "description": "Iterative Codex CLI loop with Claude as orchestrator. Runs codex exec across multiple iterations, using a Stop-hook loop engine to persist state and Claude to evaluate results each round.",
       "source": "./plugins/codex-loop",
-      "author": { "name": "Tomer Hayun", "url": "https://github.com/tomerhayundev" },
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
       "category": "development",
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/codex-loop"
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/codex-loop",
+      "license": "MIT"
     },
     {
       "name": "stitch-sdk",
       "description": "Generate UI screens programmatically with the Google Stitch SDK: screens from text prompts, edits, design variants, HTML and screenshot export, and agent integrations.",
       "source": "./",
       "strict": false,
-      "skills": ["./skills/stitch-sdk"],
-      "author": { "name": "Tomer Hayun", "url": "https://github.com/tomerhayundev" },
+      "skills": [
+        "./skills/stitch-sdk"
+      ],
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
       "category": "design",
-      "keywords": ["stitch", "ui", "design", "google"],
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/stitch-sdk"
+      "keywords": [
+        "stitch",
+        "ui",
+        "design",
+        "google"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/stitch-sdk",
+      "license": "MIT"
     },
     {
       "name": "wix-app-dev",
       "description": "Design, build, and ship production-grade Wix App Market apps: architecture, instance-token auth, webhooks, Blocks widgets, dashboard pages, a Cloudflare Workers + D1 backend, billing, and App Market submission.",
       "source": "./",
       "strict": false,
-      "skills": ["./skills/wix-app-dev"],
-      "author": { "name": "Tomer Hayun", "url": "https://github.com/tomerhayundev" },
+      "skills": [
+        "./skills/wix-app-dev"
+      ],
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
       "category": "development",
-      "keywords": ["wix", "apps", "webhooks", "billing", "cloudflare"],
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/wix-app-dev"
+      "keywords": [
+        "wix",
+        "apps",
+        "webhooks",
+        "billing",
+        "cloudflare"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/wix-app-dev",
+      "license": "MIT"
     }
   ]
 }

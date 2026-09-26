@@ -8,6 +8,7 @@
   },
   "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/codex-loop",
   "repository": "https://github.com/tomerhayundev/skills",
+  "license": "MIT",
   "keywords": [
     "codex",
     "loop",

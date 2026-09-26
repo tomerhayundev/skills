@@ -12,8 +12,9 @@ claude plugin marketplace add tomerhayundev/skills
 claude plugin install remotion-video-pipeline@tomerhayundev-skills
 ```
 
-The `owner/repo` shorthand clones over SSH. Without a GitHub SSH key, use the HTTPS
-URL instead: `claude plugin marketplace add https://github.com/tomerhayundev/skills.git`.
+The `owner/repo` shorthand prefers SSH. On a machine without a GitHub SSH key, set
+`CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` or add the HTTPS URL instead:
+`claude plugin marketplace add https://github.com/tomerhayundev/skills.git`.
 
 Inside a Claude Code session the same thing is `/plugin marketplace add tomerhayundev/skills`
 and `/plugin install <name>@tomerhayundev-skills`. A plugin's skill then runs as
@@ -61,3 +62,9 @@ Skill-only plugins point at their folder with `"source": "./"` and
 node scripts/check-skills.mjs
 claude plugin validate . --strict
 ```
+
+## License
+
+[MIT](LICENSE), except the bundled music track in
+`skills/remotion-video-pipeline/assets/music/`, which is Sascha Ende's work under
+CC BY 4.0 (see its [CREDITS.md](skills/remotion-video-pipeline/assets/music/CREDITS.md)).
