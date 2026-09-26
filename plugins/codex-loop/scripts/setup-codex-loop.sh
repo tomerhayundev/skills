@@ -187,14 +187,14 @@ $PROMPT
    \`\`\`bash
    $CODEX_CMD "$PROMPT"
    \`\`\`
-2. Critically evaluate Codex's output — treat it as a peer, not an authority:
+2. Critically evaluate Codex's output. Treat it as a peer, not an authority:
    - Push back if Codex claims something you know is incorrect
    - Research disagreements using WebSearch before accepting Codex's claims
    - Remember Codex has a knowledge cutoff and can be wrong about recent APIs/versions
 3. Verify the task requirements are actually met (run tests, inspect files, check output)
 4. If the task is complete and all criteria are genuinely met, output:
    <promise>$COMPLETION_PROMISE</promise>
-5. Otherwise let yourself exit — you will be looped back automatically
+5. Otherwise let yourself exit; you will be looped back automatically
 
 CRITICAL: Only output the promise when it is completely and unequivocally TRUE.
 Do not output false promises to escape the loop, even if you think you're stuck.
@@ -212,7 +212,7 @@ Iteration: 1 / $(if [[ $MAX_ITERATIONS -gt 0 ]]; then echo $MAX_ITERATIONS; else
 Completion promise: $(if [[ "$COMPLETION_PROMISE" != "null" ]]; then echo "${COMPLETION_PROMISE} (ONLY output when TRUE!)"; else echo "none (runs until max iterations)"; fi)
 
 The stop hook is now active. Each time you try to exit, the same task
-will be fed back to you for the next iteration — until the promise is
+will be fed back to you for the next iteration, until the promise is
 output or max iterations is reached.
 
 To monitor: head -15 .claude/codex-loop.local.md
@@ -232,9 +232,9 @@ if [[ "$COMPLETION_PROMISE" != "null" ]]; then
   echo "4. If complete and all criteria are genuinely met, output:"
   echo "   <promise>$COMPLETION_PROMISE</promise>"
   echo "   (ONLY when this is completely and unequivocally TRUE)"
-  echo "5. Otherwise let yourself exit — you will be looped back"
+  echo "5. Otherwise let yourself exit; you will be looped back"
 else
-  echo "4. Let yourself exit when done — loop will continue until max iterations"
+  echo "4. Let yourself exit when done; the loop will continue until max iterations"
 fi
 
 # Completion promise section

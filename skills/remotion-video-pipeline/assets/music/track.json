@@ -1,0 +1,76 @@
+{
+  "file": "ende-business-moves-1.mp3",
+  "durationSeconds": 163.96,
+  "bpm": 120,
+  "secondsPerBeat": 0.5,
+  "firstBeatSeconds": 0,
+  "framesPerBeat": 15,
+  "liftBeats": [
+    32,
+    96,
+    192,
+    256
+  ],
+  "sections": [
+    {
+      "beat": 0,
+      "start": 0,
+      "lufs": -16.2,
+      "lift": false
+    },
+    {
+      "beat": 32,
+      "start": 16,
+      "lufs": -14.6,
+      "lift": true
+    },
+    {
+      "beat": 64,
+      "start": 32,
+      "lufs": -15.9,
+      "lift": false
+    },
+    {
+      "beat": 96,
+      "start": 48,
+      "lufs": -14.2,
+      "lift": true
+    },
+    {
+      "beat": 128,
+      "start": 64,
+      "lufs": -13.7,
+      "lift": false
+    },
+    {
+      "beat": 160,
+      "start": 80,
+      "lufs": -16.1,
+      "lift": false
+    },
+    {
+      "beat": 192,
+      "start": 96,
+      "lufs": -14.2,
+      "lift": true
+    },
+    {
+      "beat": 224,
+      "start": 112,
+      "lufs": -16.2,
+      "lift": false
+    },
+    {
+      "beat": 256,
+      "start": 128,
+      "lufs": -14.2,
+      "lift": true
+    },
+    {
+      "beat": 288,
+      "start": 144,
+      "lufs": -14.1,
+      "lift": false
+    }
+  ]
+}

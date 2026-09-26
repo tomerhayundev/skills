@@ -70,7 +70,7 @@ if [[ $MAX_ITERATIONS -gt 0 ]] && [[ $ITERATION -ge $MAX_ITERATIONS ]]; then
   exit 0
 fi
 
-# Get transcript path from hook input — use node/python instead of jq
+# Get transcript path from hook input; use node/python instead of jq
 TRANSCRIPT_PATH=""
 if command -v node &>/dev/null; then
   TRANSCRIPT_PATH=$(printf '%s' "$HOOK_INPUT" | node -e "
@@ -117,7 +117,7 @@ if [[ -z "$LAST_LINE" ]]; then
   exit 0
 fi
 
-# Parse assistant message content — use node/python instead of jq
+# Parse assistant message content; use node/python instead of jq
 LAST_OUTPUT=""
 if command -v node &>/dev/null; then
   LAST_OUTPUT=$(printf '%s' "$LAST_LINE" | node -e "
@@ -171,7 +171,7 @@ fi
 PROMISE_TEXT=$(echo "$LAST_OUTPUT" | perl -0777 -pe 's/.*?<promise>(.*?)<\/promise>.*/$1/s; s/^\s+|\s+$//g; s/\s+/ /g' 2>/dev/null || echo "")
 
 if [[ "$COMPLETION_PROMISE" = "null" ]]; then
-  # No explicit promise set — Claude can terminate by outputting <promise>null</promise>
+  # No explicit promise set: Claude can terminate by outputting <promise>null</promise>
   if [[ "$PROMISE_TEXT" = "null" ]]; then
     echo "✅ Codex Loop: Task marked complete by Claude"
     rm "$STATE_FILE"
@@ -192,7 +192,7 @@ NEXT_ITERATION=$((ITERATION + 1))
 PROMPT_TEXT=$(awk '/^---$/{i++; next} i>=2' "$STATE_FILE")
 
 if [[ -z "$PROMPT_TEXT" ]]; then
-  echo "⚠️  Codex Loop: State file corrupted — no prompt text found" >&2
+  echo "⚠️  Codex Loop: State file corrupted, no prompt text found" >&2
   echo "   File: $STATE_FILE" >&2
   echo "   Codex Loop is stopping. Run /codex-loop again to start fresh." >&2
   rm "$STATE_FILE"
@@ -208,10 +208,10 @@ mv "$TEMP_FILE" "$STATE_FILE"
 if [[ "$COMPLETION_PROMISE" != "null" ]] && [[ -n "$COMPLETION_PROMISE" ]]; then
   SYSTEM_MSG="🔄 Codex Loop iteration $NEXT_ITERATION | Model: $CODEX_MODEL | Effort: $CODEX_EFFORT | Sandbox: $CODEX_SANDBOX | To stop: output <promise>$COMPLETION_PROMISE</promise> (ONLY when TRUE)"
 else
-  SYSTEM_MSG="🔄 Codex Loop iteration $NEXT_ITERATION | Model: $CODEX_MODEL | Effort: $CODEX_EFFORT | Sandbox: $CODEX_SANDBOX | No completion promise — loop until max iterations"
+  SYSTEM_MSG="🔄 Codex Loop iteration $NEXT_ITERATION | Model: $CODEX_MODEL | Effort: $CODEX_EFFORT | Sandbox: $CODEX_SANDBOX | No completion promise (loops until max iterations)"
 fi
 
-# Block the stop and feed prompt back to Claude — use node/python instead of jq
+# Block the stop and feed prompt back to Claude; use node/python instead of jq
 PROMPT_JSON=$(json_encode_str "$PROMPT_TEXT")
 MSG_JSON=$(json_encode_str "$SYSTEM_MSG")
 printf '{"decision":"block","reason":%s,"systemMessage":%s}\n' "$PROMPT_JSON" "$MSG_JSON"

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ┌──────────────────────────────────────────────────────────┐
-# │  Stitch SDK — One-Command Installer for Claude Code      │
+# │  Stitch SDK: One-Command Installer for Claude Code       │
 # │  Installs the SDK globally + adds the skill to Claude    │
 # └──────────────────────────────────────────────────────────┘
 set -euo pipefail
@@ -59,12 +59,14 @@ success "@google/stitch-sdk installed globally"
 header "Installing Claude Code skill"
 
 if command -v claude &>/dev/null; then
-  claude skill add --source github:tomerhayundev/skills --skill stitch-sdk 2>/dev/null && \
+  { claude plugin marketplace add tomerhayundev/skills >/dev/null 2>&1 || true; } && \
+    claude plugin install stitch-sdk@tomerhayundev-skills >/dev/null 2>&1 && \
     success "Skill 'stitch-sdk' added to Claude Code" || \
-    warn "Could not auto-add skill. Add manually: claude skill add --source github:tomerhayundev/skills --skill stitch-sdk"
+    warn "Could not auto-add skill. In Claude Code run: /plugin marketplace add tomerhayundev/skills, then /plugin install stitch-sdk@tomerhayundev-skills"
 else
   warn "Claude Code CLI not found. Install the skill manually after installing Claude Code:"
-  echo -e "    ${CYAN}claude skill add --source github:tomerhayundev/skills --skill stitch-sdk${NC}"
+  echo -e "    ${CYAN}claude plugin marketplace add tomerhayundev/skills${NC}"
+  echo -e "    ${CYAN}claude plugin install stitch-sdk@tomerhayundev-skills${NC}"
 fi
 
 # ── API Key setup ────────────────────────────────────────────
@@ -104,5 +106,5 @@ echo -e "    ${CYAN}const screen = await project.generate('A login page');${NC}"
 echo -e "    ${CYAN}const html = await screen.getHtml();${NC}"
 echo ""
 echo -e "  ${BOLD}In Claude Code:${NC}"
-echo -e "    Just ask Claude to generate UI with Stitch — the skill handles the rest."
+echo -e "    Just ask Claude to generate UI with Stitch, and the skill handles the rest."
 echo ""

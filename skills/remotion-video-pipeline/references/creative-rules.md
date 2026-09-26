@@ -1,0 +1,88 @@
+# Creative rules
+
+What makes a product video look expensive, collected from three places: a studio
+that produces dozens of product videos a season (writing about Apple-style launch
+videos), the creative laws of the open-source /brag launch-video skill, and what
+survived review in a shipped promo system. Paraphrased; the reasoning is the point.
+
+## Brand: intention over effects
+
+- Every choice needs a purpose: font, background, music, color. Nothing on screen
+  by accident.
+- Premium is mostly the absence of cheap moves: stacked effects, noisy sound
+  effects, a track that fights the product.
+- Give the series rules and keep them: a small fixed palette (one accent), the same
+  backgrounds, the same family of music. To a viewer, consistency reads as intent.
+
+## Design first
+
+- Storyboard frame by frame before animating. A video never looks better than its
+  frames.
+- One shot, one idea.
+- The key object in the center, with room to breathe.
+- The background supports the brand and never competes with the key object.
+
+## Story
+
+- **The hook is everything.** The first 2 seconds decide whether anyone keeps
+  watching. Plan it before anything else.
+- **Shape:** hook (2 to 3 s), reveal (2 to 4 s), two or three sharp highlights,
+  punchline or brand close (2 to 4 s). A starting shape, not a template.
+- **A short cut needs a narrative, not a montage.** The 15 s cut that worked:
+  build it once, it multiplies per job, the score improves, brand. A feature shown
+  for 20 seconds does not land.
+- **Clear to a stranger:** after one viewing, someone who never heard of it knows
+  what it does, who it's for, and how to get it.
+- **Specific:** use the product's own copy and claims. "Streamline your workflow"
+  is banned. Small illustrative UI text is fine; invented numbers or testimonials
+  presented as real are not.
+- **Show the real thing:** the working product doing its job beats a landing page
+  describing it. Render the real components.
+- **Show a sample, not everything:** three or four templates flipping read; nine
+  read as a blur. The caption can still state the real total.
+- If a requested length forces dead air or an unreadable caption, push back with
+  the length that works.
+
+## Motion
+
+- **Eased, never linear.** One critically damped spring for everything makes
+  independently built scenes read as one system.
+- **Transitions that belong:** carry a shared element across the cut when two
+  scenes share one; otherwise a clean hard cut. Avoid decorative transitions.
+- **Adaptive rhythm:** not every beat the same length. Speed up through the
+  familiar, slow down for the payoff.
+- **Readable:** pace comes from motion and cuts, never from pulling text away
+  early. A fully shown line holds about 0.3 s per word, at least 1.5 s for a caption.
+  Fast in, then hold.
+- **Alive:** things appear one by one, clicks and typing happen, the camera
+  breathes. Every frozen frame should be worth posting.
+
+## Sound
+
+- Music sets the energy; pick by tempo first (see music-bed), then genre for the
+  audience.
+- Cut on the beat, and land the track's lift on the story's payoff.
+- Sound effects are the cherry, not the cake: few, matched to motion, mixed under
+  the music. After mixing, listen once asking only "what feels off?", and remove it.
+
+## Lengths and placements
+
+| Length | Use |
+| --- | --- |
+| 6 s | Hook plus brand: autoplay feeds where most viewers never unmute |
+| 15 s | Paid social, X, standard ad slots |
+| 30 s | Pre-roll (skippable after 5 s, so it still opens strong) |
+| 45 to 60 s | Landing page hero, YouTube when the viewer chose to watch |
+
+| Aspect | Use |
+| --- | --- |
+| wide 16:9 | Landing page, YouTube |
+| tall 9:16 | Reels, Stories, TikTok, Shorts |
+| square 1:1 | Feed placements |
+| classic 4:3 | LinkedIn, presentations |
+
+## Ads and honesty
+
+- Fabricated metrics (a match score, a count) sit next to fictional company names
+  only. A real employer beside an invented number fails ad review.
+- The poster frame is a settled frame: text fully in, nothing mid-transition.
