@@ -37,6 +37,7 @@ npx skills add tomerhayundev/skills --skill remotion-video-pipeline
 | [stitch-sdk](skills/stitch-sdk/SKILL.md) | skill | Generate UI screens with the Google Stitch SDK: from text prompts, edits, variants, HTML and screenshot export. |
 | [wix-app-dev](skills/wix-app-dev/SKILL.md) | skill | Design, build and ship Wix App Market apps: architecture, instance-token auth, webhooks, Blocks widgets, a Cloudflare Workers + D1 backend, billing, submission. |
 | [publish-skill](skills/publish-skill/SKILL.md) | skill | Publish a skill or plugin to your Claude Code marketplace repos: routes public vs private, scaffolds the entry and README row, scans for secrets and private content, validates, test-installs in a throwaway config, and keeps a local copy. Includes a history-purge recipe for leaks. |
+| [visual-verification](skills/visual-verification/SKILL.md) | skill | Makes the agent prove an output works before calling it done: screenshot it, use it (click, submit, run, open every page), judge it against the goal, in a strict tool order (real Chrome, in-app browser, computer use), with a rationalization table and red flags. |
 
 ## Layout
 

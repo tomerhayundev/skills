@@ -133,6 +133,29 @@
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/publish-skill",
       "license": "MIT"
+    },
+    {
+      "name": "visual-verification",
+      "description": "Makes the agent prove an output works before calling it done: screenshot it, use it (click, submit, run, open every page), judge it against the goal, in a strict tool order (real Chrome, in-app browser, computer use), with a rationalization table and red flags.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/visual-verification"
+      ],
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "productivity",
+      "keywords": [
+        "verification",
+        "testing",
+        "qa",
+        "browser",
+        "screenshots"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/visual-verification",
+      "license": "MIT"
     }
   ]
 }
