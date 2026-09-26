@@ -27,9 +27,9 @@ a client's skill once had to be purged from public history.
 
 1. **Sync the clone.** Missing: `gh repo clone tomerhayundev/<repo> ~/claude-skill-repos/<repo> -- -c core.longpaths=true`. Present: `git -C <clone> pull --ff-only`.
 2. **Clean the source first**, then copy. Both repos: secrets become env var reads and personal absolute paths become relative ones, in the source project as well. Public only: also strip client names, internal URLs and project-only details; keep the technique. The SKILL.md description starts "Use when..." and names triggers, not the workflow.
-3. **Scaffold:** `node <skill-dir>/scripts/scaffold.mjs --repo <clone> --name <name> --from <source-folder> --description "<what it does, one line>" [--plugin] [--keywords a,b]`. Copies the files, adds the marketplace entry and the README row (both use `--description`, not the "Use when" line). Re-run it after edits to refresh them. `--plugin` (or a source with `.claude-plugin/plugin.json`) makes a full plugin under `plugins/` for hooks, agents, commands or MCP.
+3. **Scaffold:** `node <skill-dir>/scripts/scaffold.mjs --repo <clone> --name <name> --from <source-folder> --description "<what it does, one line>" [--plugin] [--keywords a,b]`. Copies the files, adds the marketplace entry and the README row with its `claude plugin install` command (both use `--description`, not the "Use when" line). Re-run it after edits to refresh them. `--plugin` (or a source with `.claude-plugin/plugin.json`) makes a full plugin under `plugins/` for hooks, agents, commands or MCP.
 4. **Scan:** `node <skill-dir>/scripts/scan.mjs <clone>/skills/<name> --public` (drop `--public` for private). Errors block. Fix the source too, not just the copy.
-5. **Check:** in the clone, `node scripts/check-skills.mjs` and `claude plugin validate . --strict`. Both must pass.
+5. **Check:** in the clone, `node scripts/check-skills.mjs` and `claude plugin validate . --strict`. Both must pass. The check fails when an entry has no README row or its install command is wrong, and warns on SSH install instructions.
 6. **Test the install:** `node <skill-dir>/scripts/test-install.mjs --repo <clone> --plugin <name>`. Throwaway config; never the real one.
 7. **Push:** commit (ending with the Co-Authored-By line), `git push origin main`, then `gh run watch` the CI run. Then `test-install.mjs --repo <clone> --plugin <name> --remote https://github.com/tomerhayundev/<repo>.git`.
 8. **Local copy:** `cp -r <clone>/skills/<name> ~/.claude/skills/<name>` (plugin: its `skills/<name>` folder). Updating: replace the folder.
@@ -47,10 +47,19 @@ claude plugin install <name>@tomerhayundev-private-skills
 
 Already added on that machine: `claude plugin marketplace update <marketplace>` instead of `add`.
 
+## Keep the instructions current
+
+A publish is done when a new user can install from the README alone:
+
+- The skill's README row carries its exact install command (scaffold writes it, the check enforces it).
+- Prerequisites it needs (a CLI, an npm package, an env var) go in its row and in its own README, with the setup steps.
+- Every install instruction in the repo uses the HTTPS URL, never the SSH `owner/repo` shorthand.
+- Changing how installs work (new repo, renamed marketplace, new auth step): update the repo README's Install section and every skill README that repeats install steps, in the same commit.
+
 ## Updating a published skill
 
 - Skill-only entries track the commit: push, then users run `claude plugin marketplace update tomerhayundev-skills`.
-- Full plugins with a `version` in `plugin.json`: **bump it**, or installed copies never update (codex-loop's jq fix reached no installed copy until 1.1.0).
+- Full plugins with a `version` in `plugin.json`: **bump it**, or installed copies never update (codex-loop's jq fix reached no installed copy until 1.1.0). Users then run `claude plugin update <name>@<marketplace>`.
 - Renaming or removing: add a `renames` map entry (`"old": "new"` or `"old": null`), never just delete the entry.
 
 ## Something sensitive was pushed

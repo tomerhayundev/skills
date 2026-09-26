@@ -144,17 +144,25 @@ if (at >= 0) market.plugins[at] = { ...market.plugins[at], ...entry };
 else market.plugins.push(entry);
 writeFileSync(marketPath, JSON.stringify(market, null, 2) + "\n");
 
-// 3. README row, in the table under a "What's here" heading
+// 3. README row, in the table under a "What's here" heading. Built from the
+// table's own header, so a column like "Install" fills in wherever it sits.
 const readmePath = join(repo, "README.md");
+const installCmd = `claude plugin install ${name}@${market.name}`;
 if (existsSync(readmePath)) {
   const lines = readFileSync(readmePath, "utf8").replace(/\r\n/g, "\n").split("\n");
   const h = lines.findIndex((l) => /^#+\s+what'?s here/i.test(l));
   const head = h < 0 ? -1 : lines.findIndex((l, i) => i > h && l.startsWith("|"));
   if (head < 0) console.log("README: no table under a \"What's here\" heading; add the row by hand");
   else {
-    const cols = lines[head].split("|").length - 2;
-    const link = `[${name}](${isPlugin ? `${rel}/README.md` : `${rel}/SKILL.md`})`;
-    const row = cols >= 3 ? `| ${link} | ${isPlugin ? "plugin" : "skill"} | ${description} |` : `| ${link} | ${description} |`;
+    const link = `[${name}](${isPlugin && existsSync(join(dest, "README.md")) ? `${rel}/README.md` : isPlugin ? `${rel}/skills/${name}/SKILL.md` : `${rel}/SKILL.md`})`;
+    const cell = (col) => {
+      if (/^name$/i.test(col)) return link;
+      if (/^type$/i.test(col)) return isPlugin ? "plugin" : "skill";
+      if (/install/i.test(col)) return `\`${installCmd}\``;
+      return description; // "What it does" / "Description"
+    };
+    const cols = lines[head].split("|").slice(1, -1).map((c) => c.trim());
+    const row = `| ${cols.map(cell).join(" | ")} |`;
     let end = head;
     while (end + 1 < lines.length && lines[end + 1].startsWith("|")) end++;
     const existing = lines.slice(head, end + 1).findIndex((l) => l.startsWith(`| [${name}](`));
@@ -165,4 +173,5 @@ if (existsSync(readmePath)) {
 }
 
 console.log(`${at >= 0 ? "updated" : "added"} ${isPlugin ? "plugin" : "skill"} "${name}" at ${rel}`);
+console.log(`install: ${installCmd}`);
 console.log(`next: fill in SKILL.md if it's a template, then run the scan, the repo checks, and test-install.mjs`);

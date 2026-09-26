@@ -96,6 +96,32 @@ for (const p of market.plugins) {
 }
 for (const dir of skillNames) if (!installable.has(dir)) warnings.push(`skills/${dir}: no marketplace entry installs it`);
 
+// README: every entry has a row in the "What's here" table, and when the table
+// has an Install column, the row carries that entry's exact install command.
+const readme = existsSync(join(ROOT, "README.md")) ? readFileSync(join(ROOT, "README.md"), "utf8").replace(/\r\n/g, "\n").split("\n") : [];
+const tableHead = (() => {
+  const h = readme.findIndex((l) => /^#+\s+what'?s here/i.test(l));
+  return h < 0 ? -1 : readme.findIndex((l, i) => i > h && l.startsWith("|"));
+})();
+if (tableHead < 0) errors.push(`README.md: no table under a "What's here" heading`);
+else {
+  const cols = readme[tableHead].split("|").slice(1, -1).map((c) => c.trim().toLowerCase());
+  const installCol = cols.indexOf("install");
+  const rows = [];
+  for (let i = tableHead + 2; i < readme.length && readme[i].startsWith("|"); i++) rows.push(readme[i]);
+  for (const p of market.plugins) {
+    const row = rows.find((r) => r.startsWith(`| [${p.name}](`));
+    if (!row) errors.push(`README.md: no "What's here" row for "${p.name}"`);
+    else if (installCol >= 0 && !row.split("|")[installCol + 1]?.includes(`plugin install ${p.name}@${market.name}`)) {
+      errors.push(`README.md: the "${p.name}" row's Install cell must read \`claude plugin install ${p.name}@${market.name}\``);
+    }
+  }
+  for (const r of rows) {
+    const name = r.match(/^\| \[([^\]]+)\]/)?.[1];
+    if (name && !market.plugins.some((p) => p.name === name)) errors.push(`README.md: row "${name}" has no marketplace entry`);
+  }
+}
+
 // Scripts parse; house style (no em dashes)
 const EM_DASH = String.fromCharCode(0x2014);
 walk(ROOT, (p) => {
@@ -109,6 +135,15 @@ walk(ROOT, (p) => {
     if (r.status !== 0) errors.push(`${rel}: ${r.stderr.trim()}`);
   }
   if (/\.(md|json|sh|mjs|ts)$/.test(p) && readFileSync(p, "utf8").includes(EM_DASH)) warnings.push(`${rel}: contains an em dash`);
+  // `marketplace add owner/repo` clones over SSH and fails on machines without
+  // a GitHub SSH key; instructions give the HTTPS URL.
+  if (/\.(md|sh)$/.test(p)) {
+    readFileSync(p, "utf8").split(/\r?\n/).forEach((line, i) => {
+      if (/marketplace add\s+(?!https?:\/\/|<|\.|\/|[A-Za-z]:)[\w.-]+\/[\w.-]+/.test(line)) {
+        warnings.push(`${rel}:${i + 1}: \`marketplace add owner/repo\` is SSH; give https://github.com/owner/repo.git`);
+      }
+    });
+  }
 });
 
 for (const w of warnings) console.log(`warn   ${w}`);

@@ -5,39 +5,62 @@ extracted from a real project so the next project starts from what worked.
 
 ## Install
 
-Add the marketplace once, then install what you need:
+**1. Add the marketplace** (once per machine):
 
 ```bash
-claude plugin marketplace add tomerhayundev/skills
-claude plugin install remotion-video-pipeline@tomerhayundev-skills
+claude plugin marketplace add https://github.com/tomerhayundev/skills.git
 ```
 
-The `owner/repo` shorthand prefers SSH. On a machine without a GitHub SSH key, set
-`CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` or add the HTTPS URL instead:
-`claude plugin marketplace add https://github.com/tomerhayundev/skills.git`.
+The `tomerhayundev/skills` shorthand also works, but it clones over SSH, so it fails
+on a machine without a GitHub SSH key unless `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` is set.
 
-Inside a Claude Code session the same thing is `/plugin marketplace add tomerhayundev/skills`
-and `/plugin install <name>@tomerhayundev-skills`. A plugin's skill then runs as
-`/<plugin>:<skill>`, or triggers on its own when the task matches.
+**2. Install what you need.** Every row in [What's here](#whats-here) has its
+command, for example:
 
-For other agents that support [Agent Skills](https://agentskills.io) (Codex, Cursor,
+```bash
+claude plugin install visual-verification@tomerhayundev-skills
+```
+
+Restart Claude Code (or run `/reload-plugins`). A skill then triggers on its own
+when a task matches, or runs as `/<name>`. Inside a session the same steps are
+`/plugin marketplace add <url>` and `/plugin install <name>@tomerhayundev-skills`.
+
+**3. Get updates:**
+
+```bash
+claude plugin marketplace update tomerhayundev-skills
+claude plugin update <name>@tomerhayundev-skills
+```
+
+Or turn on auto-update once: `/plugin` > Marketplaces > tomerhayundev-skills >
+Enable auto-update. Remove one with `claude plugin uninstall <name>@tomerhayundev-skills`.
+
+**Without the plugin system**, copy a skill into your personal skills folder; it
+loads in every session:
+
+```bash
+git clone https://github.com/tomerhayundev/skills.git
+cp -r skills/skills/<name> ~/.claude/skills/<name>
+```
+
+**Other agents** that support [Agent Skills](https://agentskills.io) (Codex, Cursor,
 opencode, and more):
 
 ```bash
-npx skills add tomerhayundev/skills --skill remotion-video-pipeline
+npx skills add https://github.com/tomerhayundev/skills --skill <name>
 ```
 
 ## What's here
 
-| Name | Type | What it does |
-| --- | --- | --- |
-| [remotion-video-pipeline](skills/remotion-video-pipeline/SKILL.md) | skill | A production Remotion pipeline for product promo videos: clips as manifest rows, four aspect ratios, RTL locales, a beat-locked music bed whose lift lands on the payoff, measured verification, publishing. Ships a beat-grid fitter, an audio checker and a CC BY 4.0 120 BPM track. |
-| [deploy-production-level](skills/deploy-production-level/SKILL.md) | skill | Production deploy pipeline on GitHub Actions and Cloudflare: quality-gate CI, PR previews, automated production deploys, git-tag releases, one-click rollback, a human setup guide. Invoke it explicitly. |
-| [codex-loop](plugins/codex-loop/README.md) | plugin | An iterative Codex CLI loop with Claude as orchestrator: a Stop hook keeps state across rounds and Claude judges each result. `/codex-loop "task" --completion-promise "DONE"` |
-| [stitch-sdk](skills/stitch-sdk/SKILL.md) | skill | Generate UI screens with the Google Stitch SDK: from text prompts, edits, variants, HTML and screenshot export. |
-| [wix-app-dev](skills/wix-app-dev/SKILL.md) | skill | Design, build and ship Wix App Market apps: architecture, instance-token auth, webhooks, Blocks widgets, a Cloudflare Workers + D1 backend, billing, submission. |
-| [publish-skill](skills/publish-skill/SKILL.md) | skill | Publish a skill or plugin to your Claude Code marketplace repos: routes public vs private, scaffolds the entry and README row, scans for secrets and private content, validates, test-installs in a throwaway config, and keeps a local copy. Includes a history-purge recipe for leaks. |
-| [visual-verification](skills/visual-verification/SKILL.md) | skill | Makes the agent prove an output works before calling it done: screenshot it, use it (click, submit, run, open every page), judge it against the goal, in a strict tool order (real Chrome, in-app browser, computer use), with a rationalization table and red flags. |
+| Name | Type | What it does | Install |
+| --- | --- | --- | --- |
+| [remotion-video-pipeline](skills/remotion-video-pipeline/SKILL.md) | skill | A production Remotion pipeline for product promo videos: clips as manifest rows, four aspect ratios, RTL locales, a beat-locked music bed whose lift lands on the payoff, measured verification, publishing. Ships a beat-grid fitter, an audio checker and a CC BY 4.0 120 BPM track. | `claude plugin install remotion-video-pipeline@tomerhayundev-skills` |
+| [deploy-production-level](skills/deploy-production-level/SKILL.md) | skill | Production deploy pipeline on GitHub Actions and Cloudflare: quality-gate CI, PR previews, automated production deploys, git-tag releases, one-click rollback, a human setup guide. Invoke it explicitly. | `claude plugin install deploy-production-level@tomerhayundev-skills` |
+| [codex-loop](plugins/codex-loop/README.md) | plugin | An iterative Codex CLI loop with Claude as orchestrator: a Stop hook keeps state across rounds and Claude judges each result. `/codex-loop "task" --completion-promise "DONE"`. Needs the Codex CLI. | `claude plugin install codex-loop@tomerhayundev-skills` |
+| [stitch-sdk](skills/stitch-sdk/SKILL.md) | skill | Generate UI screens with the Google Stitch SDK: from text prompts, edits, variants, HTML and screenshot export. Needs `@google/stitch-sdk` and a `STITCH_API_KEY` ([setup](skills/stitch-sdk/README.md)). | `claude plugin install stitch-sdk@tomerhayundev-skills` |
+| [wix-app-dev](skills/wix-app-dev/SKILL.md) | skill | Design, build and ship Wix App Market apps: architecture, instance-token auth, webhooks, Blocks widgets, a Cloudflare Workers + D1 backend, billing, submission. | `claude plugin install wix-app-dev@tomerhayundev-skills` |
+| [publish-skill](skills/publish-skill/SKILL.md) | skill | Publish a skill or plugin to your Claude Code marketplace repos: routes public vs private, scaffolds the entry and README row, scans for secrets and private content, validates, test-installs in a throwaway config, and keeps a local copy. Includes a history-purge recipe for leaks. | `claude plugin install publish-skill@tomerhayundev-skills` |
+| [visual-verification](skills/visual-verification/SKILL.md) | skill | Makes the agent prove an output works before calling it done: screenshot it, use it (click, submit, run, open every page), judge it against the goal, in a strict tool order (real Chrome, in-app browser, computer use), with a rationalization table and red flags. | `claude plugin install visual-verification@tomerhayundev-skills` |
 
 ## Layout
 
@@ -54,19 +77,24 @@ Skill-only plugins point at their folder with `"source": "./"` and
 
 ## Adding a skill
 
-The [publish-skill](skills/publish-skill/SKILL.md) skill runs this whole flow (scaffold,
-scan, checks, test install, push, local copy). By hand:
+The [publish-skill](skills/publish-skill/SKILL.md) skill runs this whole flow: scaffold
+(files, catalog entry, README row with its install command), scan, checks, test
+install, push, local copy. By hand:
 
 1. Create `skills/<name>/SKILL.md`. Frontmatter on line 1, `name` equal to the
-   folder name, a `description` under 1024 characters that says what it does and
-   when to use it. Keep the body under ~500 lines; put detail in `references/`.
+   folder name, a `description` under 1024 characters that says when to use it.
+   Keep the body under ~500 lines; put detail in `references/`.
 2. Add an entry to `.claude-plugin/marketplace.json`.
-3. Run the checks:
+3. Add a row to [What's here](#whats-here), with its install command.
+4. Run the checks (CI runs them too; a missing row or install command fails):
 
 ```bash
 node scripts/check-skills.mjs
 claude plugin validate . --strict
 ```
+
+A plugin with a `version` in its `plugin.json` (codex-loop) only reaches installed
+copies when that version is bumped. Skill-only entries track the latest commit.
 
 ## License
 

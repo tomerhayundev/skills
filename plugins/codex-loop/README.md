@@ -5,7 +5,7 @@ A Claude Code plugin that runs `codex exec` iteratively across multiple iteratio
 **Claude orchestrates. Codex codes.**
 
 ```bash
-claude plugin marketplace add tomerhayundev/skills
+claude plugin marketplace add https://github.com/tomerhayundev/skills.git
 claude plugin install codex-loop@tomerhayundev-skills
 ```
 
@@ -46,36 +46,40 @@ User → /codex-loop "Build a REST API" --completion-promise "ALL TESTS PASSING"
 
 ### Install the plugin
 
-Run this inside Claude Code (the `/plugin` command):
-
-```
-/plugin install codex-loop@tomerhayundev-skills
-```
-
-Or install directly from GitHub:
+Add the marketplace (once per machine), then install:
 
 ```bash
-claude plugin marketplace add tomerhayundev/skills
+claude plugin marketplace add https://github.com/tomerhayundev/skills.git
 claude plugin install codex-loop@tomerhayundev-skills
 ```
 
+Inside a Claude Code session the same steps are `/plugin marketplace add https://github.com/tomerhayundev/skills.git`
+and `/plugin install codex-loop@tomerhayundev-skills`. The `tomerhayundev/skills` shorthand
+clones over SSH, so use the HTTPS URL on a machine without a GitHub SSH key.
+
 ### Verify installation
 
-After installing, these commands should be available in Claude Code:
-
-```
-/codex-loop --help
-/cancel-codex-loop
+```bash
+claude plugin details codex-loop@tomerhayundev-skills
 ```
 
-If commands aren't showing after restarting Claude Code, manually enable the plugin:
+It should list three skills (`codex-loop`, `cancel-codex-loop`, `help`) and one Stop hook.
+After restarting Claude Code (or `/reload-plugins`), `/codex-loop --help` prints the options.
 
-1. Open `~/.claude/settings.json`
-2. Add this entry to `enabledPlugins`:
-   ```json
-   "codex-loop@tomerhayundev-skills": true
-   ```
-3. Restart Claude Code
+If the commands don't show up, the plugin may be disabled:
+
+```bash
+claude plugin enable codex-loop@tomerhayundev-skills
+```
+
+### Update
+
+codex-loop is versioned; a new version reaches you with:
+
+```bash
+claude plugin marketplace update tomerhayundev-skills
+claude plugin update codex-loop@tomerhayundev-skills
+```
 
 ### Gitignore the state file (recommended)
 

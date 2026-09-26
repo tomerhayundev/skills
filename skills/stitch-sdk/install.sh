@@ -59,13 +59,13 @@ success "@google/stitch-sdk installed globally"
 header "Installing Claude Code skill"
 
 if command -v claude &>/dev/null; then
-  { claude plugin marketplace add tomerhayundev/skills >/dev/null 2>&1 || true; } && \
+  { claude plugin marketplace add https://github.com/tomerhayundev/skills.git >/dev/null 2>&1 || claude plugin marketplace update tomerhayundev-skills >/dev/null 2>&1 || true; } && \
     claude plugin install stitch-sdk@tomerhayundev-skills >/dev/null 2>&1 && \
     success "Skill 'stitch-sdk' added to Claude Code" || \
-    warn "Could not auto-add skill. In Claude Code run: /plugin marketplace add tomerhayundev/skills, then /plugin install stitch-sdk@tomerhayundev-skills"
+    warn "Could not auto-add skill. In Claude Code run: /plugin marketplace add https://github.com/tomerhayundev/skills.git, then /plugin install stitch-sdk@tomerhayundev-skills"
 else
   warn "Claude Code CLI not found. Install the skill manually after installing Claude Code:"
-  echo -e "    ${CYAN}claude plugin marketplace add tomerhayundev/skills${NC}"
+  echo -e "    ${CYAN}claude plugin marketplace add https://github.com/tomerhayundev/skills.git${NC}"
   echo -e "    ${CYAN}claude plugin install stitch-sdk@tomerhayundev-skills${NC}"
 fi
 

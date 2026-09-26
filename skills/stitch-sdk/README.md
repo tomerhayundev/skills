@@ -26,7 +26,7 @@ If you prefer to install step-by-step:
 npm install -g @google/stitch-sdk
 
 # 2. Add the skill to Claude Code
-claude plugin marketplace add tomerhayundev/skills
+claude plugin marketplace add https://github.com/tomerhayundev/skills.git
 claude plugin install stitch-sdk@tomerhayundev-skills
 
 # 3. Set your API key
