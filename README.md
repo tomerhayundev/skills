@@ -36,6 +36,7 @@ npx skills add tomerhayundev/skills --skill remotion-video-pipeline
 | [codex-loop](plugins/codex-loop/README.md) | plugin | An iterative Codex CLI loop with Claude as orchestrator: a Stop hook keeps state across rounds and Claude judges each result. `/codex-loop "task" --completion-promise "DONE"` |
 | [stitch-sdk](skills/stitch-sdk/SKILL.md) | skill | Generate UI screens with the Google Stitch SDK: from text prompts, edits, variants, HTML and screenshot export. |
 | [wix-app-dev](skills/wix-app-dev/SKILL.md) | skill | Design, build and ship Wix App Market apps: architecture, instance-token auth, webhooks, Blocks widgets, a Cloudflare Workers + D1 backend, billing, submission. |
+| [publish-skill](skills/publish-skill/SKILL.md) | skill | Publish a skill or plugin to your Claude Code marketplace repos: routes public vs private, scaffolds the entry and README row, scans for secrets and private content, validates, test-installs in a throwaway config, and keeps a local copy. Includes a history-purge recipe for leaks. |
 
 ## Layout
 
@@ -51,6 +52,9 @@ Skill-only plugins point at their folder with `"source": "./"` and
 [anthropics/skills](https://github.com/anthropics/skills).
 
 ## Adding a skill
+
+The [publish-skill](skills/publish-skill/SKILL.md) skill runs this whole flow (scaffold,
+scan, checks, test install, push, local copy). By hand:
 
 1. Create `skills/<name>/SKILL.md`. Frontmatter on line 1, `name` equal to the
    folder name, a `description` under 1024 characters that says what it does and

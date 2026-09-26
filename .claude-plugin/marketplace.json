@@ -110,6 +110,29 @@
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/wix-app-dev",
       "license": "MIT"
+    },
+    {
+      "name": "publish-skill",
+      "description": "Publish a skill or plugin to your Claude Code marketplace repos: routes public vs private, scaffolds the entry and README row, scans for secrets and private content, validates, test-installs in a throwaway config, and keeps a local copy. Includes a history-purge recipe for leaks.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/publish-skill"
+      ],
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "development",
+      "keywords": [
+        "skills",
+        "plugins",
+        "marketplace",
+        "publishing",
+        "secrets"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/publish-skill",
+      "license": "MIT"
     }
   ]
 }
