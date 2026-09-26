@@ -1,0 +1,5 @@
+.DS_Store
+Thumbs.db
+node_modules/
+# Packaged skill archives are build output, not source
+*.skill

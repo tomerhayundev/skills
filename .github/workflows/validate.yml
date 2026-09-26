@@ -1,0 +1,38 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Skill and marketplace checks
+        run: node scripts/check-skills.mjs
+
+      - name: Claude Code plugin validation
+        run: npx -y @anthropic-ai/claude-code plugin validate . --strict
+
+      - name: Install ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+
+      - name: remotion-video-pipeline beat fitter still reads the bundled track
+        run: |
+          node skills/remotion-video-pipeline/scripts/fit-beat-grid.mjs \
+            skills/remotion-video-pipeline/assets/music/ende-business-moves-1.mp3 --json > fit.json
+          node -e '
+            const f = require("./fit.json");
+            const want = [32, 96, 192, 256];
+            if (Math.abs(f.bpm - 120) > 0.05) throw new Error("bpm " + f.bpm);
+            if (f.firstBeatSeconds > 0.03) throw new Error("first beat " + f.firstBeatSeconds);
+            if (JSON.stringify(f.liftBeats) !== JSON.stringify(want)) throw new Error("lifts " + f.liftBeats);
+            console.log("ok", f.bpm, f.firstBeatSeconds, f.liftBeats);
+          '

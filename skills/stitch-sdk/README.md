@@ -1,6 +1,6 @@
 # Stitch SDK Skill
 
-> AI-Powered UI Generation — Generate production-quality UI screens from text prompts using Google's Stitch SDK.
+> AI-Powered UI Generation: generate production-quality UI screens from text prompts using Google's Stitch SDK.
 
 [![npm](https://img.shields.io/npm/v/@google/stitch-sdk)](https://www.npmjs.com/package/@google/stitch-sdk)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](https://github.com/google-labs-code/stitch-sdk/blob/main/LICENSE)
@@ -26,7 +26,8 @@ If you prefer to install step-by-step:
 npm install -g @google/stitch-sdk
 
 # 2. Add the skill to Claude Code
-claude skill add --source github:tomerhayundev/skills --skill stitch-sdk
+claude plugin marketplace add tomerhayundev/skills
+claude plugin install stitch-sdk@tomerhayundev-skills
 
 # 3. Set your API key
 export STITCH_API_KEY="your-api-key"
@@ -38,8 +39,8 @@ export STITCH_API_KEY="your-api-key"
 |-------------|---------|------------|
 | **Node.js** | 18+ | [nodejs.org](https://nodejs.org) |
 | **npm** | 8+ | Comes with Node.js |
-| **Stitch API Key** | — | [stitch.withgoogle.com](https://stitch.withgoogle.com) |
-| **Claude Code** | Latest | [claude.ai/claude-code](https://claude.ai/claude-code) |
+| **Stitch API Key** | n/a | [stitch.withgoogle.com](https://stitch.withgoogle.com) |
+| **Claude Code** | Latest | [code.claude.com](https://code.claude.com/docs) |
 
 ## Getting Your API Key
 
@@ -77,9 +78,9 @@ This skill teaches Claude Code how to use the Stitch SDK to:
 
 - **Generate UI screens** from text descriptions ("A login page with email and password")
 - **Edit screens** iteratively ("Make the background dark, add a sidebar")
-- **Create design variants** — explore different color schemes, layouts, fonts
-- **Extract outputs** — get HTML download URLs and screenshot URLs
-- **Build agent pipelines** — use the low-level Tool Client or Vercel AI SDK adapter
+- **Create design variants**: explore different color schemes, layouts, fonts
+- **Extract outputs**: get HTML download URLs and screenshot URLs
+- **Build agent pipelines**: use the low-level Tool Client or Vercel AI SDK adapter
 
 ### Supported Workflows
 
@@ -131,7 +132,7 @@ const imageUrl = await screen.getImage();
 
 | Version | Status |
 |---------|--------|
-| 0.0.3 | Current — initial public release |
+| 0.0.3 | Current, initial public release |
 
 ## Troubleshooting
 
@@ -148,7 +149,7 @@ Too many requests. Wait a moment and retry. Consider reducing `variantCount` for
 Can't reach the Stitch MCP server. Check your internet connection and any proxy/firewall settings.
 
 ### `getHtml()` returns a URL, not HTML
-This is expected — `getHtml()` returns a **download URL**. Fetch it to get the actual HTML:
+This is expected: `getHtml()` returns a **download URL**. Fetch it to get the actual HTML:
 ```ts
 const htmlUrl = await screen.getHtml();
 const response = await fetch(htmlUrl);

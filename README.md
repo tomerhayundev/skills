@@ -1,45 +1,60 @@
-# Claude Code Plugins & Skills
+# Claude Code plugins and skills
 
-A collection of plugins and skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
+Plugins and skills for [Claude Code](https://code.claude.com/docs), each one
+extracted from a real project so the next project starts from what worked.
 
-## Plugins
+## Install
 
-### codex-loop
-
-Iterative Codex CLI loop with Claude as orchestrator. Runs `codex exec` across multiple iterations — Claude evaluates each result and loops until the task is genuinely complete.
-
-**Install:**
+Add the marketplace once, then install what you need:
 
 ```bash
 claude plugin marketplace add tomerhayundev/skills
-claude plugin install codex-loop@tomerhayundev-skills
+claude plugin install remotion-video-pipeline@tomerhayundev-skills
 ```
 
-**Usage:**
+Inside a Claude Code session the same thing is `/plugin marketplace add tomerhayundev/skills`
+and `/plugin install <name>@tomerhayundev-skills`. A plugin's skill then runs as
+`/<plugin>:<skill>`, or triggers on its own when the task matches.
+
+For other agents that support [Agent Skills](https://agentskills.io) (Codex, Cursor,
+opencode, and more):
 
 ```bash
-/codex-loop "Build a REST API with CRUD and tests" --completion-promise "ALL TESTS PASSING"
+npx skills add tomerhayundev/skills --skill remotion-video-pipeline
 ```
 
-See [`plugins/codex-loop`](./plugins/codex-loop/README.md) for full documentation.
+## What's here
 
----
+| Name | Type | What it does |
+| --- | --- | --- |
+| [remotion-video-pipeline](skills/remotion-video-pipeline/SKILL.md) | skill | A production Remotion pipeline for product promo videos: clips as manifest rows, four aspect ratios, RTL locales, a beat-locked music bed whose lift lands on the payoff, measured verification, publishing. Ships a beat-grid fitter, an audio checker and a CC BY 4.0 120 BPM track. |
+| [deploy-production-level](skills/deploy-production-level/SKILL.md) | skill | Production deploy pipeline on GitHub Actions and Cloudflare: quality-gate CI, PR previews, automated production deploys, git-tag releases, one-click rollback, a human setup guide. Invoke it explicitly. |
+| [codex-loop](plugins/codex-loop/README.md) | plugin | An iterative Codex CLI loop with Claude as orchestrator: a Stop hook keeps state across rounds and Claude judges each result. `/codex-loop "task" --completion-promise "DONE"` |
+| [stitch-sdk](skills/stitch-sdk/SKILL.md) | skill | Generate UI screens with the Google Stitch SDK: from text prompts, edits, variants, HTML and screenshot export. |
+| [wix-app-dev](skills/wix-app-dev/SKILL.md) | skill | Design, build and ship Wix App Market apps: architecture, instance-token auth, webhooks, Blocks widgets, a Cloudflare Workers + D1 backend, billing, submission. |
 
-## Skills
+## Layout
 
-### deploy-production-level
+```
+.claude-plugin/marketplace.json   the catalog: one entry per installable plugin
+skills/<name>/SKILL.md            a skill (+ references/, scripts/, assets/)
+plugins/<name>/                   a plugin with commands and hooks
+scripts/check-skills.mjs          repo checks CI runs on every push
+```
 
-Production-grade deployment pipeline setup for web applications. Implements quality gate CI, PR preview deployments, automated production deploys, git-tag release tracking, one-click rollback, and human setup guides.
+Skill-only plugins point at their folder with `"source": "./"` and
+`"skills": ["./skills/<name>"]`, the same shape as
+[anthropics/skills](https://github.com/anthropics/skills).
 
-**Install:**
+## Adding a skill
+
+1. Create `skills/<name>/SKILL.md`. Frontmatter on line 1, `name` equal to the
+   folder name, a `description` under 1024 characters that says what it does and
+   when to use it. Keep the body under ~500 lines; put detail in `references/`.
+2. Add an entry to `.claude-plugin/marketplace.json`.
+3. Run the checks:
 
 ```bash
-claude skill add --url https://github.com/tomerhayundev/skills/tree/main/skills/deploy-production-level
+node scripts/check-skills.mjs
+claude plugin validate . --strict
 ```
-
----
-
-## What are Plugins vs Skills?
-
-- **Plugins** use Claude Code's plugin system (`claude plugin install`) and can include slash commands, hooks, and scripts
-- **Skills** are markdown-based instruction sets loaded via the skills system (`claude skill add`)

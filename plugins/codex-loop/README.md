@@ -37,8 +37,8 @@ User → /codex-loop "Build a REST API" --completion-promise "ALL TESTS PASSING"
 
 ### Prerequisites
 
-1. **Claude Code** — [Install guide](https://docs.anthropic.com/en/docs/claude-code)
-2. **Codex CLI** — Install from [github.com/openai/codex](https://github.com/openai/codex):
+1. **Claude Code**: [Install guide](https://code.claude.com/docs)
+2. **Codex CLI**: install from [github.com/openai/codex](https://github.com/openai/codex):
    ```bash
    npm install -g @openai/codex
    ```
@@ -133,7 +133,7 @@ The loop stops when Claude outputs:
 <promise>YOUR PROMISE HERE</promise>
 ```
 
-Claude will **only** output this when the statement is completely and unequivocally true. The loop is designed to prevent false exits — Claude cannot lie to escape.
+Claude will **only** output this when the statement is completely and unequivocally true. The loop is designed to prevent false exits: Claude cannot lie to escape.
 
 ---
 
@@ -204,7 +204,7 @@ codex-loop/
 
 ## Credits
 
-- **Loop engine**: Adapted from [ralph-loop](https://github.com/anthropics/claude-plugins) by Anthropic
+- **Loop engine**: Adapted from [ralph-loop](https://github.com/anthropics/claude-plugins-official) by Anthropic
 - **Codex integration**: Based on [skill-codex](https://github.com/tomerhayundev/skills)
 - **Ralph technique**: Pioneered by [Geoffrey Huntley](https://ghuntley.com/ralph/)
 

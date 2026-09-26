@@ -1,4 +1,4 @@
-# Stitch SDK — Full API Reference
+# Stitch SDK: Full API Reference
 
 Package: `@google/stitch-sdk` v0.0.3
 License: Apache 2.0
@@ -49,7 +49,7 @@ const sdk = new Stitch(client);
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `createProject(title?)` | `title?: string` | `Promise<Project>` | Create a new project |
-| `projects()` | — | `Promise<Project[]>` | List all accessible projects |
+| `projects()` | none | `Promise<Project[]>` | List all accessible projects |
 | `project(id)` | `id: string` | `Project` | Reference project by ID (no API call) |
 
 ---
@@ -71,7 +71,7 @@ A Stitch project containing screens.
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `generate(prompt, deviceType?, modelId?)` | `prompt: string`, `deviceType?: DeviceType`, `modelId?: ModelId` | `Promise<Screen>` | Generate a screen from text prompt |
-| `screens()` | — | `Promise<Screen[]>` | List all screens in project |
+| `screens()` | none | `Promise<Screen[]>` | List all screens in project |
 | `getScreen(screenId)` | `screenId: string` | `Promise<Screen>` | Retrieve specific screen by ID |
 
 ### DeviceType
@@ -103,8 +103,8 @@ A generated UI screen. Provides access to HTML and screenshots.
 |--------|-----------|---------|-------------|
 | `edit(prompt, deviceType?, modelId?)` | `prompt: string`, `deviceType?: DeviceType`, `modelId?: ModelId` | `Promise<Screen>` | Edit screen with text prompt |
 | `variants(prompt, variantOptions, deviceType?, modelId?)` | `prompt: string`, `variantOptions: VariantOptions`, `deviceType?: DeviceType`, `modelId?: ModelId` | `Promise<Screen[]>` | Generate design variants |
-| `getHtml()` | — | `Promise<string>` | Get HTML download URL |
-| `getImage()` | — | `Promise<string>` | Get screenshot download URL |
+| `getHtml()` | none | `Promise<string>` | Get HTML download URL |
+| `getImage()` | none | `Promise<string>` | Get screenshot download URL |
 
 **Note:** `getHtml()` and `getImage()` use cached data from the generation response when available. If the screen was loaded via `screens()` or `getScreen()`, they call the `get_screen` API automatically.
 
@@ -135,10 +135,10 @@ const client = new StitchToolClient({ apiKey: "..." });   // explicit
 
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
-| `connect()` | — | `Promise<void>` | Explicitly connect (auto-called by `callTool`) |
+| `connect()` | none | `Promise<void>` | Explicitly connect (auto-called by `callTool`) |
 | `callTool<T>(name, args)` | `name: string`, `args: Record<string, any>` | `Promise<T>` | Call an MCP tool |
-| `listTools()` | — | `Promise<{ tools: ToolDef[] }>` | List available tools |
-| `close()` | — | `Promise<void>` | Close connection |
+| `listTools()` | none | `Promise<{ tools: ToolDef[] }>` | List available tools |
+| `close()` | none | `Promise<void>` | Close connection |
 
 ### Available MCP Tools
 
@@ -169,7 +169,7 @@ const proxy = new StitchProxy({ apiKey: "..." });
 | Method | Parameters | Returns | Description |
 |--------|-----------|---------|-------------|
 | `start(transport)` | `transport: Transport` | `Promise<void>` | Start proxy server |
-| `close()` | — | `Promise<void>` | Stop proxy server |
+| `close()` | none | `Promise<void>` | Stop proxy server |
 
 ### Usage with stdio
 
@@ -183,7 +183,7 @@ await proxy.start(new StdioServerTransport());
 
 ---
 
-## `stitchTools()` — Vercel AI SDK Adapter
+## `stitchTools()`: Vercel AI SDK Adapter
 
 Returns Stitch tools in Vercel AI SDK format. Each tool is pre-wired with `execute` → `callTool`.
 

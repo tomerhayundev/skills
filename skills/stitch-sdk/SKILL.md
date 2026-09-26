@@ -1,9 +1,9 @@
 ---
 name: stitch-sdk
-description: "Use when building UI screens programmatically with Google Stitch SDK — generating screens from text prompts, editing designs, creating variants, extracting HTML/screenshots, or integrating Stitch into AI agent workflows via the Domain API, Tool Client, or Vercel AI SDK adapter."
+description: "Use when building UI screens programmatically with Google Stitch SDK: generating screens from text prompts, editing designs, creating variants, extracting HTML/screenshots, or integrating Stitch into AI agent workflows via the Domain API, Tool Client, or Vercel AI SDK adapter."
 ---
 
-# Stitch SDK — AI-Powered UI Generation
+# Stitch SDK: AI-Powered UI Generation
 
 Generate production-quality UI screens from text prompts using `@google/stitch-sdk`. Extract HTML and screenshots programmatically. Works standalone, in agent pipelines, or with Vercel AI SDK.
 
@@ -33,7 +33,7 @@ Set your API key:
 export STITCH_API_KEY="your-api-key"
 ```
 
-Get your API key from [stitch.withgoogle.com](https://stitch.withgoogle.com) — go to your account settings to generate one.
+Get your API key from [stitch.withgoogle.com](https://stitch.withgoogle.com): go to your account settings to generate one.
 
 ## Core Pattern: Generate → Edit → Extract
 
@@ -106,9 +106,9 @@ for (const v of variants) {
 **Variant aspects:** `"LAYOUT"`, `"COLOR_SCHEME"`, `"IMAGES"`, `"TEXT_FONT"`, `"TEXT_CONTENT"`
 
 **Creative range:**
-- `"REFINE"` — Small tweaks, stays close to original
-- `"EXPLORE"` — Moderate changes, balanced creativity
-- `"REIMAGINE"` — Bold redesigns, maximum creativity
+- `"REFINE"`: small tweaks, stays close to original
+- `"EXPLORE"`: moderate changes, balanced creativity
+- `"REIMAGINE"`: bold redesigns, maximum creativity
 
 ## Three Usage Modes
 
@@ -212,7 +212,7 @@ Auth requires either `apiKey` OR both `accessToken` + `projectId`.
 | Mistake | Fix |
 |---------|-----|
 | Missing `STITCH_API_KEY` | Set env var or pass `apiKey` in config |
-| Calling `getHtml()` expecting HTML string | Returns a **download URL**, not raw HTML — fetch the URL |
+| Calling `getHtml()` expecting HTML string | Returns a **download URL**, not raw HTML; fetch the URL |
 | Not closing `StitchToolClient` | Always call `client.close()` when done |
 | Using wrong device type for layout | Use `"DESKTOP"` for web, `"MOBILE"` for mobile-first |
 | Generating too many variants | Max is 5 per call |

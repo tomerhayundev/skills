@@ -77,7 +77,7 @@ Claude (Sonnet/Opus) + Codex work together:
 - **Codex**: Writes the code, makes file changes
 - **Claude**: Orchestrates, evaluates, fact-checks, decides when done
 
-Claude treats Codex as a peer — pushes back when Codex is wrong, researches disagreements, and never blindly accepts Codex's output.
+Claude treats Codex as a peer. It pushes back when Codex is wrong, researches disagreements, and never blindly accepts Codex's output.
 
 ### State File
 
