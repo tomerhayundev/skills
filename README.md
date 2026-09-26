@@ -12,6 +12,9 @@ claude plugin marketplace add tomerhayundev/skills
 claude plugin install remotion-video-pipeline@tomerhayundev-skills
 ```
 
+The `owner/repo` shorthand clones over SSH. Without a GitHub SSH key, use the HTTPS
+URL instead: `claude plugin marketplace add https://github.com/tomerhayundev/skills.git`.
+
 Inside a Claude Code session the same thing is `/plugin marketplace add tomerhayundev/skills`
 and `/plugin install <name>@tomerhayundev-skills`. A plugin's skill then runs as
 `/<plugin>:<skill>`, or triggers on its own when the task matches.
