@@ -26,11 +26,18 @@ const FLOOR = opt("floor", 1.5);
 const GRID = opt("grid", 15);
 const WINDOW = 3;
 
-// Mean luma of |frame n - frame n-1|, on a downscaled copy (fast, and noise
-// like film grain averages out instead of reading as change).
+// Mean luma of |frame n - frame n-1|, from two independent decodes of the file
+// offset by one frame. Not tblend: its internal previous-frame buffer
+// occasionally compared against the wrong frame and faked large pops between
+// identical frames. Every flagged pop still deserves a look: fine film grain
+// that re-renders can register while being invisible.
 const r = spawnSync(
   "ffmpeg",
-  ["-hide_banner", "-i", file, "-an", "-vf", "scale=320:-2,format=gray,tblend=all_mode=difference,signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=-", "-f", "null", "-"],
+  [
+    "-hide_banner", "-i", file, "-i", file, "-an", "-filter_complex",
+    "[0:v]format=gray[a];[1:v]format=gray,trim=start_frame=1,setpts=PTS-STARTPTS[b];[a][b]blend=all_mode=difference,signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=-",
+    "-f", "null", "-",
+  ],
   { encoding: "utf8", maxBuffer: 1 << 28 },
 );
 if (r.status !== 0) {
@@ -49,7 +56,7 @@ const median = (xs) => {
 
 const pops = [];
 values.forEach((d, i) => {
-  // tblend's first output compares frames 0 and 1, so value i is the change INTO frame i + 1.
+  // Value i compares frames i and i + 1: the change INTO frame i + 1.
   const frame = i + 1;
   const around = [...values.slice(Math.max(0, i - WINDOW), i), ...values.slice(i + 1, i + 1 + WINDOW)];
   const base = median(around);

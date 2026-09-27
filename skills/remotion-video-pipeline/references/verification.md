@@ -42,11 +42,17 @@ Check per aspect:
 node ${CLAUDE_SKILL_DIR}/scripts/frame-pops.mjs out/promo/<id>.mp4 [--factor=3]
 ```
 
-Measures how much each frame changes from the last (on a downscaled grey copy, so grain
-averages out) and flags any frame that changes 3x more than its neighbours: a hard cut, a
-transition that covers too much in one frame, an element that blinks in. Exit 1 on any.
-It reports whether each pop sits on the beat grid. Run it on every cut before publishing,
-and after changing a transition.
+Measures how much each frame changes from the last (two independent decodes of the file,
+offset by one frame) and flags any frame that changes 3x more than its neighbours: a hard
+cut, a transition that covers too much in one frame, an element that blinks in or
+unmounts on screen. Exit 1 on any. It reports whether each pop sits on the beat grid. Run
+it on every cut and every aspect before publishing, and after changing a transition: a
+tall frame shows more of the world than a wide one, so it catches pops that wide hides.
+
+Look at every pop it flags before fixing anything: extract the frames either side and
+compare them at full size. Not ffmpeg's \`tblend\`, and not with a downscale in the chain:
+both faked large differences between identical frames in testing. Fine film grain that
+re-renders can also register while being invisible.
 
 ## Frame 0 is a thumbnail
 
