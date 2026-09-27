@@ -34,7 +34,7 @@
     },
     {
       "name": "deploy-production-level",
-      "description": "Production-grade deployment pipeline for web apps on GitHub Actions and Cloudflare: quality-gate CI, PR previews, automated production deploys, git-tag releases, one-click rollback, and a human setup guide. Invoke explicitly.",
+      "description": "Production deploy pipeline on GitHub Actions and Cloudflare Workers: a required quality gate, PR preview environments, staging on every merge, human-promoted production releases tagged with their Worker version, instant rollback, and a hook that stops AI agents from deploying. Invoke it explicitly.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -50,6 +50,8 @@
         "ci",
         "github-actions",
         "cloudflare",
+        "workers",
+        "staging",
         "rollback"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/deploy-production-level",

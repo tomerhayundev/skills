@@ -1,176 +1,108 @@
 ---
 name: deploy-production-level
-description: "Production-grade deployment pipeline setup for web applications using GitHub Actions, Cloudflare (Workers + Pages), and branch protection. Use this skill ONLY when explicitly invoked -- not all projects need this level of deployment rigor. Implements: quality gate CI (typecheck + tests), PR preview deployments, automated production deploys on merge, git-tag-based release tracking, one-click rollback, and a human setup guide. Covers the full method end-to-end: GitHub repo configuration, CI/CD workflows, branch strategy, secrets management, PR templates, rollback procedures, and deployment safety rules for both humans and AI agents."
+description: Use when the user explicitly asks for a production-grade deployment pipeline, release process, staging to production promotion, per-PR preview environments, or one-click rollback for a web app on GitHub Actions and Cloudflare Workers, or asks to upgrade a repo that already has a deploy.yml / preview.yml / rollback.yml pipeline from an earlier version of this method. Not for projects where a single manual deploy is enough.
 ---
 
 # Production-Level Deployment Pipeline
 
-A complete, battle-tested deployment method that ensures **zero broken deploys** through
-automated quality gates, preview environments, and instant rollback capability.
+Nothing reaches production without passing a quality gate twice, running on staging first, and being promoted by a human. Every production deploy is tagged with its Worker version ID, so rollback is instant and needs no rebuild. AI agents are blocked from deploying by a hook, not just by a rule they are asked to follow.
 
-## Architecture Overview
+Last verified against the tooling on 2026-09-27. Check the version table before copying anything.
+
+## The pipeline
 
 ```
-Developer writes code
-       |
-Push to feature branch (NEVER main)
-       |
-Open Pull Request to main
-       |
-GitHub Actions: Quality Gate (typecheck + tests + build)
-       |
-   Pass? --> Preview deployed to pr-<N>.<project>.pages.dev
-       |
-Human tests preview, approves
-       |
-Merge PR to main
-       |
-Quality Gate runs AGAIN on main
-       |
-   Pass? --> Deploy Worker (API) + Pages (Frontend) in parallel
-       |
-Git tag created: deploy-YYYYMMDD-HHMMSS-<sha>
+feature/* --PR--> main --PR (promotion)--> production
+                   |                            |
+ every PR:         | push to main:              | push to production:
+ CI Quality Gate   | gate, build,               | gate, build, record live version,
+ (required check)  | migrate staging D1,        | migrate prod D1, deploy, smoke test
+ + Preview URL     | deploy --env staging,      | (smoke fails: auto-rollback),
+ (optional)        | smoke test                 | tag deploy-<ts>-<sha> with version ID
+
+Rollback Production (manual button): wrangler rollback <version ID>. Instant.
 ```
 
-**If any step fails, nothing deploys. The live site stays safe.**
+If any step fails, nothing after it runs. If the production smoke test fails, the job rolls back to the version that was live before it started.
 
-## Core Principles
+## Current versions (update this table whenever you touch the skill)
 
-1. **Main is sacred** -- No direct pushes. All changes via feature branch + PR.
-2. **Quality gate is mandatory** -- Typecheck + tests must pass before ANY deploy.
-3. **Double verification** -- Gate runs on PR AND again on merge to main.
-4. **Every deploy is tagged** -- Full audit trail with `deploy-*` git tags.
-5. **Instant rollback** -- One-click revert via GitHub Actions or Cloudflare dashboard.
-6. **Preview before production** -- Every PR gets a live preview URL.
-7. **No manual deploys** -- All deploys through CI/CD only.
+| Tool | Use | Notes |
+|---|---|---|
+| `actions/checkout` | `@v7` | node24 runtime. Actions on Node 20 (`checkout@v4` and friends) lost runner support on 2026-09-23 |
+| `actions/setup-node` | `@v7` | with `cache: npm` |
+| Node.js | `24` | Active LTS. Node 26 becomes LTS on 2026-10-28. Node 20 is EOL |
+| Wrangler | `^4.135.0` or newer, pinned in `package.json` | `wrangler preview` needs 4.135.0+. CI runs `npx wrangler`, so it uses the project's pinned version. Bump it with `npm install -D wrangler@latest` (in the Worker's workspace), never by editing `package.json` alone: a stale lockfile fails `npm ci` |
+| `cloudflare/wrangler-action` | `@v4` (4.1.2+), only if you prefer the wrapper | 4.1.0 is broken |
 
-## Implementation Steps
+## Implementation steps
 
-### Step 1: Create the GitHub Actions Workflows
+1. **Inspect first.** Read `package.json` scripts, the Wrangler config (and which folder it lives in), the build output directory, every binding (D1, KV, R2, queues), `migrations/`, existing `.github/workflows/`, `CLAUDE.md` and `AGENTS.md`, and how the frontend finds the API (absolute URL, CORS list, OAuth redirect URIs). If the repo has the old pipeline (Pages deploys, `@v4` actions, a `rollback.yml` that rebuilds a tag), also follow "Upgrading an old pipeline" below.
+2. **Shape the Worker config.** Production at the top level, `env.staging` for the persistent staging Worker, a `previews` block for PR previews. Every binding needs its own staging and preview resource. Keep the project's format (`wrangler.toml` works the same way). Template: [Wrangler config](references/github-actions-workflows.md#wrangler-config).
+3. **Write the workflows** from [references/github-actions-workflows.md](references/github-actions-workflows.md): `ci.yml` (the gate, also callable), `deploy-staging.yml`, `deploy-production.yml`, `rollback.yml`, optional `preview.yml`, and `.github/dependabot.yml` so versions stay current.
+4. **Add the PR template** from [assets/pull_request_template.md](assets/pull_request_template.md) as `.github/pull_request_template.md`.
+5. **Install the agent guardrails** from [references/agent-guardrails.md](references/agent-guardrails.md): the rules block (in `AGENTS.md` imported by `CLAUDE.md` when other agents such as Codex or Cursor work in the repo, otherwise in `CLAUDE.md`), and [assets/deploy-guard.mjs](assets/deploy-guard.mjs) as a PreToolUse hook in `.claude/settings.json`.
+6. **Write `DEPLOYMENT-GUIDE.md`** at the repo root from [references/human-setup-guide.md](references/human-setup-guide.md), with the project's real names and URLs filled in.
+7. **Give the human the one-time setup list** (below). These steps need their accounts; do not attempt them.
+8. **Verify before calling it done:** run the gate commands locally, `npx wrangler deploy --dry-run` and `npx wrangler deploy --dry-run --env staging`, lint the workflows (`actionlint` if available), and pipe sample commands through the hook (see agent-guardrails.md). Then open the first PR and watch `Quality Gate` go green.
 
-Create three workflow files. See [references/github-actions-workflows.md](references/github-actions-workflows.md) for complete, copy-paste-ready YAML for all three workflows:
+## Rules the workflows keep
 
-1. **`deploy.yml`** -- Production pipeline (quality gate -> deploy -> tag)
-2. **`preview.yml`** -- PR preview deployments with auto-comment
-3. **`rollback.yml`** -- Manual rollback via workflow dispatch
+These are why the templates look the way they do. Do not simplify them away.
 
-### Step 2: Create the PR Template
+| Rule | Why |
+|---|---|
+| The gate runs on the PR **and** again inside each deploy (`uses: ./.github/workflows/ci.yml`) | Two green PRs can merge into a red `main` |
+| Build, then migrate D1, then deploy | A failed build must not leave a migrated schema behind old code |
+| Migrations are backward-compatible: add and backfill now, drop in a later release | Neither `wrangler rollback` nor a revert undoes a D1 migration, so the old code must run on the new schema |
+| Production `concurrency` uses `cancel-in-progress: false` | Cancelling halfway can leave a migrated DB behind an old Worker |
+| Record the live version ID before deploying; store the new one in the deploy tag | Rollback becomes `wrangler rollback <id>`: instant, no rebuild, no guessing what "previous" means |
+| Top-level `permissions: contents: read`, widened per job | Least privilege for `GITHUB_TOKEN` |
+| `inputs.*`, PR titles and branch names reach `run:` through `env:`, never inline `${{ }}` | Script injection |
+| Previews run on `pull_request`, skip fork PRs, never use `pull_request_target` | Fork code must never run with Cloudflare secrets. GitHub's default policy starts blocking `pull_request_target` in public repos on 2026-11-02 |
+| Previews bind to one shared preview D1 (and KV, R2): not production, not one per PR | Keeps production data out of previews; a database per PR hits the account's D1 limit |
 
-Create `.github/pull_request_template.md`. See [assets/pull_request_template.md](assets/pull_request_template.md) for the template.
+**Tell the human this trust boundary plainly:** a same-repo PR runs its own copy of `preview.yml` (and of the preview config) with the Cloudflare token, before anyone reviews it, and a Cloudflare token cannot be limited to one Worker. Write access to the repo is therefore deploy access. Grant it only to people and agents you would let deploy; on plans with environments, the token can live in a `preview` environment that needs approval.
 
-### Step 3: Create the Deployment Safety Doc (for AI agents)
+## Human one-time setup (the agent lists it, the human does it)
 
-Create `DEPLOYMENT-SAFETY.md` at the repo root. See [references/deployment-safety-template.md](references/deployment-safety-template.md) for the full template. This file is the **single source of truth** that all AI agents must follow.
+1. Merge the pipeline PR into `main` first, then create the `production` branch from `main`, so it starts with the new workflows.
+2. Protect `main` and `production` with rulesets: require a PR, require the `Quality Gate` check, block force pushes and deletions, empty bypass list, and on `production` allow only merge commits. Delete any old classic branch protection rule: its "require branches to be up to date" blocks every promotion PR. Private repos need GitHub Pro or higher for rulesets and branch protection. On Free, only the agent hook guards the branches: say so plainly.
+3. Add repo secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, and repo variables `STAGING_URL` and `PRODUCTION_URL`.
+4. Create the Cloudflare API token (plus Pages Edit if Pages sites remain), a staging and a preview copy of every resource the Worker binds (D1, KV, R2, queues), and each environment's Worker secrets (test-mode values outside production). Register staging redirect URIs with any OAuth provider.
 
-### Step 4: Create the Human Deployment Guide
+Click-by-click steps are in [references/human-setup-guide.md](references/human-setup-guide.md).
 
-Create `DEPLOYMENT-GUIDE.md` at the repo root. See [references/human-setup-guide.md](references/human-setup-guide.md) for the full template. This guide walks the human through daily workflow, rollback procedures, and one-time GitHub setup.
+## Adapting
 
-### Step 5: Configure CLAUDE.md / Project Instructions
+| Situation | Change |
+|---|---|
+| Small project, no staging wanted | Drop `deploy-staging.yml`, trigger `deploy-production.yml` on `main`, skip the `production` branch. Keep previews so something is tested before production |
+| Frontend and API are separate Workers | One deploy job per Worker (`working-directory:`), one `worker_version_<name>=` line per Worker in the tag, loop over them in rollback |
+| Wrangler config in a subfolder (`worker/`, `apps/api/`) | Set `working-directory:` on every Wrangler step, including the gate's bundle check |
+| Next.js on Workers (OpenNext) | Build with `npx opennextjs-cloudflare build`, deploy with `npx wrangler deploy`, same order |
+| Static sites still on Cloudflare Pages | Cloudflare now starts new projects on Workers static assets; migrate with its "Migrate from Pages" guide when convenient. Until then see [Pages sites next to the Worker](references/github-actions-workflows.md#pages-sites-next-to-the-worker) |
+| Frontend calls the API by an absolute production URL, or the API has a CORS allowlist | Staging and previews would talk to production. Derive the API base from `location.origin` or a build-time variable per environment, and add the staging and preview origins to CORS. OAuth rarely works on per-PR hostnames: test those flows on staging |
+| Worker uses queue consumers, cron, or service bindings to other Workers | Previews do not isolate these: queue consumers and cron stay on production, and service bindings call the production Worker. Skip previews or accept it |
+| Vercel, Netlify or AWS | Same method, different deploy step (`vercel deploy --prod`, `netlify deploy --prod`, `aws s3 sync` plus a CloudFront invalidation). Roll back with the host's instant rollback |
 
-Add these rules to the project's CLAUDE.md or equivalent AI instructions file:
+## Upgrading an old pipeline (from the early-2026 version of this skill)
 
-```markdown
-## Critical Deployment Rules
+- Bump every action to the version table; the `@v4` actions run on Node 20, which runners no longer have. Bump Wrangler through the package manager so the lockfile follows.
+- `deploy.yml` becomes `deploy-production.yml` (on `production`) plus `deploy-staging.yml` (on `main`), both calling `ci.yml`.
+- Move D1 migrations to after the build and before the deploy. A schema applied with `d1 execute --file schema.sql` becomes `migrations/0001_initial.sql`; keep it idempotent (`CREATE TABLE IF NOT EXISTS`) so the first `migrations apply` on the existing production database only records it.
+- Set production `cancel-in-progress: false`.
+- Replace the rebuild-a-tag `rollback.yml` with the `wrangler rollback` one, and write `worker_version=` into new deploy tags. Tags from before the upgrade carry no version ID, so the first rollback after the upgrade needs the ID passed by hand (from `npx wrangler deployments list`). Say so in the handover.
+- Previews: the API Worker moves to `wrangler preview`. Static sites that stay on Pages keep `--branch pr-<N>` previews. Either way, post one PR comment and edit it in place instead of a new one per push.
+- Move the rules from `DEPLOYMENT-SAFETY.md` into the rules block (step 5), add the hook, then delete `DEPLOYMENT-SAFETY.md` once nothing links to it. Remove `deploy` scripts from `package.json` so nobody runs one by habit.
 
-1. **NEVER push directly to `main`** -- All changes must go through a feature branch + pull request.
-2. **NEVER deploy manually** -- No `wrangler deploy`, no `npm run deploy:*`. All deploys via GitHub Actions only.
-3. **NEVER modify `.github/workflows/` without explicit human approval**.
-4. **NEVER skip the quality gate** -- No `--no-verify`, no commenting out CI steps.
-5. **Read `DEPLOYMENT-SAFETY.md` before any deployment-related work**.
-```
+## Common mistakes
 
-### Step 6: Human One-Time Setup
-
-**IMPORTANT**: The following steps CANNOT be done by an AI agent. Instruct the human to complete them. See [references/human-setup-guide.md](references/human-setup-guide.md) for detailed walkthrough.
-
-#### 6a. GitHub Branch Protection
-1. Go to repo Settings -> Branches
-2. Add branch protection rule for `main`
-3. Enable: Require PR before merging, Require status checks (`Quality Gate`), Require up-to-date branches, Do not allow bypassing
-
-#### 6b. GitHub Actions Secrets
-Set these in repo Settings -> Secrets and variables -> Actions:
-- `CLOUDFLARE_API_TOKEN` -- API token with Workers Scripts Edit + Pages Edit + D1 Edit
-- `CLOUDFLARE_ACCOUNT_ID` -- Cloudflare account ID
-
-#### 6c. Cloudflare API Token
-Create at dash.cloudflare.com -> My Profile -> API Tokens with permissions:
-- Account: Workers Scripts Edit
-- Account: Cloudflare Pages Edit
-- Account: D1 Edit (if using D1)
-
-## Adapting to Your Stack
-
-The reference workflows use Cloudflare (Workers + Pages). To adapt:
-
-| Component | Cloudflare | Vercel | AWS | Netlify |
-|-----------|-----------|--------|-----|---------|
-| Frontend | `wrangler pages deploy` | `vercel deploy` | `aws s3 sync` + CloudFront | `netlify deploy` |
-| API | `wrangler deploy` (Worker) | Vercel Functions | Lambda/ECS | Netlify Functions |
-| Secrets | `wrangler secret put` | `vercel env add` | AWS Secrets Manager | `netlify env:set` |
-
-The **method** (quality gate -> preview -> merge -> deploy -> tag -> rollback) is universal. Only the deploy commands change.
-
-## Quality Gate Composition
-
-At minimum, the quality gate must include:
-
-```yaml
-steps:
-  - run: npm ci                    # Install dependencies
-  - run: npm run build:shared      # Build shared packages first (if monorepo)
-  - run: npm run typecheck         # TypeScript type checking
-  - run: npm test                  # Unit/integration tests
-```
-
-Optionally add: lint, E2E tests, bundle size checks, security audit.
-
-## Branch Naming Convention
-
-| Prefix | Purpose |
-|--------|---------|
-| `feature/<name>` | New features |
-| `fix/<name>` | Bug fixes |
-| `refactor/<name>` | Code cleanup |
-| `docs/<name>` | Documentation |
-
-## Rollback Decision Matrix
-
-| Symptom | Action |
-|---------|--------|
-| Frontend broken, API fine | Rollback `pages-only` |
-| API errors, frontend fine | Rollback `worker-only` |
-| Both broken or unsure | Rollback `both` |
-| GitHub is down | Use hosting dashboard directly |
-
-## Secrets Management Rules
-
-- **NEVER** commit secrets, `.env` files, API keys, or tokens
-- Set worker/function secrets via CLI (`wrangler secret put`, `vercel env add`, etc.)
-- Set CI secrets via GitHub repo Settings -> Secrets
-- Frontend env files may be committed ONLY if they contain public URLs (no secrets)
-
-## Daily Developer Workflow (Quick Reference)
-
-```bash
-# 1. Start from latest main
-git checkout main && git pull
-
-# 2. Create feature branch
-git checkout -b feature/my-change
-
-# 3. Make changes, test locally
-npm run typecheck && npm test
-
-# 4. Push and create PR
-git push -u origin feature/my-change
-gh pr create --title "Add my change" --body "Description"
-
-# 5. Wait for Quality Gate + preview URL
-# 6. Test preview, merge when green
-gh pr merge <number> --merge
-
-# 7. Verify deploy (~2 min after merge)
-git tag --list 'deploy-*' --sort=-creatordate | head -1
-```
+| Mistake | Fix |
+|---|---|
+| `Quality Gate` does not appear in the ruleset's status check search | The search only lists checks that ran in the last 7 days. Open a PR first, then add it |
+| Squash-merging the `main` to `production` promotion PR | Use a merge commit for promotions, or the branches diverge and every later promotion conflicts. Do not require linear history on `production` |
+| Preview URL or version ID scraped from stdout with `grep` | Set `WRANGLER_OUTPUT_FILE_PATH` and read `preview_urls` / `version_id` from that file with `jq` |
+| `wrangler rollback` without a version ID | It picks "the version uploaded before the latest", which may never have served traffic. Always pass the ID |
+| Checking a secret with `if [ -z "${{ secrets.X }}" ]` | Map the secret into `env:` and test `"$X"` |
+| Trusting `CLAUDE.md` alone to stop an agent from deploying | It is context, not enforcement. The hook blocks locally; the ruleset blocks on GitHub |

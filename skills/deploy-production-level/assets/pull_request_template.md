@@ -1,15 +1,19 @@
 ## What changed
 
-<!-- Brief description of what this PR does -->
+<!-- One or two sentences: what this PR does and why. -->
+
+## How to test
+
+<!-- Steps on the preview URL the bot comments below. For a promotion PR (main to production): the commit list is what goes live. -->
 
 ## Checklist
 
-- [ ] `npm run typecheck` passes locally
-- [ ] `npm test` passes locally
-- [ ] Tested in browser (dev server)
-- [ ] No secrets or .env files included
-- [ ] No changes to CI/CD workflows without human approval
+- [ ] `npm run typecheck && npm run lint && npm test && npm run build` pass locally
+- [ ] Tried it on the preview URL (or locally, if previews are off)
+- [ ] D1 migrations, if any, keep the currently deployed code working (no drop or rename of anything it still reads)
+- [ ] No secrets, `.env` files or real customer data
+- [ ] Changes under `.github/workflows/` were reviewed by a human
 
-## Screenshots (if UI change)
+## Screenshots (UI changes)
 
-<!-- Paste screenshots or delete this section -->
+<!-- Before / after, or delete this section. -->
