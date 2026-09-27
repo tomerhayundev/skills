@@ -132,7 +132,8 @@ const entry = {
   source: isPlugin ? `./${rel}` : "./",
   ...(isPlugin ? {} : { strict: false, skills: [`./${rel}`] }),
   author: market.owner,
-  category: opt("category") ?? "development",
+  // Keep an existing entry's category on a re-run; defaulting reset "media" to "development" once.
+  category: opt("category") ?? existingEntry?.category ?? "development",
   ...(opt("keywords") ? { keywords: opt("keywords").split(",").map((k) => k.trim()) } : {}),
   ...(homepage ? { homepage } : {}),
   ...(license ? { license } : {}),

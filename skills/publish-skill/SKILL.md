@@ -33,7 +33,7 @@ a client's skill once had to be purged from public history.
 6. **Test the install:** `node <skill-dir>/scripts/test-install.mjs --repo <clone> --plugin <name>`. Throwaway config; never the real one.
 7. **Push:** commit (ending with the Co-Authored-By line), `git push origin main`, then `gh run watch` the CI run. Then `test-install.mjs --repo <clone> --plugin <name> --remote https://github.com/tomerhayundev/<repo>.git`.
 8. **Local copy:** `cp -r <clone>/skills/<name> ~/.claude/skills/<name>` (plugin: its `skills/<name>` folder). Updating: replace the folder.
-9. **Report** the HTTPS install commands (below), public or private, and what the scan changed.
+9. **Report** the HTTPS install commands (below), public or private, the update commands for machines that already have it, and what the scan changed.
 
 ```bash
 # public
@@ -47,6 +47,12 @@ claude plugin install <name>@tomerhayundev-private-skills
 
 Already added on that machine: `claude plugin marketplace update <marketplace>` instead of `add`.
 
+```bash
+# update a skill or plugin that is already installed: BOTH lines, then restart Claude Code
+claude plugin marketplace update <marketplace>
+claude plugin update <name>@<marketplace>
+```
+
 ## Keep the instructions current
 
 A publish is done when a new user can install from the README alone:
@@ -58,7 +64,7 @@ A publish is done when a new user can install from the README alone:
 
 ## Updating a published skill
 
-- Skill-only entries track the commit: push, then users run `claude plugin marketplace update tomerhayundev-skills`.
+- Skill-only entries track the commit: push, then users run `claude plugin marketplace update tomerhayundev-skills` **and** `claude plugin update <name>@tomerhayundev-skills`, then restart. The marketplace update alone leaves the installed copy on the old commit (tested: the new file only arrived after `plugin update`).
 - Full plugins with a `version` in `plugin.json`: **bump it**, or installed copies never update (codex-loop's jq fix reached no installed copy until 1.1.0). Users then run `claude plugin update <name>@<marketplace>`.
 - Renaming or removing: add a `renames` map entry (`"old": "new"` or `"old": null`), never just delete the entry.
 

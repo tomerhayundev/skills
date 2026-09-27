@@ -32,6 +32,9 @@ claude plugin marketplace update tomerhayundev-skills
 claude plugin update <name>@tomerhayundev-skills
 ```
 
+Run both, then restart Claude Code: the first only refreshes the catalog, the second
+moves the installed copy to the latest version.
+
 Or turn on auto-update once: `/plugin` > Marketplaces > tomerhayundev-skills >
 Enable auto-update. Remove one with `claude plugin uninstall <name>@tomerhayundev-skills`.
 
@@ -54,7 +57,7 @@ npx skills add https://github.com/tomerhayundev/skills --skill <name>
 
 | Name | Type | What it does | Install |
 | --- | --- | --- | --- |
-| [remotion-video-pipeline](skills/remotion-video-pipeline/SKILL.md) | skill | A production Remotion pipeline for product promo videos: clips as manifest rows, four aspect ratios, RTL locales, no visible cuts (shared elements and a flood that turns each scene into the next), a beat-locked music bed whose lift lands on the payoff, measured verification, publishing. Ships a beat-grid fitter, an audio checker, a frame-pop checker and a CC BY 4.0 120 BPM track. | `claude plugin install remotion-video-pipeline@tomerhayundev-skills` |
+| [remotion-video-pipeline](skills/remotion-video-pipeline/SKILL.md) | skill | A production Remotion pipeline for product promo videos: clips as manifest rows, four aspect ratios, RTL locales, no visible cuts (shared elements and a flood that turns each scene into the next), a beat-locked music bed whose lift lands on the payoff, one-take launch films (one element travels through every moment and the camera follows it), measured verification, publishing. Ships a beat-grid fitter, an audio checker, a frame-pop checker and a CC BY 4.0 120 BPM track. | `claude plugin install remotion-video-pipeline@tomerhayundev-skills` |
 | [deploy-production-level](skills/deploy-production-level/SKILL.md) | skill | Production deploy pipeline on GitHub Actions and Cloudflare: quality-gate CI, PR previews, automated production deploys, git-tag releases, one-click rollback, a human setup guide. Invoke it explicitly. | `claude plugin install deploy-production-level@tomerhayundev-skills` |
 | [codex-loop](plugins/codex-loop/README.md) | plugin | An iterative Codex CLI loop with Claude as orchestrator: a Stop hook keeps state across rounds and Claude judges each result. `/codex-loop "task" --completion-promise "DONE"`. Needs the Codex CLI. | `claude plugin install codex-loop@tomerhayundev-skills` |
 | [stitch-sdk](skills/stitch-sdk/SKILL.md) | skill | Generate UI screens with the Google Stitch SDK: from text prompts, edits, variants, HTML and screenshot export. Needs `@google/stitch-sdk` and a `STITCH_API_KEY` ([setup](skills/stitch-sdk/README.md)). | `claude plugin install stitch-sdk@tomerhayundev-skills` |
