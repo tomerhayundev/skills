@@ -21,18 +21,36 @@ If the user says "public" but the scan or the content says it is not public, pub
 private and say so. Never publish such content publicly on instruction alone:
 a client's skill once had to be purged from public history.
 
+## Every entry is a full plugin (Cowork)
+
+Cowork installs only marketplace entries whose `source` is a folder with its own
+`.claude-plugin/plugin.json`. Skill-only entries (`source: "./"`, `strict: false`,
+`skills: [...]`) install fine in the Claude Code CLI, but Cowork skips them silently.
+Observed: adding tomerhayundev-skills in Cowork installed only codex-loop.
+
+- Layout: `plugins/<name>/.claude-plugin/plugin.json` and `plugins/<name>/skills/<name>/SKILL.md`,
+  with the skill's references/, scripts/, assets/ next to its SKILL.md. A bare skill goes
+  under `plugins/<name>/skills/<name>/`, never straight into `plugins/<name>/`.
+- The marketplace entry is `"source": "./plugins/<name>"`, with no `strict` and no `skills` key.
+- `plugin.json` has `name` (same as the folder and the entry), `version`, `description`, `author`.
+  Bump `version` on every change, or installed copies (CLI and Cowork) never update.
+- Hook and MCP paths use `${CLAUDE_PLUGIN_ROOT}`, never absolute paths.
+- The scaffold always builds this shape, and `check-skills.mjs` fails on anything else: a
+  source outside `./plugins/`, a missing or incomplete `plugin.json`, a plugin with no skill,
+  command, agent, hook or MCP server, or a changed plugin whose version was not bumped.
+
 ## Steps
 
 `<skill-dir>` is the base directory printed when this skill loads.
 
 1. **Sync the clone.** Missing: `gh repo clone tomerhayundev/<repo> ~/claude-skill-repos/<repo> -- -c core.longpaths=true`. Present: `git -C <clone> pull --ff-only`.
 2. **Clean the source first**, then copy. Both repos: secrets become env var reads and personal absolute paths become relative ones, in the source project as well. Public only: also strip client names, internal URLs and project-only details; keep the technique. The SKILL.md description starts "Use when..." and names triggers, not the workflow.
-3. **Scaffold:** `node <skill-dir>/scripts/scaffold.mjs --repo <clone> --name <name> --from <source-folder> --description "<what it does, one line>" [--plugin] [--keywords a,b]`. Copies the files, adds the marketplace entry and the README row with its `claude plugin install` command (both use `--description`, not the "Use when" line). Re-run it after edits to refresh them. `--plugin` (or a source with `.claude-plugin/plugin.json`) makes a full plugin under `plugins/` for hooks, agents, commands or MCP.
-4. **Scan:** `node <skill-dir>/scripts/scan.mjs <clone>/skills/<name> --public` (drop `--public` for private). Errors block. Fix the source too, not just the copy.
-5. **Check:** in the clone, `node scripts/check-skills.mjs` and `claude plugin validate . --strict`. Both must pass. The check fails when an entry has no README row or its install command is wrong, and warns on SSH install instructions.
+3. **Scaffold:** `node <skill-dir>/scripts/scaffold.mjs --repo <clone> --name <name> --from <source-folder> --description "<what it does, one line>" [--keywords a,b]`. A bare skill folder lands in `plugins/<name>/skills/<name>/`, a plugin folder in `plugins/<name>/`. It writes `plugin.json` (new plugins start at 0.1.0), the marketplace entry, and the README row with its `claude plugin install` command (catalog and row use `--description`, not the "Use when" line; a re-run keeps a hand-tuned row unless `--description` is passed). Re-run it after edits with `--bump patch` (or `minor`/`major`).
+4. **Scan:** `node <skill-dir>/scripts/scan.mjs <clone>/plugins/<name> --public` (drop `--public` for private). Errors block. Fix the source too, not just the copy.
+5. **Check:** in the clone, `node scripts/check-skills.mjs` and `claude plugin validate . --strict`. Both must pass. The check fails on the Cowork rules above, a missing README row, a wrong install command, or a relative link that points nowhere, and warns on SSH install instructions.
 6. **Test the install:** `node <skill-dir>/scripts/test-install.mjs --repo <clone> --plugin <name>`. Throwaway config; never the real one.
 7. **Push:** commit (ending with the Co-Authored-By line), `git push origin main`, then `gh run watch` the CI run. Then `test-install.mjs --repo <clone> --plugin <name> --remote https://github.com/tomerhayundev/<repo>.git`.
-8. **Local copy:** `cp -r <clone>/skills/<name> ~/.claude/skills/<name>` (plugin: its `skills/<name>` folder). Updating: replace the folder.
+8. **Local copy:** `cp -r <clone>/plugins/<name>/skills/<name> ~/.claude/skills/<name>`. Updating: replace the folder.
 9. **Report** the HTTPS install commands (below), public or private, the update commands for machines that already have it, and what the scan changed.
 
 ```bash
@@ -64,8 +82,8 @@ A publish is done when a new user can install from the README alone:
 
 ## Updating a published skill
 
-- Skill-only entries track the commit: push, then users run `claude plugin marketplace update tomerhayundev-skills` **and** `claude plugin update <name>@tomerhayundev-skills`, then restart. The marketplace update alone leaves the installed copy on the old commit (tested: the new file only arrived after `plugin update`).
-- Full plugins with a `version` in `plugin.json`: **bump it**, or installed copies never update (codex-loop's jq fix reached no installed copy until 1.1.0). Users then run `claude plugin update <name>@<marketplace>`.
+- **Bump the version** with every change (`scaffold.mjs --bump patch`), or installed copies never update (codex-loop's jq fix reached no installed copy until 1.1.0). The check compares each plugin with `origin/main` and fails on a change without a bump.
+- Users then run `claude plugin marketplace update <marketplace>` **and** `claude plugin update <name>@<marketplace>`, then restart. The marketplace update alone leaves the installed copy on the old version (tested: the new file only arrived after `plugin update`).
 - Renaming or removing: add a `renames` map entry (`"old": "new"` or `"old": null`), never just delete the entry.
 
 ## Something sensitive was pushed
@@ -82,6 +100,7 @@ A publish is done when a new user can install from the README alone:
 | `Filename too long` | Windows MAX_PATH: `core.longpaths=true`, short asset names, short temp paths |
 | Private install fails silently | Needs a stored credential: `gh auth setup-git`. A bare `GITHUB_TOKEN` is not enough |
 | `claude skill add ...` | Not a command. Only `claude plugin marketplace add` + `claude plugin install` |
+| Cowork installs only some entries, with no error | The skipped ones are skill-only entries. Convert them to `plugins/<name>/` with a `plugin.json` |
 | Em dashes | Tomer's house style: none. The scan flags them |
 
 ## Red flags
@@ -92,3 +111,4 @@ A publish is done when a new user can install from the README alone:
 - Editing unrelated catalog text, README sections or other skills while publishing
 - Handing over the `owner/repo` install command (SSH) instead of the HTTPS URL
 - Skipping the local `~/.claude/skills` copy
+- A skill-only entry, or a change pushed without a version bump

@@ -1,0 +1,20 @@
+{
+  "name": "deploy-production-level",
+  "version": "1.0.0",
+  "description": "Production deploy pipeline on GitHub Actions and Cloudflare Workers: a required quality gate, PR preview environments, staging on every merge, human-promoted production releases tagged with their Worker version, instant rollback, and a hook that stops AI agents from deploying. Invoke it explicitly.",
+  "author": {
+    "name": "Tomer Hayun",
+    "url": "https://github.com/tomerhayundev"
+  },
+  "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/deploy-production-level",
+  "license": "MIT",
+  "keywords": [
+    "deployment",
+    "ci",
+    "github-actions",
+    "cloudflare",
+    "workers",
+    "staging",
+    "rollback"
+  ]
+}

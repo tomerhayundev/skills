@@ -26,8 +26,8 @@ jobs:
 
       - name: remotion-video-pipeline beat fitter still reads the bundled track
         run: |
-          node skills/remotion-video-pipeline/scripts/fit-beat-grid.mjs \
-            skills/remotion-video-pipeline/assets/music/ende-business-moves-1.mp3 --json > fit.json
+          node plugins/remotion-video-pipeline/skills/remotion-video-pipeline/scripts/fit-beat-grid.mjs \
+            plugins/remotion-video-pipeline/skills/remotion-video-pipeline/assets/music/ende-business-moves-1.mp3 --json > fit.json
           node -e '
             const f = require("./fit.json");
             const want = [32, 96, 192, 256];

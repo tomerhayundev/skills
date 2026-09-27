@@ -8,7 +8,7 @@
 ## One-Command Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/tomerhayundev/skills/main/skills/stitch-sdk/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/tomerhayundev/skills/main/plugins/stitch-sdk/skills/stitch-sdk/install.sh | bash
 ```
 
 This will:

@@ -10,11 +10,7 @@
     {
       "name": "remotion-video-pipeline",
       "description": "A production Remotion pipeline for product promo videos: clips as manifest rows, four aspect ratios, RTL locales, no visible cuts (shared elements and a flood that turns each scene into the next), a beat-locked music bed whose lift lands on the payoff, one-take launch films (one element travels through every moment and the camera follows it), measured verification, publishing. Ships a beat-grid fitter, an audio checker, a frame-pop checker and a CC BY 4.0 120 BPM track.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/remotion-video-pipeline"
-      ],
+      "source": "./plugins/remotion-video-pipeline",
       "author": {
         "name": "Tomer Hayun",
         "url": "https://github.com/tomerhayundev"
@@ -29,17 +25,13 @@
         "rtl",
         "transitions"
       ],
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/remotion-video-pipeline",
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-pipeline",
       "license": "MIT"
     },
     {
       "name": "deploy-production-level",
       "description": "Production deploy pipeline on GitHub Actions and Cloudflare Workers: a required quality gate, PR preview environments, staging on every merge, human-promoted production releases tagged with their Worker version, instant rollback, and a hook that stops AI agents from deploying. Invoke it explicitly.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/deploy-production-level"
-      ],
+      "source": "./plugins/deploy-production-level",
       "author": {
         "name": "Tomer Hayun",
         "url": "https://github.com/tomerhayundev"
@@ -54,7 +46,7 @@
         "staging",
         "rollback"
       ],
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/deploy-production-level",
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/deploy-production-level",
       "license": "MIT"
     },
     {
@@ -72,11 +64,7 @@
     {
       "name": "stitch-sdk",
       "description": "Generate UI screens programmatically with the Google Stitch SDK: screens from text prompts, edits, design variants, HTML and screenshot export, and agent integrations.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/stitch-sdk"
-      ],
+      "source": "./plugins/stitch-sdk",
       "author": {
         "name": "Tomer Hayun",
         "url": "https://github.com/tomerhayundev"
@@ -88,17 +76,13 @@
         "design",
         "google"
       ],
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/stitch-sdk",
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/stitch-sdk",
       "license": "MIT"
     },
     {
       "name": "wix-app-dev",
       "description": "Design, build, and ship production-grade Wix App Market apps: architecture, instance-token auth, webhooks, Blocks widgets, dashboard pages, a Cloudflare Workers + D1 backend, billing, and App Market submission.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/wix-app-dev"
-      ],
+      "source": "./plugins/wix-app-dev",
       "author": {
         "name": "Tomer Hayun",
         "url": "https://github.com/tomerhayundev"
@@ -111,17 +95,13 @@
         "billing",
         "cloudflare"
       ],
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/wix-app-dev",
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/wix-app-dev",
       "license": "MIT"
     },
     {
       "name": "publish-skill",
       "description": "Publish a skill or plugin to your Claude Code marketplace repos: routes public vs private, scaffolds the entry and README row, scans for secrets and private content, validates, test-installs in a throwaway config, and keeps a local copy. Includes a history-purge recipe for leaks.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/publish-skill"
-      ],
+      "source": "./plugins/publish-skill",
       "author": {
         "name": "Tomer Hayun",
         "url": "https://github.com/tomerhayundev"
@@ -134,17 +114,13 @@
         "publishing",
         "secrets"
       ],
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/publish-skill",
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/publish-skill",
       "license": "MIT"
     },
     {
       "name": "visual-verification",
       "description": "Makes the agent prove an output works before calling it done: screenshot it, use it (click, submit, run, open every page), judge it against the goal, in a strict tool order (real Chrome, in-app browser, computer use), with a rationalization table and red flags.",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/visual-verification"
-      ],
+      "source": "./plugins/visual-verification",
       "author": {
         "name": "Tomer Hayun",
         "url": "https://github.com/tomerhayundev"
@@ -157,7 +133,7 @@
         "browser",
         "screenshots"
       ],
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/skills/visual-verification",
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/visual-verification",
       "license": "MIT"
     }
   ]

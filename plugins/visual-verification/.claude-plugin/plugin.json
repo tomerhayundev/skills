@@ -1,0 +1,18 @@
+{
+  "name": "visual-verification",
+  "version": "1.0.0",
+  "description": "Makes the agent prove an output works before calling it done: screenshot it, use it (click, submit, run, open every page), judge it against the goal, in a strict tool order (real Chrome, in-app browser, computer use), with a rationalization table and red flags.",
+  "author": {
+    "name": "Tomer Hayun",
+    "url": "https://github.com/tomerhayundev"
+  },
+  "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/visual-verification",
+  "license": "MIT",
+  "keywords": [
+    "verification",
+    "testing",
+    "qa",
+    "browser",
+    "screenshots"
+  ]
+}

@@ -5,15 +5,26 @@
  *
  *   node scripts/check-skills.mjs
  *
- * Errors (exit 1): a SKILL.md whose frontmatter is not the first thing in the
- * file, whose name is invalid or doesn't match its folder, whose description is
- * missing or over 1024 characters; a marketplace entry pointing at a path that
- * doesn't exist; a script that doesn't parse.
- * Warnings: a skill no marketplace entry installs, a frontmatter key outside
- * the known set, an em dash (house style).
+ * Errors (exit 1):
+ * - a marketplace entry that is not a full plugin: its source must be
+ *   "./plugins/<name>" with no "strict" or "skills" key, because Cowork installs
+ *   only full plugins and silently skips skill-only entries;
+ * - a plugin folder without .claude-plugin/plugin.json, or whose plugin.json lacks
+ *   name (= folder), version, description or author; one with no skill, command,
+ *   agent, hook or MCP server; a SKILL.md at the plugin root instead of skills/<name>/;
+ * - a plugin whose files differ from origin/main while its version does not
+ *   (installed copies never update); set CHECK_BASE_REF to compare elsewhere;
+ * - a SKILL.md whose frontmatter is not the first thing in the file, whose name
+ *   is invalid or doesn't match its folder, whose description is missing or over
+ *   1024 characters;
+ * - a README "What's here" row missing, pointing nowhere, or without its install
+ *   command; a relative markdown link to a file that does not exist; a script that
+ *   doesn't parse.
+ * Warnings: a plugin no marketplace entry installs, a frontmatter key outside the
+ * known set, an em dash (house style), SSH-style install instructions.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { join, relative } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { spawnSync } from "node:child_process";
 
 const ROOT = join(import.meta.dirname, "..");
@@ -59,20 +70,27 @@ function walk(dir, visit) {
   }
 }
 
-// Skills
-const skillsDir = join(ROOT, "skills");
-const skillNames = readdirSync(skillsDir).filter((d) => statSync(join(skillsDir, d)).isDirectory());
-for (const dir of skillNames) {
-  const file = join(skillsDir, dir, "SKILL.md");
-  const rel = relative(ROOT, file);
-  if (!existsSync(file)) {
-    errors.push(`${rel}: missing`);
-    continue;
-  }
-  const fm = frontmatter(readFileSync(file, "utf8"));
-  if (!fm) {
-    errors.push(`${rel}: frontmatter must open on line 1 with --- and close with ---`);
-    continue;
+const isDir = (p) => existsSync(p) && statSync(p).isDirectory();
+const subdirs = (p) => (isDir(p) ? readdirSync(p).filter((d) => isDir(join(p, d))) : []);
+const git = (args) => {
+  const r = spawnSync("git", ["-C", ROOT, ...args], { encoding: "utf8" });
+  return r.status === 0 ? r.stdout : null;
+};
+
+function checkSkill(file) {
+  const rel = relative(ROOT, file).replace(/\\/g, "/");
+  const dir = file.replace(/\\/g, "/").split("/").at(-2);
+  if (!existsSync(file)) return errors.push(`${rel}: missing`);
+  const text = readFileSync(file, "utf8");
+  const fm = frontmatter(text);
+  if (!fm) return errors.push(`${rel}: frontmatter must open on line 1 with --- and close with ---`);
+  // Claude Code tolerates an unquoted value containing ": " or " #", strict YAML parsers
+  // (npx skills, other agents) reject the whole file and skip the skill.
+  for (const line of text.replace(/\r\n/g, "\n").split("\n---\n")[0].split("\n").slice(1)) {
+    const m = line.match(/^([A-Za-z_][\w-]*):\s+(.*)$/);
+    if (m && !/^(["'>|[{]|$)/.test(m[2]) && /: | #/.test(m[2])) {
+      errors.push(`${rel}: "${m[1]}" is invalid YAML (an unquoted ": " or " #"); write it as a folded block (${m[1]}: >-) or quote it`);
+    }
   }
   if (fm.name !== dir) errors.push(`${rel}: name "${fm.name}" must match its folder "${dir}"`);
   if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(fm.name ?? "") || (fm.name ?? "").length > 64) {
@@ -83,21 +101,73 @@ for (const dir of skillNames) {
   for (const key of Object.keys(fm)) if (!KNOWN_KEYS.has(key)) warnings.push(`${rel}: unknown frontmatter key "${key}"`);
 }
 
-// Marketplace
+// Marketplace: every entry is a full plugin under plugins/<name>. Cowork installs
+// nothing else and gives no error for what it skips.
 const market = JSON.parse(readFileSync(join(ROOT, ".claude-plugin/marketplace.json"), "utf8"));
-const installable = new Set();
 for (const p of market.plugins) {
-  const src = join(ROOT, p.source);
-  if (!existsSync(src)) errors.push(`marketplace "${p.name}": source ${p.source} does not exist`);
-  for (const s of p.skills ?? []) {
-    if (!existsSync(join(ROOT, s, "SKILL.md"))) errors.push(`marketplace "${p.name}": ${s}/SKILL.md does not exist`);
-    installable.add(s.replace(/^\.\/skills\//, ""));
+  const where = `marketplace "${p.name}"`;
+  if (p.source !== `./plugins/${p.name}`) errors.push(`${where}: source must be "./plugins/${p.name}" (Cowork installs only full plugins), not ${JSON.stringify(p.source)}`);
+  if ("strict" in p || "skills" in p) errors.push(`${where}: remove the "strict" and "skills" keys; the plugin folder carries its skills`);
+}
+if (isDir(join(ROOT, "skills"))) errors.push("skills/: skill-only layout. Move each skill to plugins/<name>/skills/<name>/ and give it a plugin.json");
+
+// Plugins
+const baseRef = process.env.CHECK_BASE_REF || "origin/main";
+const haveBase = git(["rev-parse", "--verify", "-q", `${baseRef}^{commit}`]) !== null;
+const pluginNames = subdirs(join(ROOT, "plugins"));
+let skillCount = 0;
+for (const dir of pluginNames) {
+  const rel = `plugins/${dir}`;
+  const base = join(ROOT, rel);
+  if (!market.plugins.some((p) => p.source === `./${rel}`)) warnings.push(`${rel}: no marketplace entry installs it`);
+  if (existsSync(join(base, "SKILL.md"))) errors.push(`${rel}/SKILL.md: a skill goes in ${rel}/skills/${dir}/, not at the plugin root`);
+
+  const skills = subdirs(join(base, "skills"));
+  for (const s of skills) checkSkill(join(base, "skills", s, "SKILL.md"));
+  skillCount += skills.length;
+
+  const pjPath = join(base, ".claude-plugin", "plugin.json");
+  if (!existsSync(pjPath)) {
+    errors.push(`${rel}: missing .claude-plugin/plugin.json`);
+    continue;
+  }
+  let pj;
+  try {
+    pj = JSON.parse(readFileSync(pjPath, "utf8"));
+  } catch (e) {
+    errors.push(`${rel}/.claude-plugin/plugin.json: ${e.message}`);
+    continue;
+  }
+  if (pj.name !== dir) errors.push(`${rel}/.claude-plugin/plugin.json: name "${pj.name}" must match its folder "${dir}"`);
+  if (!/^\d+\.\d+\.\d+/.test(pj.version ?? "")) errors.push(`${rel}/.claude-plugin/plugin.json: needs a "version" (x.y.z), or installed copies never update`);
+  if (!pj.description) errors.push(`${rel}/.claude-plugin/plugin.json: needs a "description"`);
+  if (!pj.author) errors.push(`${rel}/.claude-plugin/plugin.json: needs an "author"`);
+
+  const hasMd = (d) => isDir(join(base, d)) && readdirSync(join(base, d)).some((f) => f.endsWith(".md"));
+  const components = skills.length || hasMd("commands") || hasMd("agents") || existsSync(join(base, "hooks", "hooks.json")) || pj.hooks || existsSync(join(base, ".mcp.json")) || pj.mcpServers;
+  if (!components) errors.push(`${rel}: has no skills/<name>/SKILL.md, commands, agents, hooks or MCP servers`);
+
+  // A change that keeps the version never reaches installed copies.
+  if (haveBase && pj.version) {
+    const old = git(["show", `${baseRef}:${rel}/.claude-plugin/plugin.json`]);
+    if (old) {
+      const changed = (git(["diff", "--name-only", baseRef, "--", rel]) ?? "") + (git(["ls-files", "--others", "--exclude-standard", "--", rel]) ?? "");
+      let oldVersion;
+      try {
+        oldVersion = JSON.parse(old).version;
+      } catch {
+        /* unreadable old manifest: nothing to compare */
+      }
+      if (changed.trim() && oldVersion === pj.version) {
+        errors.push(`${rel}: files changed since ${baseRef} but version is still ${pj.version}; bump it (scaffold.mjs --bump patch)`);
+      }
+    }
   }
 }
-for (const dir of skillNames) if (!installable.has(dir)) warnings.push(`skills/${dir}: no marketplace entry installs it`);
 
-// README: every entry has a row in the "What's here" table, and when the table
-// has an Install column, the row carries that entry's exact install command.
+// README: every entry has a row in the "What's here" table that links to a real
+// file, and when the table has an Install column, the row carries that entry's
+// exact install command.
 const readme = existsSync(join(ROOT, "README.md")) ? readFileSync(join(ROOT, "README.md"), "utf8").replace(/\r\n/g, "\n").split("\n") : [];
 const tableHead = (() => {
   const h = readme.findIndex((l) => /^#+\s+what'?s here/i.test(l));
@@ -122,10 +192,10 @@ else {
   }
 }
 
-// Scripts parse; house style (no em dashes)
+// Scripts parse; relative links resolve; house style (no em dashes)
 const EM_DASH = String.fromCharCode(0x2014);
 walk(ROOT, (p) => {
-  const rel = relative(ROOT, p);
+  const rel = relative(ROOT, p).replace(/\\/g, "/");
   if (p.endsWith(".mjs") || p.endsWith(".js")) {
     const r = spawnSync(process.execPath, ["--check", p], { encoding: "utf8" });
     if (r.status !== 0) errors.push(`${rel}: ${r.stderr.trim().split("\n").pop()}`);
@@ -135,18 +205,28 @@ walk(ROOT, (p) => {
     if (r.status !== 0) errors.push(`${rel}: ${r.stderr.trim()}`);
   }
   if (/\.(md|json|sh|mjs|ts)$/.test(p) && readFileSync(p, "utf8").includes(EM_DASH)) warnings.push(`${rel}: contains an em dash`);
-  // `marketplace add owner/repo` clones over SSH and fails on machines without
-  // a GitHub SSH key; instructions give the HTTPS URL.
   if (/\.(md|sh)$/.test(p)) {
-    readFileSync(p, "utf8").split(/\r?\n/).forEach((line, i) => {
+    const text = readFileSync(p, "utf8");
+    // `marketplace add owner/repo` clones over SSH and fails on machines without
+    // a GitHub SSH key; instructions give the HTTPS URL.
+    text.split(/\r?\n/).forEach((line, i) => {
       if (/marketplace add\s+(?!https?:\/\/|<|\.|\/|[A-Za-z]:)[\w.-]+\/[\w.-]+/.test(line)) {
         warnings.push(`${rel}:${i + 1}: \`marketplace add owner/repo\` is SSH; give https://github.com/owner/repo.git`);
       }
     });
+    // Moving a folder breaks relative links silently; outside code fences, every one must resolve.
+    if (p.endsWith(".md")) {
+      const prose = text.replace(/```[\s\S]*?```/g, "").replace(/`[^`\n]*`/g, "");
+      for (const m of prose.matchAll(/\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
+        const target = m[1].split("#")[0];
+        if (!target || /^[a-z][\w+.-]*:/i.test(target) || target.startsWith("<")) continue;
+        if (!existsSync(join(dirname(p), decodeURIComponent(target)))) errors.push(`${rel}: link to ${m[1]} points to nothing`);
+      }
+    }
   }
 });
 
 for (const w of warnings) console.log(`warn   ${w}`);
 for (const e of errors) console.log(`error  ${e}`);
-console.log(`\n${skillNames.length} skills, ${market.plugins.length} marketplace entries, ${errors.length} errors, ${warnings.length} warnings`);
+console.log(`\n${pluginNames.length} plugins, ${skillCount} skills, ${market.plugins.length} marketplace entries, ${errors.length} errors, ${warnings.length} warnings`);
 process.exit(errors.length ? 1 : 0);

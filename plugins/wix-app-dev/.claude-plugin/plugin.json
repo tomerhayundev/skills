@@ -1,0 +1,18 @@
+{
+  "name": "wix-app-dev",
+  "version": "1.0.0",
+  "description": "Design, build, and ship production-grade Wix App Market apps: architecture, instance-token auth, webhooks, Blocks widgets, dashboard pages, a Cloudflare Workers + D1 backend, billing, and App Market submission.",
+  "author": {
+    "name": "Tomer Hayun",
+    "url": "https://github.com/tomerhayundev"
+  },
+  "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/wix-app-dev",
+  "license": "MIT",
+  "keywords": [
+    "wix",
+    "apps",
+    "webhooks",
+    "billing",
+    "cloudflare"
+  ]
+}

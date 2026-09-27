@@ -1,6 +1,13 @@
 ---
 name: visual-verification
-description: Use when about to call any work done, correct, good, approved, or ready to ship, or to hand off / approve an output, especially after only reading the code/source, or after only checking that it LOOKS right without using it. The core is to confirm with your own eyes that it actually WORKS, not just that it renders. Covers UI, web pages, interactive features, designs, generated images, documents, CLI/script/API output, prose/copy, and data files. Symptoms: "the code looks right", "it looks right so it works", "tests pass so it works", "the handler is wired up", "no need to run/click/open/render it", or skipping the check because you are short on time.
+description: >-
+  Use when about to call any work done, correct, good, approved, or ready to ship, or to hand off /
+  approve an output, especially after only reading the code/source, or after only checking that it
+  LOOKS right without using it. The core is to confirm with your own eyes that it actually WORKS, not
+  just that it renders. Covers UI, web pages, interactive features, designs, generated images,
+  documents, CLI/script/API output, prose/copy, and data files. Symptoms: "the code looks right", "it
+  looks right so it works", "tests pass so it works", "the handler is wired up", "no need to
+  run/click/open/render it", or skipping the check because you are short on time.
 ---
 
 # Visual Verification
