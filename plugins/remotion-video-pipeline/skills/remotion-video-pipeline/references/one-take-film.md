@@ -27,7 +27,9 @@ same film with a ball would be a template.
    busiest station, a caption in its rest, the payoff.
 3. A 4 to 5 second motion clip of the trickiest stretch before rendering everything.
    Motion quality can't be judged from stills.
-4. Then all cuts, each checked (see the review loop at the end).
+4. An animatic of the whole cut at half size (`--scale=0.5`) with the music. Pacing is
+   judged here, before polish.
+5. Then all cuts, each checked (see the review loop at the end).
 
 ## A shorter cut is fewer ideas, not faster ones
 
@@ -155,4 +157,6 @@ score ring, and the score stepped up once per keyword, on the half beats.
 - A contact sheet per cut (one frame a second). It caught what tests missed: slivers of
   neighbouring stations at the frame edge, a panel collapsing into a black slab, the
   first item of a row cropped in tall.
+- The phone sheet (360 px wide): captions and labels must read at feed size.
+- Scores from the [critique loop](verification.md#critique-loop), until every one is 8 or more.
 - Loudness with `audio-check.mjs`, and a person watching with sound.

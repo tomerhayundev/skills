@@ -44,7 +44,7 @@ Write this block at the top of the plan, every row filled:
 | --- | --- | --- |
 | Promise | The brand name or promise plus the product's action, in one phrase | tailoring one CV to each job |
 | Motif | The object that phrase suggests | a tailor's thread and needle |
-| Travels or grows | Travels (thread, road, cable, river): a one-take film. Grows or opens (page, drop, bubble, leaf, tag, box): a chain whose floods are its silhouette | travels |
+| Travels, grows or morphs | Travels (thread, road, cable, river): a one-take film. Grows or opens (page, drop, bubble, leaf, tag, box): a chain whose floods are its silhouette. Morphs (one element of the product's own UI, a slot, a button, a card): a chain where that element never cuts and is the shared element on every boundary, changing size, radius and fill through the product's states | travels |
 | Transitions | How the motif carries each boundary | the needle strikes, stitches, threads |
 | Echoes | Where else it appears: caption underline, a score, the logo close | the caption underline is a stitch; the close sews the wordmark |
 | Competitor test | Put a competitor's logo on the film. What breaks? | a thread means nothing for a product that does not tailor |
@@ -52,6 +52,30 @@ Write this block at the top of the plan, every row filled:
 If nothing breaks in the competitor test, the motif is decoration: go back to the
 promise. The disc in `flood.ts` is the fallback for a motif with no closed outline;
 when a flood uses it, the Transitions row says why.
+
+## Reference and real assets, also before the beat map
+
+- **A reference in the brief** (a video, a frame, a folder of past work, a launch film
+  the client loves): write `docs/style_guide.md` from it before the beat map: palette
+  (hex), type (family, weight, tracking), shot lengths, transition types, camera moves,
+  texture, how text enters and exits. Commands: [verification](references/verification.md#read-a-reference).
+  Take its grammar, never its content, logos or characters. The motif stays yours, and
+  where its grammar breaks a hard rule (cuts, crossfades), the rule wins.
+  No reference: ask for one once; without it, [creative-rules](references/creative-rules.md) is the grammar.
+- **Real assets.** The product's own components when its code is in the repo. No code
+  access: capture the live site with Playwright into `./assets` (each screen state,
+  the logo, colors, fonts) and list what you found before animating.
+
+## Order of work for a new film
+
+1. Style guide (if there is a reference), real assets, the motif block.
+2. Beat map: beat, time, what changes, caption.
+3. Stills of 3 or 4 key moments, for sign-off.
+4. Animatic: the whole film at half size (`--scale=0.5`) with the real music (a silent
+   loop gets a click on every beat instead). Fix pacing here, before any polish: it is
+   cheap now and expensive later.
+5. Full renders, one aspect at a time.
+6. The critique loop until every score is 8 or more (below).
 
 ## Architecture in one screen
 
@@ -79,7 +103,8 @@ when a flood uses it, the Transitions row says why.
 | Interior chain entries start at `from: 0` | Windowing an interior entry makes its Sequence mount early and overpaint the previous scene. Guard it. |
 | Never loosen a containment test to make a rect fit | Move the content. Clipped chips shipped once because a test was "adjusted". |
 | Fake company names next to fabricated metrics | A real employer beside an invented score fails ad review. |
-| Show the real product | Render the app's real components in the video (import them), not screenshots of them. |
+| Show the real product | Render the app's real components in the video (import them), not screenshots of them. No code access: animate real captures of the live site, never UI redrawn from imagination. |
+| No AI giveaways | Text or labels in the corners, frame borders, a centered title on a gradient, everything fading in: the tells of generated video. |
 | Loops carry no music | A track cannot loop seamlessly inside a short loop, and in-page loops play muted anyway. |
 | Every scene is made out of the previous one | No hard cuts, no crossfades. `frame-pops.mjs` fails a render with a cut in it. |
 | Every transition is made of the motif | Films planned without a motif block flooded every boundary with a plain disc, the one shape that fits any brand, and read as a template. |
@@ -130,6 +155,13 @@ node ${CLAUDE_SKILL_DIR}/scripts/frame-pops.mjs out/promo/<id>.mp4
   implementation was caught covering 30% of the screen in one frame.
 - Frame 0 is the thumbnail on platforms that don't take a poster. Check it; if it
   is an empty stage, bake the poster frame in (see verification).
+- Phone: tile it at 360 px wide. Every caption and label must read there; feeds are
+  watched on phones.
+- Loops: play it twice back to back and run `frame-pops.mjs` on that file. The seam is
+  a frame like any other.
+- Then score it: the [critique loop](references/verification.md#critique-loop) rates
+  hook, phone readability, motion, variety, composition, motif and brand, and sound from
+  1 to 10, fixes the three worst problems, and repeats until every score is 8 or more.
 
 ## Rendering and publishing
 

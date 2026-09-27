@@ -185,6 +185,18 @@ twice): make it the base value plus one spring per change, each starting at its 
 frame: `v(f) = v0 + sum(delta_i * spring(f - start_i))`. It stays a pure function of the
 frame, with no state carried between frames.
 
+**UI motion that reads as real** (a morphing motif, any product UI on screen):
+
+- Text inside a container that changes shape enters after the change starts and leaves
+  before the next one. It never rides the morph, or it squashes and overlaps.
+- A moving indicator (a tab underline, a selected slot) puts its leading and trailing
+  edges on the same critically damped spring at two stiffnesses: the lead arrives first,
+  the tail catches up, and it stretches like a real one.
+- Never set `will-change` on anything the camera scales. Chrome rasterizes it once at
+  its starting size, and the text goes soft as the camera zooms in.
+- A loop's last frame equals its first in position and in velocity, cursor included.
+  Matching position alone still jolts at the seam.
+
 **Motion blur** for fast shape changes: `@remotion/motion-blur` (`<CameraMotionBlur>`)
 renders subframes and blends them; the ffmpeg equivalent is rendering at 4x the frame rate
 and blending with `tmix`. It multiplies render time, so apply it around floods, not to

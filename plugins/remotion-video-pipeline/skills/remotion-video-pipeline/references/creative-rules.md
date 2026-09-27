@@ -31,6 +31,9 @@ survived review in a shipped promo system. Paraphrased; the reasoning is the poi
 
 - Storyboard frame by frame before animating. A video never looks better than its
   frames.
+- **Show the look, don't describe it.** A reference (a film, a frame, the client's past
+  work) gives pacing, type and transitions to copy; without one, a model falls back to its
+  defaults and hundreds of videos rhyme. Take the grammar, never the content.
 - One shot, one idea.
 - The key object in the center, with room to breathe.
 - The background supports the brand and never competes with the key object.
@@ -57,7 +60,8 @@ survived review in a shipped promo system. Paraphrased; the reasoning is the poi
   is banned. Small illustrative UI text is fine; invented numbers or testimonials
   presented as real are not.
 - **Show the real thing:** the working product doing its job beats a landing page
-  describing it. Render the real components.
+  describing it. Render the real components; without the code, animate real captures of
+  the live site. UI redrawn from imagination is always slightly wrong, and the client sees it.
 - **Show a sample, not everything:** three or four templates flipping read; nine
   read as a blur. The caption can still state the real total.
 - If a requested length forces dead air or an unreadable caption, push back with
@@ -69,6 +73,8 @@ survived review in a shipped promo system. Paraphrased; the reasoning is the poi
   change shape instead. The eye never has to find its place again.
 - **Banned:** crossfades, blur-ins, 3D flips, particles, glows, brightness "developing",
   holds longer than about 1s with nothing moving, anything that looks like a template.
+  Also the tells of generated video: text or labels in the corners, frame borders, a
+  centered title on a gradient, everything fading in.
 - **Something happens on every beat.** Map the beats before building (a table of beat,
   time, what changes) and render 3 or 4 stills of the key moments for sign-off first.
 - **Big moments on the music:** the zoom or payoff on the drop, a quiet scene in the
