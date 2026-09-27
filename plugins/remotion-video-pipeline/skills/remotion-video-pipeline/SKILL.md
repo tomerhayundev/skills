@@ -47,10 +47,10 @@ Write this block at the top of the plan, every row filled:
 | Travels, grows or morphs | Travels (thread, road, cable, river): a one-take film. Grows or opens (page, drop, bubble, leaf, tag, box): a chain whose floods are its silhouette. Morphs (one element of the product's own UI, a slot, a button, a card): a chain where that element never cuts and is the shared element on every boundary, changing size, radius and fill through the product's states | travels |
 | Transitions | How the motif carries each boundary | the needle strikes, stitches, threads |
 | Echoes | Where else it appears: caption underline, a score, the logo close | the caption underline is a stitch; the close sews the wordmark |
-| Competitor test | Put a competitor's logo on the film. What breaks? | a thread means nothing for a product that does not tailor |
+| Competitor test | Put the closest rival's logo on the film. What stops making sense? A rival shares the features, so the answer has to come from the name or the promise | a thread means nothing to a brand whose promise is not tailoring |
 
-If nothing breaks in the competitor test, the motif is decoration: go back to the
-promise. The disc in `flood.ts` is the fallback for a motif with no closed outline;
+If only the logo breaks in the competitor test, the motif is decoration: go back to
+the name and the promise. The disc in `flood.ts` is the fallback for a motif with no closed outline;
 when a flood uses it, the Transitions row says why.
 
 ## Reference and real assets, also before the beat map
@@ -64,7 +64,8 @@ when a flood uses it, the Transitions row says why.
   No reference: ask for one once; without it, [creative-rules](references/creative-rules.md) is the grammar.
 - **Real assets.** The product's own components when its code is in the repo. No code
   access: capture the live site with Playwright into `./assets` (each screen state,
-  the logo, colors, fonts) and list what you found before animating.
+  the logo, colors, fonts) and list what you found before animating. A product that
+  does not exist yet: design its UI once as components and treat those as the real ones.
 
 ## Order of work for a new film
 
@@ -81,12 +82,12 @@ when a flood uses it, the Transitions row says why.
 
 | Piece | Rule |
 | --- | --- |
-| Canvas | Author every scene on one square canvas (1920x1920). Each aspect ratio is a camera window onto it, fitted to the scene's declared focus rect. |
+| Canvas | Author every scene on one square canvas (1920x1920). Each aspect ratio is a camera window onto it, fitted to the scene's declared focus rect. When a scene's content cannot sit at a readable size in an aspect (two calendars side by side in tall), give that scene a layout and focus rects per aspect; never shrink text to fit. |
 | Aspects | `wide` 1920x1080, `tall` 1080x1920, `square` 1080x1080, `classic` 1440x1080. Omit to get all four; name them only to exclude. |
 | Scene registry | Metadata (duration, focus rects, caption key, persist rect) in a module Node can load; components in a separate map. A scene's `.tsx` must never be reachable from the render script's import path. |
 | Manifest | `{ id, scenes: [{ scene, from?, to?, captionOverride?, captionTiming?, musicLift? }], aspects?, locales?, loop?, posterFrame }` |
 | `expand()` | Rows x aspects x locales into compositions. Validates windows, the grid, the poster frame, and the music. Throws rather than renders something wrong. |
-| Chain | No visible cuts. A shared-element overlap when both scenes share an element; everywhere else a flood: the motif's silhouette grows from one scene's anchor, covers the cut, and contracts into the next scene's anchor. Declared duration and rendered timeline come from one function. |
+| Chain | No visible cuts. A shared-element overlap when both scenes share an element (a morphing motif is shared on every boundary); everywhere else a flood: the motif's silhouette grows from one scene's anchor, covers the cut, and contracts into the next scene's anchor or settles into its mark. Declared duration and rendered timeline come from one function. |
 | Grid | Every duration is a multiple of one grid unit (15 frames at 30fps). It is also one beat at 120 BPM, which is what makes the music free. |
 | Tokens | One source for every color, size and duration. One accent color, nothing competes with it. |
 
@@ -95,7 +96,8 @@ when a flood uses it, the Transitions row says why.
 | Rule | Why |
 | --- | --- |
 | Clip durations are multiples of the grid unit | Grain and loops seam cleanly and every cut lands on a beat. Enforce it in `expand()`. |
-| A fully revealed caption holds at least 1.5s before its beat ends | The top cause of an incoherent cut. Test the arithmetic, not a screenshot. |
+| A fully revealed caption holds at least 1.5s before its beat ends | The top cause of an incoherent cut. Test the arithmetic, not a screenshot. A flood's window opens 9 frames before its cut and counts against the hold. |
+| Three captions in 15 s, at most four with the close | Each costs about 2.5 s of still picture; four plus a hook left about 5 s for the product to act. |
 | A caption rises only into a still picture | Viewers watch the motion, not the text: captions that arrived mid-action went unread. Nothing moves until about 1s after the last word lands. 4 to 6 words |
 | The hook line holds whole for 2s before anything competes with it | It once changed before anyone could read it. Words in within about 1s, then the hold, then the action |
 | A shorter cut drops ideas; the ones it keeps play at the long cut's pace | Shrinking every leg to fit made a 15s cut that looked fast and was harder to follow. Keep shared timings identical and test on-screen speed per moment |
@@ -103,7 +105,7 @@ when a flood uses it, the Transitions row says why.
 | Interior chain entries start at `from: 0` | Windowing an interior entry makes its Sequence mount early and overpaint the previous scene. Guard it. |
 | Never loosen a containment test to make a rect fit | Move the content. Clipped chips shipped once because a test was "adjusted". |
 | Fake company names next to fabricated metrics | A real employer beside an invented score fails ad review. |
-| Show the real product | Render the app's real components in the video (import them), not screenshots of them. No code access: animate real captures of the live site, never UI redrawn from imagination. |
+| Show the real product | Render the app's real components in the video (import them), not screenshots of them. No code access: animate real captures of the live site, never a redrawn version of a UI that exists. (A product with no UI yet gets its UI designed once, as components.) |
 | No AI giveaways | Text or labels in the corners, frame borders, a centered title on a gradient, everything fading in: the tells of generated video. |
 | Loops carry no music | A track cannot loop seamlessly inside a short loop, and in-page loops play muted anyway. |
 | Every scene is made out of the previous one | No hard cuts, no crossfades. `frame-pops.mjs` fails a render with a cut in it. |
@@ -187,7 +189,9 @@ The short version; the reasoning and sources are in [creative-rules](references/
 - **Every scene is made out of the previous one:** nothing fades, blurs or cuts;
   objects change shape. Shared elements carry across, a flood in the motif's shape
   covers every other boundary. Recipe: [architecture](references/architecture.md#transitions).
-- Eased motion only (one critically damped spring for everything); vary the rhythm.
+- Eased motion only: one critically damped spring for everything that moves on screen
+  (numbers in creative-rules); the camera's quintic ease and the flood's eased coverage
+  are the only exceptions. Vary the rhythm.
 - Show 3 or 4 examples, never all of them: more reads as a blur.
 - Sound with restraint: one music bed, at most a few effects that match the motion.
   If an effect feels loud or out of place, cut it.

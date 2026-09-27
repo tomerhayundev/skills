@@ -81,6 +81,19 @@ describe("flood", () => {
     expect(() => floodProfile([...outer, ...inner])).toThrow(/star-shaped/);
   });
 
+  it("grows out of a visible motif and settles into a visible mark", () => {
+    const geo = frames["wide, anchor above centre"];
+    const profile = floodProfile(page);
+    const ends = { fromScale: 120, toScale: 80 };
+    const cover = (f: number) => visibleCoverage(floodScale(f, geo, profile, ends), geo, profile);
+    expect(floodScale(0, geo, profile, ends)).toBeGreaterThan(120); // never smaller than where it started
+    expect(cover(FLOOD_FRAMES - 1)).toBeGreaterThan(0.999);
+    expect(cover(FLOOD_FRAMES)).toBeGreaterThan(0.999);
+    const last = floodScale(2 * FLOOD_FRAMES - 1, geo, profile, ends);
+    expect(last).toBeCloseTo(80, 0); // the mark takes over at the next frame without a jump
+    for (let f = 1; f < 2 * FLOOD_FRAMES; f++) expect(Math.abs(cover(f) - cover(f - 1)), `frame ${f}`).toBeLessThanOrEqual(0.2);
+  });
+
   it("rejects an anchor outside the frame", () => {
     expect(() => visibleCoverage(10, { cx: -5, cy: 10, width: 100, height: 100 }, floodProfile(page))).toThrow(/inside the frame/);
   });

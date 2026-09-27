@@ -133,6 +133,8 @@ Nothing hard-cuts (see [Transitions](#transitions)). When both neighbours declar
 the outgoing scene's chrome fades out, the incoming fades in, and a floating copy
 of the shared element glides between the two cameras' settled rects. Reuse each
 scene's own settled rect for the overlay, or the element pops in size at the cut.
+(This chrome fade is allowed: the eye rides the shared element. The creative rules ban
+one whole scene fading into another.)
 
 One function computes both each Sequence's `from` and the composition's total
 duration, so the declared length can never disagree with what renders.
@@ -142,7 +144,7 @@ amount, or the back half of the clip goes black.
 
 ## Transitions
 
-**Every scene is made out of the previous one.** Two mechanisms, chosen per boundary:
+**Every scene is made out of the previous one.** Three mechanisms, chosen per boundary:
 
 1. **Shared element** (both scenes declare `persist`): the element glides from one
    scene's framing into the next, as above.
@@ -151,6 +153,12 @@ amount, or the back half of the clip goes black.
    frame, the cut happens underneath, and it contracts into the incoming scene's anchor.
    The next scene's key element grows out of where the last one was. Pure math in
    `assets/templates/flood.ts` (with tests).
+3. **Morph** (the motif morphs): the element is the shared element on every boundary.
+   Each state change (link to page, slot to event) is one spring per property (size,
+   radius, fill; the several-targets pattern below), and its content swaps by the UI-motion
+   rules. Where the next scene has no place for it (usually the brand close), it floods
+   in its own outline (`fromScale` at its current size) and settles into the mark
+   (`toScale`), or it becomes the mark directly.
 
 Getting the flood right:
 
@@ -167,9 +175,14 @@ Getting the flood right:
   two frames: a pop. Pick the share of the frame covered per frame (an ease-in-out on
   coverage), then solve for the scale by bisection on the shape/frame overlap (exact for
   a star-shaped outline: along each ray the visible part ends at the nearer of the two
-  edges). Result: no frame changes more than about 18% of the screen.
+  edges). Result: no frame changes more than about a fifth of the screen (17% growing,
+  19% contracting).
 - **About 0.3s each way** (9 frames at 30fps), full cover on both frames around the cut,
-  and a reach 1.15x past full cover.
+  and a reach 1.15x past full cover. The window opens 9 frames before the cut, so the
+  outgoing scene's caption hold must end by then; count it in the caption-hold test.
+- **From a motif, into a mark.** `floodScale(frame, geo, profile, { fromScale, toScale })`
+  grows out of a motif already on screen and settles exactly into the incoming mark (same
+  outline and color) on the window's last frame; the scene draws the mark from then on.
 - **Anchors.** A scene's anchor is where its eye goes, in canvas coords, mapped through
   the same camera fit and RTL mirroring as the scene (`focus.to` for the outgoing
   scene, `focus.from` for the incoming one). Default: the focus rect's centre. Declare

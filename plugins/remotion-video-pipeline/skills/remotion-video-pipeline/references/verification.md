@@ -17,7 +17,8 @@ npx remotion still src/index.ts <composition-id> out/_check.png --frame=120
 
 Read the PNG. Pick frames deliberately: the poster frame, the moment each caption
 is fully revealed, a frame mid-transition, the last frame. Prefix scratch files
-with `_` and have the render script sweep them.
+with `_` and have the render script sweep them before it renders, so every sheet you
+look at comes from the current render. Copy a sheet out of `out/` to keep it.
 
 Tile a cut into one image:
 
@@ -63,10 +64,13 @@ scene that opens on an empty stage makes a blank thumbnail. Check it:
 ffmpeg -y -i clip.mp4 -vf "select='eq(n,0)+eq(n,<posterFrame>)',scale=640:-1,tile=2x1" -frames:v 1 _f0-vs-poster.png
 ```
 
-A loop cannot take a baked poster: frame 0 is also the frame after its last, so a
-replaced frame 0 pops at the seam. Design a loop's frame 0 as a settled, readable frame
-instead. For anything else, bake the poster in without changing duration or audio sync
-by replacing frame 0 rather than adding one:
+The best fix is a frame 0 that is already a settled, readable frame (the hook's
+picture, without its caption, is usually enough). A loop needs that: frame 0 is also
+the frame after its last, so a replaced frame 0 pops at the seam. Bake a poster only
+when frame 0 cannot be designed that way. The pop gate runs on the render before the
+bake: the bake itself is a one-frame change at frame 1 that the scan flags, and that
+single flag on the baked file is expected. To bake it without changing duration or
+audio sync, replace frame 0 rather than adding one:
 
 ```bash
 ffmpeg -y -i clip.mp4 -i poster.png -filter_complex "[1][0]scale2ref[p][v];[v][p]overlay=enable='eq(n,0)'" \
@@ -126,7 +130,8 @@ full render, look at it as a harsh motion director, not as its proud author:
 2. Score each from 1 to 10: the hook in the first 2 s; readability at phone size;
    motion (springs, no dead frames, nothing sliding linearly); variety (something new on
    every beat); composition; the motif and the brand (would a competitor's logo fit?);
-   sound (lift on the payoff, effects on the motion; a silent loop skips this one).
+   sound (the lift on the payoff, the level, and any effects sitting on the motion; a
+   silent loop skips this one).
 3. Write the three worst problems with timestamps. Hunt for: text overlapping during a
    swap, anything that slides instead of easing, text in the corners, frame borders, a
    centered title on a gradient, everything fading in, soft text the camera scaled, a beat

@@ -23,9 +23,12 @@ survived review in a shipped promo system. Paraphrased; the reasoning is the poi
 - It carries every boundary: floods are its silhouette, a travelling motif is the
   path the camera follows, the caption underline is drawn in it, the close is built
   from it. One motif, used everywhere, is what makes separate moments read as one film.
-- Competitor test: put a competitor's logo on the film. If the motif still fits, it
-  is decoration. A disc, a gradient or particles fit every brand; plans made without
-  a motif flooded every boundary with a plain disc and read as a template.
+- Competitor test: put the closest rival's logo on the film and ask what stops making
+  sense. A rival in the same category shares the features, so the motif has to come from
+  what only this brand says: its name or its promise (a promise of tailoring, and a
+  thread). If only the logo breaks, the motif is decoration. A disc, a gradient or
+  particles fit every brand; plans made without a motif flooded every boundary with a
+  plain disc and read as a template.
 
 ## Design first
 
@@ -42,7 +45,9 @@ survived review in a shipped promo system. Paraphrased; the reasoning is the poi
 
 - **The hook is everything.** The first 2 seconds decide whether anyone keeps
   watching. Plan it before anything else. Its line lands in about a second and then
-  holds whole for 2 more; the action starts after the hold, never during it.
+  holds whole for 2 more; the action starts after the hold, never during it. The motif
+  may arrive during the hold (the needle flying in), but nothing changes the picture the
+  line talks about until the hold ends (the strike comes after).
 - **Shape:** hook (2 to 3 s), reveal (2 to 4 s), two or three sharp highlights,
   punchline or brand close (2 to 4 s). A starting shape, not a template.
 - **A short cut needs a narrative, not a montage.** The 15 s cut that worked:
@@ -69,14 +74,20 @@ survived review in a shipped promo system. Paraphrased; the reasoning is the poi
 
 ## Continuity
 
-- **Every scene is made out of the previous one.** Nothing fades, blurs or cuts; objects
-  change shape instead. The eye never has to find its place again.
+- **Every scene is made out of the previous one.** No scene fades, blurs or cuts into the
+  next; objects change shape instead. The eye never has to find its place again. (Under a
+  shared element the chrome around it may fade: the eye is on the element.)
 - **Banned:** crossfades, blur-ins, 3D flips, particles, glows, brightness "developing",
   holds longer than about 1s with nothing moving, anything that looks like a template.
   Also the tells of generated video: text or labels in the corners, frame borders, a
   centered title on a gradient, everything fading in.
 - **Something happens on every beat.** Map the beats before building (a table of beat,
   time, what changes) and render 3 or 4 stills of the key moments for sign-off first.
+  In a hook hold or a caption rest the camera's breath (a slow drift, architecture) is
+  the something: still enough to read, never frozen.
+- **Budget the captions.** Each one costs about 2.5 s of still picture (words in, the
+  1.5 s hold, a beat before motion resumes). A 15 s cut carries 3, at most 4 counting
+  the close; more leaves no time for the product to act.
 - **Big moments on the music:** the zoom or payoff on the drop, a quiet scene in the
   breakdown, the brand returning with the beat.
 - **A cursor drives the product:** real clicks, drags and long-presses, with the camera
@@ -85,10 +96,14 @@ survived review in a shipped promo system. Paraphrased; the reasoning is the poi
 
 ## Motion
 
-- **Eased, never linear.** One critically damped spring for everything makes
-  independently built scenes read as one system.
+- **Eased, never linear.** One critically damped spring for everything that moves on
+  screen makes independently built scenes read as one system. In Remotion:
+  `spring({ frame, fps, config: { stiffness: 170, damping: 26, overshootClamping: true } })`;
+  a thing has landed at `measureSpring({ fps, config })` frames (threshold 0.005). Two
+  deliberate exceptions: the camera's quintic ease, and the flood's eased coverage.
 - **Transitions that belong:** carry a shared element across when two scenes share
-  one; otherwise flood from one scene's anchor into the next. Never a visible cut.
+  one; morph the motif when it is a UI element; otherwise flood in the motif's shape from
+  one scene's anchor into the next. Never a visible cut.
 - **Adaptive rhythm:** not every beat the same length. Speed up through the
   familiar, slow down for the payoff.
 - **Readable:** pace comes from motion and cuts, never from pulling text away

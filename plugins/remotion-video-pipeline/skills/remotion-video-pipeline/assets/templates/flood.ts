@@ -135,12 +135,31 @@ function scaleForCoverage(target: number, geo: FloodGeometry, profile: Profile):
 
 const easeInOutSine = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
 
+export interface FloodEnds {
+  /** Scale the shape grows from: the outgoing scene's visible motif (0 = a point). */
+  fromScale?: number;
+  /** Scale it contracts to: the incoming scene's mark in the same shape (0 = a point). */
+  toScale?: number;
+}
+
 /**
  * Scale at local frame `f` of the flood's own 2 * FLOOD_FRAMES window; the cut
  * sits at f = FLOOD_FRAMES. Edge to edge on both frames either side of it.
+ *
+ * With `fromScale` the flood grows out of a motif already on screen, and with
+ * `toScale` it settles into the incoming mark (same outline, same color), which
+ * the scene draws from the end of the window on. The window starts FLOOD_FRAMES
+ * before the cut, so the outgoing scene's caption hold must end by then.
  */
-export function floodScale(f: number, geo: FloodGeometry, profile: Profile): number {
+export function floodScale(f: number, geo: FloodGeometry, profile: Profile, ends: FloodEnds = {}): number {
   if (f < 0 || f >= 2 * FLOOD_FRAMES) return 0;
-  const coverage = f < FLOOD_FRAMES ? easeInOutSine((f + 1) / FLOOD_FRAMES) : 1 - easeInOutSine((f - FLOOD_FRAMES) / FLOOD_FRAMES);
+  const start = ends.fromScale ? visibleCoverage(ends.fromScale, geo, profile) : 0;
+  const end = ends.toScale ? visibleCoverage(ends.toScale, geo, profile) : 0;
+  // Grow: full on the frame before the cut. Contract: full on the cut frame and
+  // exactly `end` on the window's last frame, so the mark takes over without a jump.
+  const coverage =
+    f < FLOOD_FRAMES
+      ? start + (1 - start) * easeInOutSine((f + 1) / FLOOD_FRAMES)
+      : end + (1 - end) * (1 - easeInOutSine((f - FLOOD_FRAMES) / (FLOOD_FRAMES - 1)));
   return scaleForCoverage(coverage, geo, profile);
 }
