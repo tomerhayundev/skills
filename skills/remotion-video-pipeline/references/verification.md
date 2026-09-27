@@ -50,7 +50,7 @@ it on every cut and every aspect before publishing, and after changing a transit
 tall frame shows more of the world than a wide one, so it catches pops that wide hides.
 
 Look at every pop it flags before fixing anything: extract the frames either side and
-compare them at full size. Not ffmpeg's \`tblend\`, and not with a downscale in the chain:
+compare them at full size. Not ffmpeg's `tblend`, and not with a downscale in the chain:
 both faked large differences between identical frames in testing. Fine film grain that
 re-renders can also register while being invisible.
 
