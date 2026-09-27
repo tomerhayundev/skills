@@ -25,12 +25,19 @@ survived review in a shipped promo system. Paraphrased; the reasoning is the poi
 ## Story
 
 - **The hook is everything.** The first 2 seconds decide whether anyone keeps
-  watching. Plan it before anything else.
+  watching. Plan it before anything else. Its line lands in about a second and then
+  holds whole for 2 more; the action starts after the hold, never during it.
 - **Shape:** hook (2 to 3 s), reveal (2 to 4 s), two or three sharp highlights,
   punchline or brand close (2 to 4 s). A starting shape, not a template.
 - **A short cut needs a narrative, not a montage.** The 15 s cut that worked:
   build it once, it multiplies per job, the score improves, brand. A feature shown
   for 20 seconds does not land.
+- **A short cut is fewer ideas, not faster ones.** It delivers the message in less
+  time by dropping moments; the moments it keeps play exactly as in the long cut.
+  Squeezing every moment to fit looked rushed and read worse.
+- **Gestures mirror the product action.** Per moment, write the action, the gesture,
+  and how the gesture could be misread: a reveal under a moving element reads as
+  erasing, a line through text as crossing it out. Pasted things appear whole.
 - **Clear to a stranger:** after one viewing, someone who never heard of it knows
   what it does, who it's for, and how to get it.
 - **Specific:** use the product's own copy and claims. "Streamline your workflow"
@@ -67,7 +74,11 @@ survived review in a shipped promo system. Paraphrased; the reasoning is the poi
   familiar, slow down for the payoff.
 - **Readable:** pace comes from motion and cuts, never from pulling text away
   early. A fully shown line holds about 0.3 s per word, at least 1.5 s for a caption.
-  Fast in, then hold.
+  Fast in, then hold. A caption rises into a still picture, after the moment's action,
+  never while something else holds the eye; keep it to 4 to 6 words, and draw the
+  film's motif under its key word.
+- **Camera:** it starts and stops with no acceleration (a quintic ease), moves with
+  the thing the viewer follows, and never jolts. Details: one-take-film.
 - **Alive:** things appear one by one, clicks and typing happen, the camera
   breathes. Every frozen frame should be worth posting.
 

@@ -87,6 +87,15 @@ ffmpeg -y -i clip.mp4 -i poster.png -filter_complex "[1][0]scale2ref[p][v];[v][p
   imports; it must load without the browser-only assets.
 - **Manifest**: every scene has at least one standalone clip, every clip covers all
   aspects and locales unless it's a named exception, company names are fictional.
+- **Camera jerk**: the third difference of the camera centre on screen, every frame,
+  every aspect, under about 12 px per frame cubed. It caught a lean switched on in one
+  frame, a dead zone shoving the camera, and eases that brake in their last frame.
+- **Still picture under captions**: nothing on screen (the moving element, the camera)
+  moves more than 1.5 px a frame from a caption's first word until a second after its
+  last one lands.
+- **Short cut pace**: per moment both cuts share, the short cut's on-screen speed is at
+  most 1.1 times the long cut's.
+- **Text crossing**: every sample of a drawn path stays out of every text rect.
 
 ## Audio
 
@@ -114,6 +123,8 @@ chain layout instead.
 ## Before calling it done
 
 - Stills read at every aspect and locale touched.
+- A contact sheet per cut (one frame a second), checked at the frame edges too: a
+  sliver of a neighbouring scene or station at the edge is easy to miss in stills.
 - Audio measured, and a human has listened to at least one cut per change.
 - The rendered file you are about to publish is the one you checked (the render
   script's skip logic can hand you a stale file; use `--force` when in doubt).

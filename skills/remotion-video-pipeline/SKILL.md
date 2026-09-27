@@ -1,6 +1,6 @@
 ---
 name: remotion-video-pipeline
-description: Build or extend a production Remotion pipeline for product promo and marketing videos. One manifest row per clip, scenes sliced by frame range, every clip expanded to four aspect ratios and several locales (RTL included), a beat-locked music bed whose lift lands on the story's payoff, batch rendering, measured visual and audio verification, and publishing. Use when asked to make a promo video, product demo, ad cut, launch video, or social clip (Reels, TikTok, Shorts, LinkedIn, X); to add music, captions, aspect ratios, or a new language to Remotion videos; to cut a shorter or longer version; or to set up a video pipeline in a new project.
+description: Build or extend a production Remotion pipeline for product promo and marketing videos. One manifest row per clip, scenes sliced by frame range, every clip expanded to four aspect ratios and several locales (RTL included), a beat-locked music bed whose lift lands on the story's payoff, batch rendering, measured visual and audio verification, and publishing. Use when asked to make a promo video, product demo, ad cut, launch video, one-take launch film, or social clip (Reels, TikTok, Shorts, LinkedIn, X); to add music, captions, aspect ratios, or a new language to Remotion videos; to cut a shorter or longer version; or to set up a video pipeline in a new project.
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
@@ -24,6 +24,9 @@ is the last resort.
 4. **No pipeline yet?** Scaffold it in this order: tokens, one scene on the square
    canvas, the registry, `expand()`, the chain `Clip`, the render script, then the
    music bed. Each step is in [architecture](references/architecture.md).
+5. **One continuous take, with an element that travels through every moment** (a
+   thread, a line, a cursor)? Not a manifest chain: see
+   [one-take-film](references/one-take-film.md) for its architecture, motion, camera and tests.
 
 ## Architecture in one screen
 
@@ -44,6 +47,10 @@ is the last resort.
 | --- | --- |
 | Clip durations are multiples of the grid unit | Grain and loops seam cleanly and every cut lands on a beat. Enforce it in `expand()`. |
 | A fully revealed caption holds at least 1.5s before its beat ends | The top cause of an incoherent cut. Test the arithmetic, not a screenshot. |
+| A caption rises only into a still picture | Viewers watch the motion, not the text: captions that arrived mid-action went unread. Nothing moves until about 1s after the last word lands. 4 to 6 words |
+| The hook line holds whole for 2s before anything competes with it | It once changed before anyone could read it. Words in within about 1s, then the hold, then the action |
+| A shorter cut drops ideas; the ones it keeps play at the long cut's pace | Shrinking every leg to fit made a 15s cut that looked fast and was harder to follow. Keep shared timings identical and test on-screen speed per moment |
+| Every gesture mirrors the product action | A needle revealing pasted text read as erasing it. Pasted things appear whole; mark text from below, never across it |
 | Interior chain entries start at `from: 0` | Windowing an interior entry makes its Sequence mount early and overpaint the previous scene. Guard it. |
 | Never loosen a containment test to make a rect fit | Move the content. Clipped chips shipped once because a test was "adjusted". |
 | Fake company names next to fabricated metrics | A real employer beside an invented score fails ad review. |
@@ -116,7 +123,8 @@ node ${CLAUDE_SKILL_DIR}/scripts/frame-pops.mjs out/promo/<id>.mp4
 The short version; the reasoning and sources are in [creative-rules](references/creative-rules.md).
 
 - The first 2 seconds decide if anyone keeps watching. Plan the hook first.
-- A short cut needs a narrative (build, multiply, improve, brand), not a montage.
+- A short cut needs a narrative (build, multiply, improve, brand), not a montage:
+  fewer ideas at the same pace, never the same ideas faster.
 - One shot, one idea, the key object centered, room to breathe.
 - **Every scene is made out of the previous one:** nothing fades, blurs or cuts;
   objects change shape. Shared elements carry across, a flood covers every other
