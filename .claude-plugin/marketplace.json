@@ -50,36 +50,6 @@
       "license": "MIT"
     },
     {
-      "name": "codex-loop",
-      "description": "Iterative Codex CLI loop with Claude as orchestrator. Runs codex exec across multiple iterations, using a Stop-hook loop engine to persist state and Claude to evaluate results each round.",
-      "source": "./plugins/codex-loop",
-      "author": {
-        "name": "Tomer Hayun",
-        "url": "https://github.com/tomerhayundev"
-      },
-      "category": "development",
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/codex-loop",
-      "license": "MIT"
-    },
-    {
-      "name": "stitch-sdk",
-      "description": "Generate UI screens programmatically with the Google Stitch SDK: screens from text prompts, edits, design variants, HTML and screenshot export, and agent integrations.",
-      "source": "./plugins/stitch-sdk",
-      "author": {
-        "name": "Tomer Hayun",
-        "url": "https://github.com/tomerhayundev"
-      },
-      "category": "design",
-      "keywords": [
-        "stitch",
-        "ui",
-        "design",
-        "google"
-      ],
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/stitch-sdk",
-      "license": "MIT"
-    },
-    {
       "name": "wix-app-dev",
       "description": "Design, build, and ship production-grade Wix App Market apps: architecture, instance-token auth, webhooks, Blocks widgets, dashboard pages, a Cloudflare Workers + D1 backend, billing, and App Market submission.",
       "source": "./plugins/wix-app-dev",
@@ -136,5 +106,9 @@
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/visual-verification",
       "license": "MIT"
     }
-  ]
+  ],
+  "renames": {
+    "codex-loop": null,
+    "stitch-sdk": null
+  }
 }
