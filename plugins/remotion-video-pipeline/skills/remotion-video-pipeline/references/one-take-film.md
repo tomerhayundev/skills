@@ -6,6 +6,10 @@ needle, a line, a cursor, a ball). It is not a manifest chain of scenes, so it g
 own small architecture. Everything below came out of building one and taking two rounds
 of review from a picky owner; each rule names the mistake it prevents.
 
+The element is the film's motif, taken from the brand and the product's action (SKILL.md,
+"Find the motif first"). A thread and needle worked because the product tailors CVs; the
+same film with a ball would be a template.
+
 ## Four modules and a component
 
 | File | Holds |

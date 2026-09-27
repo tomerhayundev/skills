@@ -14,6 +14,19 @@ survived review in a shipped promo system. Paraphrased; the reasoning is the poi
 - Give the series rules and keep them: a small fixed palette (one accent), the same
   backgrounds, the same family of music. To a viewer, consistency reads as intent.
 
+## Motif: one object the film is made of
+
+- Find it in the brand and the product's action, not in a list of transitions: the
+  name or promise, plus what the product does to the viewer's problem. A CV builder
+  whose name means tailored became a thread and needle that re-tailors the CV,
+  threads the job tags and sews the logo. Nobody had to explain the transitions.
+- It carries every boundary: floods are its silhouette, a travelling motif is the
+  path the camera follows, the caption underline is drawn in it, the close is built
+  from it. One motif, used everywhere, is what makes separate moments read as one film.
+- Competitor test: put a competitor's logo on the film. If the motif still fits, it
+  is decoration. A disc, a gradient or particles fit every brand; plans made without
+  a motif flooded every boundary with a plain disc and read as a template.
+
 ## Design first
 
 - Storyboard frame by frame before animating. A video never looks better than its

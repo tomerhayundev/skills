@@ -146,24 +146,35 @@ amount, or the back half of the clip goes black.
 
 1. **Shared element** (both scenes declare `persist`): the element glides from one
    scene's framing into the next, as above.
-2. **Flood** (every other boundary): a disc in the accent grows from the outgoing
-   scene's anchor until it covers the frame, the cut happens underneath, and it contracts
-   into the incoming scene's anchor. The next scene's key element grows out of where the
-   last one was. Pure math in `assets/templates/flood.ts` (with tests).
+2. **Flood** (every other boundary): the motif's silhouette (SKILL.md, "Find the motif
+   first"), in the accent, grows from the outgoing scene's anchor until it covers the
+   frame, the cut happens underneath, and it contracts into the incoming scene's anchor.
+   The next scene's key element grows out of where the last one was. Pure math in
+   `assets/templates/flood.ts` (with tests).
 
 Getting the flood right:
 
-- **Ease the coverage, not the radius.** Visible area grows with r squared and then clips
-  at the frame edges, so a radius eased over 9 frames covers most of the screen in two
-  frames: a pop. Pick the share of the frame covered per frame (an ease-in-out on
-  coverage), then solve for the radius by bisection on the circle/rectangle overlap.
-  Result: no frame changes more than about 18% of the screen.
+- **The shape is the motif.** Give its silhouette as a closed polygon around the point
+  it grows from, build `floodProfile(outline)` once at module scope, and draw the
+  polygon with `translate(cx cy) scale(floodScale(frame, geo, profile))`. The outline
+  must contain that point and be star-shaped around it (every ray from it leaves the
+  outline once): a page, a drop, a speech bubble, a leaf, a tag, a heart. A crescent, a
+  ring or a letter C is not, and `floodProfile` throws; simplify the silhouette or move
+  the point. `discOutline()` is the fallback for a motif with no closed outline, and the
+  plan's Transitions row says why it was used.
+- **Ease the coverage, not the scale.** Visible area grows with scale squared and then
+  clips at the frame edges, so a scale eased over 9 frames covers most of the screen in
+  two frames: a pop. Pick the share of the frame covered per frame (an ease-in-out on
+  coverage), then solve for the scale by bisection on the shape/frame overlap (exact for
+  a star-shaped outline: along each ray the visible part ends at the nearer of the two
+  edges). Result: no frame changes more than about 18% of the screen.
 - **About 0.3s each way** (9 frames at 30fps), full cover on both frames around the cut,
-  and a reach 1.15x past the farthest corner.
+  and a reach 1.15x past full cover.
 - **Anchors.** A scene's anchor is where its eye goes, in canvas coords, mapped through
   the same camera fit and RTL mirroring as the scene (`focus.to` for the outgoing
   scene, `focus.from` for the incoming one). Default: the focus rect's centre. Declare
-  one when the key element sits elsewhere, or the disc contracts beside it.
+  one when the key element sits elsewhere, or the shape contracts beside it. Mirror the
+  outline too in RTL when the motif has a direction (a speech bubble's tail).
 - **Automatic.** Derive flood boundaries from the chain (every boundary that isn't a
   shared-element overlap), so a new cut can never ship as a hard cut.
 - Other shape changes that read the same way: text rising out of a mask line, icons

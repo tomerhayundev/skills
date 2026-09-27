@@ -19,14 +19,39 @@ is the last resort.
 1. **Does it already exist?** List compositions (`remotion compositions` or the
    project's dry-run). Often the ask is a file that is already rendered.
 2. **Is it a new cut of existing footage?** Add a manifest row. Done.
-3. **Is it a new product moment?** Write one new scene, register it, give it a
-   focus rect and a containment test. See [architecture](references/architecture.md).
-4. **No pipeline yet?** Scaffold it in this order: tokens, one scene on the square
-   canvas, the registry, `expand()`, the chain `Clip`, the render script, then the
-   music bed. Each step is in [architecture](references/architecture.md).
-5. **One continuous take, with an element that travels through every moment** (a
-   thread, a line, a cursor)? Not a manifest chain: see
+3. **Is it a new product moment?** Fill the motif block (next section) if the
+   project has none, then write one new scene, register it, give it a focus rect and
+   a containment test. See [architecture](references/architecture.md).
+4. **No pipeline yet, or a new film?** Fill the motif block first. Then scaffold in
+   this order: tokens, one scene on the square canvas, the registry, `expand()`, the
+   chain `Clip`, the render script, then the music bed. Each step is in
+   [architecture](references/architecture.md).
+5. **Does the motif travel** (a thread, a road, a cable, a line)? Not a manifest
+   chain: one continuous take that follows it. See
    [one-take-film](references/one-take-film.md) for its architecture, motion, camera and tests.
+
+## Find the motif first
+
+Every transition is made of one motif: an object that comes from the brand's name or
+promise and from what the product does to the viewer's problem. It is decided before
+the beat map, because it decides what the beats look like. A CV builder whose name
+means tailored got a tailor's thread and needle: it stitches the CV, threads the job
+tags, and sews the wordmark shut. A shape that fits every brand says nothing about this one.
+
+Write this block at the top of the plan, every row filled:
+
+| Slot | What goes in it | CV-builder example |
+| --- | --- | --- |
+| Promise | The brand name or promise plus the product's action, in one phrase | tailoring one CV to each job |
+| Motif | The object that phrase suggests | a tailor's thread and needle |
+| Travels or grows | Travels (thread, road, cable, river): a one-take film. Grows or opens (page, drop, bubble, leaf, tag, box): a chain whose floods are its silhouette | travels |
+| Transitions | How the motif carries each boundary | the needle strikes, stitches, threads |
+| Echoes | Where else it appears: caption underline, a score, the logo close | the caption underline is a stitch; the close sews the wordmark |
+| Competitor test | Put a competitor's logo on the film. What breaks? | a thread means nothing for a product that does not tailor |
+
+If nothing breaks in the competitor test, the motif is decoration: go back to the
+promise. The disc in `flood.ts` is the fallback for a motif with no closed outline;
+when a flood uses it, the Transitions row says why.
 
 ## Architecture in one screen
 
@@ -37,7 +62,7 @@ is the last resort.
 | Scene registry | Metadata (duration, focus rects, caption key, persist rect) in a module Node can load; components in a separate map. A scene's `.tsx` must never be reachable from the render script's import path. |
 | Manifest | `{ id, scenes: [{ scene, from?, to?, captionOverride?, captionTiming?, musicLift? }], aspects?, locales?, loop?, posterFrame }` |
 | `expand()` | Rows x aspects x locales into compositions. Validates windows, the grid, the poster frame, and the music. Throws rather than renders something wrong. |
-| Chain | No visible cuts. A shared-element overlap when both scenes share an element; a flood (a disc grows from one scene's anchor, covers the cut, contracts into the next scene's anchor) everywhere else. Declared duration and rendered timeline come from one function. |
+| Chain | No visible cuts. A shared-element overlap when both scenes share an element; everywhere else a flood: the motif's silhouette grows from one scene's anchor, covers the cut, and contracts into the next scene's anchor. Declared duration and rendered timeline come from one function. |
 | Grid | Every duration is a multiple of one grid unit (15 frames at 30fps). It is also one beat at 120 BPM, which is what makes the music free. |
 | Tokens | One source for every color, size and duration. One accent color, nothing competes with it. |
 
@@ -57,6 +82,7 @@ is the last resort.
 | Show the real product | Render the app's real components in the video (import them), not screenshots of them. |
 | Loops carry no music | A track cannot loop seamlessly inside a short loop, and in-page loops play muted anyway. |
 | Every scene is made out of the previous one | No hard cuts, no crossfades. `frame-pops.mjs` fails a render with a cut in it. |
+| Every transition is made of the motif | Films planned without a motif block flooded every boundary with a plain disc, the one shape that fits any brand, and read as a template. |
 | Load fonts explicitly and prove it | A missing font falls back to system-ui silently and still looks plausible. Keep a render test that fails on the fallback. |
 
 ## Music bed (the one layer silent pipelines miss)
@@ -127,8 +153,8 @@ The short version; the reasoning and sources are in [creative-rules](references/
   fewer ideas at the same pace, never the same ideas faster.
 - One shot, one idea, the key object centered, room to breathe.
 - **Every scene is made out of the previous one:** nothing fades, blurs or cuts;
-  objects change shape. Shared elements carry across, a flood covers every other
-  boundary. Recipe: [architecture](references/architecture.md#transitions).
+  objects change shape. Shared elements carry across, a flood in the motif's shape
+  covers every other boundary. Recipe: [architecture](references/architecture.md#transitions).
 - Eased motion only (one critically damped spring for everything); vary the rhythm.
 - Show 3 or 4 examples, never all of them: more reads as a blur.
 - Sound with restraint: one music bed, at most a few effects that match the motion.
