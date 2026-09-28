@@ -22,13 +22,16 @@
  *   install command; a relative markdown link to a file that does not exist; a
  *   script that doesn't parse;
  * - with scripts/sync.mjs present: a specialist, catalog entry or README family
- *   table out of step with its master, or a specialist edited by hand.
+ *   table out of step with its master, or a specialist edited by hand;
+ * - with scripts/names.mjs present: a real company, client, product or competitor
+ *   name from scripts/blocked-names.txt (salted hashes) anywhere in the repo.
  * Warnings: a plugin no marketplace entry installs, a frontmatter key outside the
  * known set, an em dash (house style), SSH-style install instructions.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { spawnSync } from "node:child_process";
+import { pathToFileURL } from "node:url";
 
 const ROOT = join(import.meta.dirname, "..");
 const errors = [];
@@ -210,6 +213,15 @@ for (const p of market.plugins) {
 for (const r of rows) {
   const name = r.line.match(/^\| \[([^\]]+)\]/)?.[1];
   if (name && !market.plugins.some((p) => p.name === name)) errors.push(`README.md: row "${name}" has no marketplace entry`);
+}
+
+// Names: no real company, client, product or competitor name anywhere in the repo. The
+// list is salted hashes (scripts/names.mjs); findings give the place, never the name.
+if (existsSync(join(ROOT, "scripts", "names.mjs"))) {
+  const { loadHashes, scanPath } = await import(pathToFileURL(join(ROOT, "scripts", "names.mjs")).href);
+  for (const h of scanPath(ROOT, loadHashes(ROOT))) {
+    errors.push(`${h.file}:${h.line}:${h.column}: a blocked company or product name; describe the case by category`);
+  }
 }
 
 // Specialists generated from a master: in step with it, and never edited by hand.

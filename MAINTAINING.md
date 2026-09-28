@@ -17,11 +17,18 @@ written here in the same commit.
 4. **Never just delete a catalog entry.** Rename with `"renames": { "old": "new" }`, retire with
    `"old": null` and move the folder to `archive/`.
 5. **Nothing secret or private in this public repo.** Keys and tokens live in environment variables,
-   never in a skill (not even a private one). Client names, product internals and internal URLs go to
+   never in a skill (not even a private one). Product internals and internal URLs go to
    `tomerhayundev/skills-private`. Run the scan before every push.
-6. **House style.** No em dashes. A `SKILL.md` description starts "Use when..." and names triggers, not
+6. **No real company names, ever.** Not the client a lesson came from, not its competitors, not
+   Tomer's own products as examples: not in a skill, a test prompt, a commit message or any file.
+   Describe the case by category. `scripts/blocked-names.txt` lists names that must never appear, as
+   salted hashes; add one with `node scripts/names.mjs add "<name>"` (it prints where the name already
+   appears). `check-skills.mjs` fails on any of them on every push, and the scan does with `--public`;
+   both print the place, never the name. A name that is also an ordinary word goes in only with the
+   rest of its full name.
+7. **House style.** No em dashes. A `SKILL.md` description starts "Use when..." and names triggers, not
    the workflow. Install commands use the HTTPS URL. Every entry has a README row with its install command.
-7. **Nothing is pushed red.** The sync, the checks, the tests, the scan and a test install pass
+8. **Nothing is pushed red.** The sync, the checks, the tests, the scan and a test install pass
    locally first, and a failing CI run is fixed before the work is reported done.
 
 ## How the repo is laid out
@@ -33,7 +40,8 @@ plugins/remotion-video-<format>/           specialists, generated from remotion-
 archive/<name>/                            retired plugins, out of the catalog
 scripts/sync.mjs                           versions, specialists, catalog entries, README family tables
 scripts/sync.test.mjs                      its tests
-scripts/check-skills.mjs                   every repo check (CI runs it; it also runs sync --check)
+scripts/check-skills.mjs                   every repo check (CI runs it; it also runs sync --check and the names check)
+scripts/names.mjs, blocked-names.txt       names that must never appear, kept as salted hashes
 .github/workflows/validate.yml             CI: sync on push to main, then every check and test
 .claude/agents/skills-maintainer.md        the agent that follows this file
 CLAUDE.md                                  points any session in this repo here

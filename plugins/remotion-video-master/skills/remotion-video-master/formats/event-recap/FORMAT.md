@@ -31,7 +31,7 @@ The promo profile, except continuity: hard cuts on the beat between footage clip
 
 ## Build notes
 
-Cut footage on the beat grid; photos move with the camera's breath and ease, never a slideshow of static frames. Motif transitions between sections.
+Cut footage on the beat grid; photos move with the camera's breath and ease, never a slideshow of static frames. The motif's full treatment at the peak moment and the close; beat cuts everywhere else.
 
 ## Verification
 

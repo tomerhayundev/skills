@@ -8,10 +8,12 @@
  */
 
 export interface FormatProfile {
-  /** seamless: no hard cuts anywhere. chaptered: motif transitions between chapters, hard cuts allowed inside recordings. */
+  /** seamless: no unmotivated cut; every boundary is a declared beat cut, a match cut, a shared element or a motif turn. chaptered: steps are chapters marked by the motif's step markers, and hard cuts are allowed inside recordings. */
   continuity: "seamless" | "chaptered";
   /** strict: frame-pops.mjs fails any pop. declared-cuts: pops pass only at cuts listed in out/<id>.cuts.json. */
   popsGate: "strict" | "declared-cuts";
+  /** Motif turns (a flood or a push through the real object) per 15 s, plus one at the close; every other boundary is a cut, a match cut or a shared element (transitions.ts). */
+  transitions: { motifTurnsPerFifteenSeconds: number; closeTurn: boolean };
   /** What lands in the first seconds, by when, and how long a hook line holds whole. */
   hook: { kind: "line" | "outcome" | "problem"; deliverBySeconds: number; holdSeconds?: number };
   captions: {
@@ -32,11 +34,24 @@ export interface FormatProfile {
 }
 
 /** "story and copy" first: the message, the script and the words decide whether a video works. */
-const BASE_CRITIQUE = ["story and copy", "hook", "phone readability", "motion", "variety", "composition", "motif and brand", "sound"];
+const BASE_CRITIQUE = [
+  "story and copy",
+  "hook",
+  "phone readability",
+  "motion",
+  "variety",
+  "composition",
+  "motif and brand",
+  "transitions: hierarchy and dose",
+  "graphics belong to the picture",
+  "cover",
+  "sound",
+];
 
 export const PROMO: FormatProfile = {
   continuity: "seamless",
-  popsGate: "strict",
+  popsGate: "declared-cuts",
+  transitions: { motifTurnsPerFifteenSeconds: 1, closeTurn: true },
   hook: { kind: "line", deliverBySeconds: 1, holdSeconds: 2 },
   captions: { mode: "statements", perFifteenSeconds: 3, words: [4, 6], holdSeconds: 1.5, riseIntoStill: true },
   music: { mode: "bed-with-lift" },
@@ -59,7 +74,6 @@ export function withOverrides(base: FormatProfile, overrides: Partial<FormatProf
 export const PRODUCT_DEMO = withOverrides(
   PROMO,
   {
-    popsGate: "declared-cuts",
     hook: { kind: "outcome", deliverBySeconds: 3 },
     captions: { mode: "subtitles+titles", holdSeconds: 1.5, riseIntoStill: false, maxLines: 2 },
     music: { mode: "bed-under-voice", underVoiceDb: [18, 22] },
@@ -68,7 +82,6 @@ export const PRODUCT_DEMO = withOverrides(
     critique: [...BASE_CRITIQUE, "each feature lands"],
   },
   {
-    popsGate: "spliced recordings may cut; the engine's own boundaries stay seamless",
     hook: "a demo earns attention with the outcome, not a slogan",
     captions: "a voiced demo is subtitled; feature titles still follow the statement rules",
     music: "the voice carries the demo",
@@ -137,18 +150,16 @@ export const NEAREST: Record<string, keyof typeof PROFILES> = {
 export const STUB_PROFILES: Record<string, FormatProfile> = {
   "event-recap": withOverrides(
     PROMO,
-    { continuity: "chaptered", popsGate: "declared-cuts" },
+    { continuity: "chaptered" },
     {
       continuity: "real footage cuts; motif transitions between sections, beat cuts inside them",
-      popsGate: "beat cuts between footage clips are declared in cuts.json",
     },
   ),
   testimonial: withOverrides(
     EXPLAINER,
-    { continuity: "chaptered", popsGate: "declared-cuts" },
+    { continuity: "chaptered" },
     {
       continuity: "an interview is edited speech",
-      popsGate: "cuts between takes land on sentence ends and are declared",
     },
   ),
   "app-store-preview": withOverrides(

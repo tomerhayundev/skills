@@ -1,6 +1,6 @@
 {
   "name": "publish-skill",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Publish a skill or plugin to your Claude Code marketplace repos: routes public vs private, scaffolds the entry and README row, scans for secrets and private content, validates, test-installs in a throwaway config, and keeps a local copy. Includes a history-purge recipe for leaks.",
   "author": {
     "name": "Tomer Hayun",

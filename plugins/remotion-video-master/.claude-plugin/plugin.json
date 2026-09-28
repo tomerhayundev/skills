@@ -1,6 +1,6 @@
 {
   "name": "remotion-video-master",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "The master Remotion video skill, every format in one: a guided brief (what the video is for, where it runs, a recommended length), the story and script, then one engine for promos, demos, tutorials, explainers and more, with the brand motif in every transition, platform safe zones and measured verification.",
   "author": {
     "name": "Tomer Hayun",

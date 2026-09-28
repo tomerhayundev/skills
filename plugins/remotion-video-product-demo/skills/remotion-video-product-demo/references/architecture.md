@@ -103,6 +103,9 @@ export interface ChainEntry {
   captionOverride?: { en: string; he: string };  // swap the caption for this clip
   captionTiming?: { startAt: number; stagger?: number }; // reveal earlier/faster
   musicLift?: boolean;      // the music's lift lands on this entry's first frame
+  // How this entry is entered. Omitted: a cut on the beat. A flood or a push is a motif
+  // turn and needs reason "turn" or "close" (assets/templates/transitions.ts).
+  transition?: { kind: "cut" | "match" | "shared" | "morph" | "push" | "flood"; reason?: "turn" | "close" | "chapter"; fromMotifOnScreen?: boolean };
 }
 export interface ClipRow {
   id: string;
@@ -125,14 +128,18 @@ A slice of an existing scene is a row, no new animation:
 something wrong: unknown scene, window outside the scene, caption override on a
 scene without a caption, an interior entry with `from > 0`, a total duration off
 the grid, a poster frame outside the clip, more than one `musicLift`, a lift on a
-loop. It emits one composition per row x aspect x locale with id
+loop, and whatever `checkTransitions()` (`assets/templates/transitions.ts`) reports: a
+flood or push without a reason, more motif turns than the profile allows, a flood that
+does not grow out of the motif already on screen, a poster frame inside a transition or
+a caption's entrance. It emits one composition per row x aspect x locale with id
 `<clip>-<aspect>-<locale>` (hyphens only: Remotion rejects underscores in ids, and
 only at runtime, never in a unit test).
 
 ## Chain layout
 
-Nothing hard-cuts (see [Transitions](#transitions)). When both neighbours declare `persist`
-(the same element on screen, e.g. the product page), they overlap by one grid unit:
+Every boundary is a cut on the beat unless its entry declares another transition (see
+[Transitions](#transitions)). When both neighbours declare `persist` (the same element on
+screen, e.g. the product page), they overlap by one grid unit:
 the outgoing scene's chrome fades out, the incoming fades in, and a floating copy
 of the shared element glides between the two cameras' settled rects. Reuse each
 scene's own settled rect for the overlay, or the element pops in size at the cut.
@@ -140,10 +147,10 @@ scene's own settled rect for the overlay, or the element pops in size at the cut
 one whole scene fading into another.)
 
 One function computes both each Sequence's `from` and the composition's total
-duration, so the declared length can never disagree with what renders. When the
-format's profile allows hard cuts (a tutorial cutting inside a recording, beat cuts in
-an event recap), the same function writes every cut's frame to `out/<id>.cuts.json`,
-which `frame-pops.mjs --cuts` reads: what was declared is what rendered.
+duration, so the declared length can never disagree with what renders. The same function
+writes every cut's frame to `out/<id>.cuts.json` (`declaredCuts()` in `transitions.ts`),
+which `frame-pops.mjs --cuts` reads: what was declared is what rendered, and any other
+pop fails.
 For voice-led formats, `calculateMetadata` sizes each scene from its audio (or its
 reading time when caption-led) and the same function rounds it up to the grid.
 A windowed first entry is rendered with a negative `Sequence.from`, so the scene's
@@ -152,21 +159,31 @@ amount, or the back half of the clip goes black.
 
 ## Transitions
 
-**Every scene is made out of the previous one.** Three mechanisms, chosen per boundary:
+**The eye never has to find its place again, and the motif carries only the turns.**
+Mechanisms, in order of preference, chosen per boundary and declared on the entry:
 
-1. **Shared element** (both scenes declare `persist`): the element glides from one
-   scene's framing into the next, as above.
-2. **Flood** (every other boundary): the motif's silhouette (SKILL.md, "Find the motif
-   first"), in the accent, grows from the outgoing scene's anchor until it covers the
-   frame, the cut happens underneath, and it contracts into the incoming scene's anchor.
-   The next scene's key element grows out of where the last one was. Pure math in
-   `assets/templates/flood.ts` (with tests).
-3. **Morph** (the motif morphs): the element is the shared element on every boundary.
-   Each state change (link to page, slot to event) is one spring per property (size,
-   radius, fill; the several-targets pattern below), and its content swaps by the UI-motion
-   rules. Where the next scene has no place for it (usually the brand close), it floods
-   in its own outline (`fromScale` at its current size) and settles into the mark
+1. **Cut on the beat** (the default, `kind: "cut"`): the next shot starts on a grid frame.
+   A **match cut** (`"match"`) is better: the key object (the motif, the product) sits at
+   the same place and size on both sides, so the eye stays put.
+2. **Shared element** (`"shared"`, both scenes declare `persist`): the element glides from
+   one scene's framing into the next, as above.
+3. **Morph** (`"morph"`, the motif is a UI element): that element is shared across the
+   boundary. Each state change (link to page, slot to event) is one spring per property
+   (size, radius, fill; the several-targets pattern below), and its content swaps by the
+   UI-motion rules. Where the next scene has no place for it (usually the brand close), it
+   floods in its own outline (`fromScale` at its current size) and settles into the mark
    (`toScale`), or it becomes the mark directly.
+4. **Push through** (`"push"`, a turn): the camera moves into the real object (the code on
+   the box, the needle's eye) until it fills the frame, and the next shot opens out of the
+   same shape. In filmed footage this is the motif turn that stays in the world.
+5. **Flood** (`"flood"`, a turn or the close): the motif's silhouette, in the accent, grows
+   out of the motif where it already is on screen until it covers the frame, the cut
+   happens underneath, and it contracts into the incoming scene's anchor. Pure math in
+   `assets/templates/flood.ts` (with tests).
+
+The budget: at most one motif turn (push or flood) per 15 s, plus one at the close; the
+profile's `transitions` key sets it and `checkTransitions()` enforces it. A tutorial's
+chapter boundaries are step markers made of the motif, not floods.
 
 Getting the flood right:
 
@@ -196,8 +213,9 @@ Getting the flood right:
   scene, `focus.from` for the incoming one). Default: the focus rect's centre. Declare
   one when the key element sits elsewhere, or the shape contracts beside it. Mirror the
   outline too in RTL when the motif has a direction (a speech bubble's tail).
-- **Automatic.** Derive flood boundaries from the chain (every boundary that isn't a
-  shared-element overlap), so a new cut can never ship as a hard cut.
+- **Declared, never automatic.** A boundary floods only when its entry says
+  `transition: { kind: "flood", reason: "turn" | "close", fromMotifOnScreen: true }`.
+  Deriving floods for every boundary made six in a 30 s promo; the default is a cut.
 - Other shape changes that read the same way: text rising out of a mask line, icons
   popping from zero on a spring, bars drawing across, a page pushing the last one out.
 
@@ -222,8 +240,8 @@ frame, with no state carried between frames.
 
 **Motion blur** for fast shape changes: `@remotion/motion-blur` (`<CameraMotionBlur>`)
 renders subframes and blends them; the ffmpeg equivalent is rendering at 4x the frame rate
-and blending with `tmix`. It multiplies render time, so apply it around floods, not to
-the whole film.
+and blending with `tmix`. It multiplies render time, so apply it around floods and
+pushes, not to the whole film.
 
 ## Captions
 

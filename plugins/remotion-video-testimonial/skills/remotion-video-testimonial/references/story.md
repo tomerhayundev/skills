@@ -24,10 +24,20 @@ recap; explainer: problem, why it matters, idea, how it works, proof). Inside th
   Where the module's story shape says otherwise, it wins: a tutorial opens on the outcome (its viewer
   arrived from search with the problem already), and its tension is saved for the turn.
 - **One turn**: the moment the product changes things; it lands on the music's lift or the voice's
-  emphasis, and the motif does it (the needle strikes, the slot splits).
+  emphasis, and the motif does it (the needle strikes, the code is scanned and the list opens). The turn
+  is the one boundary that gets the motif's full treatment; the others are cuts on the beat.
+- **Cause, then effect, on screen**: every step the viewer needs to believe the payoff is shown (the
+  code, the scan, what it opens), or the payoff is a claim. A jump in time (packing months before the
+  search) is marked by the picture, never left for the viewer to guess.
 - **Show, then say**: the picture proves what the words claim. A caption never describes what is
   already obvious on screen.
 - **A short cut is a narrative, not a montage**: build, multiply, improve, brand. Drop ideas, keep the arc.
+- **A cutdown is a new script, not a subset of the long one.** Write its own one-sentence message and
+  its own script table. For every scene kept, list what the viewer must already have seen to understand
+  it; if that was dropped, the scene goes or gets its own setup. Then a cold read: someone (a fresh
+  subagent) who never saw the long cut reads only the cutdown's table and says what happens and why. A
+  15 s cut that went from a dim basement ("which box has the lights?") straight to a page where someone
+  types what went into a box failed it: the code and the scan that lead to the page had been dropped.
 
 ## 3. The script
 
@@ -78,4 +88,6 @@ run longer), and re-check the hook still lands in a second.
 - The critique loop scores **story and copy** for every format: is the one message clear after one
   viewing, does the hook make a stranger stay, is every line specific to this brand, does the CTA name
   one action. Tests: read it aloud; the stranger test (someone new says what it is, who it is for, what
-  to do); the rival test (would a competitor's logo fit these words?).
+  to do); the rival test, as a question in the plan (would these words still work for the closest
+  competitor? then they are not specific enough). No competitor is ever named or shown in the video;
+  the contrast is with the category's generic problem, and the advantage is stated positively.

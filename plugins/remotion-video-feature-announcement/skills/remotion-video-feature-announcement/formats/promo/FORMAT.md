@@ -2,7 +2,7 @@
 name: remotion-video-promo
 description: Use when making a product promo, ad (bumper, 15 s or 30 s), teaser, launch film, one-take launch film or landing page loop with Remotion; when adding music, captions, aspect ratios or a new language to one; when cutting a shorter or longer version; or when setting up a promo video pipeline in a new project.
 summary: >-
-  Promo videos with Remotion: bumpers, 15 and 30 s ads, teasers, launch films and landing page loops. Seamless, beat-locked, every transition made of the brand's motif, four aspects and RTL locales from one manifest.
+  Promo videos with Remotion: bumpers, 15 and 30 s ads, teasers, launch films and landing page loops. Beat-locked, the brand's motif carrying the turn and the close, four aspects and RTL locales from one manifest.
 ---
 
 # Promo
@@ -54,32 +54,39 @@ music-led, not caption-led: about -16 LUFS, the lift scored. A loop is silent.
 
 | Key | Value | Base (promo) | Why |
 | --- | --- | --- | --- |
-| continuity | seamless | seamless | this is the base |
-| popsGate | strict | strict | |
+| continuity | seamless: no unmotivated cut | seamless | this is the base |
+| popsGate | declared cuts | declared cuts | only the beat cuts listed in `cuts.json` may pop |
+| transitions | 1 motif turn per 15 s, plus the close | same | a flood is an exclamation mark |
 | hook | line in 1 s, held 2 s | same | |
 | captions | statements: 3 per 15 s, 4-6 words, rise into a still, held 1.5 s | same | |
 | music | bed with its lift on the payoff | same | |
 | durations | grid | grid | |
 | shortCut | fewer ideas at the long cut's pace | same | |
-| critique | the base 8 | same | |
+| critique | the base 11 (story and copy first; transitions, graphics and the cover included) | same | |
 
 ## Build notes
 
 The whole engine applies as written: [architecture](../../references/architecture.md) (manifest,
 `expand()`, chain, transitions), [creative-rules](../../references/creative-rules.md) (story, continuity,
 motion, captions, lengths and placements, ads and honesty), [music-bed](../../references/music-bed.md).
-Transitions: shared elements, a morph, or a flood in the motif's shape (`assets/templates/flood.ts`).
+Transitions (`assets/templates/transitions.ts`): cuts on the beat and match cuts on the motif by
+default, shared elements where scenes share one, and the motif's full treatment (a push through the
+real object, or a flood in its shape, `assets/templates/flood.ts`) only at the turn and the close:
+at most one per 15 s, plus the close. A cutdown is re-scripted, not trimmed ([story](../../references/story.md)).
 
 ## Verification
 
-Pops strict (zero). Loudness about -16 LUFS (silent for loops). Safe zones per shipped platform; the
-phone sheet; a loop's seam scan. Critique: the base 8 criteria, all 8 or more.
+Pops with `--cuts` (only declared beat cuts). Motif coverage within budget, the cover measured clean.
+Loudness about -16 LUFS (silent for loops). Safe zones per shipped platform; the phone sheet; a loop's
+seam scan. Critique by a fresh critic, each cut on its own: the base criteria, all 8 or more.
 
 ## Common mistakes
 
 | Mistake | Fix |
 | --- | --- |
 | A flood that is a plain disc | Grow the motif's silhouette |
+| A flood on every boundary | Cuts on the beat; the motif carries the turn and the close |
+| The motif pops up before the real object was seen | Open on the real thing, hold it, then let the motif act |
 | Four captions and a hook in 15 s | Three lines, the hook included (four with the close); each costs about 2.5 s of still picture |
 | The 15 s cut is the 30 s cut, faster | Drop ideas, keep the pace |
 | Music under the landing loop | Loops are silent |

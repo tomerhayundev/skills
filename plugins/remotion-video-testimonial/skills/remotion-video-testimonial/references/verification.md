@@ -50,8 +50,8 @@ unmounts on screen. Exit 1 on any. It reports whether each pop sits on the beat 
 it on every cut and every aspect before publishing, and after changing a transition: a
 tall frame shows more of the world than a wide one, so it catches pops that wide hides.
 
-The format's profile sets the gate. `strict` (promo, explainer): zero pops. `declared-cuts`
-(tutorial, product demo, event recap, testimonial): run with `--cuts=out/<id>.cuts.json`; pops at
+The format's profile sets the gate. `strict` (a loop): zero pops. `declared-cuts` (every other format: the
+beat cuts, match cuts and cuts inside recordings that `declaredCuts()` wrote): run with `--cuts=out/<id>.cuts.json`; pops at
 the declared cuts pass (within a frame), any other pop fails. Scan a raw screen recording before
 editing it: a page-load flash inside it is a pop nobody declared.
 
@@ -60,10 +60,18 @@ compare them at full size, byte for byte if in doubt. Do not trust ffmpeg's diff
 filters for this (`tblend`, `blend`): on full-range (yuvj) renders both reported large,
 uniform changes between frames that were byte-identical.
 
-## Frame 0 is a thumbnail
+## The cover and frame 0
+
+The cover is designed, not picked: the real product and the promise, settled, text fully in,
+never a transition frame or a field of flat color. `checkTransitions()` refuses a poster frame
+inside a transition or a caption's entrance; then measure the rendered cover and look at it:
+
+```bash
+node ${CLAUDE_SKILL_DIR}/scripts/motif-coverage.mjs out/<id>.webp --accent=<hex> --max-share=0
+```
 
 Platforms without a separate poster upload (and chat previews) show frame 0. A
-scene that opens on an empty stage makes a blank thumbnail. Check it:
+scene that opens on an empty stage makes a blank thumbnail. Check both:
 
 ```bash
 ffmpeg -y -i clip.mp4 -vf "select='eq(n,0)+eq(n,<posterFrame>)',scale=640:-1,tile=2x1" -frames:v 1 _f0-vs-poster.png
@@ -125,10 +133,33 @@ node ${CLAUDE_SKILL_DIR}/scripts/frame-pops.mjs _loop2.mp4
 A pop at the seam means the last frame is not the first, or matches it in position but
 not in velocity (a cursor that stops dead and restarts).
 
+## Motif coverage
+
+A flood is an exclamation mark. Measure how much of the film flat accent color covers:
+
+```bash
+node ${CLAUDE_SKILL_DIR}/scripts/motif-coverage.mjs out/<id>.mp4 --accent=<hex> --allow=<turn and close frame ranges>
+```
+
+It fails when accent dominates more than 5% of the runtime, or a full frame of it falls
+outside the declared turn and close. Measured on a 30 s promo that flooded all six of its
+boundaries: 7.5% dominated and six undeclared full frames; its 15 s cut, two.
+
 ## Critique loop
 
-Tests prove the arithmetic; they cannot say whether the film is good. After the first
-full render, look at it as a harsh motion director, not as its proud author:
+Tests prove the arithmetic; they cannot say whether the film is good. The author is the worst
+judge of their own film: a self-scored promo passed every criterion at exactly 8, and the same
+model, asked afterwards as a critic, found the floods, the missing motif introduction and the
+15 s cut that made no sense on its own. So the critique is cold:
+
+- A fresh critic (a subagent with no part in the build) gets only the sheets below, the one-sentence
+  message and the profile's criteria, never the script or the plan.
+- Before scoring, it narrates what a first-time viewer understands every 2 s, and what they would
+  not. Anything the message needs that a first-time viewer would not understand is a problem.
+- It scores each cutdown on its own, as if the long cut did not exist.
+- Every score at exactly the threshold is a warning: a second critic scores it again.
+
+Then look at it as a harsh motion director, not as its proud author:
 
 1. Make the sheets: the contact sheet (one frame a second), the phone sheet, and a strip
    of 12 consecutive frames around the fastest moment
@@ -136,7 +167,11 @@ full render, look at it as a harsh motion director, not as its proud author:
 2. Score each from 1 to 10: story and copy (the one message clear after one viewing, every line
    specific to this brand, one call to action; [story](story.md)); the hook in the first 2 s; readability at phone size;
    motion (springs, no dead frames, nothing sliding linearly); variety (something new on
-   every beat); composition; the motif and the brand (would a competitor's logo fit?);
+   every beat); composition; the motif and the brand (met as a real object before it is abstracted;
+   does what the product does; would this film still work for the closest competitor, asked as a
+   question and never shown); transitions: hierarchy and dose (the turn feels bigger than the other
+   boundaries, which are mostly cuts on the beat); graphics belong to the picture (each one on a
+   surface, in an interface or in the brand's layer); the cover (the product and the promise, settled);
    sound (the lift on the payoff where there is one, the level, and any effects sitting on the
    motion; a caption-led tutorial's or onboarding video's bed is scored on staying out of the way (every other bed on its lift); a silent loop skips this).
 3. Write the three worst problems with timestamps. Hunt for: text overlapping during a

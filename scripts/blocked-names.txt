@@ -1,0 +1,10 @@
+# Salted hashes of names that must never appear in this repo. Add with: node scripts/names.mjs add "<name>"
+c89a14b528a3a69a288f39b1
+d402a29a1aeda3ee95f86438
+550cf0ca76ad1d16d2edbac7
+98822614a6ba7600454a288f
+64e95ddaa97c85f5c4df0019
+856b1942571cf5a0f01e00f9
+ec52926f36acf005c5eac6c4
+c17f6d8ddb94ebf599559c55
+47f62e4814f8aa34f2e018f4

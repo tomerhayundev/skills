@@ -20,15 +20,31 @@ survived review in a shipped promo system. Paraphrased; the reasoning is the poi
   name or promise, plus what the product does to the viewer's problem. A CV builder
   whose name means tailored became a thread and needle that re-tailors the CV,
   threads the job tags and sews the logo. Nobody had to explain the transitions.
-- It carries every boundary: floods are its silhouette, a travelling motif is the
-  path the camera follows, the caption underline is drawn in it, the close is built
-  from it. One motif, used everywhere, is what makes separate moments read as one film.
-- Competitor test: put the closest rival's logo on the film and ask what stops making
-  sense. A rival in the same category shares the features, so the motif has to come from
-  what only this brand says: its name or its promise (a promise of tailoring, and a
-  thread). If only the logo breaks, the motif is decoration. A disc, a gradient or
-  particles fit every brand; plans made without a motif flooded every boundary with a
-  plain disc and read as a template.
+- **A character with an arc, not a wipe.** The viewer first meets the real object and
+  sees it held; then it acts, doing what the product does; then it pays off at the close.
+  A travelling motif is the path the camera follows; a motif that opens opens once, at the
+  turn, to reveal what the product does; the caption underline is drawn in it; the close
+  is built from it. One motif, met, used and paid off, makes separate moments one film.
+- **It carries the turns, not every boundary.** A flood is an exclamation mark: one at the
+  turn (problem to solution) and one at the close is a film; one on every boundary is an
+  effect laid over it. A promo whose code-shaped flood covered all six of its boundaries
+  put flat color over a third of 30 s and gave the biggest moment the same treatment as
+  the smallest. Most boundaries are cuts on the beat or match cuts.
+- **Met before it is abstracted.** A shape that pops up from nothing and floods the
+  screen reads as a sticker, even when it is the right motif. First the real object on
+  screen, held at least a second; only then its silhouette, its outline, its path.
+- **Its verb is the product's verb.** The thread stitches because the product tailors. A
+  code the product lets you scan should scan and reveal, not cover the screen: the most
+  natural turn is often the product's own action (the phone frames the code, the
+  viewfinder locks, the screen becomes what is inside).
+- **Competitor test, in the plan only.** Ask: if this film carried the closest
+  competitor's name, would it still work for them? A rival in the same category shares the
+  features, so the motif has to come from what only this brand says, its promise, and the
+  gesture has to match how this product works (a code molded into the product never
+  arrives like a label stuck on). If the film would still work for them, the motif is
+  decoration. The test is a question, never a render: the competitor never appears in the
+  film in any form. A disc, a gradient or particles fit every brand; plans made without a
+  motif flooded every boundary with a plain disc and read as a template.
 
 ## Design first
 
@@ -59,6 +75,11 @@ the arc, the script table, the copy rules, the hook options) is [story](story.md
 - **A short cut is fewer ideas, not faster ones.** It delivers the message in less
   time by dropping moments; the moments it keeps play exactly as in the long cut.
   Squeezing every moment to fit looked rushed and read worse.
+- **A short cut is a new script, not a subset.** It gets its own one-sentence message
+  and its own cold read by someone who has not seen the long cut. A kept scene that
+  depends on a dropped one goes, or gets its own setup: a 15 s cut that kept the page
+  where you type what went in, but dropped the code and the scan that lead to it, jumped
+  from the problem to a form nobody had asked for.
 - **Gestures mirror the product action.** Per moment, write the action, the gesture,
   and how the gesture could be misread: a reveal under a moving element reads as
   erasing, a line through text as crossing it out. Pasted things appear whole.
@@ -77,9 +98,11 @@ the arc, the script table, the copy rules, the hook options) is [story](story.md
 
 ## Continuity
 
-- **Every scene is made out of the previous one.** No scene fades, blurs or cuts into the
-  next; objects change shape instead. The eye never has to find its place again. (Under a
-  shared element the chrome around it may fade: the eye is on the element.)
+- **The eye never has to find its place again.** Across a boundary the key object keeps
+  its place (a match cut), stays (a shared element), turns into the next (a morph), or, at
+  a turn, the motif carries it. A plain cut on the beat is right when the next shot is its
+  own new idea; no scene fades, blurs or flips into the next. (Under a shared element the
+  chrome around it may fade: the eye is on the element.)
 - **Banned:** crossfades, blur-ins, 3D flips, particles, glows, brightness "developing",
   holds longer than about 1s with nothing moving, anything that looks like a template.
   Also the tells of generated video: text or labels in the corners, frame borders, a
@@ -105,9 +128,12 @@ the arc, the script table, the copy rules, the hook options) is [story](story.md
   `spring({ frame, fps, config: { stiffness: 170, damping: 26, overshootClamping: true } })`;
   a thing has landed at `measureSpring({ fps, config })` frames (threshold 0.005). Two
   deliberate exceptions: the camera's quintic ease, and the flood's eased coverage.
-- **Transitions that belong:** carry a shared element across when two scenes share
-  one; morph the motif when it is a UI element; otherwise flood in the motif's shape from
-  one scene's anchor into the next. Never a visible cut.
+- **Transitions that belong, in this order:** a cut on the beat, matched on the motif
+  or the key object when possible; a shared element when two scenes share one; a morph
+  when the motif is a UI element; a push through the real object at a turn; a flood in
+  the motif's shape only at a declared turn or the close, growing out of the motif where
+  it already is on screen. Never an unmotivated cut, a crossfade or a wipe that belongs
+  to no layer.
 - **Adaptive rhythm:** not every beat the same length. Speed up through the
   familiar, slow down for the payoff.
 - **Readable:** pace comes from motion and cuts, never from pulling text away
@@ -119,6 +145,34 @@ the arc, the script table, the copy rules, the hook options) is [story](story.md
   the thing the viewer follows, and never jolts. Details: one-take-film.
 - **Alive:** things appear one by one, clicks and typing happen, the camera
   breathes. Every frozen frame should be worth posting.
+
+## Graphics over footage
+
+Graphics on filmed footage and photos are normal: callouts, outlines, a device's
+interface, an underline, a tracked logo. They look foreign when they belong to nothing.
+Every graphic element belongs to a layer the viewer already knows:
+
+| Layer | What it looks like | Example |
+| --- | --- | --- |
+| The world | On a real surface, in its perspective, moving with it | an outline pinned to the code molded into a box's face |
+| An interface | A real device's screen or viewfinder | finder corners snapping onto a real code while the phone scans it |
+| The brand | Captions, their underline, the end card: set up from the first seconds | the caption's underline growing into the code on the end card |
+
+And three conditions:
+
+- **Anchored:** to a surface, or to an action in the scene (a hand, a scan, a camera
+  move). Nothing pops up by itself during a still.
+- **Proportionate:** it marks and highlights; it does not replace the picture. A frame
+  that is mostly flat color is a declared turn or the close, never a routine wipe.
+- **Matched:** perspective, motion blur, grain and light, and a color related to the
+  scene's palette. A saturated flat shape with hard vector edges over a soft, desaturated
+  photo is a sticker.
+
+What failed: a saturated flat square with three finder corners popped up in empty air in
+front of a generic box in a dim basement, grew to cover the frame, and did so six times in
+30 s, while the real code in the footage was gray and molded into the plastic. Two different
+objects, and the one on screen was not the one the product makes. `scripts/motif-coverage.mjs`
+measures how much of the runtime flat accent color covers.
 
 ## Sound
 
@@ -148,4 +202,10 @@ the arc, the script table, the copy rules, the hook options) is [story](story.md
 
 - Fabricated metrics (a match score, a count) sit next to fictional company names
   only. A real employer beside an invented number fails ad review.
-- The poster frame is a settled frame: text fully in, nothing mid-transition.
+- **No competitor, ever:** no name, logo, product, packaging or recognizable design, not
+  even blurred or in the background. Show the category's generic problem (labels that peel
+  off) and state the brand's advantage positively ("It comes on the tote."), never "unlike".
+  Generated and stock images tend to reproduce well-known products: the "before" objects
+  must be visibly generic.
+- **The cover is designed:** the real product and the promise, settled, text fully in.
+  Never a transition frame or a field of flat color; frame 0 is a cover too (verification).

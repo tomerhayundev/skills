@@ -2,7 +2,7 @@
 name: remotion-video-feature-announcement
 description: Use when announcing a new feature, release or changelog item in a short video with Remotion.
 summary: >-
-  Feature announcement videos with Remotion: one new feature or release, before and after on the same screen, in a short seamless film.
+  Feature announcement videos with Remotion: one new feature or release, before and after on the same screen, in a short film.
 ---
 
 # Feature announcement

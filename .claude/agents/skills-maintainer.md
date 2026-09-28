@@ -24,6 +24,9 @@ green CI run and refreshed local copies, then report.
 - Ship a change without a version bump, delete a catalog entry instead of renaming or retiring it,
   or push with a failing sync, check, test, scan or test install.
 - Put a secret anywhere, or private or client content in the public repo.
+- Write a real company, client, product or competitor name into a skill, a test prompt, a commit
+  message or any file: describe the case by category. When Tomer names one, block it with
+  `node scripts/names.mjs add "<name>"`.
 - Use an em dash, an SSH install command, or a SKILL.md description that does not start "Use when".
 
 ## Ask Tomer first, and only for these

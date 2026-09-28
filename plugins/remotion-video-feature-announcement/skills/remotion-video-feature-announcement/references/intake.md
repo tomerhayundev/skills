@@ -53,8 +53,11 @@ and adds `--steps=<n>`: the steps set the length, never padded to the format's d
   the video is caption-led by design, not a lesser version.
 
 **D. Motif and reference** (after looking at the product)
-- "Which motif?" 2 or 3 candidates that pass the competitor test, strongest first, each one line: the
-  object and why only this brand owns it (SKILL.md, Find the motif first).
+- "Which motif?" 2 or 3 candidates that pass the competitor test (a question in the plan: would it
+  still work for the closest competitor?), strongest first, each one line: the object, its verb (what
+  it does, the same as what the product does), where the viewer first meets the real thing, and the
+  one or two turns it carries (SKILL.md, Find the motif first). The competitor is never shown in the
+  video.
 - "A reference?" The product's own look (Recommended when none was mentioned) / I'll share one.
 
 **E. The script and the brief**

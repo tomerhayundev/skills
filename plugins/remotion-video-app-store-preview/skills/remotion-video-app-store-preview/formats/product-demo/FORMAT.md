@@ -45,24 +45,24 @@ under the voice, or a bed with a lift on the strongest feature when caption-led.
 | Key | Value | Base (promo) | Why |
 | --- | --- | --- | --- |
 | continuity | seamless | seamless | the engine's boundaries stay seamless |
-| popsGate | declared cuts | strict | spliced recordings may cut; listed in `cuts.json` |
+| popsGate | declared cuts | declared cuts | beat cuts and cuts inside spliced recordings, all listed in `cuts.json` |
 | hook | the outcome in 3 s | a line held 2 s | a demo earns attention with the result |
 | captions | feature titles (statements) + subtitles when voiced | statements | a voiced demo is subtitled |
 | music | bed under the voice, or bed + lift when caption-led | bed with a lift | the voice carries the demo |
 | durations | from the voice or reading time, on the grid | grid | the words set the pace |
 | shortCut | drops features, keeps the pace | fewer ideas | a shorter demo shows fewer features |
-| critique | base 8 + "each feature lands" | base 8 | every feature shown must be understood |
+| critique | base + "each feature lands" | base | every feature shown must be understood |
 
 ## Build notes
 
-Each feature is a scene; the motif carries the boundaries (a morph of one UI element across features
-works especially well). Cursor zoom for small controls. A feature clip for social is the same scene
+Each feature is a scene. Features change on cuts on the beat, or a morph of one UI element when the
+features share it; the motif's full treatment is kept for the turn and the close. Cursor zoom for small controls. A feature clip for social is the same scene
 rendered alone, reframed for 9:16, with a caption instead of the voice.
 
 ## Verification
 
-Pops with `--cuts` when recordings are spliced, otherwise strict. Loudness about -16 LUFS. Every
-feature title and number readable on the phone sheet. Critique: the base 8 plus "each feature lands":
+Pops with `--cuts`. Loudness about -16 LUFS. Every
+feature title and number readable on the phone sheet. Critique: the base criteria plus "each feature lands":
 after watching, a viewer can name what each one does.
 
 ## Common mistakes

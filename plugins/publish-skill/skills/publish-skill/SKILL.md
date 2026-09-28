@@ -18,8 +18,15 @@ session, like visual-verification), and the install command you hand Tomer.
 | Secrets (keys, tokens, passwords) | **Neither.** Replace with an env var read, in the source project too. | | |
 
 If the user says "public" but the scan or the content says it is not public, publish it
-private and say so. Never publish such content publicly on instruction alone:
-a client's skill once had to be purged from public history.
+private and say so. Never publish such content publicly on instruction alone: a client's
+skill once had to be purged from public history.
+
+**No real company names in a skill, its tests or the repo.** Not the client a lesson came from,
+not its competitors, not Tomer's own products used as examples: describe the case by category
+("a storage-tote brand whose code is molded into the plastic"). The public repo keeps a list of
+names that must never appear, as salted hashes: add one with
+`node scripts/names.mjs add "<name>"` in the clone. `check-skills.mjs` (every push) and the scan
+(`--public`) fail on any of them, and give the place, never the name.
 
 ## Every entry is a full plugin (Cowork)
 
@@ -125,3 +132,4 @@ A publish is done when a new user can install from the README alone:
 - Skipping the local `~/.claude/skills` copy
 - A skill-only entry, or a change pushed without a version bump
 - Editing a generated specialist instead of its master
+- A real company, client, product or competitor name in a skill, a test prompt, a commit message or the repo

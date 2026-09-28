@@ -9,12 +9,18 @@
  * warnings: personal absolute paths, email addresses, em dashes (house style),
  *   and, without --public, those not-public markers.
  *
+ * Blocked names: when the folder sits in a repo with scripts/names.mjs (the public
+ * skills repo), a real company, client, product or competitor name on its list is
+ * an error with --public and a warning without. The list is salted hashes only;
+ * findings give the place, never the name.
+ *
  * A line containing "scan:allow" is skipped (for rules that must name the words,
  * like this file's own patterns). A clean scan is necessary, not sufficient:
  * read what you are publishing.
  */
-import { readdirSync, readFileSync, statSync } from "node:fs";
-import { join, relative } from "node:path";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { dirname, join, relative, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const args = process.argv.slice(2);
 const root = args.find((a) => !a.startsWith("--"));
@@ -43,6 +49,17 @@ const TEXT = /\.(md|mdx|txt|json|ya?ml|toml|js|mjs|cjs|ts|tsx|jsx|py|sh|ps1|html
 const errors = [];
 const warnings = [];
 
+// The repo this folder belongs to may keep a list of names that must never appear.
+let names = null;
+for (let dir = resolve(root); ; dir = dirname(dir)) {
+  if (existsSync(join(dir, "scripts", "names.mjs"))) {
+    const lib = await import(pathToFileURL(join(dir, "scripts", "names.mjs")).href);
+    names = { find: lib.findNames, hashes: lib.loadHashes(dir) };
+    break;
+  }
+  if (dirname(dir) === dir) break;
+}
+
 function walk(dir) {
   for (const e of readdirSync(dir, { withFileTypes: true })) {
     if (e.name === ".git" || e.name === "node_modules") continue;
@@ -56,7 +73,11 @@ function walk(dir) {
 function scanFile(p) {
   const rel = relative(root, p);
   if (/^\.env/.test(p.split(/[\\/]/).pop())) errors.push(`${rel}: an env file; never publish one`);
-  readFileSync(p, "utf8").split(/\r?\n/).forEach((line, i) => {
+  const text = readFileSync(p, "utf8");
+  for (const hit of names?.find(text, names.hashes) ?? []) {
+    (isPublic ? errors : warnings).push(`${rel}:${hit.line}:${hit.column}: a blocked company or product name; describe the case by category`);
+  }
+  text.split(/\r?\n/).forEach((line, i) => {
     if (line.includes("scan:allow")) return;
     const at = `${rel}:${i + 1}`;
     for (const [re, what] of SECRETS) if (re.test(line)) errors.push(`${at}: ${what}: ${line.trim().slice(0, 90)}`);

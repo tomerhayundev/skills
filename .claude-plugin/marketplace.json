@@ -30,7 +30,7 @@
     },
     {
       "name": "remotion-video-promo",
-      "description": "Promo videos with Remotion: bumpers, 15 and 30 s ads, teasers, launch films and landing page loops. Seamless, beat-locked, every transition made of the brand's motif, four aspects and RTL locales from one manifest. Single-purpose specialist of remotion-video-master, which covers every format.",
+      "description": "Promo videos with Remotion: bumpers, 15 and 30 s ads, teasers, launch films and landing page loops. Beat-locked, the brand's motif carrying the turn and the close, four aspects and RTL locales from one manifest. Single-purpose specialist of remotion-video-master, which covers every format.",
       "source": "./plugins/remotion-video-promo",
       "author": {
         "name": "Tomer Hayun",
@@ -106,7 +106,7 @@
     },
     {
       "name": "remotion-video-feature-announcement",
-      "description": "Feature announcement videos with Remotion: one new feature or release, before and after on the same screen, in a short seamless film. Early single-purpose specialist of remotion-video-master, built on its promo module.",
+      "description": "Feature announcement videos with Remotion: one new feature or release, before and after on the same screen, in a short film. Early single-purpose specialist of remotion-video-master, built on its promo module.",
       "source": "./plugins/remotion-video-feature-announcement",
       "author": {
         "name": "Tomer Hayun",

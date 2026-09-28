@@ -52,21 +52,21 @@ the action, show the result, hold 1 to 2 s with the camera breathing so a viewer
 | Key | Value | Base (promo) | Why |
 | --- | --- | --- | --- |
 | continuity | chaptered | seamless | steps are chapters; hard cuts inside a recording keep it honest and short |
-| popsGate | declared cuts | strict | cuts inside recordings are listed in `cuts.json`; any other pop still fails |
+| popsGate | declared cuts | declared cuts | beat cuts and cuts inside recordings are listed in `cuts.json`; any other pop still fails |
 | hook | the outcome and the time it takes, in 3 s | a line held 2 s | search viewers want the result, then step 1 |
 | captions | step titles (statements, up to 8 words so exact UI labels fit) + subtitles, 2 lines, 32-42 characters, shown with the action | statements rising into a still | a tutorial says it while doing it |
 | music | none or a bed under the voice | bed with a lift | instruction is easier with little music |
 | durations | from the voice, or from reading time when caption-led, on the grid | grid | the words set the pace |
 | shortCut | a teaser pointing to the full video | fewer ideas | a tutorial cannot lose steps |
-| critique | base 8 + "a stranger can repeat each step" + "words and action within 0.3 s" | base 8 | the test of a tutorial is whether someone can follow it |
+| critique | base + "a stranger can repeat each step" + "words and action within 0.3 s" | base | the test of a tutorial is whether someone can follow it |
 
-Kept from the base: the motif (step markers are made of it; the chapter boundaries are its floods or
-morphs, never a centered title on a gradient), springs, the grid, fonts, safe zones, no AI giveaways.
+Kept from the base: the motif (step markers are made of it; its full treatment only at the turn and
+the close, never a flood per chapter, never a centered title on a gradient), springs, the grid, fonts, safe zones, no AI giveaways.
 
 ## Build notes
 
-- Chapters: one Sequence per step; the boundary between chapters is a motif transition, cuts only
-  inside a step's recording, each written to `out/<id>.cuts.json`.
+- Chapters: one Sequence per step; a chapter opens on its step marker (made of the motif) with a cut
+  on the beat or a match cut, and cuts inside a step's recording are declared in `out/<id>.cuts.json`.
 - Cursor zoom: `assets/templates/cursor-zoom.ts`; wide at the start of each step, back out at its end.
 - Subtitles: with a voice, `@remotion/captions` from its transcript, shipped as an SRT with the YouTube
   master (the player shows it) and burned only into feed cutdowns. Caption-led, the instruction lines
@@ -86,7 +86,7 @@ morphs, never a centered title on a gradient), springs, the grid, fonts, safe zo
 Pops with `--cuts=out/<id>.cuts.json`: zero undeclared. Loudness about -16 LUFS with a voice; a
 caption-led tutorial's bed sits lower on purpose (around -24 to -20 LUFS) so it never competes with
 reading; true peak under -1 dBFS either way. Words-to-action offset under 0.3 s at every step (the voice line's or the caption's start against
-the action's frame). The phone sheet (15 frames over the whole length), for the master and any cutdown. Critique: the base 8 plus a
+the action's frame). The phone sheet (15 frames over the whole length), for the master and any cutdown. Critique: the base criteria plus a
 stranger test: someone who never saw the product repeats each step from the video alone.
 
 ## Common mistakes
