@@ -1,16 +1,16 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "tomerhayundev-skills",
-  "description": "Claude Code plugins and skills by Tomer Hayun: a Remotion promo video pipeline, production deploy pipelines, Codex loops, and Google Stitch UI generation.",
+  "description": "Claude Code plugins and skills by Tomer Hayun: the Remotion video family (one master skill for every kind of video, plus single-purpose specialists generated from it), production deploy pipelines, skill publishing, and visual verification.",
   "owner": {
     "name": "Tomer Hayun",
     "url": "https://github.com/tomerhayundev"
   },
   "plugins": [
     {
-      "name": "remotion-video-pipeline",
-      "description": "A production Remotion pipeline for product promo videos: clips as manifest rows, four aspect ratios, RTL locales, no visible cuts (shared elements and a flood that turns each scene into the next), a beat-locked music bed whose lift lands on the payoff, one-take launch films (one element travels through every moment and the camera follows it), measured verification, publishing. Ships a beat-grid fitter, an audio checker, a frame-pop checker and a CC BY 4.0 120 BPM track.",
-      "source": "./plugins/remotion-video-pipeline",
+      "name": "remotion-video-master",
+      "description": "The master Remotion video skill, every format in one: a guided brief (what the video is for, where it runs, a recommended length), the story and script, then one engine for promos, demos, tutorials, explainers and more, with the brand motif in every transition, platform safe zones and measured verification.",
+      "source": "./plugins/remotion-video-master",
       "author": {
         "name": "Tomer Hayun",
         "url": "https://github.com/tomerhayundev"
@@ -19,13 +19,203 @@
       "keywords": [
         "remotion",
         "video",
+        "motion-design",
         "promo",
-        "marketing",
-        "music",
-        "rtl",
-        "transitions"
+        "tutorial",
+        "explainer",
+        "captions"
       ],
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-pipeline",
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-master",
+      "license": "MIT"
+    },
+    {
+      "name": "remotion-video-promo",
+      "description": "Promo videos with Remotion: bumpers, 15 and 30 s ads, teasers, launch films and landing page loops. Seamless, beat-locked, every transition made of the brand's motif, four aspects and RTL locales from one manifest. Single-purpose specialist of remotion-video-master, which covers every format.",
+      "source": "./plugins/remotion-video-promo",
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "media",
+      "keywords": [
+        "remotion",
+        "video",
+        "motion-design",
+        "captions",
+        "promo"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-promo",
+      "license": "MIT"
+    },
+    {
+      "name": "remotion-video-product-demo",
+      "description": "Product demo and product tour videos with Remotion: the real product, feature by feature, driven by a cursor with smooth zooms, voiced or caption-led, with cuts only inside screen recordings. Single-purpose specialist of remotion-video-master, which covers every format.",
+      "source": "./plugins/remotion-video-product-demo",
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "media",
+      "keywords": [
+        "remotion",
+        "video",
+        "motion-design",
+        "captions",
+        "product-demo"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-product-demo",
+      "license": "MIT"
+    },
+    {
+      "name": "remotion-video-tutorial",
+      "description": "Tutorial and how-to videos with Remotion: step by step, chaptered by the brand's motif, a voiceover or word-synced subtitles, cursor zooms, checked so a stranger can repeat every step. Single-purpose specialist of remotion-video-master, which covers every format.",
+      "source": "./plugins/remotion-video-tutorial",
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "media",
+      "keywords": [
+        "remotion",
+        "video",
+        "motion-design",
+        "captions",
+        "tutorial"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-tutorial",
+      "license": "MIT"
+    },
+    {
+      "name": "remotion-video-explainer",
+      "description": "Explainer videos with Remotion: one idea made clear with diagrams and the brand's motif, voiced or caption-led, checked for one-sentence recall. Single-purpose specialist of remotion-video-master, which covers every format.",
+      "source": "./plugins/remotion-video-explainer",
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "media",
+      "keywords": [
+        "remotion",
+        "video",
+        "motion-design",
+        "captions",
+        "explainer"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-explainer",
+      "license": "MIT"
+    },
+    {
+      "name": "remotion-video-feature-announcement",
+      "description": "Feature announcement videos with Remotion: one new feature or release, before and after on the same screen, in a short seamless film. Early single-purpose specialist of remotion-video-master, built on its promo module.",
+      "source": "./plugins/remotion-video-feature-announcement",
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "media",
+      "keywords": [
+        "remotion",
+        "video",
+        "motion-design",
+        "captions",
+        "feature-announcement"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-feature-announcement",
+      "license": "MIT"
+    },
+    {
+      "name": "remotion-video-social-organic",
+      "description": "Organic social clips with Remotion for Reels, TikTok, Shorts and LinkedIn: the hook in the first second, captions inside every platform's safe zone, made to loop and be shared. Early single-purpose specialist of remotion-video-master, built on its promo module.",
+      "source": "./plugins/remotion-video-social-organic",
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "media",
+      "keywords": [
+        "remotion",
+        "video",
+        "motion-design",
+        "captions",
+        "social-organic"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-social-organic",
+      "license": "MIT"
+    },
+    {
+      "name": "remotion-video-event-recap",
+      "description": "Event recap and conference highlight videos with Remotion, cut from real footage and photos on the beat. Early single-purpose specialist of remotion-video-master, built on its promo module.",
+      "source": "./plugins/remotion-video-event-recap",
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "media",
+      "keywords": [
+        "remotion",
+        "video",
+        "motion-design",
+        "captions",
+        "event-recap"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-event-recap",
+      "license": "MIT"
+    },
+    {
+      "name": "remotion-video-app-store-preview",
+      "description": "App Store previews and Google Play videos with Remotion: in-app footage only, 15 to 30 s, caption-led for muted autoplay, at the store's exact size. Early single-purpose specialist of remotion-video-master, built on its product-demo module.",
+      "source": "./plugins/remotion-video-app-store-preview",
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "media",
+      "keywords": [
+        "remotion",
+        "video",
+        "motion-design",
+        "captions",
+        "app-store-preview"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-app-store-preview",
+      "license": "MIT"
+    },
+    {
+      "name": "remotion-video-onboarding",
+      "description": "Onboarding and first-run videos with Remotion: a series of short tutorials, one task each, caption-led for in-product playback. Early single-purpose specialist of remotion-video-master, built on its tutorial module.",
+      "source": "./plugins/remotion-video-onboarding",
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "media",
+      "keywords": [
+        "remotion",
+        "video",
+        "motion-design",
+        "captions",
+        "onboarding"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-onboarding",
+      "license": "MIT"
+    },
+    {
+      "name": "remotion-video-testimonial",
+      "description": "Customer testimonial and case study videos with Remotion, built from a real customer's quote, interview or numbers. Early single-purpose specialist of remotion-video-master, built on its explainer module.",
+      "source": "./plugins/remotion-video-testimonial",
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "media",
+      "keywords": [
+        "remotion",
+        "video",
+        "motion-design",
+        "captions",
+        "testimonial"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-testimonial",
       "license": "MIT"
     },
     {
@@ -86,30 +276,10 @@
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/visual-verification",
       "license": "MIT"
-    },
-    {
-      "name": "remotion-video-master",
-      "description": "One-stop Remotion video skill: a guided brief (what the video is for, platforms, a recommended length), then the remotion-video-pipeline engine for promos, demos, tutorials, explainers and more, with per-format rules, platform safe zones and measured verification.",
-      "source": "./plugins/remotion-video-master",
-      "author": {
-        "name": "Tomer Hayun",
-        "url": "https://github.com/tomerhayundev"
-      },
-      "category": "media",
-      "keywords": [
-        "remotion",
-        "video",
-        "motion-design",
-        "promo",
-        "tutorial",
-        "explainer",
-        "captions"
-      ],
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-master",
-      "license": "MIT"
     }
   ],
   "renames": {
+    "remotion-video-pipeline": "remotion-video-promo",
     "codex-loop": null,
     "stitch-sdk": null,
     "wix-app-dev": null

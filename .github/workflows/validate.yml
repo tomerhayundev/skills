@@ -5,31 +5,78 @@ on:
     branches: [main]
   pull_request:
 
+# One run at a time per branch, so two sync commits never race.
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   validate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # the sync commit on push to main; pull requests stay read-only
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v5
         with:
           node-version: 22
 
+      - name: The commit to compare versions against
+        env:
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ "$EVENT" = pull_request ]; then
+            echo "BASE=origin/$BASE_REF" >> "$GITHUB_ENV"
+          elif git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            echo "BASE=$BEFORE" >> "$GITHUB_ENV"
+          else
+            echo "BASE=HEAD~1" >> "$GITHUB_ENV"
+          fi
+
+      # A master edited on github.com, or a forgotten version bump, is fixed here and
+      # committed back, so the specialists and installed copies always follow. A
+      # hand-edited specialist fails this step instead of being overwritten.
+      - name: Sync specialists, versions, catalog and README (push to main)
+        if: github.event_name == 'push'
+        run: |
+          node scripts/sync.mjs --since="$BASE" > "$RUNNER_TEMP/sync.log" || { cat "$RUNNER_TEMP/sync.log"; exit 1; }
+          cat "$RUNNER_TEMP/sync.log"
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            { echo "chore: sync generated skills and versions"; echo; grep '^synced ' "$RUNNER_TEMP/sync.log"; } > "$RUNNER_TEMP/msg.txt"
+            git commit -q -F "$RUNNER_TEMP/msg.txt"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+
+      - name: Specialists and versions in step (pull request)
+        if: github.event_name == 'pull_request'
+        run: node scripts/sync.mjs --check --since="$BASE"
+
       - name: Skill and marketplace checks
-        run: node scripts/check-skills.mjs
+        run: CHECK_BASE_REF="$BASE" node scripts/check-skills.mjs
 
       - name: Claude Code plugin validation
         run: npx -y @anthropic-ai/claude-code plugin validate . --strict
 
+      - name: Sync tests
+        run: node --test scripts/*.test.mjs
+
       - name: Install ffmpeg
         run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
 
-      - name: remotion-video-pipeline beat fitter still reads the bundled track
+      - name: remotion-video-master beat fitter still reads the bundled track
         run: |
-          node plugins/remotion-video-pipeline/skills/remotion-video-pipeline/scripts/fit-beat-grid.mjs \
-            plugins/remotion-video-pipeline/skills/remotion-video-pipeline/assets/music/ende-business-moves-1.mp3 --json > fit.json
+          S=plugins/remotion-video-master/skills/remotion-video-master
+          node $S/scripts/fit-beat-grid.mjs $S/assets/music/ende-business-moves-1.mp3 --json > "$RUNNER_TEMP/fit.json"
           node -e '
-            const f = require("./fit.json");
+            const f = require(process.env.RUNNER_TEMP + "/fit.json");
             const want = [32, 96, 192, 256];
             if (Math.abs(f.bpm - 120) > 0.05) throw new Error("bpm " + f.bpm);
             if (f.firstBeatSeconds > 0.03) throw new Error("first beat " + f.firstBeatSeconds);

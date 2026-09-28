@@ -6,8 +6,8 @@ the brainstorm for a video: do not also run a generic brainstorming skill.
 
 ## Step 0, before asking anything
 
-Read the ask, the product's README or landing copy, recent commits, and any Remotion project already
-in the repo. Every question the ask already answers ("a 15 s Reels ad") is skipped and confirmed in
+Read the ask, the product's README or landing copy, recent commits, the locales it ships (i18n
+files), and any Remotion project already in the repo. Every question the ask already answers ("a 15 s Reels ad") is skipped and confirmed in
 one line instead ("15 s ad for Reels, 9:16: noted"). A re-cut, a new locale or an existing composition
 skips the intake entirely (SKILL.md §0).
 
@@ -22,22 +22,37 @@ skips the intake entirely (SKILL.md §0).
 
 ## The calls
 
+<!-- master-only -->
 **A. Goal family and mode**
 - "What is this video for?" Options from `specs.json` families: **Sell it** (ad, teaser, launch film,
   feature announcement, landing loop) / **Show how it works** (product demo, tutorial, onboarding, app
   store preview) / **Explain an idea** (explainer) / **Social or story** (social clip, testimonial,
   event recap). Recommend the family the ask and the product point to, and say why.
+<!-- /master-only -->
+<!-- specialist
+**A. Mode** (the goal is set: {{kind}} videos, [the module](../{{path}}))
+- When the ask is really another kind of video, say so in one line and recommend {{master}}, which
+  covers every kind; otherwise never ask what the video is for.
+-->
 - "How do you want to work?" **Guided: a few choices, each with my recommendation (Recommended)** /
   **Hands-off: I choose, you approve the brief once**.
 
+<!-- master-only -->
 **B. Format and platforms**
 - "Which kind?" The family's formats, up to 4, each label carrying its default length ("Short ad, 15 s").
   Skip when the family has one format.
+<!-- /master-only -->
+<!-- specialist
+**B. Kind and platforms**
+- "Which kind?" Only when the {{kind}} module's "Lengths and platforms" lists several kinds, each label
+  carrying its default length ("Short ad, 15 s"). Otherwise skip it.
+-->
 - "Where will it run?" (multi-select) The family's top 4 platforms (`specs.json` families), the likeliest
   first. More via "Other".
 
 Then run `node ${CLAUDE_SKILL_DIR}/scripts/recommend.mjs --format=<id> --platforms=<id,id>` and use its
-numbers verbatim.
+numbers verbatim. A tutorial or onboarding video first counts the task's steps (Step 0, in the product)
+and adds `--steps=<n>`: the steps set the length, never padded to the format's default.
 
 **C. Length, source, voice**
 - "How long?" The script's options in its order: the recommended length first, then the short and long

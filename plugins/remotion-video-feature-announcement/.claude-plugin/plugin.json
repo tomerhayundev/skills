@@ -1,0 +1,18 @@
+{
+  "name": "remotion-video-feature-announcement",
+  "version": "0.2.0",
+  "description": "Feature announcement videos with Remotion: one new feature or release, before and after on the same screen, in a short seamless film. Early single-purpose specialist of remotion-video-master, built on its promo module.",
+  "author": {
+    "name": "Tomer Hayun",
+    "url": "https://github.com/tomerhayundev"
+  },
+  "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-feature-announcement",
+  "license": "MIT",
+  "keywords": [
+    "remotion",
+    "video",
+    "motion-design",
+    "captions",
+    "feature-announcement"
+  ]
+}

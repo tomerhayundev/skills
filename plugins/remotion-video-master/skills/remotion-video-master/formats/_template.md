@@ -1,14 +1,18 @@
 # Format module template
 
-Every module in `formats/<type>/FORMAT.md` has exactly these headings, in this order, so that any of
-them can later become its own skill: move the folder to `skills/remotion-video-<type>/`, rename
-`FORMAT.md` to `SKILL.md`, and point its `../../references/` links at the master's references.
-Modules never run scripts themselves; the master's verification section does.
+Every module in `formats/<type>/FORMAT.md` has exactly these headings, in this order. Every module is
+also published as its own specialist skill, `remotion-video-<type>`, generated from this master by
+`scripts/sync.mjs` in the marketplace repo: its `name` and `description` become the specialist's
+SKILL.md frontmatter, its `summary` the catalog and README line, and the specialist ships this module
+(plus the nearest full module, for a stub) with the master's engine. A new module here becomes a new
+specialist on the next sync. Modules never run scripts themselves; the master's verification section does.
 
 ```markdown
 ---
 name: remotion-video-<type>
-description: Use when ... (the triggers this format would have as its own skill)
+description: Use when ... (the triggers this format has as its own skill)
+summary: >-
+  What the specialist does, one line, for the catalog and the README.
 ---
 
 # <Format>

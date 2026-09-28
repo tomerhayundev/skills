@@ -1,0 +1,18 @@
+{
+  "name": "remotion-video-promo",
+  "version": "0.2.0",
+  "description": "Promo videos with Remotion: bumpers, 15 and 30 s ads, teasers, launch films and landing page loops. Seamless, beat-locked, every transition made of the brand's motif, four aspects and RTL locales from one manifest. Single-purpose specialist of remotion-video-master, which covers every format.",
+  "author": {
+    "name": "Tomer Hayun",
+    "url": "https://github.com/tomerhayundev"
+  },
+  "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-promo",
+  "license": "MIT",
+  "keywords": [
+    "remotion",
+    "video",
+    "motion-design",
+    "captions",
+    "promo"
+  ]
+}

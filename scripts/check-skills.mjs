@@ -18,8 +18,11 @@
  *   is invalid or doesn't match its folder, whose description is missing or over
  *   1024 characters;
  * - a README "What's here" row missing, pointing nowhere, or without its install
- *   command; a relative markdown link to a file that does not exist; a script that
- *   doesn't parse.
+ *   command (rows are read from every table in that section, so skills can be
+ *   grouped); a relative markdown link to a file that does not exist; a script
+ *   that doesn't parse;
+ * - with scripts/sync.mjs present: a specialist, catalog entry or README family
+ *   table out of step with its master, or a specialist edited by hand.
  * Warnings: a plugin no marketplace entry installs, a frontmatter key outside the
  * known set, an em dash (house style), SSH-style install instructions.
  */
@@ -165,30 +168,44 @@ for (const dir of pluginNames) {
   }
 }
 
-// README: every entry has a row in the "What's here" table that links to a real
-// file, and when the table has an Install column, the row carries that entry's
-// exact install command.
+// README: every entry has a row in a table under "What's here" (every table up to
+// the next level-2 heading, so skills can be grouped) that links to a real file,
+// and when its table has an Install column, the row carries that entry's exact
+// install command.
 const readme = existsSync(join(ROOT, "README.md")) ? readFileSync(join(ROOT, "README.md"), "utf8").replace(/\r\n/g, "\n").split("\n") : [];
-const tableHead = (() => {
+const rows = []; // { line, installCol }
+{
   const h = readme.findIndex((l) => /^#+\s+what'?s here/i.test(l));
-  return h < 0 ? -1 : readme.findIndex((l, i) => i > h && l.startsWith("|"));
-})();
-if (tableHead < 0) errors.push(`README.md: no table under a "What's here" heading`);
-else {
-  const cols = readme[tableHead].split("|").slice(1, -1).map((c) => c.trim().toLowerCase());
-  const installCol = cols.indexOf("install");
-  const rows = [];
-  for (let i = tableHead + 2; i < readme.length && readme[i].startsWith("|"); i++) rows.push(readme[i]);
-  for (const p of market.plugins) {
-    const row = rows.find((r) => r.startsWith(`| [${p.name}](`));
-    if (!row) errors.push(`README.md: no "What's here" row for "${p.name}"`);
-    else if (installCol >= 0 && !row.split("|")[installCol + 1]?.includes(`plugin install ${p.name}@${market.name}`)) {
-      errors.push(`README.md: the "${p.name}" row's Install cell must read \`claude plugin install ${p.name}@${market.name}\``);
+  let installCol = -1;
+  for (let i = h + 1; h >= 0 && i < readme.length && !/^##\s/.test(readme[i]); i++) {
+    if (!readme[i].startsWith("|")) continue;
+    if (!readme[i - 1].startsWith("|")) {
+      installCol = readme[i].split("|").slice(1, -1).map((c) => c.trim().toLowerCase()).indexOf("install");
+      i++; // skip the --- separator row
+      continue;
     }
+    rows.push({ line: readme[i], installCol });
   }
-  for (const r of rows) {
-    const name = r.match(/^\| \[([^\]]+)\]/)?.[1];
-    if (name && !market.plugins.some((p) => p.name === name)) errors.push(`README.md: row "${name}" has no marketplace entry`);
+  if (h < 0 || !rows.length) errors.push(`README.md: no table under a "What's here" heading`);
+}
+for (const p of market.plugins) {
+  const row = rows.find((r) => r.line.startsWith(`| [${p.name}](`));
+  if (!row) errors.push(`README.md: no "What's here" row for "${p.name}"`);
+  else if (row.installCol >= 0 && !row.line.split("|")[row.installCol + 1]?.includes(`plugin install ${p.name}@${market.name}`)) {
+    errors.push(`README.md: the "${p.name}" row's Install cell must read \`claude plugin install ${p.name}@${market.name}\``);
+  }
+}
+for (const r of rows) {
+  const name = r.line.match(/^\| \[([^\]]+)\]/)?.[1];
+  if (name && !market.plugins.some((p) => p.name === name)) errors.push(`README.md: row "${name}" has no marketplace entry`);
+}
+
+// Specialists generated from a master: in step with it, and never edited by hand.
+if (existsSync(join(ROOT, "scripts", "sync.mjs"))) {
+  const r = spawnSync(process.execPath, [join(ROOT, "scripts", "sync.mjs"), "--check", "--no-bump"], { encoding: "utf8" });
+  if (r.status !== 0) {
+    for (const l of r.stdout.split("\n").filter((l) => /^(error|stale) /.test(l))) errors.push(`sync: ${l.replace(/^\w+\s+/, "")}`);
+    errors.push("sync: generated files are out of step; run node scripts/sync.mjs (it never overwrites a hand edit)");
   }
 }
 
@@ -216,7 +233,8 @@ walk(ROOT, (p) => {
     });
     // Moving a folder breaks relative links silently; outside code fences, every one must resolve.
     if (p.endsWith(".md")) {
-      const prose = text.replace(/```[\s\S]*?```/g, "").replace(/`[^`\n]*`/g, "");
+      // HTML comments render as nothing; a master's <!-- specialist ... --> templates link to {{path}}.
+      const prose = text.replace(/```[\s\S]*?```/g, "").replace(/<!--[\s\S]*?-->/g, "").replace(/`[^`\n]*`/g, "");
       for (const m of prose.matchAll(/\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
         const target = m[1].split("#")[0];
         if (!target || /^[a-z][\w+.-]*:/i.test(target) || target.startsWith("<")) continue;
