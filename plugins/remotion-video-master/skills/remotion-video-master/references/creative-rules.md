@@ -89,8 +89,9 @@ the arc, the script table, the copy rules, the hook options) is [story](story.md
   In a hook hold or a caption rest the camera's breath (a slow drift, architecture) is
   the something: still enough to read, never frozen.
 - **Budget the captions.** Each one costs about 2.5 s of still picture (words in, the
-  1.5 s hold, a beat before motion resumes). A 15 s cut carries 3, at most 4 counting
-  the close; more leaves no time for the product to act.
+  1.5 s hold, a beat before motion resumes). A 15 s cut carries 3 lines, at most 4
+  counting the close, and the hook line is one of them (a 15 s cut that passed: the
+  hook, two captions, the brand line); more leaves no time for the product to act.
 - **Big moments on the music:** the zoom or payoff on the drop, a quiet scene in the
   breakdown, the brand returning with the beat.
 - **A cursor drives the product:** real clicks, drags and long-presses, with the camera
