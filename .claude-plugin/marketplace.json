@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "tomerhayundev-skills",
-  "description": "Claude Code plugins and skills by Tomer Hayun: a Remotion promo video pipeline, production deploy pipelines, Codex loops, Google Stitch UI generation, and Wix app development.",
+  "description": "Claude Code plugins and skills by Tomer Hayun: a Remotion promo video pipeline, production deploy pipelines, Codex loops, and Google Stitch UI generation.",
   "owner": {
     "name": "Tomer Hayun",
     "url": "https://github.com/tomerhayundev"
@@ -50,25 +50,6 @@
       "license": "MIT"
     },
     {
-      "name": "wix-app-dev",
-      "description": "Design, build, and ship production-grade Wix App Market apps: architecture, instance-token auth, webhooks, Blocks widgets, dashboard pages, a Cloudflare Workers + D1 backend, billing, and App Market submission.",
-      "source": "./plugins/wix-app-dev",
-      "author": {
-        "name": "Tomer Hayun",
-        "url": "https://github.com/tomerhayundev"
-      },
-      "category": "development",
-      "keywords": [
-        "wix",
-        "apps",
-        "webhooks",
-        "billing",
-        "cloudflare"
-      ],
-      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/wix-app-dev",
-      "license": "MIT"
-    },
-    {
       "name": "publish-skill",
       "description": "Publish a skill or plugin to your Claude Code marketplace repos: routes public vs private, scaffolds the entry and README row, scans for secrets and private content, validates, test-installs in a throwaway config, and keeps a local copy. Includes a history-purge recipe for leaks.",
       "source": "./plugins/publish-skill",
@@ -109,6 +90,7 @@
   ],
   "renames": {
     "codex-loop": null,
-    "stitch-sdk": null
+    "stitch-sdk": null,
+    "wix-app-dev": null
   }
 }

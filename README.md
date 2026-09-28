@@ -59,7 +59,6 @@ npx skills add https://github.com/tomerhayundev/skills --skill <name>
 | --- | --- | --- | --- |
 | [remotion-video-pipeline](plugins/remotion-video-pipeline/skills/remotion-video-pipeline/SKILL.md) | skill | A production Remotion pipeline for product promo videos: clips as manifest rows, four aspect ratios, RTL locales, no visible cuts (shared elements and a flood that turns each scene into the next), a beat-locked music bed whose lift lands on the payoff, one-take launch films (one element travels through every moment and the camera follows it), measured verification, publishing. Ships a beat-grid fitter, an audio checker, a frame-pop checker and a CC BY 4.0 120 BPM track. | `claude plugin install remotion-video-pipeline@tomerhayundev-skills` |
 | [deploy-production-level](plugins/deploy-production-level/skills/deploy-production-level/SKILL.md) | skill | Production deploy pipeline on GitHub Actions and Cloudflare Workers: a required quality gate, PR preview environments, staging on every merge, human-promoted production releases tagged with their Worker version, instant rollback, and a hook that stops AI agents from deploying. Invoke it explicitly. | `claude plugin install deploy-production-level@tomerhayundev-skills` |
-| [wix-app-dev](plugins/wix-app-dev/skills/wix-app-dev/SKILL.md) | skill | Design, build and ship Wix App Market apps: architecture, instance-token auth, webhooks, Blocks widgets, a Cloudflare Workers + D1 backend, billing, submission. | `claude plugin install wix-app-dev@tomerhayundev-skills` |
 | [publish-skill](plugins/publish-skill/skills/publish-skill/SKILL.md) | skill | Publish a skill or plugin to your Claude Code marketplace repos: routes public vs private, scaffolds the entry and README row, scans for secrets and private content, validates, test-installs in a throwaway config, and keeps a local copy. Includes a history-purge recipe for leaks. | `claude plugin install publish-skill@tomerhayundev-skills` |
 | [visual-verification](plugins/visual-verification/skills/visual-verification/SKILL.md) | skill | Makes the agent prove an output works before calling it done: screenshot it, use it (click, submit, run, open every page), judge it against the goal, in a strict tool order (real Chrome, in-app browser, computer use), with a rationalization table and red flags. | `claude plugin install visual-verification@tomerhayundev-skills` |
 
@@ -70,6 +69,7 @@ npx skills add https://github.com/tomerhayundev/skills --skill <name>
 plugins/<name>/.claude-plugin/plugin.json       name, version, description, author
 plugins/<name>/skills/<name>/SKILL.md           a skill (+ references/, scripts/, assets/)
 plugins/<name>/commands/, hooks/                commands and hooks, when a plugin has them
+archive/<name>/                                 retired plugins, kept as they were, not in the catalog
 scripts/check-skills.mjs                        repo checks CI runs on every push
 ```
 
@@ -102,6 +102,16 @@ claude plugin validate . --strict
 A change only reaches installed copies (CLI and Cowork) when the plugin's `version` in
 `plugin.json` is bumped. The check fails when a plugin's files differ from `origin/main`
 but its version does not.
+
+## Archived
+
+No longer maintained. Kept as they were, but out of the catalog, so `claude plugin install`
+no longer finds them. Copies already installed keep working and get no updates. To use
+one anyway, copy its skill folder into `~/.claude/skills/`.
+
+| Name | What it does |
+| --- | --- |
+| [wix-app-dev](archive/wix-app-dev/skills/wix-app-dev/SKILL.md) | Design, build and ship Wix App Market apps: architecture, instance-token auth, webhooks, Blocks widgets, a Cloudflare Workers + D1 backend, billing, submission. |
 
 ## License
 
