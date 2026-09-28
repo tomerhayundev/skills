@@ -1,7 +1,7 @@
 {
   "name": "visual-verification",
-  "version": "1.0.0",
-  "description": "Makes the agent prove an output works before calling it done: screenshot it, use it (click, submit, run, open every page), judge it against the goal, in a strict tool order (real Chrome, in-app browser, computer use), with a rationalization table and red flags.",
+  "version": "1.1.0",
+  "description": "Makes the agent prove an output works before calling it done: scope the check from the user's words, verify on the real surface and environment (never tests, CI, health checks or localhost alone), screenshot it, use it (click, submit, run, open every page), read the evidence critically, and report each item as ✓/✗/?, in a strict tool order (real Chrome, in-app browser, headless Playwright, computer use), with a tool-traps guide, a rationalization table and red flags.",
   "author": {
     "name": "Tomer Hayun",
     "url": "https://github.com/tomerhayundev"
