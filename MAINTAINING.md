@@ -39,8 +39,10 @@ scripts/check-skills.mjs                   every repo check (CI runs it; it also
 CLAUDE.md                                  points any session in this repo here
 ```
 
-The README's "What's here" has one section per family (the master's row first, then its
-specialists, generated between `<!-- family:<master> -->` markers) and "More skills" for the rest.
+The README's catalog sits between `<!-- catalog -->` markers: a section per family, whose master
+has its own hand-written card (the MASTER badge, what it does, its install command) followed by a
+diagram and the specialists' table that the sync generates between `<!-- family:<master> -->`
+markers; then "More skills", one table row per plugin. The banner is `.github/readme/banner.svg`.
 
 ## Families: a master and its specialists
 

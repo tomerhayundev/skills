@@ -28,8 +28,9 @@
  * removed from the master becomes a rename to the master in the catalog.
  *
  * Catalog and README. Specialists get marketplace entries right after their
- * master, and the README table between <!-- family:<master> --> and
- * <!-- /family:<master> --> lists the master first, then its specialists.
+ * master. Between <!-- family:<master> --> and <!-- /family:<master> --> the
+ * README gets a diagram of the master and its specialists, then the
+ * specialists' table; the master's own card above the markers is written by hand.
  */
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
@@ -342,24 +343,54 @@ export function sync(root, { check = false, since, bump = true, force = false } 
       plugins = plugins.filter((p) => !familyNames.has(p.name));
       plugins.splice(plugins.findIndex((p) => p.name === masterPlugin) + 1, 0, ...specs.map((s) => s.entry));
 
-      // README: the family table, master first.
+      // README: a diagram of the master and its specialists, then the specialists' table.
+      // The master itself is presented by hand above the markers (its own card).
       if (readme !== null) {
         const open = `<!-- family:${masterPlugin} -->`;
         const close = `<!-- /family:${masterPlugin} -->`;
         const a = readme.indexOf(open);
         const b = readme.indexOf(close);
         if (a < 0 || b < a) {
-          errors.push(`README.md: add the lines "${open}" and "${close}" where the ${masterPlugin} family table goes`);
+          errors.push(`README.md: add the lines "${open}" and "${close}" where the ${masterPlugin} family diagram and table go`);
         } else {
           const esc = (s) => s.replace(/\|/g, "\\|");
           const install = (n) => `\`claude plugin install ${n}@${market.name}\``;
-          const table = [
-            "| Skill | Role | What it does | Install |",
-            "| --- | --- | --- | --- |",
-            `| [${masterPlugin}](plugins/${masterPlugin}/skills/${skill}/SKILL.md) | **Master**: every format, all in one | ${esc(masterEntry.description)} | ${install(masterPlugin)} |`,
-            ...specs.map((s) => `| [${s.name}](plugins/${s.name}/skills/${s.name}/SKILL.md) | Specialist: ${s.kind}${s.nearestTitle ? ` (early, built on ${s.nearestTitle})` : ""} | ${esc(s.summary)} | ${install(s.name)} |`),
+          // Each group is a small grid (rows chained by invisible links), side by side under the master.
+          const full = specs.filter((s) => !s.nearestTitle);
+          const early = specs.filter((s) => s.nearestTitle);
+          const label = (s) => s.kind.charAt(0).toUpperCase() + s.kind.slice(1);
+          let node = 0;
+          let hidden = 0;
+          const groups = [];
+          const group = (id, title, list, cls) => {
+            if (!list.length) return [];
+            groups.push(id);
+            const cols = Math.ceil(Math.sqrt(list.length));
+            const rows = [];
+            for (let i = 0; i < list.length; i += cols) rows.push(list.slice(i, i + cols));
+            hidden += rows.reduce((n, r) => n + r.length - 1, 0);
+            return [`  subgraph ${id}["${title}"]`, "    direction LR", ...rows.map((r) => `    ${r.map((s) => `s${node++}["${label(s)}"]:::${cls}`).join(" ~~~ ")}`), "  end"];
+          };
+          const lines = [...group("full", "Specialists", full, "spec"), ...group("early", "Early specialists, built on a full one", early, "early")];
+          const block = [
+            "```mermaid",
+            "flowchart TB",
+            `  master(["&#11088; THE MASTER<br/>${masterPlugin}<br/>every format in one skill"]):::master`,
+            ...lines,
+            ...groups.map((g) => `  master ==> ${g}`),
+            "  classDef master fill:#6d4aff,stroke:#4a2fd1,stroke-width:3px,color:#ffffff,font-weight:bold",
+            "  classDef spec fill:#ece7ff,stroke:#6d4aff,stroke-width:1.5px,color:#2b1d70",
+            "  classDef early fill:#f7f5ff,stroke:#8f7bff,stroke-width:1.5px,stroke-dasharray:5 4,color:#4a3a9a",
+            ...(full.length ? ["  style full fill:transparent,stroke:#6d4aff"] : []),
+            ...(early.length ? ["  style early fill:transparent,stroke:#8f7bff,stroke-dasharray:5 4"] : []),
+            ...(groups.length ? [`  linkStyle ${groups.map((_, i) => hidden + i).join(",")} stroke:#6d4aff,stroke-width:2.5px`] : []),
+            "```",
+            "",
+            "| Specialist | What it does | Install |",
+            "| --- | --- | --- |",
+            ...specs.map((s) => `| [${s.name}](plugins/${s.name}/skills/${s.name}/SKILL.md) | ${esc(s.summary)}${s.nearestTitle ? `<br/><sub>Early: built on the ${s.nearestTitle} module until it gets its own.</sub>` : ""} | ${install(s.name)} |`),
           ].join("\n");
-          readme = `${readme.slice(0, a + open.length)}\n${table}\n${readme.slice(b)}`;
+          readme = `${readme.slice(0, a + open.length)}\n${block}\n${readme.slice(b)}`;
         }
       }
     }

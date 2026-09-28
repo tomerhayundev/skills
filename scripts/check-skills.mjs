@@ -17,10 +17,10 @@
  * - a SKILL.md whose frontmatter is not the first thing in the file, whose name
  *   is invalid or doesn't match its folder, whose description is missing or over
  *   1024 characters;
- * - a README "What's here" row missing, pointing nowhere, or without its install
- *   command (rows are read from every table in that section, so skills can be
- *   grouped); a relative markdown link to a file that does not exist; a script
- *   that doesn't parse;
+ * - a plugin the README's catalog does not list (a table row, or a card for a
+ *   plugin presented on its own, e.g. a master), or lists without its exact
+ *   install command; a relative markdown link to a file that does not exist; a
+ *   script that doesn't parse;
  * - with scripts/sync.mjs present: a specialist, catalog entry or README family
  *   table out of step with its master, or a specialist edited by hand.
  * Warnings: a plugin no marketplace entry installs, a frontmatter key outside the
@@ -168,31 +168,43 @@ for (const dir of pluginNames) {
   }
 }
 
-// README: every entry has a row in a table under "What's here" (every table up to
-// the next level-2 heading, so skills can be grouped) that links to a real file,
-// and when its table has an Install column, the row carries that entry's exact
-// install command.
+// README: every entry is listed in the catalog part of the README, which is the
+// text between <!-- catalog --> and <!-- /catalog --> when those markers exist,
+// otherwise everything under a "What's here" heading up to the next level-2
+// heading (so skills can be grouped in several tables). Listed means a table row
+// that links to a real file and, when its table has an Install column, carries
+// the entry's exact install command; or, for a plugin presented on its own (a
+// master's card), a link into plugins/<name>/ plus that install command.
 const readme = existsSync(join(ROOT, "README.md")) ? readFileSync(join(ROOT, "README.md"), "utf8").replace(/\r\n/g, "\n").split("\n") : [];
 const rows = []; // { line, installCol }
+let catalog = [];
 {
+  const start = readme.indexOf("<!-- catalog -->");
+  const end = readme.indexOf("<!-- /catalog -->");
   const h = readme.findIndex((l) => /^#+\s+what'?s here/i.test(l));
+  const [from, to] = start >= 0 && end > start ? [start + 1, end] : [h + 1, h < 0 ? 0 : readme.findIndex((l, i) => i > h && /^##\s/.test(l)) >>> 0];
+  catalog = readme.slice(from, Math.min(to, readme.length));
   let installCol = -1;
-  for (let i = h + 1; h >= 0 && i < readme.length && !/^##\s/.test(readme[i]); i++) {
-    if (!readme[i].startsWith("|")) continue;
-    if (!readme[i - 1].startsWith("|")) {
-      installCol = readme[i].split("|").slice(1, -1).map((c) => c.trim().toLowerCase()).indexOf("install");
+  for (let i = 0; i < catalog.length; i++) {
+    if (!catalog[i].startsWith("|")) continue;
+    if (!catalog[i - 1]?.startsWith("|")) {
+      installCol = catalog[i].split("|").slice(1, -1).map((c) => c.trim().toLowerCase()).indexOf("install");
       i++; // skip the --- separator row
       continue;
     }
-    rows.push({ line: readme[i], installCol });
+    rows.push({ line: catalog[i], installCol });
   }
-  if (h < 0 || !rows.length) errors.push(`README.md: no table under a "What's here" heading`);
+  if (!catalog.length) errors.push(`README.md: no catalog; list the plugins between <!-- catalog --> and <!-- /catalog --> or under a "What's here" heading`);
 }
+const catalogText = catalog.join("\n");
 for (const p of market.plugins) {
   const row = rows.find((r) => r.line.startsWith(`| [${p.name}](`));
-  if (!row) errors.push(`README.md: no "What's here" row for "${p.name}"`);
-  else if (row.installCol >= 0 && !row.line.split("|")[row.installCol + 1]?.includes(`plugin install ${p.name}@${market.name}`)) {
-    errors.push(`README.md: the "${p.name}" row's Install cell must read \`claude plugin install ${p.name}@${market.name}\``);
+  const install = `claude plugin install ${p.name}@${market.name}`;
+  if (!row) {
+    const card = catalogText.includes(`](plugins/${p.name}/`) && catalogText.includes(install);
+    if (!card) errors.push(`README.md: "${p.name}" is not listed: give it a row (a link to its SKILL.md and \`${install}\`) or a card with both`);
+  } else if (row.installCol >= 0 && !row.line.split("|")[row.installCol + 1]?.includes(`plugin install ${p.name}@${market.name}`)) {
+    errors.push(`README.md: the "${p.name}" row's Install cell must read \`${install}\``);
   }
 }
 for (const r of rows) {

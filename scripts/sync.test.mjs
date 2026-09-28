@@ -91,8 +91,15 @@ test("generates each specialist from the master", () => {
   assert.deepEqual(market.plugins.map((p) => p.name), ["vid-master", "vid-alpha", "vid-beta", "other"]);
   assert.equal(market.plugins[1].source, "./plugins/vid-alpha");
   const readme = f.read("README.md");
-  assert.match(readme, /<!-- family:vid-master -->\n\| Skill \| Role \| What it does \| Install \|\n\| --- \| --- \| --- \| --- \|\n\| \[vid-master\]\(plugins\/vid-master\/skills\/vid-master\/SKILL\.md\) \| \*\*Master\*\*/);
-  assert.match(readme, /\| \[vid-beta\]\(plugins\/vid-beta\/skills\/vid-beta\/SKILL\.md\) \| Specialist: beta \(early, built on alpha thing\) \| Beta videos, early\. \| `claude plugin install vid-beta@t-skills` \|\n<!-- \/family:vid-master -->/);
+  // A diagram with the master on top, its full and early specialists in their own groups...
+  assert.match(readme, /<!-- family:vid-master -->\n```mermaid\nflowchart TB\n  master\(\["&#11088; THE MASTER<br\/>vid-master<br\/>every format in one skill"\]\):::master\n/);
+  assert.match(readme, /subgraph full\["Specialists"\]\n    direction LR\n    s0\["Alpha thing"\]:::spec\n  end\n/);
+  assert.match(readme, /subgraph early\["Early specialists, built on a full one"\]\n    direction LR\n    s1\["Beta"\]:::early\n  end\n  master ==> full\n  master ==> early\n/);
+  assert.match(readme, /linkStyle 0,1 stroke:#6d4aff/, "no invisible links in one-node groups, so the two arrows are links 0 and 1");
+  // ...then the specialists' table; the master has its own hand-written card, not a row.
+  assert.match(readme, /\| Specialist \| What it does \| Install \|\n\| --- \| --- \| --- \|\n\| \[vid-alpha\]/);
+  assert.match(readme, /\| \[vid-beta\]\(plugins\/vid-beta\/skills\/vid-beta\/SKILL\.md\) \| Beta videos, early\.<br\/><sub>Early: built on the alpha thing module until it gets its own\.<\/sub> \| `claude plugin install vid-beta@t-skills` \|\n<!-- \/family:vid-master -->/);
+  assert.doesNotMatch(readme, /\| \[vid-master\]/);
 });
 
 test("a second run changes nothing, and --check agrees", () => {
