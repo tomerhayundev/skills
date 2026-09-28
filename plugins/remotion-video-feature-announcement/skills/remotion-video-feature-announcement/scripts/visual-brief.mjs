@@ -1,0 +1,218 @@
+#!/usr/bin/env node
+/**
+ * The visual brief: the one message the user approves before the build. It shows
+ * the plan, the style frames (the finished look, from the real assets) and a
+ * storyboard of every cut (a frame per beat, its time, its words and how the shot
+ * is entered), so the user judges something that looks like the film instead of
+ * a paragraph. Needs Node 18+ and ffmpeg; a Chrome or Chromium on the machine
+ * also writes a PNG of the page.
+ *
+ *   node visual-brief.mjs docs/visual-brief.json [--out=out] [--animatic]
+ *
+ * Paths in the JSON are relative to the current directory (the project root).
+ * Writes out/visual-brief.html (self-contained: light and dark, phone width), and
+ * with --animatic out/animatic-<cut>.mp4: a rough cut at 480p with the music and
+ * labelled transitions, for checking pacing and reading time. The rough cut is
+ * internal: never send it to the user, who will judge it as the film.
+ *
+ * {
+ *   "title": "...", "plan": ["one line", "**bold** allowed"],
+ *   "styleFrames": [{ "image": "out/style-turn.png", "caption": "..." }],
+ *   "hook": { "recommended": "...", "why": "...", "alternatives": ["..."] },
+ *   "next": "After your go: ...",
+ *   "music": "public/music/track.mp3", "musicLiftSeconds": 16,
+ *   "cuts": [{ "name": "30 s", "message": "...", "turnAt": 13.5,
+ *     "source": "footage/all.mp4", "crop": { "x": 0, "y": 0, "w": 1920, "h": 1080 },
+ *     "beats": [{ "at": 0, "dur": 3.5, "src": 0, "len": 3.4, "picture": "...", "words": "...", "in": "MATCH CUT on the code" },
+ *               { "at": 3.5, "dur": 3, "image": "out/still-2.png", "picture": "...", "in": "CUT on the beat" }] }]
+ * }
+ *
+ * A beat's frame comes from its `image`, or from the cut's (or its own) `source`
+ * video at `src` + `len` / 2, reframed by `crop` (null for none). Exit 1 when the
+ * plan does not hold together: beats that leave a gap or overlap, a caption that
+ * cannot be read in its beat (about 0.3 s a word, at least 1.5 s).
+ */
+import { spawnSync } from "node:child_process";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+
+const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const rich = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+const fmt = (n) => Number(n).toFixed(1);
+
+/** Problems that make the plan not hold together, as sentences. */
+export function checkPlan(brief) {
+  const problems = [];
+  for (const cut of brief.cuts ?? []) {
+    let t = 0;
+    cut.beats.forEach((b, i) => {
+      const where = `${cut.name}, beat ${i + 1}`;
+      if (Math.abs(b.at - t) > 0.01) problems.push(`${where}: starts at ${fmt(b.at)} s, but the beat before it ends at ${fmt(t)} s`);
+      if (Math.abs(b.dur * 2 - Math.round(b.dur * 2)) > 0.001) problems.push(`${where}: ${b.dur} s is off the 0.5 s grid`);
+      const words = (b.words ?? "").trim().split(/\s+/).filter(Boolean).length;
+      const need = words ? Math.max(1.5, words * 0.3) + 0.5 : 0; // the words land, then hold
+      if (words && b.dur < need) problems.push(`${where}: ${words} words need about ${fmt(need)} s on screen, the beat has ${fmt(b.dur)} s`);
+      if (!b.image && b.src === undefined) problems.push(`${where}: needs an image or a src time in the footage`);
+      t = b.at + b.dur;
+    });
+  }
+  return problems;
+}
+
+function ff(args) {
+  const r = spawnSync("ffmpeg", ["-v", "error", "-y", ...args], { encoding: "utf8" });
+  if (r.status !== 0) throw new Error(`ffmpeg: ${r.stderr.trim().split("\n").pop()}`);
+}
+
+/** A beat's frame as a small JPEG data URI. */
+function frameFor(cut, b, tmp, key) {
+  const out = join(tmp, `${key}.jpg`);
+  const crop = b.crop !== undefined ? b.crop : cut.crop;
+  const reframe = crop ? `crop=${crop.w}:${crop.h}:${crop.x}:${crop.y},` : "";
+  if (b.image) ff(["-i", resolve(b.image), "-frames:v", "1", "-vf", `${reframe}scale=640:-2`, "-q:v", "3", out]);
+  else ff(["-ss", String(b.src + (b.len ?? 0) / 2), "-i", resolve(b.source ?? cut.source), "-frames:v", "1", "-vf", `${reframe}scale=640:-2`, "-q:v", "3", out]);
+  return `data:image/jpeg;base64,${readFileSync(out).toString("base64")}`;
+}
+
+const imageUri = (path) => {
+  const tmp = mkdtempSync(join(tmpdir(), "vb-"));
+  const out = join(tmp, "s.jpg");
+  ff(["-i", resolve(path), "-frames:v", "1", "-vf", "scale=1280:-2", "-q:v", "3", out]);
+  const uri = `data:image/jpeg;base64,${readFileSync(out).toString("base64")}`;
+  rmSync(tmp, { recursive: true, force: true });
+  return uri;
+};
+
+export function buildHtml(brief) {
+  const tmp = mkdtempSync(join(tmpdir(), "vb-"));
+  try {
+    const storyboards = (brief.cuts ?? []).map((cut, c) => {
+      const cells = cut.beats.map((b, i) => `<figure><div class="tag">${esc(b.in ?? "")}</div><img src="${frameFor(cut, b, tmp, `c${c}b${i}`)}" alt="${esc(b.picture)}"><figcaption><b>${i + 1} · ${fmt(b.at)}-${fmt(b.at + b.dur)} s</b><span>${esc(b.picture)}</span>${b.words ? `<q>${esc(b.words)}</q>` : `<i>no words</i>`}</figcaption></figure>`).join("");
+      return `<h2>Storyboard, ${esc(cut.name)}</h2>${cut.message ? `<p class="msg"><span>In one sentence:</span> ${esc(cut.message)}</p>` : ""}<div class="grid">${cells}</div>`;
+    }).join("");
+    const frames = (brief.styleFrames ?? []).map((f) => `<figure><img src="${imageUri(f.image)}" alt="${esc(f.caption)}"><figcaption>${rich(f.caption)}</figcaption></figure>`).join("");
+    const hook = brief.hook ? `<h2>The opening line</h2><div class="box"><b>${esc(brief.hook.recommended)}</b>${brief.hook.why ? ` <span class="mute">(recommended: ${esc(brief.hook.why)})</span>` : ""}${brief.hook.alternatives?.length ? `<br><span class="mute">Also possible:</span> ${brief.hook.alternatives.map((a) => `"${esc(a)}"`).join(" · ")}` : ""}</div>` : "";
+    return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Video brief</title><style>
+:root{--bg:#fff;--fg:#1d1f24;--mute:#6b6f7a;--line:#e6e7eb;--card:#f5f6f8;--tag:#f5d90a;--accent:#1d1f24}
+@media (prefers-color-scheme:dark){:root{--bg:#121418;--fg:#e9eaee;--mute:#9ea2ad;--line:#2a2d34;--card:#1a1d22;--accent:#e9eaee}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 -apple-system,'Segoe UI',Inter,Arial,sans-serif}
+main{max-width:1080px;margin:0 auto;padding:28px 16px 48px}h1{font-size:26px;line-height:1.25;margin:0 0 6px}.lead{color:var(--mute);margin:0 0 22px}
+h2{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:30px 0 10px}ul{margin:0;padding-left:20px}li{margin:4px 0}
+.frames{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.frames img{width:100%;border-radius:10px;display:block}
+.frames figcaption{font-size:14px;color:var(--mute);margin-top:6px}figure{margin:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}.grid figure{background:var(--card);border-radius:10px;overflow:hidden;position:relative}
+.grid img{width:100%;display:block}.tag{position:absolute;top:8px;left:8px;background:var(--tag);color:#111;font-weight:700;font-size:12px;padding:2px 7px;border-radius:4px;max-width:85%}
+.grid figcaption{padding:9px 11px 11px;font-size:14px;line-height:1.35}.grid figcaption b{display:block}.grid figcaption span{display:block;color:var(--mute)}
+q{display:block;margin-top:5px;font-weight:600}i{display:block;margin-top:5px;color:var(--mute)}.msg{margin:0 0 10px}.msg span,.mute{color:var(--mute)}
+.box{background:var(--card);border-radius:10px;padding:13px 15px}.go{margin-top:28px;border-left:4px solid var(--accent);padding:10px 14px;background:var(--card);border-radius:6px}
+</style></head><body><main><h1>${esc(brief.title ?? "Your video: here's what you'll get")}</h1><p class="lead">One look before I build it. Reply <b>go</b>, or change any line or any shot.</p>
+${brief.plan?.length ? `<h2>The plan</h2><ul>${brief.plan.map((l) => `<li>${rich(l)}</li>`).join("")}</ul>` : ""}
+${frames ? `<h2>The look (final quality, from your assets)</h2><div class="frames">${frames}</div>` : ""}
+${storyboards}${hook}
+${brief.next ? `<div class="go">${rich(brief.next)}</div>` : ""}</main></body></html>`;
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+}
+
+function findChrome() {
+  const candidates = [
+    process.env.CHROME_PATH,
+    "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "/usr/bin/google-chrome",
+    "/usr/bin/chromium",
+    "/usr/bin/chromium-browser",
+  ];
+  return candidates.find((c) => c && existsSync(c));
+}
+
+function findFont() {
+  const candidates = [process.env.FONT_FILE, "C:/Windows/Fonts/segoeuib.ttf", "C:/Windows/Fonts/arialbd.ttf", "/System/Library/Fonts/Supplemental/Arial Bold.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"];
+  const hit = candidates.find((c) => c && existsSync(c));
+  if (hit) return hit;
+  const r = spawnSync("fc-match", ["-f", "%{file}", "sans:bold"], { encoding: "utf8" });
+  return r.status === 0 && existsSync(r.stdout) ? r.stdout : null;
+}
+
+/** The internal rough cut of one cut: 480p, the music, captions and labelled transitions. */
+export function buildAnimatic(brief, cut, outFile) {
+  const tmp = mkdtempSync(join(tmpdir(), "vb-"));
+  const font = findFont();
+  const f = (p) => p.replace(/\\/g, "/").replace(/:/g, "\\:");
+  try {
+    const parts = cut.beats.map((b, i) => {
+      const crop = b.crop !== undefined ? b.crop : cut.crop;
+      const text = (name, s) => {
+        const file = join(tmp, `${name}${i}.txt`);
+        writeFileSync(file, s);
+        return f(file);
+      };
+      const len = b.image ? b.dur : b.len ?? b.dur;
+      const stretch = Math.min(1.5, b.dur / len);
+      const pad = Math.max(0, b.dur - len * stretch);
+      const vf = [
+        crop ? `crop=${crop.w}:${crop.h}:${crop.x}:${crop.y}` : null,
+        "scale=854:480:force_original_aspect_ratio=decrease,pad=854:480:(ow-iw)/2:(oh-ih)/2",
+        b.image ? null : `setpts=${stretch.toFixed(4)}*PTS`,
+        pad > 0 && !b.image ? `tpad=stop_mode=clone:stop_duration=${pad.toFixed(3)}` : null,
+        "fps=30",
+        `trim=duration=${b.dur}`,
+        font && b.in ? `drawtext=fontfile='${f(font)}':textfile='${text("l", b.in)}':fontsize=15:fontcolor=black:box=1:boxcolor=0xF5D90A@0.95:boxborderw=6:x=14:y=14:enable='lt(t,1.2)'` : null,
+        font && b.words ? `drawtext=fontfile='${f(font)}':textfile='${text("w", b.words)}':fontsize=24:fontcolor=white:box=1:boxcolor=black@0.55:boxborderw=8:x=(w-tw)/2:y=h-60` : null,
+      ].filter(Boolean).join(",");
+      const part = join(tmp, `b${i}.mp4`);
+      const input = b.image ? ["-loop", "1", "-t", String(b.dur), "-i", resolve(b.image)] : ["-ss", String(b.src), "-t", String(len + 0.05), "-i", resolve(b.source ?? cut.source)];
+      ff([...input, "-an", "-vf", vf, "-c:v", "libx264", "-preset", "ultrafast", "-crf", "28", "-pix_fmt", "yuv420p", part]);
+      return part;
+    });
+    writeFileSync(join(tmp, "list.txt"), parts.map((p) => `file '${p.replace(/\\/g, "/")}'`).join("\n"));
+    const total = cut.beats.reduce((s, b) => s + b.dur, 0);
+    const music = brief.music && existsSync(resolve(brief.music)) ? resolve(brief.music) : null;
+    const start = music && brief.musicLiftSeconds !== undefined && cut.turnAt !== undefined ? Math.max(0, brief.musicLiftSeconds - cut.turnAt) : 0;
+    ff([
+      "-f", "concat", "-safe", "0", "-i", join(tmp, "list.txt"),
+      ...(music ? ["-ss", String(start), "-i", music, "-filter_complex", `[1:a]atrim=duration=${total},afade=t=in:d=0.15,afade=t=out:st=${Math.max(0, total - 1.2)}:d=1.2[a]`, "-map", "0:v", "-map", "[a]", "-c:a", "aac", "-b:a", "128k"] : ["-map", "0:v"]),
+      "-c:v", "copy", "-t", String(total), outFile,
+    ]);
+    return { font: Boolean(font), music: Boolean(music) };
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+}
+
+function main() {
+  const args = process.argv.slice(2);
+  const file = args.find((a) => !a.startsWith("--"));
+  const outDir = resolve(args.find((a) => a.startsWith("--out="))?.slice(6) ?? "out");
+  if (!file) {
+    console.error("usage: node visual-brief.mjs docs/visual-brief.json [--out=out] [--animatic]");
+    process.exit(2);
+  }
+  const brief = JSON.parse(readFileSync(resolve(file), "utf8"));
+  const problems = checkPlan(brief);
+  for (const p of problems) console.log(`plan   ${p}`);
+  mkdirSync(outDir, { recursive: true });
+  const html = join(outDir, "visual-brief.html");
+  writeFileSync(html, buildHtml(brief));
+  console.log(`wrote  ${html}   <- the one message the user approves`);
+  const chrome = findChrome();
+  if (chrome) {
+    const png = join(outDir, "visual-brief.png");
+    spawnSync(chrome, ["--headless=new", "--disable-gpu", "--hide-scrollbars", "--virtual-time-budget=3000", `--screenshot=${process.platform === "win32" ? png.replace(/\//g, "\\") : png}`, "--window-size=1100,2400", pathToFileURL(html).href]);
+    if (existsSync(png)) console.log(`wrote  ${png}   (a picture of the same page, for chats that cannot open HTML)`);
+  }
+  if (args.includes("--animatic")) {
+    for (const cut of brief.cuts ?? []) {
+      const out = join(outDir, `animatic-${cut.name.replace(/[^\w]+/g, "")}.mp4`);
+      const r = buildAnimatic(brief, cut, out);
+      console.log(`wrote  ${out}   (internal: pacing and reading time; never sent to the user)${r.font ? "" : " [no font found: no text]"}${r.music ? "" : " [no music]"}`);
+    }
+  }
+  process.exit(problems.length ? 1 : 0);
+}
+
+if (process.argv[1] && pathToFileURL(resolve(process.argv[1])).href === import.meta.url) main();

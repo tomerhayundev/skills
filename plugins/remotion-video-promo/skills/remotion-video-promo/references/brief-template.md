@@ -1,7 +1,24 @@
 # Brief template
 
-Copy into the project as `docs/brief.md` and fill every line. The intake shows a 10-line summary of it
-for approval; nothing is built before that approval.
+Copy into the project as `docs/brief.md` and fill every line: it is the record. What the user sees and
+approves is the **visual brief**, one page built from it by `scripts/visual-brief.mjs` (below): the plan
+in a few lines, the style frames, a storyboard of every cut, and the hook. Nothing is built past the
+style frames before that approval.
+
+`docs/visual-brief.json`, the page's input (the full shape is in the script's header):
+
+```json
+{
+  "title": "Your <product> <format>: here's what you'll get",
+  "plan": ["A **30 s** master and a **15 s** cut, 16:9, for ...", "**No voiceover.** ...", "**The motif** ..."],
+  "styleFrames": [{ "image": "out/style-turn.png", "caption": "**The turn.** ..." }, { "image": "out/style-cover.png", "caption": "**The cover.** ..." }],
+  "hook": { "recommended": "...", "why": "...", "alternatives": ["...", "..."] },
+  "next": "**After your go**, I build it; the next thing you see is the finished <primary deliverable>.",
+  "cuts": [{ "name": "30 s", "message": "...", "source": "footage/...", "beats": [{ "at": 0, "dur": 3.5, "src": 0, "len": 3.4, "picture": "...", "words": "...", "in": "Opens on the problem" }] }]
+}
+```
+
+The record:
 
 ```markdown
 # Brief: <product> <format>
@@ -42,7 +59,7 @@ Style guide: <docs/style_guide.md if there is a reference, or "the product's own
 <every choice made for the user in hands-off mode; empty in guided mode>
 
 ## Acceptance
-- Pops: <strict | declared cuts only> (frame-pops.mjs)
+- Pops: declared cuts only (frame-pops.mjs --cuts); motif coverage within budget, the cover clean
 - Loudness about -16 LUFS, true peak under -1 dBFS; <silent for loops>
 - Text inside every safe zone shipped to; the 360 px phone sheet reads
 - Critique loop: every score 8 or more (story and copy first), logged in docs/review_log.md

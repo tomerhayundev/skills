@@ -23,12 +23,13 @@ same film with a ball would be a template.
 
 1. A table per cut: beat, time, what changes, caption. Each moment is a throw in, an
    action, and (if it has a caption) a rest of about 4 beats.
-2. Four stills of the hardest moments for sign-off: the hook while it holds, the
-   busiest station, a caption in its rest, the payoff.
-3. A 4 to 5 second motion clip of the trickiest stretch before rendering everything.
-   Motion quality can't be judged from stills.
-4. An animatic of the whole cut at half size (`--scale=0.5`) with the music. Pacing is
-   judged here, before polish.
+2. The visual brief (SKILL.md, Order of work): the storyboard of each cut, and style frames
+   at final quality of the hardest moments (the hook while it holds, the busiest station, a
+   caption in its rest, the payoff).
+3. A 4 to 5 second motion clip of the trickiest stretch, at final quality, before rendering
+   everything. Motion quality can't be judged from stills.
+4. Internally, a rough cut of the whole cut with the music (`visual-brief.mjs --animatic`, or
+   `--scale=0.5`): pacing is judged here, before polish. It is never shown to the user.
 5. Then all cuts, each checked (see the review loop at the end).
 
 ## A shorter cut is fewer ideas, not faster ones

@@ -4,7 +4,7 @@ description: Use when making a tutorial, how-to, walkthrough of a task, or step-
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.3.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 3bc48104557e -->
+<!-- Generated from remotion-video-master 0.4.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 4bbd65bdf7ba -->
 
 # Remotion tutorial video
 
@@ -16,27 +16,32 @@ video, use remotion-video-master, which covers them all.
 ## 0. Is it new?
 
 List compositions first (`npx remotion compositions`, or the project's dry-run): often the ask is
-already rendered. A clip is a manifest row, not new code: a new cut, aspect or locale of existing
-footage is a row and skips the intake. A new product moment in an existing video is one new scene:
+already rendered. A clip is a manifest row, not new code: a new cut, aspect or locale of a film that
+is already rendered is a row and skips the intake. Raw clips in the project are assets, not a film:
+they go through the intake. A new product moment in an existing video is one new scene:
 fill the motif block if the project has none, then write the scene, register it, give it a focus
 rect and a containment test ([architecture](references/architecture.md)). A new scene is the last
 resort; anything bigger starts with the intake.
 
 ## 1. Intake: the brainstorm (hard gate)
 
-No scaffolding, scene or render before the user approves `docs/brief.md`. This is the
-brainstorm for a video; do not also run a generic brainstorming skill. Script, fallbacks
-and hands-off rules: [intake](references/intake.md).
+Nothing is built past the style frames before the user approves the **visual brief**. This is
+the brainstorm for a video; do not also run a generic brainstorming skill. Users rarely know what
+the skill can make, and cannot judge a list of options: infer, decide as a recommendation, and show.
+Details and hands-off rules: [intake](references/intake.md).
 
-1. Read the ask, the product and any existing video project; skip what is already answered.
-2. The goal is set: this skill makes tutorial videos. Offer the **mode** (guided, or hands-off), the kind of
-   tutorial when the module lists several, and the **platforms**. If the ask is really another kind
-   of video, say so and recommend remotion-video-master.
+1. Read the ask, the product, its locales, its footage and any existing video project; take every
+   answer they already give.
+2. The goal is set: this skill makes tutorial videos. Ask only what is still open, in **one question
+   call at most**, recommended option first: usually where it runs, or the kind of tutorial when the
+   module lists several. If the ask is really another kind of video, say so and recommend remotion-video-master.
 3. Run `node ${CLAUDE_SKILL_DIR}/scripts/recommend.mjs --format=<id> --platforms=<id,id>` (a tutorial
-   or onboarding video adds `--steps=<n>`: its steps set the length) and offer its **lengths** with their reasons; its aspects, safe zones, captions and warnings go in the brief.
-4. Offer the **source**, the **voice** (only what is possible), the **motif** and a **reference**.
-5. Write the script (section 3) and [the brief](references/brief-template.md); show a summary with the
-   hook options; approve. Recommended option first, always; hands-off lists its assumptions.
+   or onboarding video adds `--steps=<n>`) and take its recommended length; its aspects, safe zones,
+   captions and warnings go in the brief.
+4. Decide the source, the voice (only what is possible), the motif and the reference yourself, as
+   recommendations, and write the script (section 3), each cutdown as its own.
+5. Show the **visual brief** (section 6, step 1) and ask one thing: go, or change any line or shot.
+   Hands-off, "just make it", or running as a subagent: show it and continue.
 
 ## 2. The tutorial module
 
@@ -96,13 +101,32 @@ uses it, the Turns row says why.
 
 ## 6. Order of work
 
-1. The approved brief: style guide, real assets, the script (section 3), the motif block.
-2. Beat map, built from the script table: beat, time, what changes, the words on it.
-3. Stills of 3 or 4 key moments, for sign-off.
-4. Animatic: the whole film at half size (`--scale=0.5`) with the real music or voice (a
-   silent loop gets a click on every beat). Fix pacing here, before any polish.
-5. Full renders, one aspect at a time.
-6. The critique loop, scored cold by a fresh critic, until every score is 8 or more (section 10).
+1. **The visual brief**, the one approval: build it first, and aim to show it 20 to 30 minutes after the ask:
+   - the plan in a few lines ([brief template](references/brief-template.md));
+   - two **style frames** at final quality from the real assets: the key moment (the turn) and the
+     cover. Render them with the engine (`npx remotion still` of a first scene holding only what those
+     frames need); with no Remotion project yet, render them as HTML at the final size in a headless
+     browser, the engine Remotion uses, and rebuild them as scenes after the go;
+   - a **storyboard of every cut**: each beat's frame from the real assets (footage, captures, or a
+     quick still), its time, its words and how the shot is entered;
+   - the hook, with two runners-up.
+
+   `node ${CLAUDE_SKILL_DIR}/scripts/visual-brief.mjs docs/visual-brief.json` checks the plan (gaps,
+   the grid, reading time) and writes one page; show it and wait for the go (guided). After changes,
+   rebuild the page and show it again with what changed named; a one-word fix is confirmed in one line
+   and the build goes on.
+2. Build from the approved storyboard: its beat list is the beat map, and the style frames become
+   real frames of the film.
+3. Internal, optional: the rough cut (`visual-brief.mjs --animatic`, 480p with the music) to check
+   pacing and reading time, or for a fresh critic to read the story. **Never send it to the user**:
+   they will judge it as the film.
+4. The primary deliverable, one aspect, at full quality.
+5. The critique loop, scored cold by a fresh critic, until every score is 8 or more (section 10).
+6. Then the other aspects, cuts and locales.
+
+The user sees only what looks finished: the visual brief, then the film. When the build runs long,
+send a few seconds of the turn as a clip at final quality as soon as it exists, without asking
+anything.
 
 ## 7. Architecture in one screen
 
@@ -198,7 +222,9 @@ node ${CLAUDE_SKILL_DIR}/scripts/motif-coverage.mjs out/<id>.webp --accent=<hex>
 
 | Mistake | Reality |
 | --- | --- |
-| Building before the brief is approved | The brief sets the length, the platforms and the words; everything else follows |
+| Building before the visual brief is approved | It sets the length, the platforms, the words and the look; everything else follows |
+| Five rounds of questions | Infer, decide as recommendations, ask one call at most, then show the visual brief |
+| Showing the user a rough cut or a half-size render | They judge it as the film; show the visual brief, then finished footage |
 | Treating every video as a promo | Each format sets its own rules; a tutorial breaks half the promo rules on purpose |
 | A length that fights the platform | Run `recommend.mjs`; offer a master plus cutdowns |
 | Captions in the bottom third on Reels | The platform UI covers the bottom 35% |

@@ -108,7 +108,7 @@ the arc, the script table, the copy rules, the hook options) is [story](story.md
   Also the tells of generated video: text or labels in the corners, frame borders, a
   centered title on a gradient, everything fading in.
 - **Something happens on every beat.** Map the beats before building (a table of beat,
-  time, what changes) and render 3 or 4 stills of the key moments for sign-off first.
+  time, what changes): the storyboard and the style frames of the visual brief, approved first.
   In a hook hold or a caption rest the camera's breath (a slow drift, architecture) is
   the something: still enough to read, never frozen.
 - **Budget the captions.** Each one costs about 2.5 s of still picture (words in, the

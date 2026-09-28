@@ -158,6 +158,8 @@ model, asked afterwards as a critic, found the floods, the missing motif introdu
   not. Anything the message needs that a first-time viewer would not understand is a problem.
 - It scores each cutdown on its own, as if the long cut did not exist.
 - Every score at exactly the threshold is a warning: a second critic scores it again.
+- Before the build, the same kind of critic may read the internal rough cut (`visual-brief.mjs
+  --animatic`) for story, pacing and reading time only. The rough cut is never shown to the user.
 
 Then look at it as a harsh motion director, not as its proud author:
 
