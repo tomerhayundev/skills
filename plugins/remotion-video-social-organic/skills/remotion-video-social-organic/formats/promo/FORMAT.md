@@ -47,7 +47,7 @@ when the motif travels.
 ## Assets and voice
 
 The motif block first. Real components or live-site captures. No voice by default: the music bed
-carries it, the captions tell it (3 per 15 s, at most 4 with the close). A promo with no voice is
+carries it, the captions tell it (3 lines per 15 s counting the hook, at most 4 with the close). A promo with no voice is
 music-led, not caption-led: about -16 LUFS, the lift scored. A loop is silent.
 
 ## Engine profile
@@ -80,6 +80,6 @@ phone sheet; a loop's seam scan. Critique: the base 8 criteria, all 8 or more.
 | Mistake | Fix |
 | --- | --- |
 | A flood that is a plain disc | Grow the motif's silhouette |
-| Four captions and a hook in 15 s | Three; each costs about 2.5 s of still picture |
+| Four captions and a hook in 15 s | Three lines, the hook included (four with the close); each costs about 2.5 s of still picture |
 | The 15 s cut is the 30 s cut, faster | Drop ideas, keep the pace |
 | Music under the landing loop | Loops are silent |

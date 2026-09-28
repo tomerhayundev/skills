@@ -4,7 +4,7 @@ description: Use when making a tutorial, how-to, walkthrough of a task, or step-
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.2.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: bfb169fc103e -->
+<!-- Generated from remotion-video-master 0.2.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: bf871ee6aca3 -->
 
 # Remotion tutorial video
 
