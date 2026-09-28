@@ -1,0 +1,534 @@
+{
+  "verified": "2026-09-28",
+  "note": "Lengths in seconds. hard = platform upload/placement limits (must). soft = the platform's own recommendation or measured best practice (should). unverified = could not be confirmed on an official page on the verified date; re-check before shipping. Sources: references/platforms.md. longForm formats (demo, tutorial, onboarding, explainer, testimonial) do not go whole into short-video feeds (feed: true); those platforms get a feedCutdown-length teaser pointing to the master.",
+  "grid": {
+    "fps": 30,
+    "unitFrames": 15
+  },
+  "families": {
+    "sell": {
+      "label": "Sell it",
+      "hint": "ad, teaser, launch film, feature announcement, landing loop",
+      "formats": [
+        "short-ad",
+        "standard-ad",
+        "teaser",
+        "launch-film",
+        "bumper-ad",
+        "feature-announcement",
+        "landing-loop"
+      ],
+      "platforms": [
+        "reels",
+        "tiktok",
+        "youtube",
+        "linkedin",
+        "shorts",
+        "x",
+        "fb-feed",
+        "ig-feed",
+        "landing"
+      ]
+    },
+    "show": {
+      "label": "Show how it works",
+      "hint": "product demo, tutorial, onboarding, app store preview",
+      "formats": [
+        "product-demo",
+        "tutorial",
+        "onboarding",
+        "app-store-preview"
+      ],
+      "platforms": [
+        "youtube",
+        "landing",
+        "linkedin",
+        "shorts",
+        "app-store",
+        "google-play",
+        "product-hunt"
+      ]
+    },
+    "explain": {
+      "label": "Explain an idea",
+      "hint": "explainer",
+      "formats": [
+        "explainer"
+      ],
+      "platforms": [
+        "youtube",
+        "landing",
+        "linkedin",
+        "reels"
+      ]
+    },
+    "social": {
+      "label": "Social or story",
+      "hint": "organic social clip, testimonial, event recap",
+      "formats": [
+        "social-organic",
+        "testimonial",
+        "event-recap"
+      ],
+      "platforms": [
+        "reels",
+        "tiktok",
+        "shorts",
+        "linkedin",
+        "youtube",
+        "x"
+      ]
+    }
+  },
+  "formats": {
+    "bumper-ad": {
+      "label": "Bumper ad",
+      "module": "promo",
+      "default": 6,
+      "min": 5,
+      "max": 6,
+      "voice": false,
+      "basis": "Google bumper spec: 6 s, min 5 s"
+    },
+    "short-ad": {
+      "label": "Short ad",
+      "module": "promo",
+      "default": 15,
+      "min": 6,
+      "max": 15,
+      "voice": false,
+      "basis": "Google in-stream 15 s; Pinterest 6-15 s; X 15 s or less"
+    },
+    "standard-ad": {
+      "label": "Standard ad",
+      "module": "promo",
+      "default": 30,
+      "min": 15,
+      "max": 34,
+      "voice": false,
+      "basis": "TikTok 21-34 s best conversion; LinkedIn 15-30 s fits every placement"
+    },
+    "teaser": {
+      "label": "Teaser",
+      "module": "promo",
+      "default": 10,
+      "min": 6,
+      "max": 15,
+      "voice": false,
+      "basis": "ad-spec recommendations; teasers under 1 min"
+    },
+    "launch-film": {
+      "label": "Launch film",
+      "module": "promo",
+      "default": 60,
+      "min": 45,
+      "max": 90,
+      "voice": false,
+      "basis": "65% finish videos under 1 min (Vidyard)"
+    },
+    "feature-announcement": {
+      "label": "Feature announcement",
+      "module": "feature-announcement",
+      "default": 30,
+      "min": 15,
+      "max": 60,
+      "voice": false,
+      "basis": "Shorts ads under 60 s; Reels engagement peaks 45-60 s"
+    },
+    "landing-loop": {
+      "label": "Landing page loop",
+      "module": "promo",
+      "default": 10,
+      "min": 6,
+      "max": 15,
+      "voice": false,
+      "loop": true,
+      "sound": false,
+      "basis": "typical practice (unverified); pause control needed over 5 s (WCAG 2.2.2)"
+    },
+    "product-demo": {
+      "label": "Product demo",
+      "module": "product-demo",
+      "default": 120,
+      "min": 60,
+      "max": 180,
+      "voice": true,
+      "basis": "Wistia: 1-5 min for education; deep dives 5-15 min",
+      "longForm": true
+    },
+    "tutorial": {
+      "label": "Tutorial / how-to",
+      "module": "tutorial",
+      "default": 180,
+      "min": 60,
+      "max": 300,
+      "voice": true,
+      "basis": "Wistia: 3-5 min instructional videos hold 74% engagement",
+      "longForm": true
+    },
+    "onboarding": {
+      "label": "Onboarding (per step)",
+      "module": "onboarding",
+      "default": 60,
+      "min": 30,
+      "max": 120,
+      "voice": true,
+      "basis": "practice (unverified): one task per video",
+      "longForm": true
+    },
+    "app-store-preview": {
+      "label": "App store preview",
+      "module": "app-store-preview",
+      "default": 25,
+      "min": 15,
+      "max": 30,
+      "voice": false,
+      "basis": "Apple: 15-30 s, hard limit"
+    },
+    "explainer": {
+      "label": "Explainer",
+      "module": "explainer",
+      "default": 75,
+      "min": 60,
+      "max": 120,
+      "voice": true,
+      "basis": "60-90 s industry norm (unverified); Wistia 1-5 min",
+      "longForm": true
+    },
+    "social-organic": {
+      "label": "Social clip",
+      "module": "social-organic",
+      "default": 30,
+      "min": 15,
+      "max": 90,
+      "voice": false,
+      "basis": "Reels: 45-60 s best engagement, reach drops past 180 s (6M Reels, H1 2026)"
+    },
+    "testimonial": {
+      "label": "Testimonial",
+      "module": "testimonial",
+      "default": 60,
+      "min": 30,
+      "max": 90,
+      "voice": true,
+      "basis": "Wistia: testimonials average 46% engagement",
+      "longForm": true
+    },
+    "event-recap": {
+      "label": "Event recap",
+      "module": "event-recap",
+      "default": 60,
+      "min": 30,
+      "max": 90,
+      "voice": false,
+      "basis": "practice (unverified)"
+    }
+  },
+  "platforms": {
+    "reels": {
+      "label": "Instagram Reels",
+      "aspect": "9:16",
+      "px": [
+        1080,
+        1920
+      ],
+      "hardMax": 1200,
+      "softMax": 180,
+      "softNote": "Reels over 3 min are not recommended to non-followers; engagement peaks at 45-60 s",
+      "mutedAutoplay": false,
+      "captions": "burned",
+      "safeZone": "meta",
+      "feed": true,
+      "feedCutdown": 45
+    },
+    "stories": {
+      "label": "Instagram Stories",
+      "aspect": "9:16",
+      "px": [
+        1080,
+        1920
+      ],
+      "hardMax": 3600,
+      "softMax": 60,
+      "softNote": "long videos split into cards",
+      "mutedAutoplay": false,
+      "captions": "burned",
+      "safeZone": "meta",
+      "feed": true,
+      "feedCutdown": 15
+    },
+    "ig-feed": {
+      "label": "Instagram feed",
+      "aspect": "4:5",
+      "px": [
+        1080,
+        1350
+      ],
+      "hardMin": 1,
+      "hardMax": 3600,
+      "mutedAutoplay": true,
+      "captions": "burned"
+    },
+    "fb-feed": {
+      "label": "Facebook feed",
+      "aspect": "4:5",
+      "px": [
+        1080,
+        1350
+      ],
+      "hardMin": 1,
+      "hardMax": 14460,
+      "mutedAutoplay": true,
+      "captions": "burned",
+      "softNote": "design for sound off; captions add 12% view time"
+    },
+    "fb-reels": {
+      "label": "Facebook Reels",
+      "aspect": "9:16",
+      "px": [
+        1080,
+        1920
+      ],
+      "mutedAutoplay": false,
+      "captions": "burned",
+      "safeZone": "meta",
+      "feed": true,
+      "feedCutdown": 45
+    },
+    "tiktok": {
+      "label": "TikTok",
+      "aspect": "9:16",
+      "px": [
+        1080,
+        1920
+      ],
+      "hardMax": 600,
+      "softNote": "sound-on platform; state the proposition in the first 3 s; organic cap is per account (3 min for all, some 10 min)",
+      "mutedAutoplay": false,
+      "captions": "burned",
+      "safeZone": "tiktok",
+      "feed": true,
+      "feedCutdown": 30
+    },
+    "youtube": {
+      "label": "YouTube",
+      "aspect": "16:9",
+      "px": [
+        1920,
+        1080
+      ],
+      "hardMax": 900,
+      "softNote": "15 min until the channel is verified, then 12 h; feeds autoplay muted with captions on",
+      "mutedAutoplay": true,
+      "captions": "srt",
+      "safeZone": "youtube"
+    },
+    "shorts": {
+      "label": "YouTube Shorts",
+      "aspect": "9:16",
+      "px": [
+        1080,
+        1920
+      ],
+      "hardMax": 180,
+      "softMax": 60,
+      "softNote": "Shorts ads: under 60 s recommended (only the first 60 s play)",
+      "mutedAutoplay": false,
+      "captions": "burned",
+      "safeZone": "shorts",
+      "feed": true,
+      "feedCutdown": 45
+    },
+    "linkedin": {
+      "label": "LinkedIn",
+      "aspect": "1:1",
+      "aspects": [
+        "16:9",
+        "1:1",
+        "4:5",
+        "9:16"
+      ],
+      "px": [
+        1080,
+        1080
+      ],
+      "hardMin": 3,
+      "hardMax": 600,
+      "softMin": 15,
+      "softMax": 30,
+      "softNote": "15-30 s qualifies for every ad placement",
+      "fpsCap": 30,
+      "mutedAutoplay": true,
+      "captions": "srt+burned"
+    },
+    "x": {
+      "label": "X",
+      "aspect": "16:9",
+      "aspects": [
+        "16:9",
+        "1:1",
+        "9:16",
+        "4:5"
+      ],
+      "px": [
+        1920,
+        1080
+      ],
+      "hardMax": 140,
+      "softMax": 15,
+      "softNote": "ads: 15 s or less recommended; captions strongly advised",
+      "mutedAutoplay": true,
+      "mutedAutoplayUnverified": true,
+      "captions": "burned"
+    },
+    "pinterest": {
+      "label": "Pinterest",
+      "aspect": "9:16",
+      "px": [
+        1080,
+        1920
+      ],
+      "hardMin": 4,
+      "hardMax": 300,
+      "softMin": 6,
+      "softMax": 15,
+      "softNote": "ads: 6-15 s recommended",
+      "mutedAutoplay": true,
+      "captions": "burned",
+      "safeZone": "pinterest",
+      "feed": true,
+      "feedCutdown": 15
+    },
+    "threads": {
+      "label": "Threads",
+      "aspect": "9:16",
+      "px": [
+        1080,
+        1920
+      ],
+      "hardMax": 300,
+      "mutedAutoplay": true,
+      "captions": "burned",
+      "feed": true,
+      "feedCutdown": 30
+    },
+    "product-hunt": {
+      "label": "Product Hunt",
+      "aspect": "16:9",
+      "px": [
+        1920,
+        1080
+      ],
+      "softMin": 30,
+      "softMax": 60,
+      "softNote": "takes a YouTube link; 30-60 s is practice (unverified)",
+      "mutedAutoplay": true,
+      "captions": "burned"
+    },
+    "app-store": {
+      "label": "Apple App Store preview",
+      "aspect": "886:1920",
+      "px": [
+        886,
+        1920
+      ],
+      "hardMin": 15,
+      "hardMax": 30,
+      "fpsCap": 30,
+      "softNote": "in-app footage only; up to 3 per locale; autoplays muted",
+      "mutedAutoplay": true,
+      "captions": "burned"
+    },
+    "google-play": {
+      "label": "Google Play",
+      "aspect": "16:9",
+      "px": [
+        1920,
+        1080
+      ],
+      "softMax": 30,
+      "softNote": "a YouTube link; only the first 30 s autoplay, muted",
+      "mutedAutoplay": true,
+      "captions": "burned"
+    },
+    "landing": {
+      "label": "Landing page",
+      "aspect": "16:9",
+      "px": [
+        1920,
+        1080
+      ],
+      "softMin": 6,
+      "softMax": 15,
+      "softNote": "hero loop: muted playsinline, MP4 + WebM, no audio track, a pause control if over 5 s",
+      "mutedAutoplay": true,
+      "captions": "burned",
+      "loop": true
+    },
+    "email": {
+      "label": "Email",
+      "aspect": "16:9",
+      "px": [
+        600,
+        338
+      ],
+      "softMax": 8,
+      "softNote": "a GIF under 1 MB whose first frame stands alone (Outlook shows only frame 1), linking to the full video",
+      "mutedAutoplay": true,
+      "captions": "burned"
+    }
+  },
+  "safeZones": {
+    "meta": {
+      "unit": "fraction",
+      "top": 0.14,
+      "bottom": 0.35,
+      "left": 0.06,
+      "right": 0.06,
+      "source": "Meta ads guide (Reels, Stories)"
+    },
+    "pinterest": {
+      "unit": "px@1080x1920",
+      "top": 270,
+      "bottom": 790,
+      "left": 65,
+      "right": 195,
+      "source": "Pinterest pin specs"
+    },
+    "shorts": {
+      "unit": "px@1080x1920",
+      "top": 380,
+      "bottom": 450,
+      "left": 0,
+      "right": 150,
+      "unverified": true,
+      "source": "third-party (no official Shorts safe zone)"
+    },
+    "tiktok": {
+      "unit": "fraction",
+      "top": 0.12,
+      "bottom": 0.3,
+      "left": 0.06,
+      "right": 0.12,
+      "unverified": true,
+      "source": "approximation; TikTok publishes per-ratio templates instead of one box"
+    },
+    "titleSafe": {
+      "unit": "fraction",
+      "top": 0.05,
+      "bottom": 0.05,
+      "left": 0.05,
+      "right": 0.05,
+      "source": "broadcast title-safe convention, for platforms that publish no zone"
+    },
+    "youtube": {
+      "unit": "fraction",
+      "top": 0.05,
+      "bottom": 0.12,
+      "left": 0.05,
+      "right": 0.05,
+      "unverified": true,
+      "source": "title-safe plus the player's control bar (no official zone)"
+    }
+  }
+}

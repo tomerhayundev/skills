@@ -1,0 +1,20 @@
+{
+  "name": "remotion-video-master",
+  "version": "0.1.0",
+  "description": "One-stop Remotion video skill: a guided brief (what the video is for, platforms, a recommended length), then the remotion-video-pipeline engine for promos, demos, tutorials, explainers and more, with per-format rules, platform safe zones and measured verification.",
+  "author": {
+    "name": "Tomer Hayun",
+    "url": "https://github.com/tomerhayundev"
+  },
+  "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-master",
+  "license": "MIT",
+  "keywords": [
+    "remotion",
+    "video",
+    "motion-design",
+    "promo",
+    "tutorial",
+    "explainer",
+    "captions"
+  ]
+}

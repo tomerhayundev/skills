@@ -36,3 +36,6 @@ jobs:
             if (JSON.stringify(f.liftBeats) !== JSON.stringify(want)) throw new Error("lifts " + f.liftBeats);
             console.log("ok", f.bpm, f.firstBeatSeconds, f.liftBeats);
           '
+
+      - name: remotion-video-master scripts (length recommendations, declared-cut pops)
+        run: node --test plugins/remotion-video-master/skills/remotion-video-master/scripts/*.test.mjs
