@@ -4,7 +4,7 @@ description: Use when announcing a new feature, release or changelog item in a s
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.6.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: d9e3e04a78ed -->
+<!-- Generated from remotion-video-master 0.6.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 766707ad8ada -->
 
 # Remotion feature announcement video
 
@@ -77,12 +77,14 @@ difference, or a signature the whole brand owns (in its logo, or on everything i
 what the product does to the viewer's problem. The most filmable action on its own (the kneading,
 the typing, the assembly line) is not a motif: every rival of the same kind has it. Neither is one
 collection's or one season's detail, however visible: it is what the brand made lately, not who it
-is. It is decided
-before the beat map. A CV builder
+is. It is decided after the story's beat sheet of jobs and before the beat map, and every film
+has one: it is what makes the film flow. A CV builder
 whose name means tailored got a tailor's thread and needle: it stitches the CV, threads the job
 tags and sews the wordmark shut. The motif is a character with an arc, not a wipe: the viewer
-meets the real object, it does what the product does, and it carries the film's turns. A shape
-that fits every brand says nothing about this one.
+meets the real object, it does what the product does, it links the shots in between (match cuts on
+it, the same object handed from shot to shot, a path the camera follows), and it carries the film's
+turns. A shape that fits every brand says nothing about this one; an object that does nothing (a
+divider line in the logo, a pretty prop) is decoration, not a motif.
 
 | Slot | What goes in it | CV-builder example |
 | --- | --- | --- |
@@ -93,6 +95,7 @@ that fits every brand says nothing about this one.
 | World | Filmed footage or drawn UI, and where the motif lives in it: on a real surface, on a device's screen, or in the brand's graphic layer ([creative-rules](references/creative-rules.md#graphics-over-footage)) | drawn: the whole film is UI |
 | Travels, grows or morphs | Travels (thread, road, cable): a one-take film ([one-take-film](references/one-take-film.md)). Morphs (one element of the product's UI): that element is shared across the boundaries it crosses. Grows or opens (page, box, lid, code): it opens once, at the turn, to reveal what the product does | travels |
 | Turns | The one or two boundaries the motif carries: the turn (problem to solution) and the close. Every other boundary is a cut on the beat, a match cut on the motif, or a shared element | the first stitch; the sewn wordmark |
+| Links | How it carries the shots between the turns, so the film flows: match cuts on it, the same object handed from shot to shot, a path the camera follows. Name it for each beat in the script's motif column | the thread runs out of one CV and into the next job tag |
 | Echoes | Small appearances in a layer the viewer knows: a caption underline, a step marker, the logo close | the caption underline is a stitch |
 | Competitor test | A planning question, never rendered: if this film carried the name of the closest rival of the same kind, doing the same thing the same way, would it still work for them? Test the gesture too (stuck on, or built in). If it would, go back to the brand read | a thread means nothing to a brand whose promise is not tailoring |
 
@@ -121,8 +124,9 @@ uses it, the Turns row says why.
    It is written in the user's language (right to left for Hebrew or Arabic) and holds, in order:
    - **what I understood about your brand**: the brand read's four rows, each with the brand's own
      words and what they mean for the film ([brand-read](references/brand-read.md));
-   - **the idea** in one sentence, and **what you asked for and where it is in the film**, one line
-     per item the user named;
+   - **the idea** in one sentence, **what carries the film** (the motif, its verb and how it links
+     the shots), and **what you asked for and where it is in the film**, one line per item the user
+     named;
    - the plan in a few lines ([brief template](references/brief-template.md));
    - **the music**: the recommended track and two alternatives of a different energy, each with why
      it fits and 15 s to play from where the film would start it; the user chooses by ear;
@@ -130,6 +134,10 @@ uses it, the Turns row says why.
      cover. Render them with the engine (`npx remotion still` of a first scene holding only what those
      frames need); with no Remotion project yet, render them as HTML at the final size in a headless
      browser, the engine Remotion uses, and rebuild them as scenes after the go;
+   - a **motion frame**: 3 to 6 s of the turn at final quality, the motif moving through it (render
+     that first scene with `npx remotion render --frames=<from>-<to>`). A still cannot show flow: this
+     is where the user, and the storyboard critic, judge the motion design before the build. Send it
+     as a file too;
    - a **storyboard of every cut**: each beat's frame from the real assets (footage, captures, or a
      quick still), its time, its job, its words and how the shot is entered;
    - the hook, with two runners-up.
@@ -296,5 +304,6 @@ node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cu
 | "The scores reach 8 once you record a clip of..." | The user never offered it: solve it with what exists, and ask for material only in the question call |
 | A clean, minimal brand filmed busy | The brand's own adjectives are the film's style: space, pace, how many words |
 | The same track on every film | Pick from the library by the brand's look, and let the user hear it in the brief |
+| Approving the motion design from stills | Flow only shows in motion: the brief carries 3 to 6 s of the turn, the motif moving, at final quality |
 | A Reel that opens on the slogan, a still product or a quiet intro | Frame 0: the strongest moving picture, the beat already playing, a line that opens a question |
 | A sixth round of polish when the scores stall | The problem is structure: back to the storyboard, or hand the user the one choice |

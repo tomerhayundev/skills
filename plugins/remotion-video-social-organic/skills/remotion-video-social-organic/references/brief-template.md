@@ -19,22 +19,24 @@ is built past the style frames before that approval.
     { "row": "spine", "quote": null, "inferredFrom": "<what it was inferred from, when the brand says nothing>", "scope": "brand", "meaning": "..." }
   ],
   "idea": "<the concept in one sentence>",
+  "motif": { "object": "<the one object that carries the film>", "verb": "<what it does: what the brand does>", "links": "<how it carries the shots between the turns>" },
   "asks": [{ "item": "<each thing the user asked for, in their words>", "where": "<where it lands in the film>" }],
   "feed": true,
   "music": { "id": "<library id>", "title": "...", "artist": "...", "bpm": 90, "why": "<why it fits the brand's look>", "file": "public/music/track.mp3", "liftSeconds": 16, "startSeconds": 8.6,
     "alternatives": [{ "id": "<another library id>", "title": "...", "why": "<a different energy, and why>", "file": "public/music/alt-1.mp3", "startSeconds": 0 }] },
   "plan": ["A **30 s** master and a **15 s** cut, 16:9, for ...", "**No voiceover.** ...", "**The motif** ..."],
+  "motionFrames": [{ "video": "out/motion-turn.mp4", "caption": "**The turn, moving.** ..." }],
   "styleFrames": [{ "image": "out/style-turn.png", "caption": "**The turn.** ..." }, { "image": "out/style-cover.png", "caption": "**The cover.** ..." }],
   "hook": { "recommended": "...", "why": "...", "alternatives": ["...", "..."] },
   "next": "**After your go**, I build it; the next thing you see is the finished <primary deliverable>.",
-  "cuts": [{ "name": "30 s", "message": "...", "turnAt": 12, "source": "footage/...", "beats": [{ "at": 0, "dur": 2.5, "src": 0, "len": 2.5, "changesAt": 1.5, "job": "hook", "picture": "...", "words": "...", "in": "Opens mid-action" }] }]
+  "cuts": [{ "name": "30 s", "message": "...", "turnAt": 12, "source": "footage/...", "beats": [{ "at": 0, "dur": 2.5, "src": 0, "len": 2.5, "changesAt": 1.5, "job": "hook", "motif": "<its part here>", "picture": "...", "words": "...", "in": "Opens mid-action" }] }]
 }
 ```
 
 The page refuses (exit 1) a brief with a missing brand row, a row without its `scope` (`"brand"` for
 the whole brand, or the one part it is about), a difference, look or spine taken from one part of the
 brand (a signature taken from one part is shown marked for the owner to confirm), a row with neither
-a quote nor what it was inferred from, no idea, no `asks` list (an empty list when the ask named nothing), an asked item
+a quote nor what it was inferred from, no idea, no motif with its verb, no motion frame of the turn (3 to 6 s), no `asks` list (an empty list when the ask named nothing), an asked item
 with no place in the film, a shot with no `job`, or music without a reason. A brief with any of Reels, TikTok, Shorts or
 Stories among its platforms sets `"feed": true` ([feed](feed.md)); then it also refuses a track with no `startSeconds` (its feed start), a first shot with no visible
 change within 2 s (a cut, or `changesAt` for a push-in or an action inside the shot),

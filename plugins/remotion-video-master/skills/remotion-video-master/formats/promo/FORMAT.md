@@ -44,14 +44,21 @@ A promo sells, so it is built on a spine of jobs, and the jobs come before any v
 | Close | 2-4 s | The brand, one action, where to do it |
 
 Write this beat sheet first, one row per shot, with each shot's job (`job` in the visual brief, shown
-on the page). A shot whose job cannot be named is cut, however good it looks. A visual device (a line
-that travels, before and after, a split frame, a one-take) is chosen only after the beat sheet
-exists, only when it serves the jobs, and the film must still make sense with the device removed.
-Starting from the device and fitting the story to it is how a promo turns into a trend clip with a
-logo on the end: a hook, and nothing a viewer could act on.
+on the page). A shot whose job cannot be named is cut, however good it looks.
 
-After one viewing, a stranger can say who this is, what they get, why this one, and what to do. If
-they cannot, the beat sheet is missing a job, whatever the motion looks like.
+**Then the motif carries it, and it is not optional.** The motif (SKILL.md, Find the motif first) is
+the one object that runs through the whole film and makes it flow: the viewer meets it in the hook
+or right after, it links the shots (match cuts on it, the same object passed from shot to shot, a
+path the camera follows), it does the turn, and it comes back in the close. Its verb is what the
+brand does (the thread stitches because the product tailors). Without it a promo is a sequence of
+clips; with a motif that does nothing (a line from the logo, a shape, a pretty object) it is
+decoration. What is optional is a gimmick device (a split frame, before-and-after pairs, a counter):
+chosen only when it serves a job, never as the idea, because a film built on a gimmick becomes a
+trend clip with a logo on the end.
+
+After one viewing, a stranger can say who this is, what they get, why this one, and what to do, and
+remembers the one object that carried it. If they cannot, the beat sheet is missing a job or the film
+is missing its motif, whatever the motion looks like.
 
 A short cut needs a narrative (build, multiply, improve, brand), not a montage. A teaser withholds
 the product and gives the date. A launch film can be a one-take ([one-take-film](../../references/one-take-film.md))
@@ -140,6 +147,7 @@ seam scan. Critique at three points (the concept, the storyboard, then the film 
 | A calm brand, so a calm opening | The Look sets the frame and the timbre, not the energy: open clean and hard |
 | A 51 s Reel because engagement peaks at 45-60 s | That is organic storytelling; a feed promo is 15-30 s with the turn in the first half |
 | A split screen for the whole film | Every picture at half size; use a split once, at the turn |
-| Starting from a visual device (a line, before and after) and fitting the story to it | The beat sheet of jobs first; a device only if it serves them, and the film works without it |
+| Starting from a gimmick device (before-and-after pairs, a split frame) and fitting the story to it | The beat sheet of jobs first, then the motif that carries them; a gimmick only where it serves a job |
+| A promo with no motif: good shots, no flow | One object from the brand's action runs through it: met in the hook, linking the shots, doing the turn, back in the close |
 | A strong hook with nothing a viewer could act on after it | Hook, promise, proof, offer, close: a stranger can say who, what, why this one, what to do |
 | Phone footage as found: mixed color, clutter in frame, app-style text | One grade, a clean frame, captions in the brand's type (Professional finish) |

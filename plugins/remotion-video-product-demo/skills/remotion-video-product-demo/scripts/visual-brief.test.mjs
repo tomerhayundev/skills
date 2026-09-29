@@ -2,11 +2,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdtempSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildAnimatic, buildHtml, checkPlan } from "./visual-brief.mjs";
+import { buildAnimatic, buildHtml, checkPlan, writeMotionFiles } from "./visual-brief.mjs";
 
 const script = join(dirname(fileURLToPath(import.meta.url)), "visual-brief.mjs");
 const dir = mkdtempSync(join(tmpdir(), "brief-"));
@@ -14,6 +14,10 @@ const footage = join(dir, "footage.mp4");
 const still = join(dir, "still.png");
 spawnSync("ffmpeg", ["-v", "error", "-y", "-f", "lavfi", "-i", "testsrc2=s=640x360:r=30:d=12", "-pix_fmt", "yuv420p", footage]);
 spawnSync("ffmpeg", ["-v", "error", "-y", "-f", "lavfi", "-i", "color=c=0x7a7468:s=640x360", "-frames:v", "1", still]);
+const turn = join(dir, "turn.mp4");
+spawnSync("ffmpeg", ["-v", "error", "-y", "-f", "lavfi", "-i", "testsrc2=s=360x640:r=30:d=4", "-pix_fmt", "yuv420p", turn]);
+const longTurn = join(dir, "long-turn.mp4");
+spawnSync("ffmpeg", ["-v", "error", "-y", "-f", "lavfi", "-i", "testsrc2=s=360x640:r=30:d=9", "-pix_fmt", "yuv420p", longTurn]);
 const tone = join(dir, "tone.mp3");
 spawnSync("ffmpeg", ["-v", "error", "-y", "-f", "lavfi", "-i", "sine=f=440:d=20", tone]);
 
@@ -21,6 +25,7 @@ const brief = () => ({
   title: "A promo for a storage brand",
   plan: ["A **30 s** master and a 15 s cut", "No voiceover: <captions> carry it"],
   styleFrames: [{ image: still, caption: "**The turn.** The finder locks onto the real code." }],
+  motionFrames: [{ video: turn, caption: "**The turn, moving.** The code is scanned and the list opens." }],
   hook: { recommended: "Which box has the lights?", why: "the problem in the viewer's words", alternatives: ["Where did the lights go?"] },
   next: "After your **go**: the build starts.",
   brand: [
@@ -30,6 +35,7 @@ const brief = () => ({
     { row: "spine", quote: null, inferredFrom: "how the product is used", scope: "brand", meaning: "from lost to found" },
   ],
   idea: "Every box answers when you scan it.",
+  motif: { object: "the molded code", verb: "it answers when scanned, as the product does", links: "each shot finds the code on the next box" },
   asks: [{ item: "the app", where: "the scan at the turn" }],
   music: { id: "calm-90", title: "A calm track", artist: "Someone", bpm: 120, why: "calm, like the brand says it is", file: tone, liftSeconds: 4 },
   cuts: [
@@ -41,7 +47,7 @@ const brief = () => ({
       crop: null,
       beats: [
         { at: 0, dur: 3.5, src: 0, len: 3, picture: "A dim basement", words: "Which box has the lights?", in: "Opens on the problem", job: "hook" },
-        { at: 3.5, dur: 3, src: 4, len: 2, picture: "The code on the shelf", words: "", in: "MATCH CUT on the code", job: "proof" },
+        { at: 3.5, dur: 3, src: 4, len: 2, picture: "The code on the shelf", words: "", in: "MATCH CUT on the code", job: "proof", motif: "the code, handed from the box to the shelf" },
         { at: 6.5, dur: 2, image: still, picture: "The end card", in: "CLOSE", job: "close" },
       ],
     },
@@ -173,6 +179,33 @@ test("a file that is not on disk is named, and the page still builds with a stan
   const html = buildHtml(b);
   assert.ok(html.includes("data:image/svg+xml;base64,"), "a stand-in frame");
   assert.ok(Buffer.from(html.match(/data:image\/svg\+xml;base64,([^"]+)/)[1], "base64").toString().includes("missing: GONE.mp4"));
+});
+
+test("the film has a motif that carries it, shown on the page with its part in each shot", () => {
+  const html = buildHtml(brief());
+  assert.ok(html.includes("<h2>What carries the film</h2><div class=\"box\"><b>the molded code</b>"), "the motif box");
+  assert.ok(html.includes('<em class="motif">the code, handed from the box to the shelf</em>'), "its part in a shot");
+  const b = brief();
+  delete b.motif;
+  assert.ok(checkPlan(b).some((p) => p.startsWith("the motif: name the one object")));
+  b.motif = { object: "a line from the logo" };
+  assert.ok(checkPlan(b).some((p) => p.startsWith("the motif:")), "an object that does nothing is not a motif");
+});
+
+test("the brief shows the turn in motion: 3 to 6 s, playable, a strip for the critic and a file to send", () => {
+  const html = buildHtml(brief());
+  assert.ok(html.includes('<video src="data:video/mp4;base64,'), "the turn plays on the page");
+  assert.ok(html.includes("The turn, moving."));
+  const b = brief();
+  delete b.motionFrames;
+  assert.ok(checkPlan(b).some((p) => p.startsWith("motion frame: render 3 to 6 s of the turn")));
+  b.motionFrames = [{ video: longTurn }];
+  assert.ok(checkPlan(b).some((p) => /motion frame 1: 9\.0 s/.test(p)), "a long clip is a rough cut, not a motion frame");
+  const out = join(dir, "motion-out");
+  mkdirSync(out, { recursive: true });
+  const written = writeMotionFiles(brief(), out);
+  assert.equal(written.length, 1);
+  assert.ok(existsSync(join(out, "motion-1-strip.png")) && existsSync(join(out, "motion-1.mp4")));
 });
 
 test("every shot says its job, and the page shows it", () => {

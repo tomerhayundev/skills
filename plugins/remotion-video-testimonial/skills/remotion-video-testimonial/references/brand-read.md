@@ -60,9 +60,9 @@ its own. The user is never asked to choose.
 
 Write three concepts that differ in idea, not in wording. Each is one sentence and its beat sheet
 first: one line per job (for a promo: hook, promise, proofs, offer, close; the format's own jobs
-otherwise), with where every asked item lands. Only then its motif or visual device, its turn, and a
-line on why the device serves those jobs; a concept that starts from a device and fits a story to it
-is rewritten from the jobs. Then a fresh critic (a subagent with no part in the writing)
+otherwise), with where every asked item lands. Then its motif: the one object that carries those jobs from the hook to the close, what it does
+(its verb, which is what the brand does), and how it links the shots. A concept that starts from a
+gimmick device (before and after, a split frame) and fits a story to it is rewritten from the jobs. Then a fresh critic (a subagent with no part in the writing)
 gets the brand read, the ask, the material list and the three concepts, and scores each from 1 to 10:
 
 | Criterion | The question |
@@ -71,6 +71,7 @@ gets the brand read, the ask, the material list and the three concepts, and scor
 | Structure | Can every beat's job be named? After one viewing, would a stranger know who this is, what they get, why this one, and what to do? |
 | A professional ad | Would the brand's own marketing lead post it as their ad, or is it a feed trend with a logo on the end? |
 | Only this brand | Would it work for the closest rival of the same kind doing the same thing (another bakery with the same oven, another tool in the same category)? Then it fails. Is it built on what the whole brand is, or on one collection's detail? One collection's detail fails too. |
+| The motif carries the flow | Is there one object, from the brand's difference, whose verb is what the brand does, met early, linking the shots, doing the turn and back in the close? A divider line, a shape or a pretty object that does nothing fails, and so does a film with no motif at all. |
 | The look | Would the film look like the Look row: the brand's own adjectives? |
 | Surprise | Is there a moment a stranger would not expect, one that stops the scroll? |
 | The first two seconds | For a feed (Reels, TikTok, Shorts, Stories): picture only frame 0 to 2 s, picture and sound. Does something move, does the beat already play, does the line open a question? A slogan, a logo, a still product or a quiet intro fails, whatever comes after. |

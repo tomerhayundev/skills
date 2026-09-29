@@ -167,13 +167,17 @@ it. The winner is rewritten once when any score is under 8. This is where "banal
 
 ### 2. The storyboard, before the build (required)
 
-A fresh critic gets the visual brief page (its PNG), the brand read and the one-sentence message,
+A fresh critic gets the visual brief page (its PNG), the motion frame's strip (`out/motion-1-strip.png`,
+12 frames across the turn, which `visual-brief.mjs` writes) and the clip itself, the brand read and
+the one-sentence message,
 and, when the rhythm matters, the internal rough cut (`visual-brief.mjs --animatic`). For a film in
 a feed it judges the first two seconds alone before anything else: the first beat's picture, its line
 and the track from its start point. Does something move on frame 0, is the beat already playing, does
 the line open a question? A slogan, a logo, a still product, a slow fade or a quiet intro fails, and
 nothing later makes up for it. Then it judges structure: each shot's job (for a promo: hook, promise,
-proof, offer, close) and whether a stranger would know after one viewing who this is, what they get,
+proof, offer, close), and the flow: follow the motif through the storyboard (its part in each shot)
+and say where it is met, how each shot hands it to the next, where it turns and where it comes back;
+a stretch of shots it never touches plays as a run of clips and whether a stranger would know after one viewing who this is, what they get,
 why this one and what to do; what a first-time viewer understands at each beat; whether every beat carries the
 message forward (a beat that only shows a logo or a pretty frame is a gap); tension, one turn, the
 payoff; whether every asked item lands inside the story; reading time; whether the chosen track fits
@@ -221,7 +225,8 @@ Then look at it as a harsh motion director, not as its proud author:
 2. Score each from 1 to 10: story and copy (the one message clear after one viewing, every line
    specific to this brand, one call to action; [story](story.md)); the hook in the first 2 s; readability at phone size;
    motion (springs, no dead frames, nothing sliding linearly); variety (something new on
-   every beat); composition; the motif and the brand (met as a real object before it is abstracted;
+   every beat); composition; the motif and the brand (the flow: one object linking the shots so it
+   plays as one film, not a run of clips; met as a real object before it is abstracted;
    does what the product does; would this film still work for the closest competitor, asked as a
    question and never shown); the brand's look (does the film look like the brand's own adjectives,
    the brand read's Look row: a brand that calls itself minimal and clean is not filmed busy);
