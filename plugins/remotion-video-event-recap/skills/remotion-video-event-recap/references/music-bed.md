@@ -9,8 +9,10 @@ correlation, the same loudness, and a 29 ms (sub-frame) offset.
 
 **Start from the brand, never from the last film.** When one track was bundled and nothing asked for
 a choice, every film came out with the same upbeat corporate track, whatever the brand. The brand read's
-Look row ([brand-read](brand-read.md)) sets the mood: calm and organic, warm, minimal and elegant,
-cinematic, kinetic, confident, playful or driving. Then:
+Look row ([brand-read](brand-read.md)) sets the timbre: calm and organic, warm, minimal and elegant,
+cinematic, kinetic, confident, playful or driving. It never sets the energy of the opening: a quiet
+piano chosen for a minimal brand, played from its intro, left a Reel with no beat for 17 s, and the owner
+only knew which track they wanted once they heard the options. Then:
 
 ```bash
 node ${CLAUDE_SKILL_DIR}/scripts/get-track.mjs --list            # the library, by mood, with tempo and length
@@ -18,10 +20,13 @@ node ${CLAUDE_SKILL_DIR}/scripts/get-track.mjs <id> [--dir=public/music]
 ```
 
 `get-track.mjs <id>` copies or downloads the track into the project, checks it against the library's
-checksum, and writes `track.json` (its fitted grid: bpm, beat 0, lifts) and `CREDITS.md` beside it.
-The tokens take the grid from `track.json` (architecture, Tokens). Name the track and why it fits in
-the brief (`music.why`); the brief page plays 15 s around its lift so the user hears it before the
-build. A track the user brings, or one found elsewhere, follows the rules below and is fitted with
+checksum, and writes `track.json` (its fitted grid: bpm, beat 0, lifts, `feedStartSeconds`) and
+`CREDITS.md` beside it. The tokens take the grid from `track.json` (architecture, Tokens). Name the
+track and why it fits in the brief (`music.why`), and offer two alternatives of a different energy
+(`music.alternatives`); the brief page plays 15 s of each from where the film would start it
+(`startSeconds`), so the user chooses by ear before the build. **In a feed** (Reels, TikTok, Shorts,
+Stories) the film starts the track at its `feedStartSeconds`, where the beat already plays, and
+`musicCue(liftFrame, duration, MUSIC.feedStartBeat)` picks a later lift for the payoff. A track the user brings, or one found elsewhere, follows the rules below and is fitted with
 `fit-beat-grid.mjs`.
 
 **Tempo must fit the frame grid.** Frames per beat = `fps * 60 / bpm`. Pick a

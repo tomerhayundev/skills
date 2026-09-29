@@ -20,12 +20,14 @@ is built past the style frames before that approval.
   ],
   "idea": "<the concept in one sentence>",
   "asks": [{ "item": "<each thing the user asked for, in their words>", "where": "<where it lands in the film>" }],
-  "music": { "id": "<library id>", "title": "...", "artist": "...", "bpm": 90, "why": "<why it fits the brand's look>", "file": "public/music/track.mp3", "liftSeconds": 16 },
+  "feed": true,
+  "music": { "id": "<library id>", "title": "...", "artist": "...", "bpm": 90, "why": "<why it fits the brand's look>", "file": "public/music/track.mp3", "liftSeconds": 16, "startSeconds": 8.6,
+    "alternatives": [{ "id": "<another library id>", "title": "...", "why": "<a different energy, and why>", "file": "public/music/alt-1.mp3", "startSeconds": 0 }] },
   "plan": ["A **30 s** master and a **15 s** cut, 16:9, for ...", "**No voiceover.** ...", "**The motif** ..."],
   "styleFrames": [{ "image": "out/style-turn.png", "caption": "**The turn.** ..." }, { "image": "out/style-cover.png", "caption": "**The cover.** ..." }],
   "hook": { "recommended": "...", "why": "...", "alternatives": ["...", "..."] },
   "next": "**After your go**, I build it; the next thing you see is the finished <primary deliverable>.",
-  "cuts": [{ "name": "30 s", "message": "...", "turnAt": 12, "source": "footage/...", "beats": [{ "at": 0, "dur": 3, "src": 0, "len": 3, "picture": "...", "words": "...", "in": "Opens on the problem" }] }]
+  "cuts": [{ "name": "30 s", "message": "...", "turnAt": 12, "source": "footage/...", "beats": [{ "at": 0, "dur": 2.5, "src": 0, "len": 2.5, "changesAt": 1.5, "job": "hook", "picture": "...", "words": "...", "in": "Opens mid-action" }] }]
 }
 ```
 
@@ -33,7 +35,10 @@ The page refuses (exit 1) a brief with a missing brand row, a row without its `s
 the whole brand, or the one part it is about), a difference, look or spine taken from one part of the
 brand (a signature taken from one part is shown marked for the owner to confirm), a row with neither
 a quote nor what it was inferred from, no idea, no `asks` list (an empty list when the ask named nothing), an asked item
-with no place in the film, or music without a reason. Beat times sit on the track's beat grid
+with no place in the film, a shot with no `job`, or music without a reason. A brief with any of Reels, TikTok, Shorts or
+Stories among its platforms sets `"feed": true` ([feed](feed.md)); then it also refuses a track with no `startSeconds` (its feed start), a first shot with no visible
+change within 2 s (a cut, or `changesAt` for a push-in or an action inside the shot),
+and a cut over 30 s without a `longWhy`. Beat times sit on the track's beat grid
 (`60 / bpm` seconds; 0.5 s at 120 BPM).
 
 The record:
@@ -78,7 +83,7 @@ Languages: <every locale the product ships, RTL mirrored; or the ones the brief 
 - Voice: <captions only | AI voice (which) | the user's recording>
 - What has no picture, and how the film covers it: <each item: another shot | a still that exists |
   the brand's layer | the end card>. Never a request for new material (intake, Build from what exists)
-- Music: <library id, title, BPM (frames per beat), why it fits the Look row, where the lift lands>
+- Music: <library id, title, BPM (frames per beat), why its timbre fits the Look row, where the film starts it (its feed start in a feed), where the lift lands; the two alternatives offered>
 
 ## Motif
 <the motif block from SKILL.md, every row filled>

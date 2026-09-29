@@ -9,7 +9,7 @@ describe("profile", () => {
     expect(PROMO.hook).toEqual({ kind: "line", deliverBySeconds: 1, holdSeconds: 2 });
     expect(PROMO.captions).toMatchObject({ perFifteenSeconds: 3, words: [4, 6], holdSeconds: 1.5, riseIntoStill: true });
     expect(PROMO.critique[0]).toBe("story and copy");
-    for (const c of ["the brand's look", "transitions: hierarchy and dose", "graphics belong to the picture", "cover"]) expect(PROMO.critique).toContain(c);
+    for (const c of ["the brand's look", "professional finish", "transitions: hierarchy and dose", "graphics belong to the picture", "cover"]) expect(PROMO.critique).toContain(c);
   });
 
   it("refuses a changed key without a reason", () => {

@@ -16,6 +16,12 @@ describe("MUSIC", () => {
 });
 
 describe("musicCue", () => {
+  it("in a feed, never starts the track before its feed start, and still lands a lift on the payoff", () => {
+    const liftFrame = 4 * GRID;
+    const cue = musicCue(liftFrame, 20 * GRID, MUSIC.liftBeats[0] + 1);
+    expect(cue.startBeat).toBeGreaterThanOrEqual(MUSIC.liftBeats[0] + 1);
+    expect(MUSIC.liftBeats).toContain(cue.startBeat + liftFrame / GRID);
+  });
   it("opens on the first lift when the lift is at frame 0", () => {
     expect(musicCue(0, 10 * GRID).startBeat).toBe(MUSIC.liftBeats[0]);
   });

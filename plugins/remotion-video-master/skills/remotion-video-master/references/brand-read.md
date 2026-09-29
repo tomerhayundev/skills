@@ -31,9 +31,9 @@ wears a leaf stencil" is about one season, even when it sits on the home page.
 | Row | The question | It becomes |
 | --- | --- | --- |
 | Difference | What does the brand say makes it unlike others of its kind: a method, an origin, a person, a promise? | the film's idea, and the motif's source |
-| Look | Which adjectives does it use about itself or its products (bold, warm, playful, premium)? | the film's style: pace, space, how many words, color, the music's mood |
+| Look | Which adjectives does it use about itself or its products (bold, warm, playful, premium)? | the film's frame: space, color, type, how many words; the music's timbre (piano, guitar, strings). Never the energy of the opening: in a feed, a quiet brand still opens hard, it opens clean |
 | Signature | Does the whole brand already own an object, line, shape, material, color or phrase (in its logo, or on everything it makes, a mascot)? | the motif, when there is one |
-| Spine | Is there a sentence of its own that can carry a story from start to end ("from the field to your table")? | the arc |
+| Spine | Is there a sentence of its own that can carry a story from start to end ("from the field to your table")? | the arc; the tagline itself is for the close, not the hook |
 
 Each row holds the quote, where it is from, its **scope** (the whole brand, or which part), and what
 it means for the film. When the brand says nothing for a row, write what was inferred and from what
@@ -58,16 +58,22 @@ its own. The user is never asked to choose.
 
 ## 4. Three concepts, and a critic before the brief
 
-Write three concepts that differ in idea, not in wording. Each is one sentence, plus its motif, its
-turn and where every asked item lands. Then a fresh critic (a subagent with no part in the writing)
+Write three concepts that differ in idea, not in wording. Each is one sentence and its beat sheet
+first: one line per job (for a promo: hook, promise, proofs, offer, close; the format's own jobs
+otherwise), with where every asked item lands. Only then its motif or visual device, its turn, and a
+line on why the device serves those jobs; a concept that starts from a device and fits a story to it
+is rewritten from the jobs. Then a fresh critic (a subagent with no part in the writing)
 gets the brand read, the ask, the material list and the three concepts, and scores each from 1 to 10:
 
 | Criterion | The question |
 | --- | --- |
 | One idea | Can it be said in one sentence, or is it a list with a title? |
+| Structure | Can every beat's job be named? After one viewing, would a stranger know who this is, what they get, why this one, and what to do? |
+| A professional ad | Would the brand's own marketing lead post it as their ad, or is it a feed trend with a logo on the end? |
 | Only this brand | Would it work for the closest rival of the same kind doing the same thing (another bakery with the same oven, another tool in the same category)? Then it fails. Is it built on what the whole brand is, or on one collection's detail? One collection's detail fails too. |
 | The look | Would the film look like the Look row: the brand's own adjectives? |
 | Surprise | Is there a moment a stranger would not expect, one that stops the scroll? |
+| The first two seconds | For a feed (Reels, TikTok, Shorts, Stories): picture only frame 0 to 2 s, picture and sound. Does something move, does the beat already play, does the line open a question? A slogan, a logo, a still product or a quiet intro fails, whatever comes after. |
 | Every ask inside | Does each item the user named sit inside the story, not beside it? |
 | Makes it | Can it be built entirely from the material that exists? A concept that needs footage, photos or a recording nobody has offered fails this line ([intake](intake.md#build-from-what-exists)). |
 
@@ -103,7 +109,7 @@ The read:
 | Row | The brand's words | For the film |
 | --- | --- | --- |
 | Difference | "48 hours", "don't rush dough" | the story is time |
-| Look | "simple, honest, nothing added" | long holds, natural light, few words, no graphics beyond them, a slow track |
+| Look | "simple, honest, nothing added" | natural light, few words, no graphics beyond them, a warm acoustic track; after a hard open on the crust cracking, long holds |
 | Signature | the wheat ear scored into every crust; the same ear in the logo | the motif is the score |
 | Spine | "bread that takes its time" | the arc is the 48 hours |
 

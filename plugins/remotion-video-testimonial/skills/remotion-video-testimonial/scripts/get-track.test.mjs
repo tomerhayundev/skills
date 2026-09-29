@@ -81,6 +81,7 @@ test("a bundled track is copied, with its grid and its credit", async () => {
   assert.deepEqual(json, track);
   assert.equal(json.framesPerBeat, 15);
   assert.deepEqual(json.liftSeconds, [16, 48]);
+  assert.equal(json.feedStartBeat, 0, "no feed start in the library means the track starts on its beat");
   assert.equal(json.file, "music/kinetic-120.mp3");
   assert.match(readFileSync(join(out, "CREDITS.md"), "utf8"), /Kinetic by A, CC BY 4\.0/);
 });
@@ -116,6 +117,7 @@ test("a near-miss tempo is stretched, pitch kept, to the nearest whole-frame tem
   assert.equal(odd.track.framesPerBeat, 16, "112.5 BPM is 16 frames a beat");
   assert.equal(odd.track.secondsPerBeat * 30, 16, "a beat is exactly the grid unit");
   assert.deepEqual(odd.track.liftSeconds, [4.267]);
+  assert.equal(odd.track.feedStartSeconds, 0, "odd-112 has no feed start: beat 0");
 });
 
 test("nothing is written when the file changed, is gone, or the tempo drifts", async () => {
@@ -148,5 +150,6 @@ test("the shipped library is valid: whole-frame tempos, credits, a checksum and 
     assert.ok(t.credit && t.license && t.page && (/^[0-9a-f]{64}$/.test(t.sha256 ?? "") || /^[0-9a-f]{40}$/.test(t.sha1 ?? "")), t.id);
     assert.ok(t.bundled ? existsSync(join(shipped.dir, t.bundled)) : (t.commons ?? "").startsWith("File:"), t.id);
     assert.ok(t.liftBeats.length && t.durationSeconds > 60, t.id);
+    assert.ok(Number.isInteger(t.feedStartBeat) && t.feedStartBeat >= 0 && t.feedStartBeat < Math.max(...t.liftBeats), `${t.id}: a feed start before its last lift`);
   }
 });

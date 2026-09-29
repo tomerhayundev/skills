@@ -31,18 +31,51 @@ Cutdowns come from one master: a shorter cut drops ideas and plays the ones it k
 cut's pace. A 6 s cut is the hook plus the brand. Unless the brief narrows them, every clip ships in
 all four aspects (wide, tall, square, classic) and every locale the product ships, RTL mirrored.
 
-## Story shape
+## Story shape: every shot has a job
 
-| Beat | Time | What happens |
+A promo sells, so it is built on a spine of jobs, and the jobs come before any visual idea:
+
+| Job | Time (30 s) | What it does for the viewer |
 | --- | --- | --- |
-| Hook | 0-2 s (holds to 3) | The problem or the promise in one line, landed within 1 s and held whole 2 s |
-| Reveal | 2-4 s | The product appears, made out of the hook's picture |
-| Highlights | 2 or 3 moments | One idea each: a cursor driving the real product, or for a physical product, a place or a service, the real thing and the hands that use it; the lift on the payoff |
-| Close | 2-4 s | The brand, the line, the call to action |
+| Hook | 0-2 s (holds to 3) | Stops the thumb: the strongest moving picture, in the middle of the action, and a line that names the viewer's desire or problem, landed within 1 s |
+| Promise | 2-6 s | Says what this brand gives them, the one message, in the brand's own words; the brand is seen or named here, not only at the end |
+| Proof | 2 or 3 beats | Each answers one doubt a viewer has (is it good, is it for me, can I do it, why this one) with the real product, place or people: a cursor driving the real product, or the real thing and the hands that use it; the lift on the strongest proof |
+| Offer | 1 or 2 beats | Exactly what can be bought, booked or tried, concrete (not a list of everything the brand does) |
+| Close | 2-4 s | The brand, one action, where to do it |
+
+Write this beat sheet first, one row per shot, with each shot's job (`job` in the visual brief, shown
+on the page). A shot whose job cannot be named is cut, however good it looks. A visual device (a line
+that travels, before and after, a split frame, a one-take) is chosen only after the beat sheet
+exists, only when it serves the jobs, and the film must still make sense with the device removed.
+Starting from the device and fitting the story to it is how a promo turns into a trend clip with a
+logo on the end: a hook, and nothing a viewer could act on.
+
+After one viewing, a stranger can say who this is, what they get, why this one, and what to do. If
+they cannot, the beat sheet is missing a job, whatever the motion looks like.
 
 A short cut needs a narrative (build, multiply, improve, brand), not a montage. A teaser withholds
 the product and gives the date. A launch film can be a one-take ([one-take-film](../../references/one-take-film.md))
 when the motif travels.
+
+## In the feed
+
+Reels, TikTok, Shorts and Stories: the first two seconds decide, and a promo there runs 15 to 30 s
+with the turn in its first half. The rules: [feed](../../references/feed.md). The hook opens the
+spine above; it never replaces it.
+
+## Professional finish
+
+What separates an ad from a feed clip, and costs little once planned:
+- **One look.** Every clip graded to the same color and contrast, stabilized, and cut to its best
+  one or two seconds.
+- **A clean frame.** Clutter that is not the story (a kitchen, cables, a bin) is cropped out, or the
+  shot is swapped for another take; the subject is framed, not found.
+- **Designed words.** Captions in the brand's typeface, one size system, one position, one accent:
+  they read as the brand's, not as a phone app's text.
+- **The brand present early.** Its color or mark within the first seconds, subtly; its name by the
+  promise; its logo and action at the close.
+- **Sound edited to the picture.** The track starts on its beat, its lift lands on the strongest
+  proof, and it ends on a button or a clean hit under the close, never a fade in the middle of a bar.
 
 ## Assets and voice
 
@@ -62,7 +95,7 @@ music-led, not caption-led: about -16 LUFS, the lift scored. A loop is silent.
 | music | bed with its lift on the payoff | same | |
 | durations | grid | grid | |
 | shortCut | fewer ideas at the long cut's pace | same | |
-| critique | the base 12 (story and copy first; the brand's look, transitions, graphics and the cover included) | same | |
+| critique | the base 13 (story and copy first; the brand's look, transitions, graphics, professional finish and the cover included) | same | |
 
 ## Build notes
 
@@ -103,3 +136,10 @@ seam scan. Critique at three points (the concept, the storyboard, then the film 
 | Four captions and a hook in 15 s | Three lines, the hook included (four with the close); each costs about 2.5 s of still picture |
 | The 15 s cut is the 30 s cut, faster | Drop ideas, keep the pace |
 | Music under the landing loop | Loops are silent |
+| A feed promo that opens on the slogan, a packshot or a quiet intro | Frame 0 is the strongest moving picture, with a hook line and the beat already playing |
+| A calm brand, so a calm opening | The Look sets the frame and the timbre, not the energy: open clean and hard |
+| A 51 s Reel because engagement peaks at 45-60 s | That is organic storytelling; a feed promo is 15-30 s with the turn in the first half |
+| A split screen for the whole film | Every picture at half size; use a split once, at the turn |
+| Starting from a visual device (a line, before and after) and fitting the story to it | The beat sheet of jobs first; a device only if it serves them, and the film works without it |
+| A strong hook with nothing a viewer could act on after it | Hook, promise, proof, offer, close: a stranger can say who, what, why this one, what to do |
+| Phone footage as found: mixed color, clutter in frame, app-style text | One grade, a clean frame, captions in the brand's type (Professional finish) |

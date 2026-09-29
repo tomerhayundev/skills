@@ -40,12 +40,12 @@ const brief = () => ({
       source: footage,
       crop: null,
       beats: [
-        { at: 0, dur: 3.5, src: 0, len: 3, picture: "A dim basement", words: "Which box has the lights?", in: "Opens on the problem" },
-        { at: 3.5, dur: 3, src: 4, len: 2, picture: "The code on the shelf", words: "", in: "MATCH CUT on the code" },
-        { at: 6.5, dur: 2, image: still, picture: "The end card", in: "CLOSE" },
+        { at: 0, dur: 3.5, src: 0, len: 3, picture: "A dim basement", words: "Which box has the lights?", in: "Opens on the problem", job: "hook" },
+        { at: 3.5, dur: 3, src: 4, len: 2, picture: "The code on the shelf", words: "", in: "MATCH CUT on the code", job: "proof" },
+        { at: 6.5, dur: 2, image: still, picture: "The end card", in: "CLOSE", job: "close" },
       ],
     },
-    { name: "15 s", source: footage, beats: [{ at: 0, dur: 2, src: 1, len: 2, picture: "The code", in: "Opens on the answer" }] },
+    { name: "15 s", source: footage, beats: [{ at: 0, dur: 2, src: 1, len: 2, picture: "The code", in: "Opens on the answer", job: "hook" }] },
   ],
 });
 
@@ -126,13 +126,60 @@ test("every brand row says what it is about; one collection's detail never carri
   assert.equal((html.match(/class="confirm"/g) ?? []).length, 2, "only the rows taken from one part are marked");
 });
 
+test("in a feed: the track starts on its beat, the first shot changes within 2 s, and a promo stays at 30 s", () => {
+  const b = brief();
+  b.feed = true;
+  b.cuts = [{ name: "51 s", source: footage, beats: [
+    { at: 0, dur: 3.5, src: 0, len: 3, picture: "the printer" },
+    { at: 3.5, dur: 28, src: 1, len: 3, picture: "everything else" },
+  ] }];
+  const problems = checkPlan(b).join("\n");
+  assert.match(problems, /feed: start the track where its beat already plays/);
+  assert.match(problems, /feed, 51 s: nothing changes for 3\.5 s/);
+  assert.match(problems, /feed, 51 s: 31\.5 s; a promo in a feed is 15 to 30 s/);
+  b.music.startSeconds = 0;
+  b.cuts[0].beats = [{ at: 0, dur: 1.5, src: 0, len: 1.5, picture: "the pour, mid-action" }, { at: 1.5, dur: 28.5, src: 1, len: 3, picture: "the rest" }];
+  assert.deepEqual(checkPlan(b).filter((p) => p.startsWith("feed")), []);
+  b.cuts[0].beats = [{ at: 0, dur: 2.5, src: 0, len: 2.5, picture: "the pour, then a push-in", changesAt: 1.5 }, { at: 2.5, dur: 27.5, src: 1, len: 3, picture: "the rest" }];
+  assert.deepEqual(checkPlan(b).filter((p) => p.startsWith("feed")), [], "a hook line can stay up across a change inside the shot");
+  delete b.feed;
+  b.cuts[0].beats[0].dur = 3.5;
+  assert.equal(checkPlan(b).filter((p) => p.startsWith("feed")).length, 0, "the feed checks apply only to a feed");
+});
+
+test("the music plays from where the film starts it, with alternatives to choose by ear", () => {
+  const b = brief();
+  b.music.startSeconds = 2;
+  b.music.alternatives = [{ id: "warm-120", title: "A warm guitar", why: "more lift for a Reel", file: tone, startSeconds: 0 }];
+  const html = buildHtml(b);
+  assert.equal((html.match(/<audio controls preload="metadata" src="data:audio\/mpeg;base64,/g) ?? []).length, 2);
+  assert.match(html, /Also possible, each from where the film would start it:/);
+  assert.match(html, /<div class="alt"><b>A warm guitar<\/b>/);
+});
+
 test("beats sit on the chosen track's beat grid, not a fixed 0.5 s", () => {
   const b = brief();
   b.music.bpm = 90;
-  b.cuts = [{ name: "30 s", source: footage, beats: [{ at: 0, dur: 2, src: 0, len: 2, picture: "a" }, { at: 2, dur: 1.5, src: 2, len: 1.5, picture: "b" }] }];
+  b.cuts = [{ name: "30 s", source: footage, beats: [{ at: 0, dur: 2, src: 0, len: 2, picture: "a", job: "hook" }, { at: 2, dur: 1.5, src: 2, len: 1.5, picture: "b", job: "close" }] }];
   const problems = checkPlan(b);
   assert.equal(problems.length, 1, problems.join("\n"));
   assert.match(problems[0], /beat 2: 1\.5 s is off the 0\.667 s beat grid/);
+});
+
+test("a file that is not on disk is named, and the page still builds with a stand-in", () => {
+  const b = brief();
+  b.cuts[0].beats[2].image = join(dir, "clips", "GONE.mp4");
+  assert.ok(checkPlan(b).some((p) => p.includes("GONE.mp4 is not on disk")));
+  const html = buildHtml(b);
+  assert.ok(html.includes("data:image/svg+xml;base64,"), "a stand-in frame");
+  assert.ok(Buffer.from(html.match(/data:image\/svg\+xml;base64,([^"]+)/)[1], "base64").toString().includes("missing: GONE.mp4"));
+});
+
+test("every shot says its job, and the page shows it", () => {
+  assert.ok(buildHtml(brief()).includes('2 · 3.5-6.5 s · <span class="job">proof</span>'), "the job is on the storyboard");
+  const b = brief();
+  delete b.cuts[0].beats[1].job;
+  assert.ok(checkPlan(b).some((p) => p.startsWith("30 s, beat 2: say what this shot does for the viewer (job)")));
 });
 
 test("the plan is checked: gaps, the 0.5 s grid, reading time", () => {
@@ -170,6 +217,8 @@ test("the command writes the page, and the rough cut only when asked, labelled i
   assert.equal(plain.status, 0, plain.stdout + plain.stderr);
   assert.ok(existsSync(join(outDir, "visual-brief.html")));
   assert.ok(!existsSync(join(outDir, "animatic-30s.mp4")));
+  assert.ok(existsSync(join(outDir, "music-1-calm-90.mp3")), "the music is also a file to send");
+  assert.match(plain.stdout, /music-1-calm-90.mp3 .*send it as a file too/);
   const rough = spawnSync(process.execPath, [script, json, `--out=${outDir}`, "--animatic"], { encoding: "utf8" });
   assert.match(rough.stdout, /animatic-30s\.mp4 .*internal: pacing and reading time; never sent to the user/);
 });

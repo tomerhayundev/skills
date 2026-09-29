@@ -26,8 +26,10 @@
  *             { "row": "spine", "quote": null, "inferredFrom": "when the brand says nothing", "scope": "brand", "meaning": "..." }],
  *   "idea": "the concept in one sentence",
  *   "asks": [{ "item": "workshops", "where": "the turn: guests' hands" }],
+ *   "feed": true,                      // Reels, TikTok, Shorts, Stories: the first-seconds checks apply
  *   "music": { "id": "library id", "title": "...", "artist": "...", "bpm": 90, "why": "fits the brand's look because ...",
- *              "file": "public/music/track.mp3", "liftSeconds": 16 },
+ *              "file": "public/music/track.mp3", "liftSeconds": 16, "startSeconds": 8.6,   // where the film starts the track
+ *              "alternatives": [{ "id": "...", "title": "...", "why": "...", "file": "...", "startSeconds": 0 }] },
  *   "plan": ["one line", "**bold** allowed"],
  *   "styleFrames": [{ "image": "out/style-turn.png", "caption": "..." }],
  *   "hook": { "recommended": "...", "why": "...", "alternatives": ["..."] },
@@ -45,7 +47,9 @@
  * it was inferred from; no idea; no asks list, or an asked item with no place in the
  * film; music without a reason; beats that leave a gap or overlap or sit off the
  * track's beat grid (60 / bpm s, 0.5 s when no bpm is given); a caption that cannot
- * be read in its beat (about 0.3 s a word, at least 1.5 s); a long dash in the words.
+ * be read in its beat (about 0.3 s a word, at least 1.5 s); a long dash in the words. With "feed":
+ * no music.startSeconds, nothing changing in the first 2 s (a cut, or a beat's changesAt), or a cut over
+ * 30 s without a longWhy.
  */
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -87,6 +91,17 @@ export function checkPlan(brief) {
   else {
     if (!has(brief.music.id) && !has(brief.music.title)) problems.push("music: name the track (music.id or music.title)");
     if (!has(brief.music.why)) problems.push("music: say why this track fits the brand's look (music.why)");
+    if (brief.feed && !(Number(brief.music.startSeconds) >= 0)) problems.push("feed: start the track where its beat already plays (music.startSeconds, from track.json feedStartSeconds), never at its quiet intro");
+  }
+  if (brief.feed) {
+    for (const cut of brief.cuts ?? []) {
+      const first = cut.beats?.[0];
+      // The first visible change: the cut, or one inside the shot (a push-in, an action completing), so a hook line can stay up across it.
+      const change = first ? Math.min(first.dur, Number(first.changesAt) > 0 ? Number(first.changesAt) : first.dur) : 0;
+      if (first && change > 2) problems.push(`feed, ${cut.name}: nothing changes for ${fmt(change)} s; in a feed something visibly changes within 2 s: cut sooner, or mark a change inside the shot (changesAt) (references/feed.md)`);
+      const total = (cut.beats ?? []).reduce((s, b) => s + b.dur, 0);
+      if (total > 30.5 && !has(cut.longWhy)) problems.push(`feed, ${cut.name}: ${fmt(total)} s; a promo in a feed is 15 to 30 s (say why in longWhy if it truly holds longer)`);
+    }
   }
   const beat = beatSeconds(brief);
   const beatText = String(Number(beat.toFixed(3)));
@@ -101,6 +116,9 @@ export function checkPlan(brief) {
       if (words && b.dur < need) problems.push(`${where}: ${words} words need about ${fmt(need)} s on screen, the beat has ${fmt(b.dur)} s`);
       if (/[\u2014\u2013]/.test(b.words ?? "")) problems.push(`${where}: a long dash in the words on screen reads as machine-written; use two lines or a colon`);
       if (!b.image && b.src === undefined) problems.push(`${where}: needs an image or a src time in the footage`);
+      const file = b.image ?? b.source ?? cut.source;
+      if (file && !existsSync(resolve(file))) problems.push(`${where}: ${file} is not on disk (the page shows a stand-in)`);
+      if (!has(b.job)) problems.push(`${where}: say what this shot does for the viewer (job): for a promo hook, promise, proof, offer or close; a shot with no job is cut`);
       t = b.at + b.dur;
     });
   }
@@ -112,8 +130,14 @@ function ff(args) {
   if (r.status !== 0) throw new Error(`ffmpeg: ${r.stderr.trim().split("\n").pop()}`);
 }
 
+/** A stand-in frame naming a file that is not on disk, so the page still builds and shows the gap. */
+const missingFrame = (path, w = 640, h = 1138) =>
+  `data:image/svg+xml;base64,${Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"><rect width="100%" height="100%" fill="#e9e6e1"/><text x="50%" y="50%" font-family="Arial" font-size="26" fill="#8a2c0d" text-anchor="middle">missing: ${esc(String(path).split(/[\\/]/).pop())}</text></svg>`).toString("base64")}`;
+
 /** A beat's frame as a small JPEG data URI. */
 function frameFor(cut, b, tmp, key) {
+  const src = b.image ?? b.source ?? cut.source;
+  if (!src || !existsSync(resolve(src))) return missingFrame(src ?? "no source");
   const out = join(tmp, `${key}.jpg`);
   const crop = b.crop !== undefined ? b.crop : cut.crop;
   const reframe = crop ? `crop=${crop.w}:${crop.h}:${crop.x}:${crop.y},` : "";
@@ -123,6 +147,7 @@ function frameFor(cut, b, tmp, key) {
 }
 
 const imageUri = (path) => {
+  if (!path || !existsSync(resolve(path))) return missingFrame(path ?? "no image", 1280, 720);
   const tmp = mkdtempSync(join(tmpdir(), "vb-"));
   const out = join(tmp, "s.jpg");
   ff(["-i", resolve(path), "-frames:v", "1", "-vf", "scale=1280:-2", "-q:v", "3", out]);
@@ -142,7 +167,7 @@ const LABELS = {
     inferred: "Not said on your site; inferred from",
     partOnly: "Please confirm: this is said only about",
     idea: "The idea", asks: "What you asked for, and where it is in the film", asked: "You asked for", where: "Where it is",
-    music: "The music", plan: "The plan", look: "The look (final quality, from your assets)",
+    music: "The music", alsoMusic: "Also possible, each from where the film would start it:", plan: "The plan", look: "The look (final quality, from your assets)",
     storyboard: "Storyboard", oneSentence: "In one sentence:", noWords: "no words",
     hook: "The opening line", recommended: "recommended", also: "Also possible:",
   },
@@ -156,19 +181,40 @@ const LABELS = {
     inferred: "לא כתוב אצלכם; הסקתי מ",
     partOnly: "לאישורכם: זה נאמר רק על",
     idea: "הרעיון", asks: "מה ביקשתם, ואיפה זה בסרט", asked: "ביקשתם", where: "איפה זה בסרט",
-    music: "המוזיקה", plan: "התוכנית", look: "הלוק (באיכות סופית, מהחומרים שלכם)",
+    music: "המוזיקה", alsoMusic: "אפשר גם, כל אחת מהמקום שבו הסרט יתחיל אותה:", plan: "התוכנית", look: "הלוק (באיכות סופית, מהחומרים שלכם)",
     storyboard: "סטוריבורד", oneSentence: "במשפט אחד:", noWords: "בלי מילים",
     hook: "שורת הפתיחה", recommended: "מומלץ", also: "אפשר גם:",
   },
 };
 
-/** An excerpt of the track around its lift, as an MP3 data URI, so the user hears the music in the brief. */
-function musicExcerpt(music, tmp) {
+/**
+ * 15 s of a track as an MP3 data URI, so the user hears the music in the brief: from where the film
+ * starts it (startSeconds, the feed start in a feed), else from 8 s before its lift.
+ */
+function musicExcerpt(music, tmp, key = "music") {
   if (!music?.file || !existsSync(resolve(music.file))) return null;
-  const out = join(tmp, "music.mp3");
-  const start = Math.max(0, (Number(music.liftSeconds) || 8) - 8);
+  const out = join(tmp, `${key}.mp3`);
+  const start = Number(music.startSeconds) >= 0 ? Number(music.startSeconds) : Math.max(0, (Number(music.liftSeconds) || 8) - 8);
   ff(["-ss", String(start), "-t", "15", "-i", resolve(music.file), "-vn", "-af", "afade=t=in:d=0.3,afade=t=out:st=13.5:d=1.5", "-ac", "2", "-b:a", "96k", out]);
   return `data:audio/mpeg;base64,${readFileSync(out).toString("base64")}`;
+}
+
+/** Each track the brief offers, as its own 15 s MP3 in outDir (music-1-<id>.mp3, ...), for sending as files. */
+export function writeMusicFiles(brief, outDir) {
+  const m = brief.music && typeof brief.music === "object" ? brief.music : null;
+  if (!m) return [];
+  const tmp = mkdtempSync(join(tmpdir(), "vb-"));
+  try {
+    return [m, ...(m.alternatives ?? [])].flatMap((t, i) => {
+      if (!t?.file || !existsSync(resolve(t.file))) return [];
+      musicExcerpt(t, tmp, `m${i}`);
+      const out = join(outDir, `music-${i + 1}-${String(t.id ?? "track").replace(/[^\w-]+/g, "")}.mp3`);
+      writeFileSync(out, readFileSync(join(tmp, `m${i}.mp3`)));
+      return [out];
+    });
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
 }
 
 export function buildHtml(brief) {
@@ -187,10 +233,14 @@ export function buildHtml(brief) {
     const idea = has(brief.idea) ? `<h2>${esc(L.idea)}</h2><div class="box idea">${rich(brief.idea)}</div>` : "";
     const asks = brief.asks?.length ? `<h2>${esc(L.asks)}</h2><table class="kv"><thead><tr><th>${esc(L.asked)}</th><th>${esc(L.where)}</th></tr></thead><tbody>${brief.asks.map((a) => `<tr><th>${esc(a.item)}</th><td>${rich(a.where ?? "")}</td></tr>`).join("")}</tbody></table>` : "";
     const m = brief.music && typeof brief.music === "object" ? brief.music : null;
-    const clip = m ? musicExcerpt(m, tmp) : null;
-    const music = m ? `<h2>${esc(L.music)}</h2><div class="box"><b>${esc(m.title ?? m.id ?? "")}</b>${m.artist ? ` <span class="mute">· ${esc(m.artist)}</span>` : ""}${m.bpm ? ` <span class="mute">· ${esc(m.bpm)} BPM</span>` : ""}${m.why ? `<p>${rich(m.why)}</p>` : ""}${clip ? `<audio controls preload="metadata" src="${clip}"></audio>` : ""}</div>` : "";
+    const track = (t, key) => {
+      const clip = musicExcerpt(t, tmp, key);
+      return `<b>${esc(t.title ?? t.id ?? "")}</b>${t.artist ? ` <span class="mute">· ${esc(t.artist)}</span>` : ""}${t.bpm ? ` <span class="mute">· ${esc(t.bpm)} BPM</span>` : ""}${t.why ? `<p>${rich(t.why)}</p>` : ""}${clip ? `<audio controls preload="metadata" src="${clip}"></audio>` : ""}`;
+    };
+    const alts = (m?.alternatives ?? []).map((t, i) => `<div class="alt">${track(t, `alt${i}`)}</div>`).join("");
+    const music = m ? `<h2>${esc(L.music)}</h2><div class="box">${track(m, "music")}${alts ? `<p class="mute">${esc(L.alsoMusic)}</p>${alts}` : ""}</div>` : "";
     const storyboards = (brief.cuts ?? []).map((cut, c) => {
-      const cells = cut.beats.map((b, i) => `<figure><div class="tag">${esc(b.in ?? "")}</div><img src="${frameFor(cut, b, tmp, `c${c}b${i}`)}" alt="${esc(b.picture)}"><figcaption><b>${i + 1} · ${fmt(b.at)}-${fmt(b.at + b.dur)} s</b><span>${esc(b.picture)}</span>${b.words ? `<q>${esc(b.words)}</q>` : `<i>${esc(L.noWords)}</i>`}</figcaption></figure>`).join("");
+      const cells = cut.beats.map((b, i) => `<figure><div class="tag">${esc(b.in ?? "")}</div><img src="${frameFor(cut, b, tmp, `c${c}b${i}`)}" alt="${esc(b.picture)}"><figcaption><b>${i + 1} · ${fmt(b.at)}-${fmt(b.at + b.dur)} s${has(b.job) ? ` · <span class="job">${esc(b.job)}</span>` : ""}</b><span>${esc(b.picture)}</span>${b.words ? `<q>${esc(b.words)}</q>` : `<i>${esc(L.noWords)}</i>`}</figcaption></figure>`).join("");
       return `<h2>${esc(L.storyboard)}, ${esc(cut.name)}</h2>${cut.message ? `<p class="msg"><span>${esc(L.oneSentence)}</span> ${esc(cut.message)}</p>` : ""}<div class="grid">${cells}</div>`;
     }).join("");
     const frames = (brief.styleFrames ?? []).map((f) => `<figure><img src="${imageUri(f.image)}" alt="${esc(f.caption)}"><figcaption>${rich(f.caption)}</figcaption></figure>`).join("");
@@ -203,7 +253,7 @@ main{max-width:1080px;margin:0 auto;padding:28px 16px 48px}h1{font-size:26px;lin
 h2{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:30px 0 10px}ul{margin:0;padding-inline-start:20px}li{margin:4px 0}
 .kv{width:100%;border-collapse:collapse;font-size:15px}.kv th,.kv td{text-align:start;vertical-align:top;padding:9px 10px;border-bottom:1px solid var(--line)}.kv thead th{font-size:13px;color:var(--mute);font-weight:600}
 .kv tbody th{width:22%;font-weight:700}.kv q{display:block;font-weight:600;margin:0}.kv small{display:block;color:var(--mute);font-size:12px;margin-top:3px}.kv small.confirm{color:#b45309;font-weight:700;font-size:13px}.note{color:var(--mute);font-size:14px;margin:8px 0 0}
-.idea{font-size:18px;font-weight:600}audio{display:block;width:100%;margin-top:10px}.box p{margin:6px 0 0}
+.idea{font-size:18px;font-weight:600}audio{display:block;width:100%;margin-top:10px}.alt{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}.job{color:var(--mute);font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:.04em}.box p{margin:6px 0 0}
 @media (max-width:640px){.kv,.kv tbody,.kv tr,.kv th,.kv td{display:block;width:auto}.kv thead{display:none}.kv tbody th{width:auto;padding-bottom:0;border:0}}
 .frames{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.frames img{width:100%;border-radius:10px;display:block}
 .frames figcaption{font-size:14px;color:var(--mute);margin-top:6px}figure{margin:0}
@@ -313,6 +363,7 @@ function main() {
     spawnSync(chrome, ["--headless=new", "--disable-gpu", "--hide-scrollbars", "--virtual-time-budget=3000", `--screenshot=${process.platform === "win32" ? png.replace(/\//g, "\\") : png}`, "--window-size=1100,2400", pathToFileURL(html).href]);
     if (existsSync(png)) console.log(`wrote  ${png}   (a picture of the same page, for chats that cannot open HTML)`);
   }
+  for (const w of writeMusicFiles(brief, outDir)) console.log(`wrote  ${w}   (send it as a file too: an audio player inside a page does not play in every viewer)`);
   if (args.includes("--animatic")) {
     for (const cut of brief.cuts ?? []) {
       const out = join(outDir, `animatic-${cut.name.replace(/[^\w]+/g, "")}.mp4`);

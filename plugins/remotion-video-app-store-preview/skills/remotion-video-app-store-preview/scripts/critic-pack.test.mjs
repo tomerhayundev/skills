@@ -36,11 +36,12 @@ test("frames come from a cuts.json (array or { cuts }) or a comma list, and must
 test("the pack holds both sides of every cut, a strip per moment, the audio timeline and an index", () => {
   const out = join(dir, "pack");
   const written = makePack(film, { cuts: [120], moments: [120], outDir: out });
-  assert.deepEqual(written, ["contact.png", "cuts.png", "strip-120.png", "audio.txt", "index.md"]);
+  assert.deepEqual(written, ["hook.png", "contact.png", "cuts.png", "strip-120.png", "audio.txt", "index.md"]);
   for (const f of written) assert.ok(existsSync(join(out, f)), f);
   const size = (f) => JSON.parse(spawnSync("ffprobe", ["-v", "error", "-show_entries", "stream=width,height", "-of", "json", join(out, f)], { encoding: "utf8" }).stdout).streams[0];
   assert.equal(size("cuts.png").width, 2 * 180 + 4, "one pair, tall video at 180 px, 4 px apart");
   assert.equal(size("strip-120.png").width, 12 * 180 + 11 * 4);
+  assert.equal(size("hook.png").width, 12 * 180 + 11 * 4, "12 frames across the first two seconds");
   const index = readFileSync(join(out, "index.md"), "utf8");
   assert.match(index, /1\. frame 120, 4\.00 s/);
   assert.match(index, /strip-120\.png`: 12 consecutive frames around frame 120 \(4\.00 s\)/);

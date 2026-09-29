@@ -4,6 +4,7 @@
  * cannot show a cut, a move or the music, so critics scored motion, transitions
  * and sound by guessing. This writes, into one folder:
  *
+ *   hook.png        the first two seconds, 12 frames: what a thumb in a feed sees before it decides
  *   contact.png     a frame a second, the whole film
  *   cuts.png        every declared cut as a pair: its last frame before, its first after
  *   strip-<f>.png   12 consecutive frames around each moment named (the turn, the close, a fast move)
@@ -61,6 +62,9 @@ export function makePack(file, { cuts = [], moments = [], outDir }) {
 
   const perSecond = [];
   for (let n = 0; n < v.frames; n += Math.round(v.fps)) perSecond.push(n);
+  const hookFrames = Math.min(v.frames, Math.round(2 * v.fps));
+  sheet(file, Array.from({ length: 12 }, (_, i) => Math.min(hookFrames - 1, Math.round((i * (hookFrames - 1)) / 11))), 12, w, join(outDir, "hook.png"));
+  written.push("hook.png");
   sheet(file, perSecond, 10, w, join(outDir, "contact.png"));
   written.push("contact.png");
 
@@ -87,6 +91,7 @@ export function makePack(file, { cuts = [], moments = [], outDir }) {
     "",
     `${v.frames} frames at ${v.fps} fps (${t(v.frames)} s), ${v.width}x${v.height}.`,
     "",
+    "- `hook.png`: the first two seconds, 12 frames: judge it first, as a stranger scrolling a feed would (does something move, does it open a question?).",
     "- `contact.png`: a frame a second, read left to right, 10 a row.",
     inside.length ? "- `cuts.png`: every declared cut as a pair, the last frame before it and the first after it, 4 pairs a row." : "- No declared cuts were given.",
     ...moments.map((m) => `- \`strip-${m}.png\`: 12 consecutive frames around frame ${m} (${t(m)} s).`),

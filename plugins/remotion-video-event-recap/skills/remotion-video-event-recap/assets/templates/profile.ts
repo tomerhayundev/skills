@@ -45,6 +45,7 @@ const BASE_CRITIQUE = [
   "the brand's look",
   "transitions: hierarchy and dose",
   "graphics belong to the picture",
+  "professional finish",
   "cover",
   "sound",
 ];

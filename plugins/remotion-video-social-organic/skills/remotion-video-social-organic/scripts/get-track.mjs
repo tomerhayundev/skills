@@ -47,6 +47,10 @@ export function listing(lib, { mood, fps = 30 } = {}) {
       const tempo = t.bpm ? `${t.bpm} BPM (${fpb ? `${fpb} frames a beat` : "off the frame grid"}${stretched})` : "tempo not fitted yet";
       lines.push(`  ${t.id.padEnd(24)} ${tempo}, ${Math.round(t.durationSeconds)} s  ${t.title}, ${t.artist}${t.bundled ? "  [bundled]" : ""}`);
       if (t.liftHint) lines.push(`  ${"".padEnd(24)} lift: ${t.liftHint}`);
+      if (t.bpm && t.feedStartBeat !== undefined) {
+        const at = (t.firstBeatSeconds + (t.feedStartBeat * 60) / t.bpm).toFixed(1);
+        lines.push(`  ${"".padEnd(24)} ${t.noDrums ? `no drum beat (fullest from ${at} s): better for a slow film than a feed` : `feed start: ${at} s (the beat is already playing there)`}`);
+      }
       if (t.fits) lines.push(`  ${"".padEnd(24)} fits: ${t.fits}`);
     }
   }
@@ -133,6 +137,9 @@ export async function getTrack(lib, id, { dir, fps = 30 }) {
     firstBeatSeconds: t.firstBeatSeconds,
     liftBeats: t.liftBeats,
     liftSeconds: t.liftBeats.map((b) => Number((t.firstBeatSeconds + b * secondsPerBeat).toFixed(3))),
+    /** A film in a feed starts the track here or later: the beat is already playing. */
+    feedStartBeat: t.feedStartBeat ?? 0,
+    feedStartSeconds: Number((t.firstBeatSeconds + (t.feedStartBeat ?? 0) * secondsPerBeat).toFixed(3)),
     durationSeconds: t.durationSeconds,
     gainDb: t.gainDb ?? 0,
     credit: t.credit,

@@ -168,8 +168,13 @@ it. The winner is rewritten once when any score is under 8. This is where "banal
 ### 2. The storyboard, before the build (required)
 
 A fresh critic gets the visual brief page (its PNG), the brand read and the one-sentence message,
-and, when the rhythm matters, the internal rough cut (`visual-brief.mjs --animatic`). It judges
-structure only: what a first-time viewer understands at each beat; whether every beat carries the
+and, when the rhythm matters, the internal rough cut (`visual-brief.mjs --animatic`). For a film in
+a feed it judges the first two seconds alone before anything else: the first beat's picture, its line
+and the track from its start point. Does something move on frame 0, is the beat already playing, does
+the line open a question? A slogan, a logo, a still product, a slow fade or a quiet intro fails, and
+nothing later makes up for it. Then it judges structure: each shot's job (for a promo: hook, promise,
+proof, offer, close) and whether a stranger would know after one viewing who this is, what they get,
+why this one and what to do; what a first-time viewer understands at each beat; whether every beat carries the
 message forward (a beat that only shows a logo or a pretty frame is a gap); tension, one turn, the
 payoff; whether every asked item lands inside the story; reading time; whether the chosen track fits
 the brand read's look. What it finds is fixed on the page before the user sees it. The rough cut is
@@ -192,6 +197,8 @@ the fix is another shot, a still, the brand's layer or the end card
   fastest move), the loudness timeline (where the lift lands), and an index with every cut's time. A
   frame a second alone cannot show motion, a cut or the music, so the scores for them were guesses.
   Add the phone sheet (below).
+- For a film in a feed, it judges `hook.png` and the first two seconds of `audio.txt` before anything
+  else, as a stranger with a thumb on the screen: would they stop? The hook score is capped by this.
 - Before scoring, it narrates what a first-time viewer understands every 2 s, and what they would
   not. Anything the message needs that a first-time viewer would not understand is a problem.
 - From round two, it also gets the last round's scores, its three problems and what was changed, and
@@ -220,7 +227,9 @@ Then look at it as a harsh motion director, not as its proud author:
    the brand read's Look row: a brand that calls itself minimal and clean is not filmed busy);
    transitions: hierarchy and dose (the turn feels bigger than the other
    boundaries, which are mostly cuts on the beat); graphics belong to the picture (each one on a
-   surface, in an interface or in the brand's layer); the cover (the product and the promise, settled);
+   surface, in an interface or in the brand's layer); professional finish (one look across every clip, a
+   clean frame with no clutter that is not the story, captions in the brand's type as one system, the
+   brand present from the first seconds: would the brand's marketing lead post it as their ad?); the cover (the product and the promise, settled);
    sound (the lift on the payoff where there is one, the level, and any effects sitting on the
    motion; a caption-led tutorial's or onboarding video's bed is scored on staying out of the way (every other bed on its lift); a silent loop skips this).
 3. Write the three worst problems with timestamps, each tagged polish or structure. Hunt for: text overlapping during a

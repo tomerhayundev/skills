@@ -1,5 +1,5 @@
 {
-  "about": "Vetted music beds by mood. One ships in this folder; the others download on demand from Wikimedia Commons, checked by SHA-1. Every track: CC BY 4.0 by Sascha Ende, who never registers his music with YouTube Content ID. bpm, firstBeatSeconds and liftBeats come from fit-beat-grid.mjs over the whole file. A track with sourceBpm is time-stretched (pitch kept) from sourceBpm to bpm, the nearest whole-frame tempo at 30 fps, a change of under 2.5%; its firstBeatSeconds and durationSeconds are for the stretched file. gainDb brings the whole track near -16 LUFS; audio-check.mjs measures the film.",
+  "about": "Vetted music beds by mood. One ships in this folder; the others download on demand from Wikimedia Commons, checked by SHA-1. Every track: CC BY 4.0 by Sascha Ende, who never registers his music with YouTube Content ID. bpm, firstBeatSeconds and liftBeats come from fit-beat-grid.mjs over the whole file. A track with sourceBpm is time-stretched (pitch kept) from sourceBpm to bpm, the nearest whole-frame tempo at 30 fps, a change of under 2.5%; its firstBeatSeconds and durationSeconds are for the stretched file. gainDb brings the whole track near -16 LUFS; audio-check.mjs measures the film. feedStartBeat is where the low band (the kick and bass) first reaches half its peak, measured per 8 beats: a film in a feed starts the track there, never at its quiet intro. noDrums marks a track with no drum beat at all: better for a slow film than a feed.",
   "tracks": [
     {
       "id": "kinetic-corporate-120",
@@ -14,6 +14,7 @@
       "sha256": "aa56ab1cdcbef6b05566c6a7c114323078580ccf6a740a9e6c6b6c4b40b4389f",
       "bpm": 120,
       "firstBeatSeconds": 0,
+      "feedStartBeat": 0,
       "liftBeats": [
         32,
         96,
@@ -37,6 +38,7 @@
       "sha1": "35381b9b4dc356045a6b19148800ec46bb180da2",
       "bpm": 100,
       "firstBeatSeconds": 0,
+      "feedStartBeat": 32,
       "liftBeats": [
         32,
         96,
@@ -48,7 +50,8 @@
       "durationSeconds": 186.1,
       "gainDb": -3.3,
       "liftHint": "a small rise at 0:21; the strings swell at 1:16",
-      "credit": "Music: \"Childhood\" by Sascha Ende (ende.app), CC BY 4.0"
+      "credit": "Music: \"Childhood\" by Sascha Ende (ende.app), CC BY 4.0",
+      "noDrums": true
     },
     {
       "id": "warm-feelgood-guitar",
@@ -63,6 +66,7 @@
       "sha1": "dc51dedd2f6eb7d34f33d8f78d73b7f65c66c208",
       "bpm": 120,
       "firstBeatSeconds": 0.4,
+      "feedStartBeat": 0,
       "liftBeats": [
         112,
         128,
@@ -87,6 +91,7 @@
       "sourceBpm": 109.991,
       "bpm": 112.5,
       "firstBeatSeconds": 0.0377,
+      "feedStartBeat": 32,
       "liftBeats": [
         16,
         32,
@@ -112,6 +117,7 @@
       "sourceBpm": 110,
       "bpm": 112.5,
       "firstBeatSeconds": 0.0162,
+      "feedStartBeat": 64,
       "liftBeats": [
         32,
         64,
@@ -123,7 +129,8 @@
       "durationSeconds": 219.05,
       "gainDb": -4.6,
       "liftHint": "strings step up about 0:35; brass at 1:44",
-      "credit": "Music: \"The Gigantic Epic Day After Tomorrow\" by Sascha Ende (ende.app), CC BY 4.0"
+      "credit": "Music: \"The Gigantic Epic Day After Tomorrow\" by Sascha Ende (ende.app), CC BY 4.0",
+      "noDrums": true
     },
     {
       "id": "kinetic-synth-arp",
@@ -139,6 +146,7 @@
       "sourceBpm": 122.001,
       "bpm": 120,
       "firstBeatSeconds": 0.45,
+      "feedStartBeat": 0,
       "liftBeats": [
         16,
         32,
@@ -169,6 +177,7 @@
       "sourceBpm": 122.008,
       "bpm": 120,
       "firstBeatSeconds": 0.49,
+      "feedStartBeat": 0,
       "liftBeats": [
         64,
         80,
@@ -194,6 +203,7 @@
       "sourceBpm": 150.496,
       "bpm": 150,
       "firstBeatSeconds": 0.35,
+      "feedStartBeat": 0,
       "liftBeats": [
         16,
         32,
@@ -224,6 +234,7 @@
       "sourceBpm": 94.993,
       "bpm": 94.737,
       "firstBeatSeconds": 0.0457,
+      "feedStartBeat": 8,
       "liftBeats": [
         32,
         64,
@@ -250,6 +261,7 @@
       "sha1": "b58f6d0015994c3856c773087128caac73b02dca",
       "bpm": 120,
       "firstBeatSeconds": 0,
+      "feedStartBeat": 96,
       "liftBeats": [
         96,
         160,

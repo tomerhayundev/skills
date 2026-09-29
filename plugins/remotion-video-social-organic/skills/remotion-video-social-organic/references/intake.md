@@ -64,8 +64,9 @@ source, the motif, the reference, the hook.
   competitor test (a question in the plan: would it still work for the closest rival of the same kind,
   doing the same thing? the rival is never shown), with where the viewer first meets the real thing
   and the one or two turns it carries (SKILL.md, Find the motif first).
-- The music: a track from the library that fits the brand read's look (`get-track.mjs --list`), with
-  the reason in one line ([music-bed](music-bed.md)). Fetch it (`get-track.mjs <id>`) before the
+- The music: a track from the library whose timbre fits the brand read's look (`get-track.mjs --list`),
+  with the reason in one line, and two alternatives of a different energy; the brief plays all three
+  from where the film would start them, and the user chooses by ear ([music-bed](music-bed.md)). Fetch it (`get-track.mjs <id>`) before the
   script is timed: every beat lasts a whole number of the track's beats (0.533 s at 112.5 BPM, not
   0.5 s), and the page refuses beats off that grid.
 - The reference: the product's own look, unless the user gave one.

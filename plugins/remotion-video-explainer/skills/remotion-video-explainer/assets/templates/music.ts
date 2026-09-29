@@ -24,6 +24,8 @@ export const MUSIC = {
   secondsPerBeat: 0.5,
   /** Beats where a quiet section of the track gives way to a loud one. */
   liftBeats: [32, 96, 192, 256],
+  /** Where the beat is already playing: a film in a feed never starts the track before it (track.json feedStartBeat). */
+  feedStartBeat: 0,
   /** Gain on the raw track. -0.3 dB lands this track near -16 LUFS. */
   gainDb: -0.3,
 } as const;
@@ -47,9 +49,11 @@ export interface MusicCue {
 /**
  * Picks where in the track a clip starts so a lift lands exactly on
  * `liftFrame`. Uses the earliest lift that works: a late lift frame needs a
- * late lift, or the track would have to start before its own beginning.
+ * late lift, or the track would have to start before its own beginning. A film
+ * in a feed passes `minStartBeat` (MUSIC.feedStartBeat) so frame 0 already has
+ * the beat under it, never the quiet intro.
  */
-export function musicCue(liftFrame: number, durationInFrames: number): MusicCue {
+export function musicCue(liftFrame: number, durationInFrames: number, minStartBeat = 0): MusicCue {
   if (liftFrame % GRID !== 0) {
     throw new Error(`music lift frame ${liftFrame} is off the ${GRID}-frame beat grid, so the lift would land between beats`);
   }
@@ -58,7 +62,7 @@ export function musicCue(liftFrame: number, durationInFrames: number): MusicCue 
 
   for (const liftBeat of MUSIC.liftBeats) {
     const startBeat = liftBeat - liftBeatInClip;
-    if (startBeat < 0) continue;
+    if (startBeat < Math.max(0, minStartBeat)) continue;
     const trimBefore = Math.round((MUSIC.firstBeatSeconds + startBeat * MUSIC.secondsPerBeat) * FPS);
     if (trimBefore + durationInFrames <= trackFrames) return { startBeat, trimBefore };
   }

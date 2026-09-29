@@ -4,7 +4,7 @@ description: Use when making an explainer, concept video, "how it works" or anim
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.5.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 9efaccaa9fd5 -->
+<!-- Generated from remotion-video-master 0.6.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 7d882361b5ff -->
 
 # Remotion explainer video
 
@@ -59,7 +59,9 @@ and checks apply on top of everything below. Numbers come from `assets/specs.jso
 
 The narrative, the script and the words decide whether a video works; the motion only delivers them.
 The user's ask names things, not a story: every item they listed becomes a step or a proof in one
-story (the brand read's spine), never a chapter of its own.
+story (the brand read's spine), never a chapter of its own. Every shot has a job in that story (in a
+promo: hook, promise, proof, offer, close), written before any visual device is chosen; a shot
+whose job cannot be named is cut.
 Before any beat map: the one message in one sentence, the format's arc (tension first, one turn,
 show then say), and every word written in a script table (beat, time, picture, words, motif), read
 aloud, timed (about 2.5 spoken words a second; about 0.3 s a word on screen, at least 1.5 s a line)
@@ -122,18 +124,21 @@ uses it, the Turns row says why.
    - **the idea** in one sentence, and **what you asked for and where it is in the film**, one line
      per item the user named;
    - the plan in a few lines ([brief template](references/brief-template.md));
-   - **the music**: the track, why it fits the brand's look, and an excerpt around its lift to play;
+   - **the music**: the recommended track and two alternatives of a different energy, each with why
+     it fits and 15 s to play from where the film would start it; the user chooses by ear;
    - two **style frames** at final quality from the real assets: the key moment (the turn) and the
      cover. Render them with the engine (`npx remotion still` of a first scene holding only what those
      frames need); with no Remotion project yet, render them as HTML at the final size in a headless
      browser, the engine Remotion uses, and rebuild them as scenes after the go;
    - a **storyboard of every cut**: each beat's frame from the real assets (footage, captures, or a
-     quick still), its time, its words and how the shot is entered;
+     quick still), its time, its job, its words and how the shot is entered;
    - the hook, with two runners-up.
 
    `node ${CLAUDE_SKILL_DIR}/scripts/visual-brief.mjs docs/visual-brief.json` checks the plan (the
-   brand read, the idea, every asked item placed, the music chosen with a reason, gaps, the beat grid,
-   reading time) and writes one page. Before showing it, the **storyboard critique** (required,
+   brand read, the idea, every asked item placed, a job for every shot, the music chosen with a
+   reason, gaps, the beat grid, reading time; the first seconds in a feed) and writes one page, plus
+   each music excerpt as its own MP3: send those as files too, since a player inside a page does not
+   play in every viewer. Before showing it, the **storyboard critique** (required,
    section 10): a fresh critic reads the page for structure, and what it finds is fixed in the
    storyboard, where it costs minutes. Then show the page and wait for the go (guided). After changes,
    rebuild the page and show it again with what changed named; a one-word fix is confirmed in one line
@@ -176,7 +181,11 @@ Each module's "Engine profile" sets continuity, popsGate, transitions, hook, cap
 durations, shortCut and critique (`assets/templates/profile.ts`, enforced by `expand()`). The promo
 profile is the base: no unmotivated cut (declared beat cuts pass the pops gate, any other pop
 fails), at most one motif turn per 15 s plus the close, a hook line held 2 s, 3 statement lines
-per 15 s counting the hook, each rising into a still picture, a bed with its lift on the payoff. A module changes a key only with a
+per 15 s counting the hook, each rising into a still picture, a bed with its lift on the payoff. In a
+vertical feed (Reels, TikTok, Shorts, Stories) the first two seconds decide: frame 0 is the strongest
+moving picture, the track is already on its beat, the hook line opens a question and is never the
+slogan, the picture fills the frame, and a promo runs 15 to 30 s with the turn in its first half
+([feed](references/feed.md)). A module changes a key only with a
 written reason (`withOverrides` throws otherwise), so no format quietly lowers the bar. Every
 profile's critique starts with **story and copy**.
 
@@ -225,9 +234,9 @@ node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cu
 - Critique at three points, each by a fresh critic, logged in `docs/review_log.md`
   ([verification](references/verification.md#critique-at-three-points)):
   1. **The concept**, before the brief ([brand-read](references/brand-read.md)): one idea, only this
-     brand, the brand's look, surprise, every asked item inside.
-  2. **The storyboard**, before the build: every beat carries the message, one turn, reading time.
-     Structure is fixed here.
+     brand, the brand's look, surprise, the first two seconds (in a feed), every asked item inside.
+  2. **The storyboard**, before the build: the first two seconds judged alone, picture and sound,
+     then every beat carries the message, one turn, reading time. Structure is fixed here.
   3. **The film**, at most three rounds: the critic first says what a first-time viewer understands
      every 2 s, then scores each criterion of the module's profile from 1 to 10, seeing both sides of
      every cut and the loudness curve, not only a frame a second. From round two it also gets the
@@ -241,7 +250,9 @@ node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cu
 - Music bed: chosen per film from the brand read's look, never the same track by default. The
   library (`node ${CLAUDE_SKILL_DIR}/scripts/get-track.mjs --list`) holds vetted CC BY tracks by mood
   and tempo, each already fitted; `get-track.mjs <id>` puts the chosen one and its `track.json` in the
-  project. The brief names the track and why it fits, and the page plays its lift. A track from
+  project. The Look row sets the track's timbre, not the film's energy. The brief offers the
+  recommended track and two alternatives, each played from where the film starts it; a film in a feed
+  starts the track at its `feedStartSeconds`, where the beat already plays. A track from
   elsewhere: its beat a whole number of frames, fitted with `scripts/fit-beat-grid.mjs`. The lift
   lands on the payoff (`assets/templates/music.ts`). Method: [music-bed](references/music-bed.md).
   Remotion 4.0.3xx renamed `Audio` to `Html5Audio` and `startFrom` to `trimBefore`; the old names break.
@@ -285,4 +296,5 @@ node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cu
 | "The scores reach 8 once you record a clip of..." | The user never offered it: solve it with what exists, and ask for material only in the question call |
 | A clean, minimal brand filmed busy | The brand's own adjectives are the film's style: space, pace, how many words |
 | The same track on every film | Pick from the library by the brand's look, and let the user hear it in the brief |
+| A Reel that opens on the slogan, a still product or a quiet intro | Frame 0: the strongest moving picture, the beat already playing, a line that opens a question |
 | A sixth round of polish when the scores stall | The problem is structure: back to the storyboard, or hand the user the one choice |

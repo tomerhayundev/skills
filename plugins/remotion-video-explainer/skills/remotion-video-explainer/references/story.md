@@ -72,7 +72,13 @@ One row per beat, written before the beat map, which is built from it:
   is hard");
 - about the viewer ("you", their problem), not the company;
 - one idea, 7 words or fewer on screen, landed within a second;
-- tension or curiosity, never a riddle: the viewer knows what it is about.
+- tension or curiosity, never a riddle: the viewer knows what it is about;
+- never the brand's tagline or slogan: that is a close, and it asks nothing of a stranger.
+
+A hook is a picture, a sound and a line together, and the line is the smallest part. In a feed
+(Reels, TikTok, Shorts, Stories) the picture is the strongest moving shot of the film, from frame 0,
+and the track is already on its beat ([feed](feed.md)).
+Write the five hooks as picture + line, and judge them with the sound on and the text off first.
 
 **Captions and lines.**
 - The product's own words and claims (its site, its UI labels). Tutorials use the exact labels.
