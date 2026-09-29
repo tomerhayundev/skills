@@ -17,8 +17,9 @@ is the skill's job, never handed back to the user.
 Read the ask, the product's README or landing copy, recent commits, the locales it ships (i18n
 files), the footage and images in the project, and any Remotion project already in the repo. Read
 what the brand says about itself, word for word: the site's hero line, its about page, collection
-and product copy, the tag under its logo, its social bio when there is access. These feed the brand
-read ([brand-read](brand-read.md)), which comes before the motif and the script. Every
+and product copy, the tag under its logo, its social bio when there is access, and note what each
+line is about: the whole brand, or one collection, product or season. These feed the brand read
+([brand-read](brand-read.md)), which comes before the motif and the script. Every
 answer the ask or the product already gives ("a 15 s Reels ad", clips of the product in use) is
 taken, not asked. A re-cut, a new locale or a new aspect of a film that is already rendered skips
 the intake (SKILL.md §0); raw clips are assets, not a film, and go through it.
@@ -46,6 +47,10 @@ words." What may be in it, and only when nothing points to an answer:
   likeliest first.
 - **What we show**, only when the project has no product code, footage or captures: capture the live
   site / your screen recording / design the UI once (a product that doesn't exist yet).
+- **More material**, only when something the ask names has no footage, photo or capture at all (a
+  delivery service with no footage of a delivery): **build it from what there is** (recommended) / **I have it, or
+  can make it** (they say what). This is the one moment material is asked for; see "Build from what
+  exists" below.
 - **The voice**, only when the format usually carries one and nothing says which: first check what is
   possible ([media](media.md#voice-decide-what-is-possible-before-offering-it)), then offer only what
   works: **captions only** (recommended when nothing else is available or the platforms autoplay
@@ -90,6 +95,22 @@ Hands-off, running as a subagent, or "just make it" / "skip the questions": no q
 `docs/brief.md` with an **Assumptions** section listing each choice made for the user, show the
 visual brief, and continue without waiting. With nobody to answer, note it in `docs/review_log.md`
 and hand the visual brief back with the result. Never skip the visual brief itself.
+
+## Build from what exists
+
+The film is made from the material that exists: the project's footage and photos, the site, the
+product's own captures, and what the user said in the question call they have or will make. Nothing
+else is planned on. A missing picture is solved inside the film, never handed to the user:
+
+- another shot that shows the same thing, or the moment before or after it;
+- a still that exists (the site's photo of it, a packshot), held and moved;
+- the brand's layer: a typographic beat on the brand's colors, a line, the logo's mark;
+- the item named on the end card instead of shown, when nothing can show it.
+
+So the brief lists no homework: no "record a clip of", no "send a photo of", no plan, score or fix
+that waits on material nobody offered. A critic's note that needs new material is answered with one
+of the moves above. Later, a user who offers material is welcome to it: that is their choice, never
+the skill's condition.
 
 ## What the user is shown, and what they are not
 

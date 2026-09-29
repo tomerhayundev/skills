@@ -4,7 +4,7 @@ description: Use when making a product promo, ad (bumper, 15 s or 30 s), teaser,
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.5.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 4644ed1dd8cb -->
+<!-- Generated from remotion-video-master 0.5.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 81946d3d8c38 -->
 
 # Remotion promo video
 
@@ -71,9 +71,11 @@ templates: [story](references/story.md).
 ## 4. Find the motif first
 
 The motif is one object the film is made of. It comes from the brand read: the brand's stated
-difference, or a signature it already owns (a mark on every product, a shape in its logo), joined to
+difference, or a signature the whole brand owns (in its logo, or on everything it makes), joined to
 what the product does to the viewer's problem. The most filmable action on its own (the kneading,
-the typing, the assembly line) is not a motif: every rival of the same kind has it. It is decided
+the typing, the assembly line) is not a motif: every rival of the same kind has it. Neither is one
+collection's or one season's detail, however visible: it is what the brand made lately, not who it
+is. It is decided
 before the beat map. A CV builder
 whose name means tailored got a tailor's thread and needle: it stitches the CV, threads the job
 tags and sews the wordmark shut. The motif is a character with an arc, not a wipe: the viewer
@@ -106,8 +108,9 @@ uses it, the Turns row says why.
   capture the live site with Playwright into `./assets` (each screen state, the logo, colors,
   fonts) and list what you found before animating. A product with no UI yet gets its UI designed
   once, as components, treated as the real ones. A native app (iOS, Android, React Native) has no
-  web components to import: record the device or simulator from a shot list (the user records when
-  this machine cannot run the simulator), or use react-native-web if the app already runs on the web.
+  web components to import: record the device or simulator from a shot list (when this machine
+  cannot run the simulator, ask in the one question call whether the user can record it), or use
+  react-native-web if the app already runs on the web.
   Recordings, captions and voice: [media](references/media.md).
 
 ## 6. Order of work
@@ -182,6 +185,7 @@ profile's critique starts with **story and copy**.
 | Rule | Why |
 | --- | --- |
 | Durations on the grid | Loops seam, cuts land on beats, grain repeats cleanly. Enforce it in `expand()`. |
+| Build from what exists | No beat, score or fix waits on material the user has not said they have or will make, and the user is never handed a task ("record a clip of"). A missing picture is solved in the film: another shot, a still, the brand's layer, or the end card. Material is asked for once, in the question call, if at all ([intake](references/intake.md#build-from-what-exists)). |
 | Show the real product | Import its components; without code, real captures; never a redrawn version of a UI that exists. |
 | Every transition is motivated; the motif carries only the turns | A flood on every boundary reads as an effect pasted over the film: six floods in 30 s put flat color over a third of it, and no boundary mattered more than another. At most one motif turn per 15 s plus the close; the rest are cuts on the beat, match cuts, shared elements (`transitions.ts` counts them). |
 | The motif is met before it is abstracted | A shape that appears from nothing and floods the screen reads as a sticker. Show the real object and hold on it first. |
@@ -277,6 +281,8 @@ node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cu
 | Scoring your own film at exactly 8 | A fresh critic scores it cold |
 | A chapter for each item the user listed | One story from the brand read's spine; each item a step or a proof in it, placed in the brief |
 | The motif is the most filmable action (the kneading, the typing) | Every rival of the same kind has it; take the brand's stated difference or its signature |
+| The motif is one collection's detail because it is on the home page | Check what each quote is about: a new line is a proof in the film, not the brand; ask the owner when unsure |
+| "The scores reach 8 once you record a clip of..." | The user never offered it: solve it with what exists, and ask for material only in the question call |
 | A clean, minimal brand filmed busy | The brand's own adjectives are the film's style: space, pace, how many words |
 | The same track on every film | Pick from the library by the brand's look, and let the user hear it in the brief |
 | A sixth round of polish when the scores stall | The problem is structure: back to the storyboard, or hand the user the one choice |

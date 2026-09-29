@@ -173,7 +173,10 @@ structure only: what a first-time viewer understands at each beat; whether every
 message forward (a beat that only shows a logo or a pretty frame is a gap); tension, one turn, the
 payoff; whether every asked item lands inside the story; reading time; whether the chosen track fits
 the brand read's look. What it finds is fixed on the page before the user sees it. The rough cut is
-never shown to the user.
+never shown to the user. The critic, like the film, works with the material that exists: "film the
+warehouse" or "get a screen recording" is not a fix, unless the user offered it in the question call;
+the fix is another shot, a still, the brand's layer or the end card
+([intake](intake.md#build-from-what-exists)).
 
 ### 3. The film, at most three rounds
 
@@ -196,7 +199,8 @@ never shown to the user.
 - It tags each problem **polish** (fixed in place: timing, easing, size, a word) or **structure** (a
   beat with no job, the order, the turn, the concept). A structure problem goes back to the
   storyboard: re-plan those beats, have the storyboard critic read them, then rebuild. Polishing
-  around a structure problem is how scores stall at 7.
+  around a structure problem is how scores stall at 7. Every fix uses the material that exists; a
+  score is never made to wait on footage the user has not offered.
 - It scores each cutdown on its own, as if the long cut did not exist.
 - Every score at exactly the threshold is a warning: a second critic scores it again.
 - Stop when every score is 8 or more. Stop after three rounds, or after two rounds in a row where the

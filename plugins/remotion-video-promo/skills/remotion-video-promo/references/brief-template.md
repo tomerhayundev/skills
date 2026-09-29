@@ -13,10 +13,10 @@ is built past the style frames before that approval.
   "lang": "he",
   "title": "Your <product> <format>: here's what you'll get",
   "brand": [
-    { "row": "difference", "quote": "<the brand's own words>", "source": "about page", "meaning": "<what it means for the film>" },
-    { "row": "look", "quote": "...", "source": "home page", "meaning": "..." },
-    { "row": "signature", "quote": "...", "source": "collection page", "meaning": "..." },
-    { "row": "spine", "quote": null, "inferredFrom": "<what it was inferred from, when the brand says nothing>", "meaning": "..." }
+    { "row": "difference", "quote": "<the brand's own words>", "source": "about page", "scope": "brand", "meaning": "<what it means for the film>" },
+    { "row": "look", "quote": "...", "source": "home page", "scope": "brand", "meaning": "..." },
+    { "row": "signature", "quote": "...", "source": "the logo", "scope": "brand", "meaning": "..." },
+    { "row": "spine", "quote": null, "inferredFrom": "<what it was inferred from, when the brand says nothing>", "scope": "brand", "meaning": "..." }
   ],
   "idea": "<the concept in one sentence>",
   "asks": [{ "item": "<each thing the user asked for, in their words>", "where": "<where it lands in the film>" }],
@@ -29,8 +29,10 @@ is built past the style frames before that approval.
 }
 ```
 
-The page refuses (exit 1) a brief with a missing brand row, a row with neither a quote nor what it
-was inferred from, no idea, no `asks` list (an empty list when the ask named nothing), an asked item
+The page refuses (exit 1) a brief with a missing brand row, a row without its `scope` (`"brand"` for
+the whole brand, or the one part it is about), a difference, look or spine taken from one part of the
+brand (a signature taken from one part is shown marked for the owner to confirm), a row with neither
+a quote nor what it was inferred from, no idea, no `asks` list (an empty list when the ask named nothing), an asked item
 with no place in the film, or music without a reason. Beat times sit on the track's beat grid
 (`60 / bpm` seconds; 0.5 s at 120 BPM).
 
@@ -40,7 +42,7 @@ The record:
 # Brief: <product> <format>
 
 ## Brand read (references/brand-read.md)
-| Row | The brand's words (where) | For the film |
+| Row | The brand's words (where; the whole brand, or which part) | For the film |
 | --- | --- | --- |
 | Difference | | |
 | Look | | |
@@ -74,6 +76,8 @@ Languages: <every locale the product ships, RTL mirrored; or the ones the brief 
 ## Material
 - Source: <real components | live-site captures | the user's recording | UI designed once>
 - Voice: <captions only | AI voice (which) | the user's recording>
+- What has no picture, and how the film covers it: <each item: another shot | a still that exists |
+  the brand's layer | the end card>. Never a request for new material (intake, Build from what exists)
 - Music: <library id, title, BPM (frames per beat), why it fits the Look row, where the lift lands>
 
 ## Motif

@@ -24,10 +24,10 @@ const brief = () => ({
   hook: { recommended: "Which box has the lights?", why: "the problem in the viewer's words", alternatives: ["Where did the lights go?"] },
   next: "After your **go**: the build starts.",
   brand: [
-    { row: "difference", quote: "Every box has a code", source: "home page", meaning: "the code is the hero" },
-    { row: "look", quote: "tidy, calm", source: "about page", meaning: "few words, slow moves" },
-    { row: "signature", quote: "the molded code", source: "product page", meaning: "the motif" },
-    { row: "spine", quote: null, inferredFrom: "how the product is used", meaning: "from lost to found" },
+    { row: "difference", quote: "Every box has a code", source: "home page", scope: "brand", meaning: "the code is the hero" },
+    { row: "look", quote: "tidy, calm", source: "about page", scope: "brand", meaning: "few words, slow moves" },
+    { row: "signature", quote: "the molded code", source: "product page", scope: "brand", meaning: "the motif" },
+    { row: "spine", quote: null, inferredFrom: "how the product is used", scope: "brand", meaning: "from lost to found" },
   ],
   idea: "Every box answers when you scan it.",
   asks: [{ item: "the app", where: "the scan at the turn" }],
@@ -110,6 +110,20 @@ test("no brief without the brand read, the idea, every asked item placed and the
   const legacy = brief();
   legacy.music = "public/music/track.mp3";
   assert.match(checkPlan(legacy).join("\n"), /music: name the track from the library/);
+});
+
+test("every brand row says what it is about; one collection's detail never carries the brand", () => {
+  const b = brief();
+  delete b.brand[1].scope;
+  b.brand[0].scope = "the new collection";
+  b.brand[2].scope = "the new collection";
+  const problems = checkPlan(b).join("\n");
+  assert.match(problems, /brand read, look: say what it is about/);
+  assert.match(problems, /brand read, difference: taken from the new collection, one part of the brand/);
+  assert.doesNotMatch(problems, /brand read, signature: taken from/, "a part-only signature is shown for confirmation, not refused");
+  const html = buildHtml(b);
+  assert.match(html, /<small class="confirm">Please confirm: this is said only about the new collection<\/small>/);
+  assert.equal((html.match(/class="confirm"/g) ?? []).length, 2, "only the rows taken from one part are marked");
 });
 
 test("beats sit on the chosen track's beat grid, not a fixed 0.5 s", () => {

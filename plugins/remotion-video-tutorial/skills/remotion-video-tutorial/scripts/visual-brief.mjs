@@ -21,9 +21,9 @@
  *   "lang": "he",                      // the page's language; he, ar, fa, ur read right to left
  *   "labels": { "idea": "..." },       // optional: headings for a language without built-in ones
  *   "title": "...",
- *   "brand": [{ "row": "difference", "quote": "the brand's own words", "source": "about page", "meaning": "for the film" },
- *             { "row": "look", ... }, { "row": "signature", ... },
- *             { "row": "spine", "quote": null, "inferredFrom": "when the brand says nothing", "meaning": "..." }],
+ *   "brand": [{ "row": "difference", "quote": "the brand's own words", "source": "about page", "scope": "brand", "meaning": "for the film" },
+ *             { "row": "look", ... }, { "row": "signature", "scope": "the autumn loaf", ... },   // scope: "brand", or the one part it is about
+ *             { "row": "spine", "quote": null, "inferredFrom": "when the brand says nothing", "scope": "brand", "meaning": "..." }],
  *   "idea": "the concept in one sentence",
  *   "asks": [{ "item": "workshops", "where": "the turn: guests' hands" }],
  *   "music": { "id": "library id", "title": "...", "artist": "...", "bpm": 90, "why": "fits the brand's look because ...",
@@ -40,7 +40,8 @@
  *
  * A beat's frame comes from its `image`, or from the cut's (or its own) `source`
  * video at `src` + `len` / 2, reframed by `crop` (null for none). Exit 1 when the
- * plan does not hold together: a brand row missing, or with neither a quote nor what
+ * plan does not hold together: a brand row missing, without its scope, or (but for the
+ * signature, which is marked for the owner to confirm) taken from one part of the brand, or with neither a quote nor what
  * it was inferred from; no idea; no asks list, or an asked item with no place in the
  * film; music without a reason; beats that leave a gap or overlap or sit off the
  * track's beat grid (60 / bpm s, 0.5 s when no bpm is given); a caption that cannot
@@ -74,6 +75,8 @@ export function checkPlan(brief) {
       else {
         if (!has(r.quote) && !has(r.inferredFrom)) problems.push(`brand read, ${row}: quote the brand's own words, or say what it was inferred from (inferredFrom)`);
         if (!has(r.meaning)) problems.push(`brand read, ${row}: say what it means for the film (meaning)`);
+        if (!has(r.scope)) problems.push(`brand read, ${row}: say what it is about: "brand" for the whole brand, or which part (a collection, a product, a season) (scope)`);
+        else if (row !== "signature" && r.scope !== "brand") problems.push(`brand read, ${row}: taken from ${r.scope}, one part of the brand; the ${row} comes from what the brand says about itself as a whole`);
       }
     }
   }
@@ -137,6 +140,7 @@ const LABELS = {
     said: "In your words", meaning: "What it means for the film",
     rows: { difference: "What sets you apart", look: "How you look", signature: "Your signature", spine: "Your story" },
     inferred: "Not said on your site; inferred from",
+    partOnly: "Please confirm: this is said only about",
     idea: "The idea", asks: "What you asked for, and where it is in the film", asked: "You asked for", where: "Where it is",
     music: "The music", plan: "The plan", look: "The look (final quality, from your assets)",
     storyboard: "Storyboard", oneSentence: "In one sentence:", noWords: "no words",
@@ -150,6 +154,7 @@ const LABELS = {
     said: "במילים שלכם", meaning: "מה זה אומר לסרט",
     rows: { difference: "מה מייחד אתכם", look: "איך אתם נראים", signature: "החתימה שלכם", spine: "הסיפור שלכם" },
     inferred: "לא כתוב אצלכם; הסקתי מ",
+    partOnly: "לאישורכם: זה נאמר רק על",
     idea: "הרעיון", asks: "מה ביקשתם, ואיפה זה בסרט", asked: "ביקשתם", where: "איפה זה בסרט",
     music: "המוזיקה", plan: "התוכנית", look: "הלוק (באיכות סופית, מהחומרים שלכם)",
     storyboard: "סטוריבורד", oneSentence: "במשפט אחד:", noWords: "בלי מילים",
@@ -174,7 +179,8 @@ export function buildHtml(brief) {
   const dir = RTL.has(lang.split("-")[0]) ? "rtl" : "ltr";
   try {
     const brandRows = (brief.brand ?? []).slice().sort((a, b) => ROWS.indexOf(a.row) - ROWS.indexOf(b.row)).map((r) => {
-      const said = has(r.quote) ? `<q>${esc(r.quote)}</q>${r.source ? `<small>${esc(r.source)}</small>` : ""}` : `<span class="mute">${esc(L.inferred)} ${esc(r.inferredFrom ?? "")}</span>`;
+      const part = has(r.scope) && r.scope !== "brand" ? `<small class="confirm">${esc(L.partOnly)} ${esc(r.scope)}</small>` : "";
+      const said = (has(r.quote) ? `<q>${esc(r.quote)}</q>${r.source ? `<small>${esc(r.source)}</small>` : ""}` : `<span class="mute">${esc(L.inferred)} ${esc(r.inferredFrom ?? "")}</span>`) + part;
       return `<tr><th>${esc(L.rows[r.row] ?? r.row)}</th><td>${said}</td><td>${rich(r.meaning ?? "")}</td></tr>`;
     }).join("");
     const brand = brandRows ? `<h2>${esc(L.brand)}</h2><table class="kv"><thead><tr><th></th><th>${esc(L.said)}</th><th>${esc(L.meaning)}</th></tr></thead><tbody>${brandRows}</tbody></table><p class="note">${esc(L.brandNote)}</p>` : "";
@@ -196,7 +202,7 @@ body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 -apple-system,'
 main{max-width:1080px;margin:0 auto;padding:28px 16px 48px}h1{font-size:26px;line-height:1.25;margin:0 0 6px}.lead{color:var(--mute);margin:0 0 22px}
 h2{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:30px 0 10px}ul{margin:0;padding-inline-start:20px}li{margin:4px 0}
 .kv{width:100%;border-collapse:collapse;font-size:15px}.kv th,.kv td{text-align:start;vertical-align:top;padding:9px 10px;border-bottom:1px solid var(--line)}.kv thead th{font-size:13px;color:var(--mute);font-weight:600}
-.kv tbody th{width:22%;font-weight:700}.kv q{display:block;font-weight:600;margin:0}.kv small{display:block;color:var(--mute);font-size:12px;margin-top:3px}.note{color:var(--mute);font-size:14px;margin:8px 0 0}
+.kv tbody th{width:22%;font-weight:700}.kv q{display:block;font-weight:600;margin:0}.kv small{display:block;color:var(--mute);font-size:12px;margin-top:3px}.kv small.confirm{color:#b45309;font-weight:700;font-size:13px}.note{color:var(--mute);font-size:14px;margin:8px 0 0}
 .idea{font-size:18px;font-weight:600}audio{display:block;width:100%;margin-top:10px}.box p{margin:6px 0 0}
 @media (max-width:640px){.kv,.kv tbody,.kv tr,.kv th,.kv td{display:block;width:auto}.kv thead{display:none}.kv tbody th{width:auto;padding-bottom:0;border:0}}
 .frames{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.frames img{width:100%;border-radius:10px;display:block}
