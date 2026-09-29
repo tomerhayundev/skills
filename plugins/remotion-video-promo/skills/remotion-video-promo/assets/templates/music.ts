@@ -5,8 +5,10 @@
  * script loads expand() under plain Node/tsx. The <Html5Audio> that plays it
  * lives in the clip component.
  *
- * Fill MUSIC from `node fit-beat-grid.mjs <track> --json`. The values below
- * are for the bundled track (assets/music/, CC BY 4.0, see CREDITS.md).
+ * Fill MUSIC from public/music/track.json, which `node get-track.mjs <id>` writes
+ * for the library track the brief chose (or `fit-beat-grid.mjs <track> --json`
+ * for a track from elsewhere). The values below are for the bundled track
+ * (assets/music/, CC BY 4.0, see CREDITS.md); never keep them by default.
  *
  * Adapt: FPS and the grid unit come from your tokens. The grid unit must equal
  * one beat (secondsPerBeat * FPS), which music.test.ts checks.

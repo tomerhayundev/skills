@@ -37,7 +37,7 @@ all four aspects (wide, tall, square, classic) and every locale the product ship
 | --- | --- | --- |
 | Hook | 0-2 s (holds to 3) | The problem or the promise in one line, landed within 1 s and held whole 2 s |
 | Reveal | 2-4 s | The product appears, made out of the hook's picture |
-| Highlights | 2 or 3 moments | One idea each, a cursor driving the real product; the lift on the payoff |
+| Highlights | 2 or 3 moments | One idea each: a cursor driving the real product, or for a physical product, a place or a service, the real thing and the hands that use it; the lift on the payoff |
 | Close | 2-4 s | The brand, the line, the call to action |
 
 A short cut needs a narrative (build, multiply, improve, brand), not a montage. A teaser withholds
@@ -62,7 +62,7 @@ music-led, not caption-led: about -16 LUFS, the lift scored. A loop is silent.
 | music | bed with its lift on the payoff | same | |
 | durations | grid | grid | |
 | shortCut | fewer ideas at the long cut's pace | same | |
-| critique | the base 11 (story and copy first; transitions, graphics and the cover included) | same | |
+| critique | the base 12 (story and copy first; the brand's look, transitions, graphics and the cover included) | same | |
 
 ## Build notes
 
@@ -74,11 +74,24 @@ default, shared elements where scenes share one, and the motif's full treatment 
 real object, or a flood in its shape, `assets/templates/flood.ts`) only at the turn and the close:
 at most one per 15 s, plus the close. A cutdown is re-scripted, not trimmed ([story](../../references/story.md)).
 
+**A physical product, a place or a service** (a studio, a shop, a maker, food) is shot, not captured,
+and the brand read's Look row sets the grammar:
+- The brand's own photos are assets: products photographed on seamless white, or in homes, are how
+  the brand already sees itself; a film in the same language looks like it.
+- Grade every clip to one look before the first scene: phone footage from different days in
+  different light reads as a pile of clips.
+- Cut on shape and motion (a round loaf to a round plate, a hand to a hand), not on a timer; hold a
+  beautiful frame longer rather than add one.
+- A process is shown in the world, never turned into interface: a row of step labels over the
+  footage makes a craft look like a checkout flow.
+- Words stay few when the brand calls itself minimal: a caption on every beat is the opposite of
+  clean.
+
 ## Verification
 
 Pops with `--cuts` (only declared beat cuts). Motif coverage within budget, the cover measured clean.
 Loudness about -16 LUFS (silent for loops). Safe zones per shipped platform; the phone sheet; a loop's
-seam scan. Critique by a fresh critic, each cut on its own: the base criteria, all 8 or more.
+seam scan. Critique at three points (the concept, the storyboard, then the film in at most three rounds), each cut on its own: the base criteria, all 8 or more.
 
 ## Common mistakes
 

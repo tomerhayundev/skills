@@ -23,8 +23,15 @@ const brief = () => ({
   styleFrames: [{ image: still, caption: "**The turn.** The finder locks onto the real code." }],
   hook: { recommended: "Which box has the lights?", why: "the problem in the viewer's words", alternatives: ["Where did the lights go?"] },
   next: "After your **go**: the build starts.",
-  music: tone,
-  musicLiftSeconds: 4,
+  brand: [
+    { row: "difference", quote: "Every box has a code", source: "home page", meaning: "the code is the hero" },
+    { row: "look", quote: "tidy, calm", source: "about page", meaning: "few words, slow moves" },
+    { row: "signature", quote: "the molded code", source: "product page", meaning: "the motif" },
+    { row: "spine", quote: null, inferredFrom: "how the product is used", meaning: "from lost to found" },
+  ],
+  idea: "Every box answers when you scan it.",
+  asks: [{ item: "the app", where: "the scan at the turn" }],
+  music: { id: "calm-90", title: "A calm track", artist: "Someone", bpm: 120, why: "calm, like the brand says it is", file: tone, liftSeconds: 4 },
   cuts: [
     {
       name: "30 s",
@@ -57,6 +64,63 @@ test("the page is the one message to approve: plan, style frames, a storyboard p
   assert.match(html, /prefers-color-scheme:dark/);
 });
 
+test("the brand read, the idea, the asks and the music come first, with the track's lift to play", () => {
+  const html = buildHtml(brief());
+  const at = (s) => html.indexOf(s);
+  assert.ok(at("What I understood about your brand") > 0 && at("What I understood about your brand") < at("The plan"), "the brand read opens the page");
+  assert.match(html, /<th>What sets you apart<\/th><td><q>Every box has a code<\/q><small>home page<\/small><\/td><td>the code is the hero<\/td>/);
+  assert.match(html, /Not said on your site; inferred from how the product is used/);
+  assert.match(html, /<h2>The idea<\/h2><div class="box idea">Every box answers when you scan it\.<\/div>/);
+  assert.match(html, /<th>the app<\/th><td>the scan at the turn<\/td>/);
+  assert.match(html, /<audio controls preload="metadata" src="data:audio\/mpeg;base64,/);
+  assert.match(html, /calm, like the brand says it is/);
+});
+
+test("the page speaks the user's language: Hebrew reads right to left", () => {
+  const b = brief();
+  b.lang = "he";
+  const html = buildHtml(b);
+  assert.match(html, /<html lang="he" dir="rtl">/);
+  assert.match(html, /מה הבנתי על המותג/);
+  assert.match(html, /מה ביקשתם, ואיפה זה בסרט/);
+  const custom = buildHtml({ ...brief(), lang: "de", labels: { idea: "Die Idee" } });
+  assert.match(custom, /<html lang="de" dir="ltr">/);
+  assert.match(custom, /<h2>Die Idee<\/h2>/);
+});
+
+test("no brief without the brand read, the idea, every asked item placed and the music's reason", () => {
+  const b = brief();
+  delete b.brand;
+  delete b.idea;
+  delete b.asks;
+  b.music = { id: "calm-90", bpm: 120 };
+  const problems = checkPlan(b).join("\n");
+  assert.match(problems, /brand read: missing/);
+  assert.match(problems, /the idea: missing/);
+  assert.match(problems, /asks: list every item the user asked for/);
+  assert.match(problems, /music: say why this track fits the brand's look/);
+  const c = brief();
+  c.brand = c.brand.filter((r) => r.row !== "signature");
+  c.brand[0].quote = "";
+  c.asks.push({ item: "the classes" });
+  const more = checkPlan(c).join("\n");
+  assert.match(more, /brand read: no "signature" row/);
+  assert.match(more, /brand read, difference: quote the brand's own words/);
+  assert.match(more, /asks: "the classes" has no place in the film/);
+  const legacy = brief();
+  legacy.music = "public/music/track.mp3";
+  assert.match(checkPlan(legacy).join("\n"), /music: name the track from the library/);
+});
+
+test("beats sit on the chosen track's beat grid, not a fixed 0.5 s", () => {
+  const b = brief();
+  b.music.bpm = 90;
+  b.cuts = [{ name: "30 s", source: footage, beats: [{ at: 0, dur: 2, src: 0, len: 2, picture: "a" }, { at: 2, dur: 1.5, src: 2, len: 1.5, picture: "b" }] }];
+  const problems = checkPlan(b);
+  assert.equal(problems.length, 1, problems.join("\n"));
+  assert.match(problems[0], /beat 2: 1\.5 s is off the 0\.667 s beat grid/);
+});
+
 test("the plan is checked: gaps, the 0.5 s grid, reading time", () => {
   assert.deepEqual(checkPlan(brief()), []);
   const b = brief();
@@ -64,9 +128,11 @@ test("the plan is checked: gaps, the 0.5 s grid, reading time", () => {
   b.cuts[0].beats[2].dur = 1.2;
   b.cuts[0].beats[0].dur = 1.5;
   b.cuts[0].beats[0].words = "Which one of these many boxes has the lights?";
+  b.cuts[0].beats[1].words = "In the box \u2014 the lights";
   const problems = checkPlan(b).join("\n");
+  assert.match(problems, /beat 2: a long dash in the words on screen/);
   assert.match(problems, /30 s, beat 2: starts at 4\.0 s, but the beat before it ends at 1\.5 s/);
-  assert.match(problems, /beat 3: 1\.2 s is off the 0\.5 s grid/);
+  assert.match(problems, /beat 3: 1\.2 s is off the 0\.5 s beat grid/);
   assert.match(problems, /beat 1: 9 words need about 3\.2 s on screen, the beat has 1\.5 s/);
 });
 
@@ -74,6 +140,8 @@ test("the rough cut is the cut's length, with the music, and is marked internal"
   const out = join(dir, "rough.mp4");
   const r = buildAnimatic(brief(), brief().cuts[0], out);
   assert.equal(r.music, true);
+  const legacy = { ...brief(), music: tone, musicLiftSeconds: 4 };
+  assert.equal(buildAnimatic(legacy, legacy.cuts[0], join(dir, "rough-legacy.mp4")).music, true, "the old music path still plays");
   const probe = spawnSync("ffprobe", ["-v", "error", "-show_entries", "format=duration:stream=codec_type", "-of", "json", out], { encoding: "utf8" });
   const info = JSON.parse(probe.stdout);
   assert.ok(Math.abs(Number(info.format.duration) - 8.5) < 0.15, info.format.duration);

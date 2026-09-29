@@ -176,7 +176,7 @@ measures how much of the runtime flat accent color covers.
 
 ## Sound
 
-- Music sets the energy; pick by tempo first (see music-bed), then genre for the
+- Music sets the energy; pick by the brand read's Look row from the library, then tempo (see music-bed), then genre for the
   audience.
 - Cut on the beat, and land the track's lift on the story's payoff.
 - Sound effects are the cherry, not the cake: few, matched to motion, mixed under

@@ -42,6 +42,7 @@ const BASE_CRITIQUE = [
   "variety",
   "composition",
   "motif and brand",
+  "the brand's look",
   "transitions: hierarchy and dose",
   "graphics belong to the picture",
   "cover",

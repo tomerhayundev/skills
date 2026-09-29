@@ -159,5 +159,5 @@ score ring, and the score stepped up once per keyword, on the half beats.
   neighbouring stations at the frame edge, a panel collapsing into a black slab, the
   first item of a row cropped in tall.
 - The phone sheet (360 px wide): captions and labels must read at feed size.
-- Scores from the [critique loop](verification.md#critique-loop), until every one is 8 or more.
+- Scores from the [film critique](verification.md#critique-at-three-points), until every one is 8 or more.
 - Loudness with `audio-check.mjs`, and a person watching with sound.

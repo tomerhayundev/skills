@@ -1,27 +1,55 @@
 # Brief template
 
 Copy into the project as `docs/brief.md` and fill every line: it is the record. What the user sees and
-approves is the **visual brief**, one page built from it by `scripts/visual-brief.mjs` (below): the plan
-in a few lines, the style frames, a storyboard of every cut, and the hook. Nothing is built past the
-style frames before that approval.
+approves is the **visual brief**, one page built from it by `scripts/visual-brief.mjs` (below), in the
+user's language: what was understood about the brand, the idea, where each thing they asked for lands,
+the music, the plan in a few lines, the style frames, a storyboard of every cut, and the hook. Nothing
+is built past the style frames before that approval.
 
 `docs/visual-brief.json`, the page's input (the full shape is in the script's header):
 
 ```json
 {
+  "lang": "he",
   "title": "Your <product> <format>: here's what you'll get",
+  "brand": [
+    { "row": "difference", "quote": "<the brand's own words>", "source": "about page", "meaning": "<what it means for the film>" },
+    { "row": "look", "quote": "...", "source": "home page", "meaning": "..." },
+    { "row": "signature", "quote": "...", "source": "collection page", "meaning": "..." },
+    { "row": "spine", "quote": null, "inferredFrom": "<what it was inferred from, when the brand says nothing>", "meaning": "..." }
+  ],
+  "idea": "<the concept in one sentence>",
+  "asks": [{ "item": "<each thing the user asked for, in their words>", "where": "<where it lands in the film>" }],
+  "music": { "id": "<library id>", "title": "...", "artist": "...", "bpm": 90, "why": "<why it fits the brand's look>", "file": "public/music/track.mp3", "liftSeconds": 16 },
   "plan": ["A **30 s** master and a **15 s** cut, 16:9, for ...", "**No voiceover.** ...", "**The motif** ..."],
   "styleFrames": [{ "image": "out/style-turn.png", "caption": "**The turn.** ..." }, { "image": "out/style-cover.png", "caption": "**The cover.** ..." }],
   "hook": { "recommended": "...", "why": "...", "alternatives": ["...", "..."] },
   "next": "**After your go**, I build it; the next thing you see is the finished <primary deliverable>.",
-  "cuts": [{ "name": "30 s", "message": "...", "source": "footage/...", "beats": [{ "at": 0, "dur": 3.5, "src": 0, "len": 3.4, "picture": "...", "words": "...", "in": "Opens on the problem" }] }]
+  "cuts": [{ "name": "30 s", "message": "...", "turnAt": 12, "source": "footage/...", "beats": [{ "at": 0, "dur": 3, "src": 0, "len": 3, "picture": "...", "words": "...", "in": "Opens on the problem" }] }]
 }
 ```
+
+The page refuses (exit 1) a brief with a missing brand row, a row with neither a quote nor what it
+was inferred from, no idea, no `asks` list (an empty list when the ask named nothing), an asked item
+with no place in the film, or music without a reason. Beat times sit on the track's beat grid
+(`60 / bpm` seconds; 0.5 s at 120 BPM).
 
 The record:
 
 ```markdown
 # Brief: <product> <format>
+
+## Brand read (references/brand-read.md)
+| Row | The brand's words (where) | For the film |
+| --- | --- | --- |
+| Difference | | |
+| Look | | |
+| Signature | | |
+| Spine | | |
+
+## The idea
+- The concept in one sentence: <...>; runner-up: <one line>; concept critic's scores in docs/review_log.md
+- What was asked, and where it lands: <each item: its beat>
 
 ## Goal
 - Format: <format id> (module: formats/<module>/FORMAT.md). Why: <one line>
@@ -46,7 +74,7 @@ Languages: <every locale the product ships, RTL mirrored; or the ones the brief 
 ## Material
 - Source: <real components | live-site captures | the user's recording | UI designed once>
 - Voice: <captions only | AI voice (which) | the user's recording>
-- Music: <track, BPM, where the lift lands>
+- Music: <library id, title, BPM (frames per beat), why it fits the Look row, where the lift lands>
 
 ## Motif
 <the motif block from SKILL.md, every row filled>
@@ -59,9 +87,9 @@ Style guide: <docs/style_guide.md if there is a reference, or "the product's own
 <every choice made for the user in hands-off mode; empty in guided mode>
 
 ## Acceptance
-- Pops: declared cuts only (frame-pops.mjs --cuts); motif coverage within budget, the cover clean
+- Pops: declared cuts only (frame-pops.mjs --cuts --grid=<frames per beat>); motif coverage within budget, the cover clean
 - Loudness about -16 LUFS, true peak under -1 dBFS; <silent for loops>
 - Text inside every safe zone shipped to; the 360 px phone sheet reads
-- Critique loop: every score 8 or more (story and copy first), logged in docs/review_log.md
+- Critique: the concept and the storyboard passed before the build; the film at 8 or more on every criterion (story and copy first) within three rounds, or handed over with the one structural choice; logged in docs/review_log.md
 - Platform specs re-checked on the official pages before shipping
 ```

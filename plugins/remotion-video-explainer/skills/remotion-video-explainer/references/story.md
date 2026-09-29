@@ -12,7 +12,15 @@ Write these three lines before anything else, and keep them at the top of `docs/
 - **The one message**: one sentence the viewer should repeat after watching. Not a list.
 - **The change**: what they should believe or do afterwards (the call to action follows from it).
 
-If the message needs "and", there are two videos.
+If the message needs "and", find the sentence above both halves: the brand read's spine usually
+holds them ("we make it; come and make yours"). Two films only when no sentence holds both; then
+the film tells the half the brand leads with, and the brief says which half gets its own film. The
+user is never asked to choose.
+
+**A list ask is still one story.** Users name things ("the products, the workshops, the classes and
+more"), not a story. Each item becomes a step or a proof inside one arc, and the brief shows where
+each one lands (`asks` in the visual brief). A chapter per item is a montage: five items in 30 s are
+five fragments and no idea. How to find the arc: [brand-read](brand-read.md).
 
 ## 2. The narrative
 
@@ -85,7 +93,7 @@ run longer), and re-check the hook still lands in a second.
 
 - The script table, the chosen hook (and its runners-up) and the CTA go into the brief for approval,
   before stills.
-- The critique loop scores **story and copy** for every format: is the one message clear after one
+- The film critique scores **story and copy** for every format: is the one message clear after one
   viewing, does the hook make a stranger stay, is every line specific to this brand, does the CTA name
   one action. Tests: read it aloud; the stranger test (someone new says what it is, who it is for, what
   to do); the rival test, as a question in the plan (would these words still work for the closest

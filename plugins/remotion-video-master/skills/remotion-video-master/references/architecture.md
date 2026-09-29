@@ -37,13 +37,20 @@ depend on Remotion, and the video's should never block an app deploy.
 ## Tokens
 
 ```ts
+import TRACK from "../../public/music/track.json"; // written by get-track.mjs (or fit-beat-grid --json)
+
 export const FPS = 30;
-/** One beat at 120 BPM. Every duration is a multiple of this. */
-export const TRANSITION_FRAMES = 15;
+/** One beat of the chosen track: 15 frames at 120 BPM, 18 at 100, 20 at 90, 25 at 72. Every duration is a multiple of this. */
+export const TRANSITION_FRAMES = (FPS * 60) / TRACK.bpm;
+if (!Number.isInteger(TRANSITION_FRAMES)) throw new Error(`${TRACK.bpm} BPM is not a whole number of frames at ${FPS} fps`);
 /** The square authoring canvas. Every aspect is a window onto it. */
 export const CANVAS = 1920;
 export const COLOR = { stage: "#0b0b0d", accent: "#d7ff3e", paper: "#fff", ink: "#12121a" } as const;
 ```
+
+The grid follows the music, not the other way round: a calm track at 90 BPM gives 20-frame beats
+and a slower cut, which is part of why it reads calm. `frame-pops.mjs --grid=<frames per beat>`
+takes the same number.
 
 Everything reads from here. A value that lives in one scene is a value that drifts
 from the others.

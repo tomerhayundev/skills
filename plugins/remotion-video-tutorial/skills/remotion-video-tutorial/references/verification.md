@@ -40,7 +40,7 @@ Check per aspect:
 ## Pops
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/scripts/frame-pops.mjs out/promo/<id>.mp4 [--factor=3]
+node ${CLAUDE_SKILL_DIR}/scripts/frame-pops.mjs out/promo/<id>.mp4 --grid=<frames per beat> [--factor=3]
 ```
 
 Measures how much each frame changes from the last (ffmpeg only decodes; the script
@@ -145,45 +145,88 @@ It fails when accent dominates more than 5% of the runtime, or a full frame of i
 outside the declared turn and close. Measured on a 30 s promo that flooded all six of its
 boundaries: 7.5% dominated and six undeclared full frames; its 15 s cut, two.
 
-## Critique loop
+## Critique at three points
 
 Tests prove the arithmetic; they cannot say whether the film is good. The author is the worst
 judge of their own film: a self-scored promo passed every criterion at exactly 8, and the same
 model, asked afterwards as a critic, found the floods, the missing motif introduction and the
-15 s cut that made no sense on its own. So the critique is cold:
+15 s cut that made no sense on its own. So the critique is cold, by a fresh critic (a subagent with
+no part in the build), and it comes early: the later a problem is found, the more it costs.
 
-- A fresh critic (a subagent with no part in the build) gets only the sheets below, the one-sentence
-  message and the profile's criteria, never the script or the plan.
+A critique only at the end became a polish loop. A 30 s ad went through eight cold rounds: its
+scores wandered between 5 and 7, because each new critic brought new taste and each round's fixes
+created the next round's complaints, and the last critic asked to restructure its first 10 s, a
+problem the storyboard already showed. A brand film went through six rounds to 7.3 and was still
+"fine, not wow": its concept was a list, which no amount of polish fixes.
+
+### 1. The concept, before the brief
+
+In the brand read ([brand-read](brand-read.md), step 4): three concepts, scored on one idea, only
+this brand, the brand's look, surprise, every asked item inside, and whether the material can make
+it. The winner is rewritten once when any score is under 8. This is where "banal" is caught.
+
+### 2. The storyboard, before the build (required)
+
+A fresh critic gets the visual brief page (its PNG), the brand read and the one-sentence message,
+and, when the rhythm matters, the internal rough cut (`visual-brief.mjs --animatic`). It judges
+structure only: what a first-time viewer understands at each beat; whether every beat carries the
+message forward (a beat that only shows a logo or a pretty frame is a gap); tension, one turn, the
+payoff; whether every asked item lands inside the story; reading time; whether the chosen track fits
+the brand read's look. What it finds is fixed on the page before the user sees it. The rough cut is
+never shown to the user.
+
+### 3. The film, at most three rounds
+
+- The critic gets the critic pack, the one-sentence message, the brand read's Look row and the
+  profile's criteria, never the script or the plan:
+
+  ```bash
+  node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cuts.json --moments=<turn frames>
+  ```
+
+  It writes `out/_critic/`: the contact sheet (a frame a second), the last and first frame of every
+  declared cut side by side, a 12-frame strip around each moment named (the turn, the close, the
+  fastest move), the loudness timeline (where the lift lands), and an index with every cut's time. A
+  frame a second alone cannot show motion, a cut or the music, so the scores for them were guesses.
+  Add the phone sheet (below).
 - Before scoring, it narrates what a first-time viewer understands every 2 s, and what they would
   not. Anything the message needs that a first-time viewer would not understand is a problem.
+- From round two, it also gets the last round's scores, its three problems and what was changed, and
+  says for each whether the fix worked. Scores move on evidence, not on a new critic's taste.
+- It tags each problem **polish** (fixed in place: timing, easing, size, a word) or **structure** (a
+  beat with no job, the order, the turn, the concept). A structure problem goes back to the
+  storyboard: re-plan those beats, have the storyboard critic read them, then rebuild. Polishing
+  around a structure problem is how scores stall at 7.
 - It scores each cutdown on its own, as if the long cut did not exist.
 - Every score at exactly the threshold is a warning: a second critic scores it again.
-- Before the build, the same kind of critic may read the internal rough cut (`visual-brief.mjs
-  --animatic`) for story, pacing and reading time only. The rough cut is never shown to the user.
+- Stop when every score is 8 or more. Stop after three rounds, or after two rounds in a row where the
+  lowest score did not rise: hand the user the film with the one structural choice that would lift
+  it, in one line ("the first 10 s carry no message; I would restructure them around ..."), instead
+  of another round.
 
 Then look at it as a harsh motion director, not as its proud author:
 
-1. Make the sheets: the contact sheet (one frame a second), the phone sheet, and a strip
-   of 12 consecutive frames around the fastest moment
-   (`ffmpeg -ss <t> -i clip.mp4 -vf "scale=320:-1,tile=12x1" -frames:v 1 _strip.png`).
+1. Make the critic pack (above) and the phone sheet.
 2. Score each from 1 to 10: story and copy (the one message clear after one viewing, every line
    specific to this brand, one call to action; [story](story.md)); the hook in the first 2 s; readability at phone size;
    motion (springs, no dead frames, nothing sliding linearly); variety (something new on
    every beat); composition; the motif and the brand (met as a real object before it is abstracted;
    does what the product does; would this film still work for the closest competitor, asked as a
-   question and never shown); transitions: hierarchy and dose (the turn feels bigger than the other
+   question and never shown); the brand's look (does the film look like the brand's own adjectives,
+   the brand read's Look row: a brand that calls itself minimal and clean is not filmed busy);
+   transitions: hierarchy and dose (the turn feels bigger than the other
    boundaries, which are mostly cuts on the beat); graphics belong to the picture (each one on a
    surface, in an interface or in the brand's layer); the cover (the product and the promise, settled);
    sound (the lift on the payoff where there is one, the level, and any effects sitting on the
    motion; a caption-led tutorial's or onboarding video's bed is scored on staying out of the way (every other bed on its lift); a silent loop skips this).
-3. Write the three worst problems with timestamps. Hunt for: text overlapping during a
+3. Write the three worst problems with timestamps, each tagged polish or structure. Hunt for: text overlapping during a
    swap, anything that slides instead of easing, text in the corners, frame borders, a
    centered title on a gradient, everything fading in, soft text the camera scaled, a beat
    where nothing happens, a stutter at the loop seam.
-4. Fix them, re-render only the affected frames (`--frames=<from>-<to>` for a look,
-   then the full file), and score again.
-5. Log every round in `docs/review_log.md`: scores, problems, fixes. Stop when every score
-   is 8 or more, then hand it to a person to watch with sound.
+4. Fix the polish in place, re-render only the affected frames (`--frames=<from>-<to>` for a
+   look, then the full file); send structure back to the storyboard. Score again.
+5. Log every round in `docs/review_log.md`: scores, problems (polish or structure), fixes. Stop
+   by the rules above, then hand it to a person to watch with sound.
 
 ## Tests that earned their place
 
@@ -244,7 +287,7 @@ chain layout instead.
 - A contact sheet per cut (one frame a second), checked at the frame edges too: a
   sliver of a neighbouring scene or station at the edge is easy to miss in stills.
 - The phone sheet reads; a loop's seam passes `frame-pops.mjs`.
-- The critique loop's last round scores 8 or more everywhere, logged in `docs/review_log.md`.
+- The concept and the storyboard critiques passed before the build; the film's last round scores 8 or more everywhere, or the user has the one structural choice; logged in `docs/review_log.md`.
 - Audio measured, and a human has listened to at least one cut per change.
 - The rendered file you are about to publish is the one you checked (the render
   script's skip logic can hand you a stale file; use `--force` when in doubt).

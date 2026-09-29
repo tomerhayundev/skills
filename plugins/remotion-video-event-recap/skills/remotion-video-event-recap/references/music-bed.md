@@ -7,20 +7,40 @@ correlation, the same loudness, and a 29 ms (sub-frame) offset.
 
 ## 1. Choose the track
 
+**Start from the brand, never from the last film.** When one track was bundled and nothing asked for
+a choice, every film came out with the same upbeat corporate track, whatever the brand. The brand read's
+Look row ([brand-read](brand-read.md)) sets the mood: calm and organic, warm, minimal and elegant,
+cinematic, kinetic, confident, playful or driving. Then:
+
+```bash
+node ${CLAUDE_SKILL_DIR}/scripts/get-track.mjs --list            # the library, by mood, with tempo and length
+node ${CLAUDE_SKILL_DIR}/scripts/get-track.mjs <id> [--dir=public/music]
+```
+
+`get-track.mjs <id>` copies or downloads the track into the project, checks it against the library's
+checksum, and writes `track.json` (its fitted grid: bpm, beat 0, lifts) and `CREDITS.md` beside it.
+The tokens take the grid from `track.json` (architecture, Tokens). Name the track and why it fits in
+the brief (`music.why`); the brief page plays 15 s around its lift so the user hears it before the
+build. A track the user brings, or one found elsewhere, follows the rules below and is fitted with
+`fit-beat-grid.mjs`.
+
 **Tempo must fit the frame grid.** Frames per beat = `fps * 60 / bpm`. Pick a
 tempo where that is a whole number, then make the pipeline's grid unit one beat
 (or two). Then every scene duration, and so every cut, is on a beat for free.
 
 | fps | Whole-frame tempos (BPM) |
 | --- | --- |
-| 30 | 60 (30f), 72 (25f), 75 (24f), 90 (20f), 100 (18f), 120 (15f), 150 (12f) |
+| 30 | 60 (30f), 72 (25f), 75 (24f), 90 (20f), 94.74 (19f), 100 (18f), 112.5 (16f), 120 (15f), 128.57 (14f), 150 (12f) |
 | 25 | 60 (25f), 75 (20f), 100 (15f), 125 (12f), 150 (10f) |
 | 60 | 60 (60f), 72 (50f), 90 (40f), 100 (36f), 120 (30f), 144 (25f) |
 
-A near miss drifts: a 114 BPM track at 30fps is 15.79 frames per beat, so a cut
-drifts ~0.21 frames per beat, a full frame every 5 beats. Over a 15s ad that is
-fine if you snap each cut to the nearest beat instead of the grid; over 54s it is
-not.
+Any `fps * 60 / n` works, fractions included (112.5 BPM is 16 frames). A near miss drifts: a
+114 BPM track at 30fps is 15.79 frames per beat, so a cut drifts ~0.21 frames per beat, a full
+frame every 5 beats. Most real tracks are near misses (six of nine vetted ones were), so stretch
+them, pitch kept, to the nearest whole-frame tempo when that is under 2.5%
+(`ffmpeg -i in.mp3 -af atempo=<target/source> out.mp3`, then fit again): no one hears 2%, and
+every cut lands. The library stores such tracks with their `sourceBpm`, and `get-track.mjs`
+stretches them on download.
 
 **Tempo sets the feel** (a production studio's rule of thumb): 60 to 80 BPM reads
 regal and cinematic, 90 to 110 smooth and effortless, 115 to 123 kinetic and

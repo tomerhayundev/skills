@@ -8,10 +8,17 @@ Most users cannot say what they want from a list of options, and do not know wha
 make. They can react to something that looks like the film. So the intake infers, decides as a
 recommendation, and shows; it asks as little as it can.
 
+Users are not creative directors and do not write prompts: they ask for what comes to mind, often
+a list of things to include. The ask is raw material. Turning it into one story that fits the brand
+is the skill's job, never handed back to the user.
+
 ## Step 0: infer everything you can
 
 Read the ask, the product's README or landing copy, recent commits, the locales it ships (i18n
-files), the footage and images in the project, and any Remotion project already in the repo. Every
+files), the footage and images in the project, and any Remotion project already in the repo. Read
+what the brand says about itself, word for word: the site's hero line, its about page, collection
+and product copy, the tag under its logo, its social bio when there is access. These feed the brand
+read ([brand-read](brand-read.md)), which comes before the motif and the script. Every
 answer the ask or the product already gives ("a 15 s Reels ad", clips of the product in use) is
 taken, not asked. A re-cut, a new locale or a new aspect of a film that is already rendered skips
 the intake (SKILL.md §0); raw clips are assets, not a film, and go through it.
@@ -45,19 +52,29 @@ source, the motif, the reference, the hook.
 - Run `node ${CLAUDE_SKILL_DIR}/scripts/recommend.mjs --format=<id> --platforms=<id,id>` and take its
   recommended length; when it returns a master plus cutdowns, plan both and say which platform needs
   the cutdown. A tutorial or onboarding video first counts the task's steps and adds `--steps=<n>`.
-- The motif: the strongest candidate that passes the competitor test (a question in the plan: would
-  it still work for the closest competitor? the competitor is never shown), with where the viewer
-  first meets the real thing and the one or two turns it carries (SKILL.md, Find the motif first).
+- The brand read and the concept ([brand-read](brand-read.md)): four conclusions from the brand's
+  own words, three concepts built on them, scored by a fresh concept critic; the winner places every
+  item the user asked for inside one story.
+- The motif: from the brand read's difference or signature, the strongest candidate that passes the
+  competitor test (a question in the plan: would it still work for the closest rival of the same kind,
+  doing the same thing? the rival is never shown), with where the viewer first meets the real thing
+  and the one or two turns it carries (SKILL.md, Find the motif first).
+- The music: a track from the library that fits the brand read's look (`get-track.mjs --list`), with
+  the reason in one line ([music-bed](music-bed.md)). Fetch it (`get-track.mjs <id>`) before the
+  script is timed: every beat lasts a whole number of the track's beats (0.533 s at 112.5 BPM, not
+  0.5 s), and the page refuses beats off that grid.
 - The reference: the product's own look, unless the user gave one.
 - The script ([story](story.md)): the one message, the arc, every word timed; the best hook and two
   runners-up. Each cutdown is its own script.
 
 Then build the visual brief (SKILL.md, Order of work, step 1): `docs/visual-brief.json` holds the
-plan, the style frames, the hook and a storyboard per cut; `scripts/visual-brief.mjs` turns it into
-one page. The storyboard shows each beat's frame from the real assets, its time, its words and how
-the shot is entered. Show the page and ask one thing: **go**, or change any line or any shot. The
-words, the order and the look are approved here, before anything is animated. `docs/brief.md` is the
-record behind it (brief-template).
+brand read, the idea, where each asked item lands, the music, the plan, the style frames, the hook
+and a storyboard per cut; `scripts/visual-brief.mjs` turns it into one page in the user's language.
+The storyboard shows each beat's frame from the real assets, its time, its words and how the shot is
+entered. A fresh critic reads the page for structure first (the storyboard critique), and its
+findings are fixed on the page. Then show it and ask one thing: **go**, or change any line or any
+shot. The brand read, the words, the order and the look are approved here, before anything is
+animated. `docs/brief.md` is the record behind it (brief-template).
 
 ## Hands-off
 
@@ -74,6 +91,6 @@ shown a rough cut judges it as the film.
 
 ## Push back when the ask is wrong
 
-When the chosen length fights the platform (a 3 min tutorial for Reels), plan a master plus
+A list of things to include is not wrong: it is the story's material (above). When the chosen length fights the platform (a 3 min tutorial for Reels), plan a master plus
 cutdowns and say so plainly in the brief. When the ask would produce dead air or unreadable
 captions, plan the length that works and say why in one sentence.

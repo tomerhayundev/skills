@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 /**
- * The visual brief: the one message the user approves before the build. It shows
- * the plan, the style frames (the finished look, from the real assets) and a
- * storyboard of every cut (a frame per beat, its time, its words and how the shot
- * is entered), so the user judges something that looks like the film instead of
- * a paragraph. Needs Node 18+ and ffmpeg; a Chrome or Chromium on the machine
+ * The visual brief: the one message the user approves before the build. It shows,
+ * in the user's language: what was understood about the brand (the brand read, in
+ * the brand's own words), the idea, where each thing the user asked for lands, the
+ * music (with an excerpt around its lift to play), the plan, the style frames (the
+ * finished look, from the real assets) and a storyboard of every cut (a frame per
+ * beat, its time, its words and how the shot is entered), so the user judges
+ * something that looks like the film instead of a paragraph. Needs Node 18+ and ffmpeg; a Chrome or Chromium on the machine
  * also writes a PNG of the page.
  *
  *   node visual-brief.mjs docs/visual-brief.json [--out=out] [--animatic]
@@ -16,11 +18,20 @@
  * internal: never send it to the user, who will judge it as the film.
  *
  * {
- *   "title": "...", "plan": ["one line", "**bold** allowed"],
+ *   "lang": "he",                      // the page's language; he, ar, fa, ur read right to left
+ *   "labels": { "idea": "..." },       // optional: headings for a language without built-in ones
+ *   "title": "...",
+ *   "brand": [{ "row": "difference", "quote": "the brand's own words", "source": "about page", "meaning": "for the film" },
+ *             { "row": "look", ... }, { "row": "signature", ... },
+ *             { "row": "spine", "quote": null, "inferredFrom": "when the brand says nothing", "meaning": "..." }],
+ *   "idea": "the concept in one sentence",
+ *   "asks": [{ "item": "workshops", "where": "the turn: guests' hands" }],
+ *   "music": { "id": "library id", "title": "...", "artist": "...", "bpm": 90, "why": "fits the brand's look because ...",
+ *              "file": "public/music/track.mp3", "liftSeconds": 16 },
+ *   "plan": ["one line", "**bold** allowed"],
  *   "styleFrames": [{ "image": "out/style-turn.png", "caption": "..." }],
  *   "hook": { "recommended": "...", "why": "...", "alternatives": ["..."] },
  *   "next": "After your go: ...",
- *   "music": "public/music/track.mp3", "musicLiftSeconds": 16,
  *   "cuts": [{ "name": "30 s", "message": "...", "turnAt": 13.5,
  *     "source": "footage/all.mp4", "crop": { "x": 0, "y": 0, "w": 1920, "h": 1080 },
  *     "beats": [{ "at": 0, "dur": 3.5, "src": 0, "len": 3.4, "picture": "...", "words": "...", "in": "MATCH CUT on the code" },
@@ -29,8 +40,11 @@
  *
  * A beat's frame comes from its `image`, or from the cut's (or its own) `source`
  * video at `src` + `len` / 2, reframed by `crop` (null for none). Exit 1 when the
- * plan does not hold together: beats that leave a gap or overlap, a caption that
- * cannot be read in its beat (about 0.3 s a word, at least 1.5 s).
+ * plan does not hold together: a brand row missing, or with neither a quote nor what
+ * it was inferred from; no idea; no asks list, or an asked item with no place in the
+ * film; music without a reason; beats that leave a gap or overlap or sit off the
+ * track's beat grid (60 / bpm s, 0.5 s when no bpm is given); a caption that cannot
+ * be read in its beat (about 0.3 s a word, at least 1.5 s); a long dash in the words.
  */
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -42,18 +56,47 @@ const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").r
 const rich = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
 const fmt = (n) => Number(n).toFixed(1);
 
+const ROWS = ["difference", "look", "signature", "spine"];
+const RTL = new Set(["he", "ar", "fa", "ur"]);
+const has = (v) => typeof v === "string" && v.trim().length > 0;
+/** Seconds per beat of the chosen track: the grid every beat sits on. */
+const beatSeconds = (brief) => (Number(brief.music?.bpm) > 0 ? 60 / Number(brief.music.bpm) : 0.5);
+
 /** Problems that make the plan not hold together, as sentences. */
 export function checkPlan(brief) {
   const problems = [];
+  if (!Array.isArray(brief.brand)) {
+    problems.push("brand read: missing. Add the four rows (difference, look, signature, spine) from the brand's own words (references/brand-read.md)");
+  } else {
+    for (const row of ROWS) {
+      const r = brief.brand.find((x) => x.row === row);
+      if (!r) problems.push(`brand read: no "${row}" row`);
+      else {
+        if (!has(r.quote) && !has(r.inferredFrom)) problems.push(`brand read, ${row}: quote the brand's own words, or say what it was inferred from (inferredFrom)`);
+        if (!has(r.meaning)) problems.push(`brand read, ${row}: say what it means for the film (meaning)`);
+      }
+    }
+  }
+  if (!has(brief.idea)) problems.push("the idea: missing. Write the concept in one sentence (idea)");
+  if (!Array.isArray(brief.asks)) problems.push("asks: list every item the user asked for, with where it lands in the film (an empty list when the ask named none)");
+  else for (const a of brief.asks) if (!has(a.where)) problems.push(`asks: "${a.item ?? "?"}" has no place in the film; put it inside the story, or say which film it gets`);
+  if (!brief.music || typeof brief.music !== "object") problems.push("music: name the track from the library and why it fits the brand's look (music.id, music.why)");
+  else {
+    if (!has(brief.music.id) && !has(brief.music.title)) problems.push("music: name the track (music.id or music.title)");
+    if (!has(brief.music.why)) problems.push("music: say why this track fits the brand's look (music.why)");
+  }
+  const beat = beatSeconds(brief);
+  const beatText = String(Number(beat.toFixed(3)));
   for (const cut of brief.cuts ?? []) {
     let t = 0;
     cut.beats.forEach((b, i) => {
       const where = `${cut.name}, beat ${i + 1}`;
       if (Math.abs(b.at - t) > 0.01) problems.push(`${where}: starts at ${fmt(b.at)} s, but the beat before it ends at ${fmt(t)} s`);
-      if (Math.abs(b.dur * 2 - Math.round(b.dur * 2)) > 0.001) problems.push(`${where}: ${b.dur} s is off the 0.5 s grid`);
+      if (Math.abs(b.dur / beat - Math.round(b.dur / beat)) > 0.01) problems.push(`${where}: ${b.dur} s is off the ${beatText} s beat grid`);
       const words = (b.words ?? "").trim().split(/\s+/).filter(Boolean).length;
       const need = words ? Math.max(1.5, words * 0.3) + 0.5 : 0; // the words land, then hold
       if (words && b.dur < need) problems.push(`${where}: ${words} words need about ${fmt(need)} s on screen, the beat has ${fmt(b.dur)} s`);
+      if (/[\u2014\u2013]/.test(b.words ?? "")) problems.push(`${where}: a long dash in the words on screen reads as machine-written; use two lines or a colon`);
       if (!b.image && b.src === undefined) problems.push(`${where}: needs an image or a src time in the footage`);
       t = b.at + b.dur;
     });
@@ -85,31 +128,88 @@ const imageUri = (path) => {
   return uri;
 };
 
+const LABELS = {
+  en: {
+    title: "Your video: here's what you'll get",
+    lead: "One look before I build it. Reply <b>go</b>, or change any line or any shot.",
+    brand: "What I understood about your brand",
+    brandNote: "Did I get it right? Correct any line here: everything below is built on it.",
+    said: "In your words", meaning: "What it means for the film",
+    rows: { difference: "What sets you apart", look: "How you look", signature: "Your signature", spine: "Your story" },
+    inferred: "Not said on your site; inferred from",
+    idea: "The idea", asks: "What you asked for, and where it is in the film", asked: "You asked for", where: "Where it is",
+    music: "The music", plan: "The plan", look: "The look (final quality, from your assets)",
+    storyboard: "Storyboard", oneSentence: "In one sentence:", noWords: "no words",
+    hook: "The opening line", recommended: "recommended", also: "Also possible:",
+  },
+  he: {
+    title: "הסרטון שלכם: זה מה שיהיה",
+    lead: "מבט אחד לפני שאני בונה. אפשר לאשר (<b>go</b>), או לשנות כל שורה או שוט.",
+    brand: "מה הבנתי על המותג",
+    brandNote: "הבנתי נכון? אפשר לתקן כל שורה כאן: כל מה שלמטה נבנה עליה.",
+    said: "במילים שלכם", meaning: "מה זה אומר לסרט",
+    rows: { difference: "מה מייחד אתכם", look: "איך אתם נראים", signature: "החתימה שלכם", spine: "הסיפור שלכם" },
+    inferred: "לא כתוב אצלכם; הסקתי מ",
+    idea: "הרעיון", asks: "מה ביקשתם, ואיפה זה בסרט", asked: "ביקשתם", where: "איפה זה בסרט",
+    music: "המוזיקה", plan: "התוכנית", look: "הלוק (באיכות סופית, מהחומרים שלכם)",
+    storyboard: "סטוריבורד", oneSentence: "במשפט אחד:", noWords: "בלי מילים",
+    hook: "שורת הפתיחה", recommended: "מומלץ", also: "אפשר גם:",
+  },
+};
+
+/** An excerpt of the track around its lift, as an MP3 data URI, so the user hears the music in the brief. */
+function musicExcerpt(music, tmp) {
+  if (!music?.file || !existsSync(resolve(music.file))) return null;
+  const out = join(tmp, "music.mp3");
+  const start = Math.max(0, (Number(music.liftSeconds) || 8) - 8);
+  ff(["-ss", String(start), "-t", "15", "-i", resolve(music.file), "-vn", "-af", "afade=t=in:d=0.3,afade=t=out:st=13.5:d=1.5", "-ac", "2", "-b:a", "96k", out]);
+  return `data:audio/mpeg;base64,${readFileSync(out).toString("base64")}`;
+}
+
 export function buildHtml(brief) {
   const tmp = mkdtempSync(join(tmpdir(), "vb-"));
+  const lang = String(brief.lang ?? "en");
+  const base = LABELS[lang.split("-")[0]] ?? LABELS.en;
+  const L = { ...base, ...(brief.labels ?? {}), rows: { ...base.rows, ...(brief.labels?.rows ?? {}) } };
+  const dir = RTL.has(lang.split("-")[0]) ? "rtl" : "ltr";
   try {
+    const brandRows = (brief.brand ?? []).slice().sort((a, b) => ROWS.indexOf(a.row) - ROWS.indexOf(b.row)).map((r) => {
+      const said = has(r.quote) ? `<q>${esc(r.quote)}</q>${r.source ? `<small>${esc(r.source)}</small>` : ""}` : `<span class="mute">${esc(L.inferred)} ${esc(r.inferredFrom ?? "")}</span>`;
+      return `<tr><th>${esc(L.rows[r.row] ?? r.row)}</th><td>${said}</td><td>${rich(r.meaning ?? "")}</td></tr>`;
+    }).join("");
+    const brand = brandRows ? `<h2>${esc(L.brand)}</h2><table class="kv"><thead><tr><th></th><th>${esc(L.said)}</th><th>${esc(L.meaning)}</th></tr></thead><tbody>${brandRows}</tbody></table><p class="note">${esc(L.brandNote)}</p>` : "";
+    const idea = has(brief.idea) ? `<h2>${esc(L.idea)}</h2><div class="box idea">${rich(brief.idea)}</div>` : "";
+    const asks = brief.asks?.length ? `<h2>${esc(L.asks)}</h2><table class="kv"><thead><tr><th>${esc(L.asked)}</th><th>${esc(L.where)}</th></tr></thead><tbody>${brief.asks.map((a) => `<tr><th>${esc(a.item)}</th><td>${rich(a.where ?? "")}</td></tr>`).join("")}</tbody></table>` : "";
+    const m = brief.music && typeof brief.music === "object" ? brief.music : null;
+    const clip = m ? musicExcerpt(m, tmp) : null;
+    const music = m ? `<h2>${esc(L.music)}</h2><div class="box"><b>${esc(m.title ?? m.id ?? "")}</b>${m.artist ? ` <span class="mute">· ${esc(m.artist)}</span>` : ""}${m.bpm ? ` <span class="mute">· ${esc(m.bpm)} BPM</span>` : ""}${m.why ? `<p>${rich(m.why)}</p>` : ""}${clip ? `<audio controls preload="metadata" src="${clip}"></audio>` : ""}</div>` : "";
     const storyboards = (brief.cuts ?? []).map((cut, c) => {
-      const cells = cut.beats.map((b, i) => `<figure><div class="tag">${esc(b.in ?? "")}</div><img src="${frameFor(cut, b, tmp, `c${c}b${i}`)}" alt="${esc(b.picture)}"><figcaption><b>${i + 1} · ${fmt(b.at)}-${fmt(b.at + b.dur)} s</b><span>${esc(b.picture)}</span>${b.words ? `<q>${esc(b.words)}</q>` : `<i>no words</i>`}</figcaption></figure>`).join("");
-      return `<h2>Storyboard, ${esc(cut.name)}</h2>${cut.message ? `<p class="msg"><span>In one sentence:</span> ${esc(cut.message)}</p>` : ""}<div class="grid">${cells}</div>`;
+      const cells = cut.beats.map((b, i) => `<figure><div class="tag">${esc(b.in ?? "")}</div><img src="${frameFor(cut, b, tmp, `c${c}b${i}`)}" alt="${esc(b.picture)}"><figcaption><b>${i + 1} · ${fmt(b.at)}-${fmt(b.at + b.dur)} s</b><span>${esc(b.picture)}</span>${b.words ? `<q>${esc(b.words)}</q>` : `<i>${esc(L.noWords)}</i>`}</figcaption></figure>`).join("");
+      return `<h2>${esc(L.storyboard)}, ${esc(cut.name)}</h2>${cut.message ? `<p class="msg"><span>${esc(L.oneSentence)}</span> ${esc(cut.message)}</p>` : ""}<div class="grid">${cells}</div>`;
     }).join("");
     const frames = (brief.styleFrames ?? []).map((f) => `<figure><img src="${imageUri(f.image)}" alt="${esc(f.caption)}"><figcaption>${rich(f.caption)}</figcaption></figure>`).join("");
-    const hook = brief.hook ? `<h2>The opening line</h2><div class="box"><b>${esc(brief.hook.recommended)}</b>${brief.hook.why ? ` <span class="mute">(recommended: ${esc(brief.hook.why)})</span>` : ""}${brief.hook.alternatives?.length ? `<br><span class="mute">Also possible:</span> ${brief.hook.alternatives.map((a) => `"${esc(a)}"`).join(" · ")}` : ""}</div>` : "";
-    return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Video brief</title><style>
+    const hook = brief.hook ? `<h2>${esc(L.hook)}</h2><div class="box"><b>${esc(brief.hook.recommended)}</b>${brief.hook.why ? ` <span class="mute">(${esc(L.recommended)}: ${esc(brief.hook.why)})</span>` : ""}${brief.hook.alternatives?.length ? `<br><span class="mute">${esc(L.also)}</span> ${brief.hook.alternatives.map((a) => `"${esc(a)}"`).join(" · ")}` : ""}</div>` : "";
+    return `<!doctype html><html lang="${esc(lang)}" dir="${dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Video brief</title><style>
 :root{--bg:#fff;--fg:#1d1f24;--mute:#6b6f7a;--line:#e6e7eb;--card:#f5f6f8;--tag:#f5d90a;--accent:#1d1f24}
 @media (prefers-color-scheme:dark){:root{--bg:#121418;--fg:#e9eaee;--mute:#9ea2ad;--line:#2a2d34;--card:#1a1d22;--accent:#e9eaee}}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 -apple-system,'Segoe UI',Inter,Arial,sans-serif}
 main{max-width:1080px;margin:0 auto;padding:28px 16px 48px}h1{font-size:26px;line-height:1.25;margin:0 0 6px}.lead{color:var(--mute);margin:0 0 22px}
-h2{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:30px 0 10px}ul{margin:0;padding-left:20px}li{margin:4px 0}
+h2{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:30px 0 10px}ul{margin:0;padding-inline-start:20px}li{margin:4px 0}
+.kv{width:100%;border-collapse:collapse;font-size:15px}.kv th,.kv td{text-align:start;vertical-align:top;padding:9px 10px;border-bottom:1px solid var(--line)}.kv thead th{font-size:13px;color:var(--mute);font-weight:600}
+.kv tbody th{width:22%;font-weight:700}.kv q{display:block;font-weight:600;margin:0}.kv small{display:block;color:var(--mute);font-size:12px;margin-top:3px}.note{color:var(--mute);font-size:14px;margin:8px 0 0}
+.idea{font-size:18px;font-weight:600}audio{display:block;width:100%;margin-top:10px}.box p{margin:6px 0 0}
+@media (max-width:640px){.kv,.kv tbody,.kv tr,.kv th,.kv td{display:block;width:auto}.kv thead{display:none}.kv tbody th{width:auto;padding-bottom:0;border:0}}
 .frames{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.frames img{width:100%;border-radius:10px;display:block}
 .frames figcaption{font-size:14px;color:var(--mute);margin-top:6px}figure{margin:0}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}.grid figure{background:var(--card);border-radius:10px;overflow:hidden;position:relative}
-.grid img{width:100%;display:block}.tag{position:absolute;top:8px;left:8px;background:var(--tag);color:#111;font-weight:700;font-size:12px;padding:2px 7px;border-radius:4px;max-width:85%}
+.grid img{width:100%;display:block}.tag{position:absolute;top:8px;inset-inline-start:8px;background:var(--tag);color:#111;font-weight:700;font-size:12px;padding:2px 7px;border-radius:4px;max-width:85%}
 .grid figcaption{padding:9px 11px 11px;font-size:14px;line-height:1.35}.grid figcaption b{display:block}.grid figcaption span{display:block;color:var(--mute)}
 q{display:block;margin-top:5px;font-weight:600}i{display:block;margin-top:5px;color:var(--mute)}.msg{margin:0 0 10px}.msg span,.mute{color:var(--mute)}
 .box{background:var(--card);border-radius:10px;padding:13px 15px}.go{margin-top:28px;border-left:4px solid var(--accent);padding:10px 14px;background:var(--card);border-radius:6px}
-</style></head><body><main><h1>${esc(brief.title ?? "Your video: here's what you'll get")}</h1><p class="lead">One look before I build it. Reply <b>go</b>, or change any line or any shot.</p>
-${brief.plan?.length ? `<h2>The plan</h2><ul>${brief.plan.map((l) => `<li>${rich(l)}</li>`).join("")}</ul>` : ""}
-${frames ? `<h2>The look (final quality, from your assets)</h2><div class="frames">${frames}</div>` : ""}
+</style></head><body><main><h1>${esc(brief.title ?? L.title)}</h1><p class="lead">${L.lead}</p>
+${brand}${idea}${asks}${music}
+${brief.plan?.length ? `<h2>${esc(L.plan)}</h2><ul>${brief.plan.map((l) => `<li>${rich(l)}</li>`).join("")}</ul>` : ""}
+${frames ? `<h2>${esc(L.look)}</h2><div class="frames">${frames}</div>` : ""}
 ${storyboards}${hook}
 ${brief.next ? `<div class="go">${rich(brief.next)}</div>` : ""}</main></body></html>`;
   } finally {
@@ -171,8 +271,10 @@ export function buildAnimatic(brief, cut, outFile) {
     });
     writeFileSync(join(tmp, "list.txt"), parts.map((p) => `file '${p.replace(/\\/g, "/")}'`).join("\n"));
     const total = cut.beats.reduce((s, b) => s + b.dur, 0);
-    const music = brief.music && existsSync(resolve(brief.music)) ? resolve(brief.music) : null;
-    const start = music && brief.musicLiftSeconds !== undefined && cut.turnAt !== undefined ? Math.max(0, brief.musicLiftSeconds - cut.turnAt) : 0;
+    const musicFile = typeof brief.music === "string" ? brief.music : brief.music?.file;
+    const liftSeconds = brief.music?.liftSeconds ?? brief.musicLiftSeconds;
+    const music = musicFile && existsSync(resolve(musicFile)) ? resolve(musicFile) : null;
+    const start = music && liftSeconds !== undefined && cut.turnAt !== undefined ? Math.max(0, liftSeconds - cut.turnAt) : 0;
     ff([
       "-f", "concat", "-safe", "0", "-i", join(tmp, "list.txt"),
       ...(music ? ["-ss", String(start), "-i", music, "-filter_complex", `[1:a]atrim=duration=${total},afade=t=in:d=0.15,afade=t=out:st=${Math.max(0, total - 1.2)}:d=1.2[a]`, "-map", "0:v", "-map", "[a]", "-c:a", "aac", "-b:a", "128k"] : ["-map", "0:v"]),

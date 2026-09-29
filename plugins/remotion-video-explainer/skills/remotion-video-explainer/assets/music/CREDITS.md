@@ -15,3 +15,6 @@ ende.app calls attribution optional, but CC BY 4.0 asks for it, so credit it whe
 description field exists (YouTube, a landing page footer):
 
 > Music: "Happy Beats / Business Moves Vol. 1" by Sascha Ende (ende.app), CC BY 4.0
+
+The other tracks in `library.json` are not bundled: `scripts/get-track.mjs <id>` downloads the
+chosen one from Wikimedia Commons into the project and writes that project's own `CREDITS.md`.

@@ -4,7 +4,7 @@ description: Use when making a tutorial, how-to, walkthrough of a task, or step-
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.4.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 4bbd65bdf7ba -->
+<!-- Generated from remotion-video-master 0.5.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 9fb733708847 -->
 
 # Remotion tutorial video
 
@@ -31,16 +31,22 @@ the skill can make, and cannot judge a list of options: infer, decide as a recom
 Details and hands-off rules: [intake](references/intake.md).
 
 1. Read the ask, the product, its locales, its footage and any existing video project; take every
-   answer they already give.
+   answer they already give. Read the brand's own words too: the site's hero line, its about page,
+   its product and collection copy, the tag under the logo. The ask is raw material: a user who
+   lists things ("the products, the workshops and more") is asking for a story, not a chapter each.
 2. The goal is set: this skill makes tutorial videos. Ask only what is still open, in **one question
    call at most**, recommended option first: usually where it runs, or the kind of tutorial when the
    module lists several. If the ask is really another kind of video, say so and recommend remotion-video-master.
 3. Run `node ${CLAUDE_SKILL_DIR}/scripts/recommend.mjs --format=<id> --platforms=<id,id>` (a tutorial
    or onboarding video adds `--steps=<n>`) and take its recommended length; its aspects, safe zones,
    captions and warnings go in the brief.
-4. Decide the source, the voice (only what is possible), the motif and the reference yourself, as
-   recommendations, and write the script (section 3), each cutdown as its own.
-5. Show the **visual brief** (section 6, step 1) and ask one thing: go, or change any line or shot.
+4. **Read the brand and pick the concept** ([brand-read](references/brand-read.md)): four
+   conclusions from the brand's own words (its difference, its look, its signature, its spine),
+   three concepts built on them, and a fresh critic who scores the concepts before the user sees
+   anything. The winner holds every item the user asked for inside one story.
+5. Decide the source, the voice (only what is possible), the music (section 11), the motif and the
+   reference yourself, as recommendations, and write the script (section 3), each cutdown as its own.
+6. Show the **visual brief** (section 6, step 1) and ask one thing: go, or change any line or shot.
    Hands-off, "just make it", or running as a subagent: show it and continue.
 
 ## 2. The tutorial module
@@ -52,6 +58,8 @@ and checks apply on top of everything below. Numbers come from `assets/specs.jso
 ## 3. Story, script and copy: the core
 
 The narrative, the script and the words decide whether a video works; the motion only delivers them.
+The user's ask names things, not a story: every item they listed becomes a step or a proof in one
+story (the brand read's spine), never a chapter of its own.
 Before any beat map: the one message in one sentence, the format's arc (tension first, one turn,
 show then say), and every word written in a script table (beat, time, picture, words, motif), read
 aloud, timed (about 2.5 spoken words a second; about 0.3 s a word on screen, at least 1.5 s a line)
@@ -62,8 +70,11 @@ templates: [story](references/story.md).
 
 ## 4. Find the motif first
 
-The motif is one object the film is made of. It comes from the brand's promise and from what
-the product does to the viewer's problem, and it is decided before the beat map. A CV builder
+The motif is one object the film is made of. It comes from the brand read: the brand's stated
+difference, or a signature it already owns (a mark on every product, a shape in its logo), joined to
+what the product does to the viewer's problem. The most filmable action on its own (the kneading,
+the typing, the assembly line) is not a motif: every rival of the same kind has it. It is decided
+before the beat map. A CV builder
 whose name means tailored got a tailor's thread and needle: it stitches the CV, threads the job
 tags and sews the wordmark shut. The motif is a character with an arc, not a wipe: the viewer
 meets the real object, it does what the product does, and it carries the film's turns. A shape
@@ -79,7 +90,7 @@ that fits every brand says nothing about this one.
 | Travels, grows or morphs | Travels (thread, road, cable): a one-take film ([one-take-film](references/one-take-film.md)). Morphs (one element of the product's UI): that element is shared across the boundaries it crosses. Grows or opens (page, box, lid, code): it opens once, at the turn, to reveal what the product does | travels |
 | Turns | The one or two boundaries the motif carries: the turn (problem to solution) and the close. Every other boundary is a cut on the beat, a match cut on the motif, or a shared element | the first stitch; the sewn wordmark |
 | Echoes | Small appearances in a layer the viewer knows: a caption underline, a step marker, the logo close | the caption underline is a stitch |
-| Competitor test | A planning question, never rendered: if this film carried the closest competitor's name, would it still work for them? Test the gesture too (stuck on, or built in). If it would, go back to the promise | a thread means nothing to a brand whose promise is not tailoring |
+| Competitor test | A planning question, never rendered: if this film carried the name of the closest rival of the same kind, doing the same thing the same way, would it still work for them? Test the gesture too (stuck on, or built in). If it would, go back to the brand read | a thread means nothing to a brand whose promise is not tailoring |
 
 The competitor never appears in the film in any form (section 9); the test lives in the plan
 only. The disc in `flood.ts` is the fallback for a motif with no closed outline; when a turn
@@ -101,8 +112,14 @@ uses it, the Turns row says why.
 
 ## 6. Order of work
 
-1. **The visual brief**, the one approval: build it first, and aim to show it 20 to 30 minutes after the ask:
+1. **The visual brief**, the one approval: build it first, and aim to show it 20 to 30 minutes after the ask.
+   It is written in the user's language (right to left for Hebrew or Arabic) and holds, in order:
+   - **what I understood about your brand**: the brand read's four rows, each with the brand's own
+     words and what they mean for the film ([brand-read](references/brand-read.md));
+   - **the idea** in one sentence, and **what you asked for and where it is in the film**, one line
+     per item the user named;
    - the plan in a few lines ([brief template](references/brief-template.md));
+   - **the music**: the track, why it fits the brand's look, and an excerpt around its lift to play;
    - two **style frames** at final quality from the real assets: the key moment (the turn) and the
      cover. Render them with the engine (`npx remotion still` of a first scene holding only what those
      frames need); with no Remotion project yet, render them as HTML at the final size in a headless
@@ -111,17 +128,21 @@ uses it, the Turns row says why.
      quick still), its time, its words and how the shot is entered;
    - the hook, with two runners-up.
 
-   `node ${CLAUDE_SKILL_DIR}/scripts/visual-brief.mjs docs/visual-brief.json` checks the plan (gaps,
-   the grid, reading time) and writes one page; show it and wait for the go (guided). After changes,
+   `node ${CLAUDE_SKILL_DIR}/scripts/visual-brief.mjs docs/visual-brief.json` checks the plan (the
+   brand read, the idea, every asked item placed, the music chosen with a reason, gaps, the beat grid,
+   reading time) and writes one page. Before showing it, the **storyboard critique** (required,
+   section 10): a fresh critic reads the page for structure, and what it finds is fixed in the
+   storyboard, where it costs minutes. Then show the page and wait for the go (guided). After changes,
    rebuild the page and show it again with what changed named; a one-word fix is confirmed in one line
    and the build goes on.
 2. Build from the approved storyboard: its beat list is the beat map, and the style frames become
    real frames of the film.
-3. Internal, optional: the rough cut (`visual-brief.mjs --animatic`, 480p with the music) to check
-   pacing and reading time, or for a fresh critic to read the story. **Never send it to the user**:
-   they will judge it as the film.
+3. Internal: the rough cut (`visual-brief.mjs --animatic`, 480p with the music) for pacing and
+   reading time, and for the storyboard critic when the page alone cannot show the rhythm. **Never
+   send it to the user**: they will judge it as the film.
 4. The primary deliverable, one aspect, at full quality.
-5. The critique loop, scored cold by a fresh critic, until every score is 8 or more (section 10).
+5. The film critique: at most three rounds by a fresh critic, polish fixed in place and structure sent
+   back to the storyboard (section 10).
 6. Then the other aspects, cuts and locales.
 
 The user sees only what looks finished: the visual brief, then the film. When the build runs long,
@@ -138,7 +159,7 @@ anything.
 | Manifest | `{ id, format, scenes: [{ scene, from?, to?, transition?, captionOverride?, captionTiming?, musicLift? }], aspects?, locales?, loop?, posterFrame }` |
 | `expand()` | Rows x aspects x locales into compositions. Validates windows, the grid, the transitions and the poster frame (`assets/templates/transitions.ts`), the music and the format's profile. Throws rather than renders something wrong. |
 | Chain | Every boundary is a cut on the beat unless its entry says otherwise: a match cut on the motif, a shared element or morph, or a motif turn (a flood, or a push through the real object) with its reason. Every cut is written to `out/<id>.cuts.json` for the pops gate. |
-| Durations | On the grid (15 frames at 30 fps, one beat at 120 BPM). Voice-led formats size scenes from the audio with `calculateMetadata`, rounded up to the grid. |
+| Durations | On the beat grid of the chosen track: one beat is `FPS * 60 / BPM` frames (15 at 120 BPM, 18 at 100, 20 at 90, 25 at 72), set once in the tokens from its `track.json`. Voice-led formats size scenes from the audio with `calculateMetadata`, rounded up to the grid. |
 | Tokens | One source for every color, size and duration. One accent color. |
 | Safe zones | Every text rect inside each shipped platform's safe zone (`assets/templates/safe-zones.ts`), per aspect: Reels and Stories hide the bottom 35%. |
 
@@ -167,7 +188,7 @@ profile's critique starts with **story and copy**.
 | Graphics belong to a layer the viewer knows | In the world (on a surface, in its perspective), in an interface (a device's screen, a viewfinder), or in the brand's layer (captions, the close): anchored, proportionate, matched in light and grain. A full frame of flat color only at a declared turn or the close (`motif-coverage.mjs`). |
 | No competitor, ever | No name, logo, product, packaging or recognizable design, not even blurred or in the background. Contrast with the category's generic problem, and state the brand's advantage positively. |
 | The cover is designed | The real product and the promise, settled. Never a transition frame or a field of flat color. |
-| No AI giveaways | Text in the corners, decorative borders around the whole video, a centered title on a gradient, everything fading in. |
+| No AI giveaways | Text in the corners, decorative borders around the whole video, a centered title on a gradient, everything fading in, an em dash in the words on screen: write two lines, or a colon. |
 | Every gesture mirrors the product action | Transitions included. A reveal under a moving element reads as erasing; pasted things appear whole; a code molded into the product never arrives like a sticker. |
 | Fake company names next to invented metrics | A real employer beside an invented score fails ad review. |
 | Never loosen a containment or safe-zone test | Move the content. |
@@ -183,10 +204,11 @@ and hundreds of unit tests and was caught only by rendering a frame and looking.
 
 ```bash
 npx remotion still src/index.ts <composition-id> out/check.png --frame=120
-node ${CLAUDE_SKILL_DIR}/scripts/frame-pops.mjs out/<id>.mp4 [--cuts=out/<id>.cuts.json]
+node ${CLAUDE_SKILL_DIR}/scripts/frame-pops.mjs out/<id>.mp4 --grid=<frames per beat> [--cuts=out/<id>.cuts.json]
 node ${CLAUDE_SKILL_DIR}/scripts/audio-check.mjs out/<id>.mp4
 node ${CLAUDE_SKILL_DIR}/scripts/motif-coverage.mjs out/<id>.mp4 --accent=<hex> [--allow=<turn frames>]
 node ${CLAUDE_SKILL_DIR}/scripts/motif-coverage.mjs out/<id>.webp --accent=<hex> --max-share=0
+node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cuts.json --moments=<turn frames>
 ```
 
 - Stills per aspect: nothing clipped, text in the safe zones, legible, RTL mirrored; frame 0 settled.
@@ -196,16 +218,28 @@ node ${CLAUDE_SKILL_DIR}/scripts/motif-coverage.mjs out/<id>.webp --accent=<hex>
   no voice keeps its bed lower on purpose (about -24 to -20 LUFS: the viewer is reading steps);
   every other video with no voice is music-led and stays at -16. The 360 px phone sheet reads;
   loops pass the seam scan.
-- The critique loop: a fresh critic (a subagent that sees only the frames and the one-sentence
-  message) first says what a first-time viewer understands every 2 s, then scores each criterion
-  of the module's profile from 1 to 10. Fix the three worst, repeat until every score is 8 or more,
-  logged in `docs/review_log.md`. Every score at exactly 8 is a warning: get a second critic.
+- Critique at three points, each by a fresh critic, logged in `docs/review_log.md`
+  ([verification](references/verification.md#critique-at-three-points)):
+  1. **The concept**, before the brief ([brand-read](references/brand-read.md)): one idea, only this
+     brand, the brand's look, surprise, every asked item inside.
+  2. **The storyboard**, before the build: every beat carries the message, one turn, reading time.
+     Structure is fixed here.
+  3. **The film**, at most three rounds: the critic first says what a first-time viewer understands
+     every 2 s, then scores each criterion of the module's profile from 1 to 10, seeing both sides of
+     every cut and the loudness curve, not only a frame a second. From round two it also gets the
+     last round's scores and fixes. Each problem is polish (fixed in place) or structure (back to the
+     storyboard). Stop when every score is 8 or more; after two rounds with no gain, stop and hand the
+     user the film with the one structural choice that would lift it. Every score at exactly 8 is a
+     warning: get a second critic.
 
 ## 11. Music, voice and rendering
 
-- Music bed: a track whose beat is a whole number of frames, fitted with
-  `scripts/fit-beat-grid.mjs`, the lift on the payoff (`assets/templates/music.ts`, a vetted
-  CC BY 120 BPM track in `assets/music/`). Method: [music-bed](references/music-bed.md).
+- Music bed: chosen per film from the brand read's look, never the same track by default. The
+  library (`node ${CLAUDE_SKILL_DIR}/scripts/get-track.mjs --list`) holds vetted CC BY tracks by mood
+  and tempo, each already fitted; `get-track.mjs <id>` puts the chosen one and its `track.json` in the
+  project. The brief names the track and why it fits, and the page plays its lift. A track from
+  elsewhere: its beat a whole number of frames, fitted with `scripts/fit-beat-grid.mjs`. The lift
+  lands on the payoff (`assets/templates/music.ts`). Method: [music-bed](references/music-bed.md).
   Remotion 4.0.3xx renamed `Audio` to `Html5Audio` and `startFrom` to `trimBefore`; the old names break.
 - Voice: the user's recording, an AI voice only when its key is already in the environment, a
   machine voice for drafts; with none of those the video is caption-led by design (step titles,
@@ -241,3 +275,8 @@ node ${CLAUDE_SKILL_DIR}/scripts/motif-coverage.mjs out/<id>.webp --accent=<hex>
 | The cover is a transition frame | Design it: the product and the promise, settled |
 | The short cut keeps a scene whose setup was cut | Re-script it: its own message, its own cold read |
 | Scoring your own film at exactly 8 | A fresh critic scores it cold |
+| A chapter for each item the user listed | One story from the brand read's spine; each item a step or a proof in it, placed in the brief |
+| The motif is the most filmable action (the kneading, the typing) | Every rival of the same kind has it; take the brand's stated difference or its signature |
+| A clean, minimal brand filmed busy | The brand's own adjectives are the film's style: space, pace, how many words |
+| The same track on every film | Pick from the library by the brand's look, and let the user hear it in the brief |
+| A sixth round of polish when the scores stall | The problem is structure: back to the storyboard, or hand the user the one choice |
