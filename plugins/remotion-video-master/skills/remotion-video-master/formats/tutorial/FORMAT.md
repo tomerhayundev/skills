@@ -57,6 +57,7 @@ the action, show the result, hold 1 to 2 s with the camera breathing so a viewer
 | captions | step titles (statements, up to 8 words so exact UI labels fit) + subtitles, 2 lines, 32-42 characters, shown with the action | statements rising into a still | a tutorial says it while doing it |
 | music | none or a bed under the voice | bed with a lift | instruction is easier with little music |
 | durations | from the voice, or from reading time when caption-led, on the grid | grid | the words set the pace |
+| stillness | a still stretch up to 2 s; 8 s per 30 s in all (the product demo's) | 0.6 s; 1 s per 30 s | a step holds while it is read or said |
 | shortCut | a teaser pointing to the full video | fewer ideas | a tutorial cannot lose steps |
 | critique | base + "a stranger can repeat each step" + "words and action within 0.3 s" | base | the test of a tutorial is whether someone can follow it |
 

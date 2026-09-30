@@ -120,8 +120,9 @@ fails.
   before the action. The element flies in during the hold. Test: strike frame minus
   (last word's start plus the spring's settle frames) is at least 60. Break tall lines
   by hand; one word alone on a line reads as an accident.
-- **Captions:** 4 to 6 words, bigger than you think. They rise only into a still
-  picture: the element and the camera move under 1.5 px a frame from the first word
+- **Captions:** 4 to 6 words, bigger than you think. They rise only into a calm
+  picture (the hold's slow push goes on, about 2% of scale a second; nothing else moves): the
+  element and the camera move under 1.5 px a frame from the first word
   until a second after the last one lands. Fully shown at least 1.5 s, never
   overlapping. Draw the element's motif under the accent word (a line drawn under it),
   so the eye goes where the motion taught it to go. First version: captions arrived
@@ -155,6 +156,8 @@ score ring, and the score stepped up once per keyword, on the half beats.
 
 - `frame-pops.mjs` on every cut and aspect. The camera jolt at the strike popped in
   tall only.
+- `frozen-time.mjs` on every cut and aspect: a rest where only a breath moves is the
+  one-take film's usual fault, and every frame of it looks finished.
 - A contact sheet per cut (one frame a second). It caught what tests missed: slivers of
   neighbouring stations at the frame edge, a panel collapsing into a black slab, the
   first item of a row cropped in tall.

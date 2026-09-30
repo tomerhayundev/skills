@@ -1,9 +1,10 @@
 # Creative rules
 
-What makes a product video look expensive, collected from three places: a studio
+What makes a product video look expensive, collected from four places: a studio
 that produces dozens of product videos a season (writing about Apple-style launch
-videos), the creative laws of the open-source /brag launch-video skill, and what
-survived review in a shipped promo system. Paraphrased; the reasoning is the point.
+videos), the creative laws of the open-source /brag launch-video skill, an open-source
+study of 28 professional launch films (motion-video-kit), and what survived review in
+a shipped promo system. Paraphrased; the reasoning is the point.
 
 ## Brand: intention over effects
 
@@ -54,8 +55,20 @@ survived review in a shipped promo system. Paraphrased; the reasoning is the poi
   work) gives pacing, type and transitions to copy; without one, a model falls back to its
   defaults and hundreds of videos rhyme. Take the grammar, never the content.
 - One shot, one idea.
-- The key object in the center, with room to breathe.
+- **The subject fills the frame:** it spans 60 to 85% of the usable frame along its longer side in
+  a shot that shows it, with a margin around it, not a field. A film whose booking page sat as a small card with empty sides
+  was defended as "one object, room to breathe"; to a viewer it read as unfinished. A minimal
+  brand is minimal in how few things are in the frame, not in how small they are.
+- **The scale changes:** macro, close, medium, wide, overhead, full-frame type. At least three in
+  15 s or more, never the same three shots running, never the same layout twice.
+- **About 12 to 15 compositions in 30 s,** each about 1.4 to 3.5 s; one held longer changes inside.
+  Numbers and the moves that fill them: [handoffs](handoffs.md#pace-and-density).
+- **Three moments, named before the storyboard:** each a thing and what it becomes, in plain words
+  with no effect names ("the four email bubbles become one link"). They are what a viewer
+  remembers; a film with none is a run of shots ([handoffs](handoffs.md)).
 - The background supports the brand and never competes with the key object.
+- Rows equally spaced, left edges shared across the headline, the picture and the rows under it:
+  an owner sees a row that is off at once.
 
 ## Story
 
@@ -100,18 +113,27 @@ the arc, the script table, the copy rules, the hook options) is [story](story.md
 
 - **The eye never has to find its place again.** Across a boundary the key object keeps
   its place (a match cut), stays (a shared element), turns into the next (a morph), or, at
-  a turn, the motif carries it. A plain cut on the beat is right when the next shot is its
-  own new idea; no scene fades, blurs or flips into the next. (Under a shared element the
-  chrome around it may fade: the eye is on the element.)
+  a turn, the motif carries it. No scene fades, blurs or flips into the next. (Under a shared
+  element the chrome around it may fade: the eye is on the element.)
+- **Every cut carries something.** Where the motif is not in the shot, something real still
+  crosses the cut: the same object, a shape, or a movement, in the same place at the same size on
+  both sides ([handoffs](handoffs.md)). Plans that named a motif and then cut "on the beat" at
+  nine boundaries of ten had good shots and restarted at every one. A plain cut is right when
+  size, direction and subject match on both sides and the motion goes on after it. "On the beat"
+  says when a cut lands, never what it carries.
 - **Banned:** crossfades, blur-ins, 3D flips, particles, glows, brightness "developing",
-  holds longer than about 1s with nothing moving, anything that looks like a template.
-  Also the tells of generated video: text or labels in the corners, frame borders, a
-  centered title on a gradient, everything fading in.
+  holds longer than about 0.6 s with nothing moving, anything that looks like a template.
+  Also the tells of generated video: text or labels in the corners, decorative readouts
+  (a timecode, coordinates, a frame counter, a status or version line that tells the viewer
+  nothing), frame borders, a centered title on a gradient, everything fading in, and many
+  things moving at once with nothing leading.
 - **Something happens on every beat.** Map the beats before building (a table of beat,
   time, what changes): the storyboard and the style frames of the visual brief, approved first.
-  In a hook hold or a caption rest the camera's breath (a slow drift, architecture) is
-  the something: still enough to read, never frozen.
-- **Budget the captions.** Each one costs about 2.5 s of still picture (words in, the
+  In a hook hold or a caption rest the something is a slow push, about 2% of scale a second:
+  calm enough to read, never frozen. A breath of 1% is not enough: a film whose holds had only
+  that measured over a third of its runtime still and nobody had seen it (`frozen-time.mjs`,
+  verification). The push is for reading time, not for a hold nothing needs: that one is cut.
+- **Budget the captions.** Each one costs about 2.5 s of calm picture (words in, the
   1.5 s hold, a beat before motion resumes). A 15 s cut carries 3 lines, at most 4
   counting the close, and the hook line is one of them (a 15 s cut that passed: the
   hook, two captions, the brand line); more leaves no time for the product to act.
@@ -134,13 +156,20 @@ the arc, the script table, the copy rules, the hook options) is [story](story.md
   the motif's shape only at a declared turn or the close, growing out of the motif where
   it already is on screen. Never an unmotivated cut, a crossfade or a wipe that belongs
   to no layer.
+- **One move leads.** The camera or the key object makes the main move, smaller ones run
+  under it a few frames apart (labels, a tick, an edge settling), and they overlap. The frame
+  never stops and starts all at once.
+- **Land slowly, leave fast.** A thing arrives slowing, so it can be read, and leaves quickly;
+  the next one is already arriving. Every action has a visible result: a scan produces findings,
+  a tap a new state, a request a confirmation.
 - **Adaptive rhythm:** not every beat the same length. Speed up through the
   familiar, slow down for the payoff.
 - **Readable:** pace comes from motion and cuts, never from pulling text away
   early. A fully shown line holds about 0.3 s per word, at least 1.5 s for a caption.
-  Fast in, then hold. A caption rises into a still picture, after the moment's action,
+  Fast in, then hold. A caption rises into a calm picture, after the moment's action,
   never while something else holds the eye; keep it to 4 to 6 words, and draw the
-  film's motif under its key word.
+  film's motif under its key word. Words over a busy picture get a backing (a band, a
+  scrim); settled text reads at 4.5:1 or more in the rendered frame (`contrast-check.mjs`).
 - **Camera:** it starts and stops with no acceleration (a quintic ease), moves with
   the thing the viewer follows, and never jolts. Details: one-take-film.
 - **Alive:** things appear one by one, clicks and typing happen, the camera
@@ -179,8 +208,10 @@ measures how much of the runtime flat accent color covers.
 - Music sets the energy; pick by the brand read's Look row from the library, then tempo (see music-bed), then genre for the
   audience.
 - Cut on the beat, and land the track's lift on the story's payoff.
-- Sound effects are the cherry, not the cake: few, matched to motion, mixed under
-  the music. After mixing, listen once asking only "what feels off?", and remove it.
+- Sound effects are the cherry, not the cake: one soft whoosh on a real scene change, a small
+  click only on a real action, each screened before use and mixed under the music, with a
+  music-only twin rendered beside the film ([music-bed](music-bed.md#sound-effects)). After
+  mixing, listen once asking only "what feels off?", and remove it.
 
 ## Lengths and placements
 
@@ -202,6 +233,10 @@ measures how much of the runtime flat accent color covers.
 
 - Fabricated metrics (a match score, a count) sit next to fictional company names
   only. A real employer beside an invented number fails ad review.
+- **Every number on screen comes from the facts list:** the brief's `facts`, each with where
+  it is written (the site, the product page, what the owner said). A price, a count, a
+  percentage or a date written from memory is an invented one. No invented testimonial, rating,
+  saving, warranty or result, ever; anything generated or conceptual is labelled as such.
 - **No competitor, ever:** no name, logo, product, packaging or recognizable design, not
   even blurred or in the background. Show the category's generic problem (labels that peel
   off) and state the brand's advantage positively ("It comes on the tote."), never "unlike".

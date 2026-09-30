@@ -22,6 +22,7 @@ const tone = join(dir, "tone.mp3");
 spawnSync("ffmpeg", ["-v", "error", "-y", "-f", "lavfi", "-i", "sine=f=440:d=20", tone]);
 
 const brief = () => ({
+  format: "promo",
   title: "A promo for a storage brand",
   plan: ["A **30 s** master and a 15 s cut", "No voiceover: <captions> carry it"],
   styleFrames: [{ image: still, caption: "**The turn.** The finder locks onto the real code." }],
@@ -36,6 +37,7 @@ const brief = () => ({
   ],
   idea: "Every box answers when you scan it.",
   motif: { object: "the molded code", verb: "it answers when scanned, as the product does", links: "each shot finds the code on the next box" },
+  moments: [{ thing: "the code on the box", becomes: "the list of what is inside", beat: 2 }],
   asks: [{ item: "the app", where: "the scan at the turn" }],
   music: { id: "calm-90", title: "A calm track", artist: "Someone", bpm: 120, why: "calm, like the brand says it is", file: tone, liftSeconds: 4 },
   cuts: [
@@ -46,12 +48,12 @@ const brief = () => ({
       source: footage,
       crop: null,
       beats: [
-        { at: 0, dur: 3.5, src: 0, len: 3, picture: "A dim basement", words: "Which box has the lights?", in: "Opens on the problem", job: "hook" },
-        { at: 3.5, dur: 3, src: 4, len: 2, picture: "The code on the shelf", words: "", in: "MATCH CUT on the code", job: "proof", motif: "the code, handed from the box to the shelf" },
-        { at: 6.5, dur: 2, image: still, picture: "The end card", in: "CLOSE", job: "close" },
+        { at: 0, dur: 3.5, src: 0, len: 3, picture: "A dim basement", words: "Which box has the lights?", in: "Opens on the problem", job: "hook", scale: "wide" },
+        { at: 3.5, dur: 3, src: 4, len: 2, picture: "The code on the shelf", words: "", in: "MATCH CUT on the code", job: "proof", scale: "close", motif: "the code, handed from the box to the shelf", carries: "the code, same place and size" },
+        { at: 6.5, dur: 2, image: still, picture: "The end card", in: "CLOSE", job: "close", scale: "type", carries: "the code settles into the mark" },
       ],
     },
-    { name: "15 s", source: footage, beats: [{ at: 0, dur: 2, src: 1, len: 2, picture: "The code", in: "Opens on the answer", job: "hook" }] },
+    { name: "15 s", source: footage, beats: [{ at: 0, dur: 2, src: 1, len: 2, picture: "The code", in: "Opens on the answer", job: "hook", scale: "close" }] },
   ],
 });
 
@@ -166,7 +168,7 @@ test("the music plays from where the film starts it, with alternatives to choose
 test("beats sit on the chosen track's beat grid, not a fixed 0.5 s", () => {
   const b = brief();
   b.music.bpm = 90;
-  b.cuts = [{ name: "30 s", source: footage, beats: [{ at: 0, dur: 2, src: 0, len: 2, picture: "a", job: "hook" }, { at: 2, dur: 1.5, src: 2, len: 1.5, picture: "b", job: "close" }] }];
+  b.cuts = [{ name: "30 s", source: footage, beats: [{ at: 0, dur: 2, src: 0, len: 2, picture: "a", job: "hook", scale: "close" }, { at: 2, dur: 1.5, src: 2, len: 1.5, picture: "b", job: "close", scale: "wide", carries: "the code" }] }];
   const problems = checkPlan(b);
   assert.equal(problems.length, 1, problems.join("\n"));
   assert.match(problems[0], /beat 2: 1\.5 s is off the 0\.667 s beat grid/);
@@ -254,4 +256,64 @@ test("the command writes the page, and the rough cut only when asked, labelled i
   assert.match(plain.stdout, /music-1-calm-90.mp3 .*send it as a file too/);
   const rough = spawnSync(process.execPath, [script, json, `--out=${outDir}`, "--animatic"], { encoding: "utf8" });
   assert.match(rough.stdout, /animatic-30s\.mp4 .*internal: pacing and reading time; never sent to the user/);
+});
+
+test("a promo is dense and varied: enough compositions, no long unchanging shot, the scale changing", () => {
+  const b = brief();
+  const shot = (at, dur, scale, more = {}) => ({ at, dur, src: 0, len: 1, picture: "p", job: "proof", scale, carries: "the code", ...more });
+  b.cuts = [{ name: "30 s", source: footage, beats: [shot(0, 6, "close"), shot(6, 6, "close"), shot(12, 6, "close"), shot(18, 6, "close"), shot(24, 6, "close", { changesAt: 3 })] }];
+  b.moments = [1, 2, 3].map((n) => ({ thing: `thing ${n}`, becomes: `result ${n}`, beat: n }));
+  const problems = checkPlan(b).join("\n");
+  assert.match(problems, /30 s: 5 compositions in 30\.0 s \(5\.0 per 30 s\); a promo holds about 12 to 15/);
+  assert.match(problems, /30 s, beat 1: 6\.0 s with no change marked inside it/);
+  assert.doesNotMatch(problems, /beat 5: 6\.0 s with no change/, "a change marked inside the shot is enough");
+  assert.match(problems, /30 s: every shot is close; 30\.0 s needs at least 3 scales/);
+  assert.match(problems, /30 s, beat 3: the third close shot running/);
+  delete b.cuts[0].beats[0].scale;
+  assert.ok(checkPlan(b).some((p) => p.startsWith("30 s, beat 1: say how much of the world the frame shows (scale:")));
+});
+
+test("every cut hands something on, and the film names the moments a viewer remembers", () => {
+  const b = brief();
+  delete b.cuts[0].beats[1].carries;
+  delete b.moments;
+  const problems = checkPlan(b).join("\n");
+  assert.match(problems, /30 s, beat 2: say what the eye follows over the cut into this shot \(carries\)/);
+  assert.doesNotMatch(problems, /beat 1: say what the eye follows/, "the first shot has no cut before it");
+  assert.match(problems, /moments: name the moment a viewer will remember/);
+  b.moments = [{ thing: "the code" }];
+  const more = checkPlan(b).join("\n");
+  assert.match(more, /moments, 1: say the thing and what it becomes/);
+  assert.match(more, /moments, 1: say which beat of the first cut it happens in/);
+  const html = buildHtml(brief());
+  assert.ok(html.includes('<h2>The moments you will remember</h2><ol class="moments"><li><b>the code on the box</b> <span class="mute">becomes</span> <b>the list of what is inside</b></li></ol>'));
+  assert.ok(html.includes('<em class="carry">Carried over the cut: the code, same place and size</em>'));
+  assert.ok(html.includes('<span class="job">proof</span> · <span class="job">close</span>'), "the scale sits beside the job");
+});
+
+test("the pace and carry rules are the promo's; every brief names its module", () => {
+  const b = brief();
+  b.format = "tutorial";
+  delete b.moments;
+  for (const beat of b.cuts[0].beats) {
+    delete beat.scale;
+    delete beat.carries;
+  }
+  assert.deepEqual(checkPlan(b), [], "a tutorial holds on a step and cuts inside a recording");
+  delete b.format;
+  assert.ok(checkPlan(b).some((p) => p.startsWith("format: name the module this film is")));
+});
+
+test("a number on screen comes from the facts list, never from memory", () => {
+  const b = brief();
+  b.cuts[0].beats[1].words = "24 boxes, found in 3 seconds";
+  b.hook.recommended = "90% of boxes are never opened";
+  const problems = checkPlan(b).join("\n");
+  assert.match(problems, /30 s, beat 2: "24" is on screen but in no fact/);
+  assert.match(problems, /30 s, beat 2: "3" is on screen but in no fact/);
+  assert.match(problems, /the opening line: "90" is on screen but in no fact/);
+  b.facts = [{ text: "a set of 24 boxes", source: "the product page" }, { text: "found in 3 seconds", source: "the home page" }, { text: "90% of boxes" }];
+  const left = checkPlan(b);
+  assert.equal(left.length, 1, left.join("\n"));
+  assert.match(left[0], /facts: "90% of boxes" needs its text and where it comes from/);
 });

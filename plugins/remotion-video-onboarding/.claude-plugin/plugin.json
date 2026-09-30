@@ -1,6 +1,6 @@
 {
   "name": "remotion-video-onboarding",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Onboarding and first-run videos with Remotion: a series of short tutorials, one task each, caption-led for in-product playback. Early single-purpose specialist of remotion-video-master, built on its tutorial module.",
   "author": {
     "name": "Tomer Hayun",

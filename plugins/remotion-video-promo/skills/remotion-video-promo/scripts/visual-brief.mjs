@@ -18,6 +18,7 @@
  * internal: never send it to the user, who will judge it as the film.
  *
  * {
+ *   "format": "promo",                 // the module (formats/<id>): its rules are the ones checked
  *   "lang": "he",                      // the page's language; he, ar, fa, ur read right to left
  *   "labels": { "idea": "..." },       // optional: headings for a language without built-in ones
  *   "title": "...",
@@ -27,6 +28,8 @@
  *   "idea": "the concept in one sentence",
  *   "motif": { "object": "the one object that carries the film", "verb": "what it does: what the brand does",
  *              "links": "how it carries the shots between the turns" },   // each beat may add "motif": "its part here"
+ *   "moments": [{ "thing": "the printed model", "becomes": "the mould it is cast in", "beat": 3 }],   // the three a viewer remembers: a thing, and what it turns into
+ *   "facts": [{ "text": "24 cm pie dish", "source": "the product page" }],   // the only source of any number on screen
  *   "asks": [{ "item": "workshops", "where": "the turn: guests' hands" }],
  *   "feed": true,                      // Reels, TikTok, Shorts, Stories: the first-seconds checks apply
  *   "music": { "id": "library id", "title": "...", "artist": "...", "bpm": 90, "why": "fits the brand's look because ...",
@@ -39,9 +42,14 @@
  *   "next": "After your go: ...",
  *   "cuts": [{ "name": "30 s", "message": "...", "turnAt": 13.5,
  *     "source": "footage/all.mp4", "crop": { "x": 0, "y": 0, "w": 1920, "h": 1080 },
- *     "beats": [{ "at": 0, "dur": 3.5, "src": 0, "len": 3.4, "picture": "...", "words": "...", "in": "MATCH CUT on the code" },
- *               { "at": 3.5, "dur": 3, "image": "out/still-2.png", "picture": "...", "in": "CUT on the beat" }] }]
+ *     "beats": [{ "at": 0, "dur": 3.5, "src": 0, "len": 3.4, "picture": "...", "words": "...", "scale": "close", "in": "Opens mid-action" },
+ *               { "at": 3.5, "dur": 3, "image": "out/still-2.png", "picture": "...", "scale": "wide", "in": "MATCH CUT on the code",
+ *                 "carries": "the code, same place and size in the frame" }] }]   // what the eye follows over the cut into this shot
  * }
+ *
+ * `scale` is how much of the world the frame shows: macro (a detail fills it), close (one object
+ * or one element), medium (a person, a whole screen), wide (the room, the whole canvas), overhead
+ * (from above) or type (words fill it).
  *
  * A beat's frame comes from its `image`, or from the cut's (or its own) `source`
  * video at `src` + `len` / 2, reframed by `crop` (null for none). Exit 1 when the
@@ -50,9 +58,13 @@
  * it was inferred from; no idea; no asks list, or an asked item with no place in the
  * film; music without a reason; beats that leave a gap or overlap or sit off the
  * track's beat grid (60 / bpm s, 0.5 s when no bpm is given); a caption that cannot
- * be read in its beat (about 0.3 s a word, at least 1.5 s); a long dash in the words. With "feed":
+ * be read in its beat (about 0.3 s a word, at least 1.5 s); a long dash in the words; a number
+ * on screen that is in no fact. With "feed":
  * no music.startSeconds, nothing changing in the first 2 s (a cut, or a beat's changesAt), or a cut over
- * 30 s without a longWhy.
+ * 30 s without a longWhy. For a promo (and the modules built on it): fewer than about 10 compositions
+ * per 30 s, a composition over 3.5 s with no change marked inside it, a shot with no scale, the
+ * same scale three shots running or too few scales in a cut, a boundary that carries nothing
+ * into the next shot, or fewer moments than the film's length asks for (three from 20 s).
  */
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -65,6 +77,16 @@ const rich = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
 const fmt = (n) => Number(n).toFixed(1);
 
 const ROWS = ["difference", "look", "signature", "spine"];
+/** Each module's nearest full module: whose pace and continuity rules a brief is checked against. */
+const FAMILY = {
+  promo: "promo", "feature-announcement": "promo", "social-organic": "promo", "event-recap": "promo",
+  "product-demo": "product-demo", "app-store-preview": "product-demo",
+  tutorial: "tutorial", onboarding: "tutorial",
+  explainer: "explainer", testimonial: "explainer",
+};
+const SCALES = ["macro", "close", "medium", "wide", "overhead", "type"];
+/** How many moments a film of this length names: a thing, and what it becomes. */
+const momentsFor = (seconds) => (seconds >= 20 ? 3 : seconds >= 10 ? 2 : 1);
 const RTL = new Set(["he", "ar", "fa", "ur"]);
 const has = (v) => typeof v === "string" && v.trim().length > 0;
 /** Seconds per beat of the chosen track: the grid every beat sits on. */
@@ -73,6 +95,9 @@ const beatSeconds = (brief) => (Number(brief.music?.bpm) > 0 ? 60 / Number(brief
 /** Problems that make the plan not hold together, as sentences. */
 export function checkPlan(brief) {
   const problems = [];
+  const family = FAMILY[brief.format];
+  if (!family) problems.push(`format: name the module this film is (format: ${Object.keys(FAMILY).join(", ")}); its rules are the ones checked`);
+  const promo = family === "promo";
   if (!Array.isArray(brief.brand)) {
     problems.push("brand read: missing. Add the four rows (difference, look, signature, spine) from the brand's own words (references/brand-read.md)");
   } else {
@@ -120,10 +145,42 @@ export function checkPlan(brief) {
   }
   const beat = beatSeconds(brief);
   const beatText = String(Number(beat.toFixed(3)));
+  const facts = (brief.facts ?? []).map((f) => String(f?.text ?? "")).join(" \n ");
+  const numbers = (s) => String(s ?? "").match(/\d+(?:[.,:]\d+)*/g) ?? [];
+  const unsourced = (s) => numbers(s).filter((n) => !new RegExp(`(^|[^\\d.,:])${n.replace(/[.]/g, "\\.")}([^\\d]|$)`).test(facts));
+  if (family && family !== "tutorial") {
+    for (const f of brief.facts ?? []) if (!has(f?.text) || !has(f?.source)) problems.push(`facts: "${f?.text ?? "?"}" needs its text and where it comes from (source)`);
+    for (const n of unsourced(brief.hook?.recommended)) problems.push(`the opening line: "${n}" is on screen but in no fact; every number shown comes from the facts list (facts: text, source), never from memory`);
+  }
+  if (promo) {
+    const longest = Math.max(0, ...(brief.cuts ?? []).map((c) => (c.beats ?? []).reduce((s, b) => s + b.dur, 0)));
+    const need = momentsFor(longest);
+    const moments = Array.isArray(brief.moments) ? brief.moments : [];
+    if (moments.length < need) problems.push(`moments: name ${need === 1 ? "the moment" : `the ${need} moments`} a viewer will remember, each as a thing and what it becomes (moments: thing, becomes, beat), in plain words with no effect names; a film with none is a run of shots`);
+    moments.forEach((m, i) => {
+      if (!has(m?.thing) || !has(m?.becomes)) problems.push(`moments, ${i + 1}: say the thing and what it becomes ("the inspection photo" becomes "the report's first picture")`);
+      if (!(Number.isInteger(m?.beat) && m.beat >= 1 && m.beat <= (brief.cuts?.[0]?.beats?.length ?? 0))) problems.push(`moments, ${i + 1}: say which beat of the first cut it happens in (beat)`);
+    });
+  }
   for (const cut of brief.cuts ?? []) {
     let t = 0;
+    if (promo) {
+      const total = cut.beats.reduce((s, b) => s + b.dur, 0);
+      const per30 = (cut.beats.length * 30) / total;
+      if (total >= 10 && per30 < 10) problems.push(`${cut.name}: ${cut.beats.length} compositions in ${fmt(total)} s (${fmt(per30)} per 30 s); a promo holds about 12 to 15 per 30 s, each 1.4 to 3.5 s: split the long ones, or show what is missing`);
+      const kinds = new Set(cut.beats.map((b) => b.scale).filter((s) => SCALES.includes(s)));
+      const needKinds = total >= 15 ? 3 : total >= 6 ? 2 : 1;
+      if (cut.beats.every((b) => SCALES.includes(b.scale)) && kinds.size < needKinds) problems.push(`${cut.name}: every shot is ${[...kinds].join(" or ")}; ${fmt(total)} s needs at least ${needKinds} scales (${SCALES.join(", ")}), or it reads as one layout repeated`);
+    }
     cut.beats.forEach((b, i) => {
       const where = `${cut.name}, beat ${i + 1}`;
+      if (promo) {
+        if (!SCALES.includes(b.scale)) problems.push(`${where}: say how much of the world the frame shows (scale: ${SCALES.join(", ")})`);
+        else if (i >= 2 && cut.beats[i - 1].scale === b.scale && cut.beats[i - 2].scale === b.scale) problems.push(`${where}: the third ${b.scale} shot running; change the scale, or the eye stops seeing the cuts`);
+        if (i > 0 && !has(b.carries)) problems.push(`${where}: say what the eye follows over the cut into this shot (carries): the motif, or a real object, shape or movement that sits in the same place on both sides; a cut that carries nothing restarts the film`);
+        if (b.dur > 3.5 + 0.01 && !(Number(b.changesAt) > 0)) problems.push(`${where}: ${fmt(b.dur)} s with no change marked inside it; past 3.5 s a composition needs one (changesAt), or it is two shots`);
+      }
+      if (family && family !== "tutorial") for (const n of unsourced(b.words)) problems.push(`${where}: "${n}" is on screen but in no fact; every number shown comes from the facts list (facts: text, source), never from memory`);
       if (Math.abs(b.at - t) > 0.01) problems.push(`${where}: starts at ${fmt(b.at)} s, but the beat before it ends at ${fmt(t)} s`);
       if (Math.abs(b.dur / beat - Math.round(b.dur / beat)) > 0.01) problems.push(`${where}: ${b.dur} s is off the ${beatText} s beat grid`);
       const words = (b.words ?? "").trim().split(/\s+/).filter(Boolean).length;
@@ -181,7 +238,7 @@ const LABELS = {
     rows: { difference: "What sets you apart", look: "How you look", signature: "Your signature", spine: "Your story" },
     inferred: "Not said on your site; inferred from",
     partOnly: "Please confirm: this is said only about",
-    idea: "The idea", motif: "What carries the film", asks: "What you asked for, and where it is in the film", asked: "You asked for", where: "Where it is",
+    idea: "The idea", motif: "What carries the film", moments: "The moments you will remember", becomes: "becomes", carried: "Carried over the cut:", asks: "What you asked for, and where it is in the film", asked: "You asked for", where: "Where it is",
     music: "The music", alsoMusic: "Also possible, each from where the film would start it:", plan: "The plan", look: "The look (final quality, from your assets)", motion: "The motion: the turn, at final quality",
     storyboard: "Storyboard", oneSentence: "In one sentence:", noWords: "no words",
     hook: "The opening line", recommended: "recommended", also: "Also possible:",
@@ -195,7 +252,7 @@ const LABELS = {
     rows: { difference: "מה מייחד אתכם", look: "איך אתם נראים", signature: "החתימה שלכם", spine: "הסיפור שלכם" },
     inferred: "לא כתוב אצלכם; הסקתי מ",
     partOnly: "לאישורכם: זה נאמר רק על",
-    idea: "הרעיון", motif: "מה מוביל את הסרט", asks: "מה ביקשתם, ואיפה זה בסרט", asked: "ביקשתם", where: "איפה זה בסרט",
+    idea: "הרעיון", motif: "מה מוביל את הסרט", moments: "הרגעים שיזכרו", becomes: "הופך ל", carried: "עובר בחיתוך:", asks: "מה ביקשתם, ואיפה זה בסרט", asked: "ביקשתם", where: "איפה זה בסרט",
     music: "המוזיקה", alsoMusic: "אפשר גם, כל אחת מהמקום שבו הסרט יתחיל אותה:", plan: "התוכנית", look: "הלוק (באיכות סופית, מהחומרים שלכם)", motion: "התנועה: רגע המפנה, באיכות סופית",
     storyboard: "סטוריבורד", oneSentence: "במשפט אחד:", noWords: "בלי מילים",
     hook: "שורת הפתיחה", recommended: "מומלץ", also: "אפשר גם:",
@@ -276,6 +333,8 @@ export function buildHtml(brief) {
     const brand = brandRows ? `<h2>${esc(L.brand)}</h2><table class="kv"><thead><tr><th></th><th>${esc(L.said)}</th><th>${esc(L.meaning)}</th></tr></thead><tbody>${brandRows}</tbody></table><p class="note">${esc(L.brandNote)}</p>` : "";
     const idea = has(brief.idea) ? `<h2>${esc(L.idea)}</h2><div class="box idea">${rich(brief.idea)}</div>` : "";
     const mo = brief.motif && has(brief.motif.object) ? `<h2>${esc(L.motif)}</h2><div class="box"><b>${esc(brief.motif.object)}</b>${has(brief.motif.verb) ? ` <span class="mute">· ${esc(brief.motif.verb)}</span>` : ""}${has(brief.motif.links) ? `<p>${rich(brief.motif.links)}</p>` : ""}</div>` : "";
+    const moments = (brief.moments ?? []).filter((x) => has(x?.thing) && has(x?.becomes));
+    const mm = moments.length ? `<h2>${esc(L.moments)}</h2><ol class="moments">${moments.map((x) => `<li><b>${esc(x.thing)}</b> <span class="mute">${esc(L.becomes)}</span> <b>${esc(x.becomes)}</b></li>`).join("")}</ol>` : "";
     const asks = brief.asks?.length ? `<h2>${esc(L.asks)}</h2><table class="kv"><thead><tr><th>${esc(L.asked)}</th><th>${esc(L.where)}</th></tr></thead><tbody>${brief.asks.map((a) => `<tr><th>${esc(a.item)}</th><td>${rich(a.where ?? "")}</td></tr>`).join("")}</tbody></table>` : "";
     const m = brief.music && typeof brief.music === "object" ? brief.music : null;
     const track = (t, key) => {
@@ -285,7 +344,7 @@ export function buildHtml(brief) {
     const alts = (m?.alternatives ?? []).map((t, i) => `<div class="alt">${track(t, `alt${i}`)}</div>`).join("");
     const music = m ? `<h2>${esc(L.music)}</h2><div class="box">${track(m, "music")}${alts ? `<p class="mute">${esc(L.alsoMusic)}</p>${alts}` : ""}</div>` : "";
     const storyboards = (brief.cuts ?? []).map((cut, c) => {
-      const cells = cut.beats.map((b, i) => `<figure><div class="tag">${esc(b.in ?? "")}</div><img src="${frameFor(cut, b, tmp, `c${c}b${i}`)}" alt="${esc(b.picture)}"><figcaption><b>${i + 1} · ${fmt(b.at)}-${fmt(b.at + b.dur)} s${has(b.job) ? ` · <span class="job">${esc(b.job)}</span>` : ""}</b><span>${esc(b.picture)}</span>${has(b.motif) ? `<em class="motif">${esc(b.motif)}</em>` : ""}${b.words ? `<q>${esc(b.words)}</q>` : `<i>${esc(L.noWords)}</i>`}</figcaption></figure>`).join("");
+      const cells = cut.beats.map((b, i) => `<figure><div class="tag">${esc(b.in ?? "")}</div><img src="${frameFor(cut, b, tmp, `c${c}b${i}`)}" alt="${esc(b.picture)}"><figcaption><b>${i + 1} · ${fmt(b.at)}-${fmt(b.at + b.dur)} s${has(b.job) ? ` · <span class="job">${esc(b.job)}</span>` : ""}${has(b.scale) ? ` · <span class="job">${esc(b.scale)}</span>` : ""}</b><span>${esc(b.picture)}</span>${has(b.motif) ? `<em class="motif">${esc(b.motif)}</em>` : ""}${has(b.carries) ? `<em class="carry">${esc(L.carried)} ${esc(b.carries)}</em>` : ""}${b.words ? `<q>${esc(b.words)}</q>` : `<i>${esc(L.noWords)}</i>`}</figcaption></figure>`).join("");
       return `<h2>${esc(L.storyboard)}, ${esc(cut.name)}</h2>${cut.message ? `<p class="msg"><span>${esc(L.oneSentence)}</span> ${esc(cut.message)}</p>` : ""}<div class="grid">${cells}</div>`;
     }).join("");
     const motion = (brief.motionFrames ?? []).map((m, i) => {
@@ -303,7 +362,7 @@ main{max-width:1080px;margin:0 auto;padding:28px 16px 48px}h1{font-size:26px;lin
 h2{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:30px 0 10px}ul{margin:0;padding-inline-start:20px}li{margin:4px 0}
 .kv{width:100%;border-collapse:collapse;font-size:15px}.kv th,.kv td{text-align:start;vertical-align:top;padding:9px 10px;border-bottom:1px solid var(--line)}.kv thead th{font-size:13px;color:var(--mute);font-weight:600}
 .kv tbody th{width:22%;font-weight:700}.kv q{display:block;font-weight:600;margin:0}.kv small{display:block;color:var(--mute);font-size:12px;margin-top:3px}.kv small.confirm{color:#b45309;font-weight:700;font-size:13px}.note{color:var(--mute);font-size:14px;margin:8px 0 0}
-.idea{font-size:18px;font-weight:600}audio{display:block;width:100%;margin-top:10px}.motion video{width:100%;max-width:420px;border-radius:10px;display:block;background:#000}.alt{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}.motif{display:block;margin-top:4px;color:#b45309;font-style:normal;font-size:13px}.job{color:var(--mute);font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:.04em}.box p{margin:6px 0 0}
+.idea{font-size:18px;font-weight:600}audio{display:block;width:100%;margin-top:10px}.motion video{width:100%;max-width:420px;border-radius:10px;display:block;background:#000}.alt{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}.motif{display:block;margin-top:4px;color:#b45309;font-style:normal;font-size:13px}.carry{display:block;margin-top:4px;color:var(--mute);font-style:normal;font-size:13px}.moments{margin:0;padding-inline-start:22px}.moments li{margin:5px 0}.job{color:var(--mute);font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:.04em}.box p{margin:6px 0 0}
 @media (max-width:640px){.kv,.kv tbody,.kv tr,.kv th,.kv td{display:block;width:auto}.kv thead{display:none}.kv tbody th{width:auto;padding-bottom:0;border:0}}
 .frames{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.frames img{width:100%;border-radius:10px;display:block}
 .frames figcaption{font-size:14px;color:var(--mute);margin-top:6px}figure{margin:0}
@@ -313,7 +372,7 @@ h2{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute
 q{display:block;margin-top:5px;font-weight:600}i{display:block;margin-top:5px;color:var(--mute)}.msg{margin:0 0 10px}.msg span,.mute{color:var(--mute)}
 .box{background:var(--card);border-radius:10px;padding:13px 15px}.go{margin-top:28px;border-left:4px solid var(--accent);padding:10px 14px;background:var(--card);border-radius:6px}
 </style></head><body><main><h1>${esc(brief.title ?? L.title)}</h1><p class="lead">${L.lead}</p>
-${brand}${idea}${mo}${asks}${music}
+${brand}${idea}${mo}${mm}${asks}${music}
 ${brief.plan?.length ? `<h2>${esc(L.plan)}</h2><ul>${brief.plan.map((l) => `<li>${rich(l)}</li>`).join("")}</ul>` : ""}
 ${frames ? `<h2>${esc(L.look)}</h2><div class="frames">${frames}</div>` : ""}
 ${motion ? `<h2>${esc(L.motion)}</h2><div class="frames motion">${motion}</div>` : ""}

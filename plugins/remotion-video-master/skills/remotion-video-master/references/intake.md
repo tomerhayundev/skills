@@ -84,8 +84,10 @@ source, the motif, the reference, the hook.
 Then build the visual brief (SKILL.md, Order of work, step 1): `docs/visual-brief.json` holds the
 brand read, the idea, where each asked item lands, the music, the plan, the style frames, the hook
 and a storyboard per cut; `scripts/visual-brief.mjs` turns it into one page in the user's language.
-The storyboard shows each beat's frame from the real assets, its time, its words and how the shot is
-entered. A fresh critic reads the page for structure first (the storyboard critique), and its
+The storyboard shows each beat's frame from the real assets, its time, its job, its scale, its words,
+how the shot is entered and what is carried over the cut into it; the page also names the moments
+a viewer will remember ([handoffs](handoffs.md)). A fresh critic reads the page for structure first
+(the storyboard critique), and its
 findings are fixed on the page. Then show it and ask one thing: **go**, or change any line or any
 shot. The brand read, the words, the order and the look are approved here, before anything is
 animated. `docs/brief.md` is the record behind it (brief-template).

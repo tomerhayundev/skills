@@ -4,7 +4,7 @@ description: Use when making onboarding, welcome or first-run videos with Remoti
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.6.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: fdc93bd2c86f -->
+<!-- Generated from remotion-video-master 0.7.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 1325e84a902c -->
 
 # Remotion onboarding video
 
@@ -67,7 +67,8 @@ show then say), and every word written in a script table (beat, time, picture, w
 aloud, timed (about 2.5 spoken words a second; about 0.3 s a word on screen, at least 1.5 s a line)
 and cut by a third. Each cutdown is a script of its own: its own one-sentence message, a cold read
 by someone who has not seen the long cut, and no scene whose setup was dropped. Five hooks written, the best two or three shown; the product's own words; no
-filler a rival could say; one call to action. The script is approved with the brief. Rules and
+filler a rival could say; one call to action; every number on screen from the brief's facts list,
+each with where it is written. The script is approved with the brief. Rules and
 templates: [story](references/story.md).
 
 ## 4. Find the motif first
@@ -95,13 +96,21 @@ divider line in the logo, a pretty prop) is decoration, not a motif.
 | World | Filmed footage or drawn UI, and where the motif lives in it: on a real surface, on a device's screen, or in the brand's graphic layer ([creative-rules](references/creative-rules.md#graphics-over-footage)) | drawn: the whole film is UI |
 | Travels, grows or morphs | Travels (thread, road, cable): a one-take film ([one-take-film](references/one-take-film.md)). Morphs (one element of the product's UI): that element is shared across the boundaries it crosses. Grows or opens (page, box, lid, code): it opens once, at the turn, to reveal what the product does | travels |
 | Turns | The one or two boundaries the motif carries: the turn (problem to solution) and the close. Every other boundary is a cut on the beat, a match cut on the motif, or a shared element | the first stitch; the sewn wordmark |
-| Links | How it carries the shots between the turns, so the film flows: match cuts on it, the same object handed from shot to shot, a path the camera follows. Name it for each beat in the script's motif column | the thread runs out of one CV and into the next job tag |
+| Links | How it carries the shots between the turns, so the film flows: match cuts on it, the same object handed from shot to shot, a path the camera follows, or a move from the catalog in [handoffs](references/handoffs.md). Name it for each beat in the script's motif column | the thread runs out of one CV and into the next job tag |
 | Echoes | Small appearances in a layer the viewer knows: a caption underline, a step marker, the logo close | the caption underline is a stitch |
 | Competitor test | A planning question, never rendered: if this film carried the name of the closest rival of the same kind, doing the same thing the same way, would it still work for them? Test the gesture too (stuck on, or built in). If it would, go back to the brand read | a thread means nothing to a brand whose promise is not tailoring |
 
 The competitor never appears in the film in any form (section 9); the test lives in the plan
 only. The disc in `flood.ts` is the fallback for a motif with no closed outline; when a turn
 uses it, the Turns row says why.
+
+**Under the motif, a floor: every cut carries something.** Where the motif is not in a shot,
+something real still crosses the cut: the same object, a shape or a movement, in the same place
+at the same size on both sides. The storyboard names it for every cut (`carries`); "on the beat"
+says when a cut lands, never what it carries. And before the storyboard, name the **three
+moments** a viewer will remember (two in 10 to 20 s, one under 10 s), each a thing and what it
+becomes, with no effect names: "the four email bubbles become one link". The moves that do both,
+and the pace they keep: [handoffs](references/handoffs.md).
 
 ## 5. Reference and real assets
 
@@ -125,8 +134,8 @@ uses it, the Turns row says why.
    - **what I understood about your brand**: the brand read's four rows, each with the brand's own
      words and what they mean for the film ([brand-read](references/brand-read.md));
    - **the idea** in one sentence, **what carries the film** (the motif, its verb and how it links
-     the shots), and **what you asked for and where it is in the film**, one line per item the user
-     named;
+     the shots), **the moments you will remember** (each a thing and what it becomes), and **what
+     you asked for and where it is in the film**, one line per item the user named;
    - the plan in a few lines ([brief template](references/brief-template.md));
    - **the music**: the recommended track and two alternatives of a different energy, each with why
      it fits and 15 s to play from where the film would start it; the user chooses by ear;
@@ -139,12 +148,15 @@ uses it, the Turns row says why.
      is where the user, and the storyboard critic, judge the motion design before the build. Send it
      as a file too;
    - a **storyboard of every cut**: each beat's frame from the real assets (footage, captures, or a
-     quick still), its time, its job, its words and how the shot is entered;
+     quick still), its time, its job, its scale, its words, how the shot is entered and what is
+     carried over the cut into it;
    - the hook, with two runners-up.
 
    `node ${CLAUDE_SKILL_DIR}/scripts/visual-brief.mjs docs/visual-brief.json` checks the plan (the
    brand read, the idea, every asked item placed, a job for every shot, the music chosen with a
-   reason, gaps, the beat grid, reading time; the first seconds in a feed) and writes one page, plus
+   reason, gaps, the beat grid, reading time, every number on screen in the facts list; the first
+   seconds in a feed; for a promo, enough compositions, the scale changing, something carried over
+   every cut and the moments named) and writes one page, plus
    each music excerpt as its own MP3: send those as files too, since a player inside a page does not
    play in every viewer. Before showing it, the **storyboard critique** (required,
    section 10): a fresh critic reads the page for structure, and what it finds is fixed in the
@@ -152,14 +164,22 @@ uses it, the Turns row says why.
    rebuild the page and show it again with what changed named; a one-word fix is confirmed in one line
    and the build goes on.
 2. Build from the approved storyboard: its beat list is the beat map, and the style frames become
-   real frames of the film.
+   real frames of the film. The shared pieces first (the tokens, the motif, the exact rect of every
+   handoff, so a carried object lands on the same pixels on both sides); then each scene, rendered
+   alone as stills and a 3 to 4 s clip and read by a fresh critic before it joins the film
+   (section 10). With the shared pieces in place, scenes can be built in parallel by subagents:
+   one owner per scene file, the shared files edited by you alone, unique names for every still,
+   reviewers that never edit ([architecture](references/architecture.md#building-scenes-in-parallel)).
 3. Internal: the rough cut (`visual-brief.mjs --animatic`, 480p with the music) for pacing and
    reading time, and for the storyboard critic when the page alone cannot show the rhythm. **Never
    send it to the user**: they will judge it as the film.
 4. The primary deliverable, one aspect, at full quality.
-5. The film critique: at most three rounds by a fresh critic, polish fixed in place and structure sent
-   back to the storyboard (section 10).
+5. The film critique: at most three rounds, a new critic each round, polish fixed in place and
+   structure sent back to the storyboard (section 10).
 6. Then the other aspects, cuts and locales.
+7. The hand-off: the film, the music-only twin when it has sound effects, a contact sheet, the
+   ledger of every critique round, and two short lists: what was measured, and what a person still
+   has to watch or listen to.
 
 The user sees only what looks finished: the visual brief, then the film. When the build runs long,
 send a few seconds of the turn as a clip at final quality as soon as it exists, without asking
@@ -174,7 +194,8 @@ anything.
 | Scene registry | Metadata (duration, focus rects, caption key, persist rect) in a module Node can load; components in a separate map. A scene's `.tsx` never reaches the render script's import path. |
 | Manifest | `{ id, format, scenes: [{ scene, from?, to?, transition?, captionOverride?, captionTiming?, musicLift? }], aspects?, locales?, loop?, posterFrame }` |
 | `expand()` | Rows x aspects x locales into compositions. Validates windows, the grid, the transitions and the poster frame (`assets/templates/transitions.ts`), the music and the format's profile. Throws rather than renders something wrong. |
-| Chain | Every boundary is a cut on the beat unless its entry says otherwise: a match cut on the motif, a shared element or morph, or a motif turn (a flood, or a push through the real object) with its reason. Every cut is written to `out/<id>.cuts.json` for the pops gate. |
+| Chain | Every boundary is a cut on the beat unless its entry says otherwise: a match cut on the motif, a shared element or morph, or a motif turn (a flood, or a push through the real object) with its reason. Whatever its kind, it carries what the storyboard says it carries, on the same pixels on both sides. Every cut is written to `out/<id>.cuts.json` for the pops gate. |
+| Holds | A hold is cut to what its words need; the reading time that remains (the hook line, a caption, the end card) keeps a slow push, about 2% of scale a second, toward what the eye is on. A breath of 1% reads as frozen. |
 | Durations | On the beat grid of the chosen track: one beat is `FPS * 60 / BPM` frames (15 at 120 BPM, 18 at 100, 20 at 90, 25 at 72), set once in the tokens from its `track.json`. Voice-led formats size scenes from the audio with `calculateMetadata`, rounded up to the grid. |
 | Tokens | One source for every color, size and duration. One accent color. |
 | Safe zones | Every text rect inside each shipped platform's safe zone (`assets/templates/safe-zones.ts`), per aspect: Reels and Stories hide the bottom 35%. |
@@ -186,10 +207,14 @@ A new project scaffolds in this order: tokens, one scene on the square canvas, t
 ## 8. Rules a format sets
 
 Each module's "Engine profile" sets continuity, popsGate, transitions, hook, captions, music,
-durations, shortCut and critique (`assets/templates/profile.ts`, enforced by `expand()`). The promo
+durations, stillness, shortCut and critique (`assets/templates/profile.ts`, enforced by `expand()`). The promo
 profile is the base: no unmotivated cut (declared beat cuts pass the pops gate, any other pop
 fails), at most one motif turn per 15 s plus the close, a hook line held 2 s, 3 statement lines
-per 15 s counting the hook, each rising into a still picture, a bed with its lift on the payoff. In a
+per 15 s counting the hook, each rising into a calm picture, no still stretch over 0.6 s (1 s per
+30 s in all), a bed with its lift on the payoff. A promo is also dense and varied: about 12 to 15
+compositions in 30 s, the subject spanning 60 to 85% of the usable frame, the scale changing, and one or
+two things to read at a time: dense is not busy
+([handoffs](references/handoffs.md#pace-and-density)). In a
 vertical feed (Reels, TikTok, Shorts, Stories) the first two seconds decide: frame 0 is the strongest
 moving picture, the track is already on its beat, the hook line opens a question and is never the
 slogan, the picture fills the frame, and a promo runs 15 to 30 s with the turn in its first half
@@ -205,11 +230,14 @@ profile's critique starts with **story and copy**.
 | Build from what exists | No beat, score or fix waits on material the user has not said they have or will make, and the user is never handed a task ("record a clip of"). A missing picture is solved in the film: another shot, a still, the brand's layer, or the end card. Material is asked for once, in the question call, if at all ([intake](references/intake.md#build-from-what-exists)). |
 | Show the real product | Import its components; without code, real captures; never a redrawn version of a UI that exists. |
 | Every transition is motivated; the motif carries only the turns | A flood on every boundary reads as an effect pasted over the film: six floods in 30 s put flat color over a third of it, and no boundary mattered more than another. At most one motif turn per 15 s plus the close; the rest are cuts on the beat, match cuts, shared elements (`transitions.ts` counts them). |
+| Every cut carries something | The motif, or a real object, shape or movement in the same place on both sides. A film that cuts "on the beat" with nothing carried restarts at every cut ([handoffs](references/handoffs.md)). |
+| Nothing stands still | A hold where only a breath moves looks finished in every frame and dead in motion: one film measured over a third of its runtime still. No stretch past the profile's limit; a hold keeps a slow push (`frozen-time.mjs`). |
+| Every number on screen is in the facts list | A price, a count or a percentage written from memory is an invented one. Each has its source in the brief (`facts`); no invented testimonial, rating or result. |
 | The motif is met before it is abstracted | A shape that appears from nothing and floods the screen reads as a sticker. Show the real object and hold on it first. |
 | Graphics belong to a layer the viewer knows | In the world (on a surface, in its perspective), in an interface (a device's screen, a viewfinder), or in the brand's layer (captions, the close): anchored, proportionate, matched in light and grain. A full frame of flat color only at a declared turn or the close (`motif-coverage.mjs`). |
 | No competitor, ever | No name, logo, product, packaging or recognizable design, not even blurred or in the background. Contrast with the category's generic problem, and state the brand's advantage positively. |
 | The cover is designed | The real product and the promise, settled. Never a transition frame or a field of flat color. |
-| No AI giveaways | Text in the corners, decorative borders around the whole video, a centered title on a gradient, everything fading in, an em dash in the words on screen: write two lines, or a colon. |
+| No AI giveaways | Text in the corners, decorative readouts (a timecode, coordinates, a status line that tells the viewer nothing), decorative borders around the whole video, a centered title on a gradient, everything fading in, more than two things asking to be read at once, an em dash in the words on screen: write two lines, or a colon. |
 | Every gesture mirrors the product action | Transitions included. A reveal under a moving element reads as erasing; pasted things appear whole; a code molded into the product never arrives like a sticker. |
 | Fake company names next to invented metrics | A real employer beside an invented score fails ad review. |
 | Never loosen a containment or safe-zone test | Move the content. |
@@ -226,15 +254,19 @@ and hundreds of unit tests and was caught only by rendering a frame and looking.
 ```bash
 npx remotion still src/index.ts <composition-id> out/check.png --frame=120
 node ${CLAUDE_SKILL_DIR}/scripts/frame-pops.mjs out/<id>.mp4 --grid=<frames per beat> [--cuts=out/<id>.cuts.json]
-node ${CLAUDE_SKILL_DIR}/scripts/audio-check.mjs out/<id>.mp4
+node ${CLAUDE_SKILL_DIR}/scripts/frozen-time.mjs out/<id>.mp4 [--max-stretch=<s>] [--per-30=<s>]
+node ${CLAUDE_SKILL_DIR}/scripts/contrast-check.mjs out/check.png --rect=<x,y,w,h of a text block>
+node ${CLAUDE_SKILL_DIR}/scripts/audio-check.mjs out/<id>.mp4 [--music-only=out/<id>.music-only.mp4]
 node ${CLAUDE_SKILL_DIR}/scripts/motif-coverage.mjs out/<id>.mp4 --accent=<hex> [--allow=<turn frames>]
 node ${CLAUDE_SKILL_DIR}/scripts/motif-coverage.mjs out/<id>.webp --accent=<hex> --max-share=0
 node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cuts.json --moments=<turn frames>
 ```
 
 - Stills per aspect: nothing clipped, text in the safe zones, legible, RTL mirrored; frame 0 settled.
-- Pops: `--cuts=out/<id>.cuts.json`; only declared cuts may pop. Motif coverage: flat accent over at
+- Pops: `--cuts=out/<id>.cuts.json`; only declared cuts may pop. Frozen time: no still stretch past
+  the profile's limit (a promo: 0.6 s, and 1 s per 30 s in all). Motif coverage: flat accent over at
   most 5% of the runtime, a full frame of it only inside a declared turn or the close, none on the cover.
+  Settled text at 4.5:1 or more against the picture behind it.
 - Audio about -16 LUFS, true peak under -1 dBFS. Only a tutorial or onboarding video read with
   no voice keeps its bed lower on purpose (about -24 to -20 LUFS: the viewer is reading steps);
   every other video with no voice is music-led and stays at -16. The 360 px phone sheet reads;
@@ -244,14 +276,19 @@ node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cu
   1. **The concept**, before the brief ([brand-read](references/brand-read.md)): one idea, only this
      brand, the brand's look, surprise, the first two seconds (in a feed), every asked item inside.
   2. **The storyboard**, before the build: the first two seconds judged alone, picture and sound,
-     then every beat carries the message, one turn, reading time. Structure is fixed here.
-  3. **The film**, at most three rounds: the critic first says what a first-time viewer understands
-     every 2 s, then scores each criterion of the module's profile from 1 to 10, seeing both sides of
-     every cut and the loudness curve, not only a frame a second. From round two it also gets the
-     last round's scores and fixes. Each problem is polish (fixed in place) or structure (back to the
-     storyboard). Stop when every score is 8 or more; after two rounds with no gain, stop and hand the
-     user the film with the one structural choice that would lift it. Every score at exactly 8 is a
-     warning: get a second critic.
+     then every beat carries the message, every cut carries something, one turn, the moments, the
+     density, reading time. Structure is fixed here.
+  3. **The film**: each scene alone as it is built (keep, revise or reject), then the whole film in
+     at most three rounds. The critic gets the film and its pack (a frame every 0.2 s, both sides of
+     every cut, frozen time, the loudness curve), never your reasoning. It says what a first-time
+     viewer understands every 2 s, ranks the problems with their times, scores each criterion of the
+     module's profile from 1 to 10 and ends with SHIP or ONE MORE PASS. From round two a new critic
+     gets only the last critic's report, never what you changed, and marks each problem fixed, partly
+     or still there. Each problem is polish (fixed in place) or structure (back to the storyboard).
+     Stop at SHIP with every score 8 or more; after two rounds with no gain, stop and hand the user
+     the film with the one structural choice that would lift it. Every score at exactly 8 is a
+     warning: get a second critic. A film with no defects is not yet a good one. The prompts:
+     [critic-prompts](references/critic-prompts.md).
 
 ## 11. Music, voice and rendering
 
@@ -263,6 +300,9 @@ node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cu
   starts the track at its `feedStartSeconds`, where the beat already plays. A track from
   elsewhere: its beat a whole number of frames, fitted with `scripts/fit-beat-grid.mjs`. The lift
   lands on the payoff (`assets/templates/music.ts`). Method: [music-bed](references/music-bed.md).
+  Sound effects are optional and narrow: one soft whoosh on a real scene change, a small click only
+  on a real action, each screened first (`sfx-check.mjs`), none louder than the music, and the film
+  rendered once more with them off as its music-only twin.
   Remotion 4.0.3xx renamed `Audio` to `Html5Audio` and `startFrom` to `trimBefore`; the old names break.
 - Voice: the user's recording, an AI voice only when its key is already in the environment, a
   machine voice for drafts; with none of those the video is caption-led by design (step titles,
@@ -271,6 +311,8 @@ node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cu
 - Render: bundle once, `renderMedia` per composition, in batches of one aspect at a time (a full
   unattended run has crashed Chromium; skip outputs newer than their sources). Remotion's H.264 may
   be tagged full-range yuvj420p: platforms take it; re-encode with `-pix_fmt yuv420p` if one refuses.
+  30 fps by default; 60 for a wide master of fast drawn motion, where no placement caps it
+  ([architecture](references/architecture.md#tokens)).
   H.264 CRF 18 masters (ad platforms re-encode), CRF 30 + VP9 WebM for in-page loops, a designed
   WebP cover (the poster frame, or a still of its own); SRT alongside when the brief lists it. Publish to a public media bucket separate from
   private uploads.
@@ -298,6 +340,12 @@ node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cu
 | The cover is a transition frame | Design it: the product and the promise, settled |
 | The short cut keeps a scene whose setup was cut | Re-script it: its own message, its own cold read |
 | Scoring your own film at exactly 8 | A fresh critic scores it cold |
+| Telling the next critic what you fixed | It gets the last report only, and checks each item against the frames |
+| A motif named, then every cut "on the beat" | Say what each cut carries: the motif, or a real object, shape or movement in the same place on both sides |
+| Holds where only the camera breathes | Cut the hold to what its words need, then a slow push (about 2% of scale a second) on what remains; `frozen-time.mjs` measures it |
+| A small card in an empty frame, "with room to breathe" | The subject spans 60 to 85% of the usable frame along its longer side; minimal is fewer things, not smaller ones |
+| A price or a count on screen from memory | Only what the facts list holds, with its source |
+| "No pops, loudness fine, so it is good" | Clean and basic is still basic: the critic ranks what it costs the film, and the moments are what it is remembered for |
 | A chapter for each item the user listed | One story from the brand read's spine; each item a step or a proof in it, placed in the brief |
 | The motif is the most filmable action (the kneading, the typing) | Every rival of the same kind has it; take the brand's stated difference or its signature |
 | The motif is one collection's detail because it is on the home page | Check what each quote is about: a new line is a proof in the film, not the brand; ask the owner when unsure |

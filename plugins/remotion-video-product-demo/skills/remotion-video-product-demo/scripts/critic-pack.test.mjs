@@ -33,10 +33,10 @@ test("frames come from a cuts.json (array or { cuts }) or a comma list, and must
   assert.throws(() => parseFrames("1.5"), /whole numbers/);
 });
 
-test("the pack holds both sides of every cut, a strip per moment, the audio timeline and an index", () => {
+test("the pack holds the dense sheets, both sides of every cut, a strip per moment, frozen time, the audio timeline and an index", async () => {
   const out = join(dir, "pack");
-  const written = makePack(film, { cuts: [120], moments: [120], outDir: out });
-  assert.deepEqual(written, ["hook.png", "contact.png", "cuts.png", "strip-120.png", "audio.txt", "index.md"]);
+  const written = await makePack(film, { cuts: [120], moments: [120], outDir: out });
+  assert.deepEqual(written, ["hook.png", "contact.png", "phone.png", "dense-1.png", "dense-2.png", "cuts.png", "cut-120.png", "strip-120.png", "motion.txt", "audio.txt", "index.md"]);
   for (const f of written) assert.ok(existsSync(join(out, f)), f);
   const size = (f) => JSON.parse(spawnSync("ffprobe", ["-v", "error", "-show_entries", "stream=width,height", "-of", "json", join(out, f)], { encoding: "utf8" }).stdout).streams[0];
   assert.equal(size("cuts.png").width, 2 * 180 + 4, "one pair, tall video at 180 px, 4 px apart");
@@ -46,6 +46,18 @@ test("the pack holds both sides of every cut, a strip per moment, the audio time
   assert.match(index, /1\. frame 120, 4\.00 s/);
   assert.match(index, /strip-120\.png`: 12 consecutive frames around frame 120 \(4\.00 s\)/);
   assert.match(readFileSync(join(out, "audio.txt"), "utf8"), /LUFS/);
+  assert.equal(size("dense-1.png").width, 5 * 180 + 4 * 4, "5 a row: each row is one second");
+  assert.equal(size("cut-120.png").width, 8 * 180 + 7 * 4, "16 frames around the cut, 8 a row");
+  assert.match(index, /dense-2\.png`: from 5\.00 s, a frame every 0\.2 s/);
+  assert.match(index, /motion\.txt`: frozen time: 7\.\d\d s still in all/, "two flat colors: all of it still but the cut");
+  assert.match(readFileSync(join(out, "motion.txt"), "utf8"), /over the budget/);
+});
+
+test("with auto cuts the cuts are found, for a reference nobody declared cuts for", async () => {
+  const out = join(dir, "auto");
+  const written = await makePack(film, { cuts: "auto", outDir: out });
+  assert.ok(written.includes("cut-120.png"), written.join(" "));
+  assert.match(readFileSync(join(out, "index.md"), "utf8"), /1\. frame 120, 4\.00 s/);
 });
 
 test("the command writes the folder and says what to hand the critic", () => {
@@ -53,5 +65,5 @@ test("the command writes the folder and says what to hand the critic", () => {
   const r = spawnSync(process.execPath, [script, film, "--cuts=120", "--moments=60,200", `--out=${out}`], { encoding: "utf8" });
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.match(r.stdout, /strip-200\.png/);
-  assert.match(r.stdout, /Give the critic this folder/);
+  assert.match(r.stdout, /Give the critic this folder and the film itself/);
 });

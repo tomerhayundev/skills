@@ -50,6 +50,7 @@ under the voice, or a bed with a lift on the strongest feature when caption-led.
 | captions | feature titles (statements) + subtitles when voiced | statements | a voiced demo is subtitled |
 | music | bed under the voice, or bed + lift when caption-led | bed with a lift | the voice carries the demo |
 | durations | from the voice or reading time, on the grid | grid | the words set the pace |
+| stillness | a still stretch up to 2 s; 8 s per 30 s in all | 0.6 s; 1 s per 30 s | a real screen holds while the voice explains it |
 | shortCut | drops features, keeps the pace | fewer ideas | a shorter demo shows fewer features |
 | critique | base + "each feature lands" | base | every feature shown must be understood |
 

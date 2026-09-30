@@ -55,6 +55,12 @@ takes the same number.
 Everything reads from here. A value that lives in one scene is a value that drifts
 from the others.
 
+**60 fps is an option, not the default.** Fast drawn motion (a fly-through, a fold, a camera
+travelling a canvas) is visibly smoother at 60, and the grid still holds (30 frames a beat at
+120 BPM, 40 at 90; music-bed lists the tempos). It doubles every render, and some placements cap at
+30 (an app store preview, some ad slots: `recommend.mjs` prints each platform's limit), so choose it
+for a wide master of drawn motion, set `FPS` once, and let every duration follow from the grid.
+
 ## One square canvas, a window per aspect
 
 The master adds `portrait` 1080x1350 (Instagram and Facebook feed, 4:5) and `appstore` 886x1920 (Apple
@@ -74,11 +80,28 @@ export function fitRect(rect: Rect, aspect: AspectId, captionBand = 0) {
 }
 ```
 
-A slow "breath" (scale +-1%) and "sway" (a few px) on non-loop clips keep a held
-frame alive. Because they move the frame, a containment test must check the rect
-against the drift envelope, not the static fit: compute the rect that is
-guaranteed on screen at the drift extremes and assert every element sits inside
-it. That is the test that caught clipped keyword chips.
+**A held frame gets a push, not only a breath.** A hold is the time from when a line is whole, or an
+action has settled, to the next action (the hook line's hold, a caption's rest, the end card).
+First make it no longer than its words need, or let something small happen in it; the push is for
+the reading time that remains, never a way to keep a hold nothing needs. What remains scales up at
+a steady rate of about 2% a second (3 to 5% across a hold of 1.5 to 2.5 s), blended in from the
+move before it on the one spring, so the camera never stops and restarts. It is the one steady
+move in the film; an eased push slows to nothing before the hold ends.
+
+- **Its fixed point is where the eye is:** the key object (the picked slot, the event, the mark), or
+  the top of the caption band while a caption is read, so the picture moves and the words do not.
+- **It stays calm:** what is on screen moves under 1.5 px a frame. Measure points at the frame's
+  corners, not canvas points, which are off screen at a high zoom and read faster than anything
+  the viewer sees.
+- **A "breath" of about 1% and a sway of a few px is not a push:** a film whose holds had only that
+  measured over a third of its runtime still (`frozen-time.mjs`).
+- **A loop uses a push that returns** (out and back on a sine), so its last frame is its first.
+- **Containment is tested at the push's end:** compute the rect that is guaranteed on screen there
+  and assert every element sits inside it, not inside the static fit. That is the test that caught
+  clipped keyword chips.
+- **A subject that fills the frame needs a longer way out.** On the standard spring a card at 80%
+  of the frame leaves in two frames and `frame-pops.mjs` flags it: run its exit on the spring
+  stretched about 1.5 times.
 
 ## Scene registry: split metadata from components
 
@@ -169,9 +192,12 @@ amount, or the back half of the clip goes black.
 **The eye never has to find its place again, and the motif carries only the turns.**
 Mechanisms, in order of preference, chosen per boundary and declared on the entry:
 
-1. **Cut on the beat** (the default, `kind: "cut"`): the next shot starts on a grid frame.
+1. **Cut on the beat** (the default, `kind: "cut"`): the next shot starts on a grid frame,
+   and something the storyboard names is carried over it (its `carries`: an object, a shape or
+   a movement that sits in the same place on both sides; [handoffs](handoffs.md)).
    A **match cut** (`"match"`) is better: the key object (the motif, the product) sits at
-   the same place and size on both sides, so the eye stays put.
+   the same place and size on both sides, so the eye stays put. Test it: the object's rect in
+   the last frame before and the first frame after, per aspect, within 2 px.
 2. **Shared element** (`"shared"`, both scenes declare `persist`): the element glides from
    one scene's framing into the next, as above.
 3. **Morph** (`"morph"`, the motif is a UI element): that element is shared across the
@@ -278,6 +304,28 @@ write them idiomatically for the market, not translated.
 - Every frame must be a pure function of the frame number: no `Date.now()`, no
   `Math.random()` without a seed, no CSS animations.
 
+## Building scenes in parallel
+
+Once the shared pieces exist (the tokens, the beat map, the registry, the chain, the motif, the rect
+of every handoff), each scene is its own file and scenes can be built at the same time, one
+subagent a scene. What keeps that from colliding:
+
+- **One owner per scene file.** Each builder's prompt names the one file that is its own. The shared
+  files belong to whoever runs the build, and nobody else edits them: a builder that needs a change
+  in one says so in its reply.
+- **One folder, no separate worktrees,** so every builder can render the whole project. That only
+  works with unique output names: every still and clip a builder or reviewer writes carries its
+  scene's name (`out/scenes/<Scene>-f120.png`), or two agents overwrite each other's evidence.
+- **Every frame of the scene is rendered once** before it is reviewed (half size is enough). A
+  shape given a negative radius at one exact frame passed every still and would have stopped the
+  final render; only rendering that frame finds it.
+- **Reviewers never edit.** Each pulls its own frames, reads them, and returns a list of defects:
+  how bad, at what time, and the fix ([critic-prompts](critic-prompts.md), the scene critic).
+- **A fixer runs only where a reviewer said so.** A scene that was kept goes straight on; each
+  scene moves through build, review and fix on its own and waits for no other scene. Where the user
+  has asked for a multi-agent workflow, this is a pipeline over the scenes.
+- **Long renders run in the background,** and the work that does not depend on them goes on.
+
 ## The render script
 
 ```ts
@@ -293,6 +341,11 @@ for (const spec of specs) {
 ```
 
 - Flags: `--filter --aspect --locale --dry-run --force`. Batch by aspect.
+- A film with sound effects takes an `sfx` input prop (on by default), and the script also
+  renders its twin with `sfx: false`, `<id>.music-only.mp4`, for the primary aspect.
+  `audio-check.mjs --music-only` compares the two, and the twin ships with the film. While
+  mixing, an audio-only render of each (`codec: "wav"`) is enough for the comparison and much
+  faster than a full one.
 - Watched sources for the skip check: `src/`, `scripts/`, `public/`, and any app
   modules the scenes import (a template or typography change invalidates renders).
 - Sort outputs into `out/promo/`, `out/clips/`, `out/loops/`. A flat pile of 100

@@ -51,8 +51,8 @@ recap; explainer: problem, why it matters, idea, how it works, proof). Inside th
 
 One row per beat, written before the beat map, which is built from it:
 
-| Beat | Time | Picture | Words (voice line or caption) | Motif |
-| --- | --- | --- | --- | --- |
+| Beat | Time | Picture | Words (voice line or caption) | Motif | Carried over the cut into it |
+| --- | --- | --- | --- | --- | --- |
 
 - Write the words, then time them. Spoken: about 2.5 words a second. Read on screen: about 0.3 s a
   word, at least 1.5 s a line. The words set the length; if they do not fit the recommended length,
@@ -86,7 +86,8 @@ Write the five hooks as picture + line, and judge them with the sound on and the
 - Banned filler: "streamline", "revolutionize", "seamless", "unlock", "leverage", "game-changer",
   "all-in-one", "next-level", "effortless", "powerful". If a rival could say the line, rewrite it.
 - No invented numbers, testimonials or logos presented as real; fictional names beside illustrative
-  numbers.
+  numbers. Every number, price or claim in the words comes from the brief's facts list, each with
+  where it is written; one written from memory is an invented one.
 - The brand's voice: take its tone from its site and past posts; a playful brand is not made formal,
   a serious one not made cute.
 

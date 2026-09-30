@@ -3,12 +3,20 @@
  * Checks a rendered video's audio the way you'd check its picture: measured,
  * not assumed. Needs Node 18+ and ffmpeg/ffprobe.
  *
- *   node audio-check.mjs <video.mp4> [--reference=<approved.mp4>] [--window=0.5]
+ *   node audio-check.mjs <video.mp4> [--reference=<approved.mp4>] [--music-only=<render.mp4>] [--window=0.5]
  *
  * Prints frame count, integrated loudness, true peak, a flag for a silent
  * track (Remotion always writes an audio stream, so "has audio" proves
  * nothing), a loudness timeline to see where a lift lands, and with
  * --reference the time offset and correlation against an approved mix.
+ *
+ * With --music-only (the same film rendered with its effects off) it lists
+ * every sound effect it can hear: where it is, how far it lifts the mix, how
+ * loud the effect itself is against the music under it, and how far its peak
+ * stands over the music's peak around it. An effect louder than the music, or
+ * peaking more than 6 dB over it, is marked: it pokes out. Whole-film loudness
+ * cannot show this: a tick barely moves it and still sounds harsh. An effect
+ * more than about 6 dB under the music is too quiet to be listed.
  */
 import { spawnSync } from "node:child_process";
 
@@ -16,11 +24,12 @@ const args = process.argv.slice(2);
 const file = args.find((a) => !a.startsWith("--"));
 const opt = (name) => args.find((a) => a.startsWith(`--${name}=`))?.split("=")[1];
 if (!file) {
-  console.error("usage: node audio-check.mjs <video.mp4> [--reference=<approved.mp4>] [--window=0.5]");
+  console.error("usage: node audio-check.mjs <video.mp4> [--reference=<approved.mp4>] [--music-only=<render.mp4>] [--window=0.5]");
   process.exit(2);
 }
 const WINDOW = Number(opt("window") ?? 0.5);
 const reference = opt("reference");
+const musicOnly = opt("music-only");
 
 const run = (cmd, argv) => spawnSync(cmd, argv, { encoding: "utf8", maxBuffer: 1 << 28 });
 
@@ -114,4 +123,51 @@ if (reference) {
   const delay = -a.ms;
   console.log(`\n  vs ${reference}: this plays ${delay >= 0 ? `${delay.toFixed(1)} ms later` : `${(-delay).toFixed(1)} ms earlier`}, correlation ${a.r.toFixed(3)}`);
   console.log(`  (under one frame, ${(1000 / p.fps).toFixed(1)} ms, is not perceptible; codec priming alone is ~20-40 ms)`);
+}
+
+if (musicOnly) {
+  const R = 16000;
+  const float = (x) => Float32Array.from(x, (v) => v / 32768);
+  const mix = float(pcm(file, R));
+  const bed = float(pcm(musicOnly, R));
+  const len = Math.min(mix.length, bed.length);
+  const n = Math.round(0.05 * R);
+  const FLOOR = 10 ** (-50 / 10); // a dead stop in the music is not "20 dB of lift"
+  const db = (a, b) => 10 * Math.log10(Math.max(a, FLOOR) / Math.max(b, FLOOR));
+  const power = (x, i) => {
+    let e = 0;
+    for (let j = i; j < i + n; j++) e += x[j] * x[j];
+    return e / n;
+  };
+  // The effect's own power is what the mix has over the music; against the music's power it says which is louder.
+  const windows = [];
+  for (let i = 0; i + n <= len; i += n) {
+    const m = power(mix, i);
+    const b = power(bed, i);
+    windows.push({ all: db(m, b), effect: db(Math.max(m - b, 0), b) });
+  }
+  const hit = windows.map((w) => w.all >= 1);
+  const events = [];
+  for (let i = 0; i < windows.length; i++) {
+    if (!hit[i]) continue;
+    let j = i;
+    while (j + 1 < windows.length && (hit[j + 1] || hit[j + 2])) j++;
+    const peakOf = (x, from, to) => {
+      let m = 0;
+      for (let k = Math.max(0, from); k < Math.min(len, to); k++) m = Math.max(m, Math.abs(x[k]));
+      return m;
+    };
+    const over = 20 * Math.log10(Math.max(peakOf(mix, i * n, (j + 1) * n), 1e-4) / Math.max(peakOf(bed, i * n - R / 2, (j + 1) * n + R / 2), 1e-4));
+    events.push({ at: (i * n) / R, seconds: ((j - i + 1) * n) / R, all: Math.max(...windows.slice(i, j + 1).map((w) => w.all)), effect: Math.max(...windows.slice(i, j + 1).map((w) => w.effect)), over });
+    i = j;
+  }
+  console.log(`\n  sound effects against ${musicOnly} (the music alone):`);
+  if (!events.length) console.log("  none found: the two files sound the same");
+  for (const e of events) {
+    const sign = (v) => `${v >= 0 ? "+" : ""}${v.toFixed(1)}`;
+    const poke = e.over > 6 || e.effect > 0;
+    console.log(`  ${e.at.toFixed(2).padStart(6)}s ${e.seconds.toFixed(2)}s  lifts the mix ${sign(e.all)} dB; the effect is ${sign(e.effect)} dB against the music, its peak ${sign(e.over)} dB over the music around it${poke ? "   <- pokes out" : ""}`);
+  }
+  const loud = events.filter((e) => e.over > 6 || e.effect > 0).length;
+  if (events.length) console.log(loud ? `  ${loud} of ${events.length} effect(s) poke out: lower each until it sits under the music, then listen` : `  ${events.length} effect(s), none louder than the music; now listen`);
 }

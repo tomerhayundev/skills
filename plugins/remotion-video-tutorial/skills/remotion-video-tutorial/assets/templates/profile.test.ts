@@ -8,8 +8,9 @@ describe("profile", () => {
     expect(PROMO.transitions).toEqual({ motifTurnsPerFifteenSeconds: 1, closeTurn: true });
     expect(PROMO.hook).toEqual({ kind: "line", deliverBySeconds: 1, holdSeconds: 2 });
     expect(PROMO.captions).toMatchObject({ perFifteenSeconds: 3, words: [4, 6], holdSeconds: 1.5, riseIntoStill: true });
+    expect(PROMO.stillness).toEqual({ maxStretchSeconds: 0.6, perThirtySeconds: 1 });
     expect(PROMO.critique[0]).toBe("story and copy");
-    for (const c of ["the brand's look", "professional finish", "transitions: hierarchy and dose", "graphics belong to the picture", "cover"]) expect(PROMO.critique).toContain(c);
+    for (const c of ["the brand's look", "professional finish", "transitions: hierarchy and dose", "graphics belong to the picture", "cover", "every cut carries something"]) expect(PROMO.critique).toContain(c);
   });
 
   it("refuses a changed key without a reason", () => {
@@ -20,6 +21,13 @@ describe("profile", () => {
 
   it("accepts an unchanged key without a reason", () => {
     expect(withOverrides(PROMO, { popsGate: "declared-cuts" }, {})).toEqual(PROMO);
+  });
+
+  it("lets a real screen hold while it is explained, and keeps the promo's frozen-time bar for an explainer", () => {
+    expect(PRODUCT_DEMO.stillness).toEqual({ maxStretchSeconds: 2, perThirtySeconds: 8 });
+    expect(TUTORIAL.stillness).toEqual(PRODUCT_DEMO.stillness);
+    expect(EXPLAINER.stillness).toEqual(PROMO.stillness);
+    expect(() => withOverrides(PROMO, { stillness: { maxStretchSeconds: 5, perThirtySeconds: 15 } }, {})).toThrow(/stillness/);
   });
 
   it("lets a tutorial cut inside recordings and still hold the 1.5 s caption floor", () => {

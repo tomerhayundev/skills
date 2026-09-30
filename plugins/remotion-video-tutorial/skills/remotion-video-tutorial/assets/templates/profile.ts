@@ -29,6 +29,8 @@ export interface FormatProfile {
   music: { mode: "bed-with-lift" | "bed-under-voice" | "bed-under-voice-or-none"; underVoiceDb?: [number, number] };
   /** grid: manifest durations on the grid. words: scenes sized from the words (the voiceover's audio, or reading time when caption-led), rounded up to the grid. */
   durations: "grid" | "words";
+  /** Frozen time (frozen-time.mjs): the longest stretch where nothing but a breath moves, and how much of it 30 s of film may hold. */
+  stillness: { maxStretchSeconds: number; perThirtySeconds: number };
   shortCut: string;
   critique: string[];
 }
@@ -48,6 +50,7 @@ const BASE_CRITIQUE = [
   "professional finish",
   "cover",
   "sound",
+  "every cut carries something",
 ];
 
 export const PROMO: FormatProfile = {
@@ -58,6 +61,7 @@ export const PROMO: FormatProfile = {
   captions: { mode: "statements", perFifteenSeconds: 3, words: [4, 6], holdSeconds: 1.5, riseIntoStill: true },
   music: { mode: "bed-with-lift" },
   durations: "grid",
+  stillness: { maxStretchSeconds: 0.6, perThirtySeconds: 1 },
   shortCut: "fewer ideas at the long cut's pace",
   critique: BASE_CRITIQUE,
 };
@@ -80,6 +84,7 @@ export const PRODUCT_DEMO = withOverrides(
     captions: { mode: "subtitles+titles", holdSeconds: 1.5, riseIntoStill: false, maxLines: 2 },
     music: { mode: "bed-under-voice", underVoiceDb: [18, 22] },
     durations: "words",
+    stillness: { maxStretchSeconds: 2, perThirtySeconds: 8 },
     shortCut: "drops features, keeps the pace",
     critique: [...BASE_CRITIQUE, "each feature lands"],
   },
@@ -88,6 +93,7 @@ export const PRODUCT_DEMO = withOverrides(
     captions: "a voiced demo is subtitled; feature titles still follow the statement rules",
     music: "the voice carries the demo",
     durations: "the words set the pace: the voice, or reading time when caption-led",
+    stillness: "a real screen holds while the voice explains it, or the viewer cannot read it",
     shortCut: "a shorter demo shows fewer features",
     critique: "every feature shown must be understood",
   },

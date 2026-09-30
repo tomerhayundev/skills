@@ -190,7 +190,45 @@ node ${CLAUDE_SKILL_DIR}/scripts/audio-check.mjs out/promo/<id>.mp4 --reference=
 
 ## Sound effects
 
-Optional, and restraint is the whole rule. One soft impact when the logo lands, a
-light tick for a card arriving: effects that match motion on screen, in the same
-key and space as the music, mixed under it. Never on every beat. If a sound feels
-loud, out of place, or doesn't help someone understand the product, remove it.
+Optional, and the music carries the film without them. When a film has them, sound is where a good
+picture is most easily made to feel amateur, so the rules are narrow. They come from another
+studio's published notes on mixes its clients approved and rejected (eight rounds on one calm film);
+the numbers have not been tuned by ear here, so treat them as where to start and let a person
+listen before anything ships.
+
+- **One short, soft whoosh on each real scene change,** and nothing on a cut that is only a cut.
+  Small clicks, pops and ticks only on real actions on screen: a cursor click, a pin landing, a
+  check, a part seating. Never on every beat, and never a sound with no move under it.
+- **Clean sources.** A library recording (Kenney.nl is CC0) beats a generated or synthesized one:
+  loosely prompted effects and sine sweeps were the ones rejected as unprofessional. Never name a
+  brand or an artist in a prompt for generated audio.
+- **Screen every effect before it goes in:**
+
+  ```bash
+  node ${CLAUDE_SKILL_DIR}/scripts/sfx-check.mjs public/sfx/*.wav
+  ```
+
+  It drops what is boomy (more than half its energy below 150 Hz: the whooshes rejected as "whoosh,
+  whoosh, whoosh" had 35 to 83% there), hissy (more than 40% above 6 kHz) or longer than a second.
+  A gentle high-pass at about 150 to 200 Hz and short fades at both ends clean most candidates.
+- **Under the music, each in its own place.** An effect sits just above the music in its own range
+  and never louder than the music as a whole; repeated sounds keep the same level every time, and
+  two that land within about 0.15 s of each other are both lowered.
+- **Always render the music-only twin,** the same film with the effects off
+  (`out/<id>.music-only.mp4`), and compare:
+
+  ```bash
+  node ${CLAUDE_SKILL_DIR}/scripts/audio-check.mjs out/<id>.mp4 --music-only=out/<id>.music-only.mp4
+  ```
+
+  It lists every effect with its time and marks any that is louder than the music under it or
+  peaks more than 6 dB over it. The twin is also a deliverable, and how a complaint is traced: when
+  someone says "that whoosh", play the twin at that moment first, because a brushed snare or a riser
+  in the track sounds like one.
+- **Change one thing a round, by its time.** The distance between "I can't hear anything" and "too
+  loud" is a few dB.
+- **No sting over a track that already resolves on the logo,** and a calm track is not cut out
+  before the logo lands.
+- A track edited to the picture beats one laid under it: its groove arrives on the hero moment, a
+  short stop (about 0.4 s) before the biggest cut makes the drop land, and its own last hit sits on
+  the end card.
