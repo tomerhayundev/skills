@@ -46,7 +46,7 @@ under the voice, or a bed with a lift on the strongest feature when caption-led.
 | --- | --- | --- | --- |
 | continuity | seamless | seamless | the engine's boundaries stay seamless |
 | popsGate | declared cuts | declared cuts | beat cuts and cuts inside spliced recordings, all listed in `cuts.json` |
-| hook | the outcome in 3 s | a line held 2 s | a demo earns attention with the result |
+| hook | the outcome in 3 s | chosen per film | a demo earns attention with the result |
 | captions | feature titles (statements) + subtitles when voiced | statements | a voiced demo is subtitled |
 | music | bed under the voice, or bed + lift when caption-led | bed with a lift | the voice carries the demo |
 | durations | from the voice or reading time, on the grid | grid | the words set the pace |

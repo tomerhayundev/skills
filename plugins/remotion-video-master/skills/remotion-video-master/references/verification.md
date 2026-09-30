@@ -67,7 +67,7 @@ node ${CLAUDE_SKILL_DIR}/scripts/frozen-time.mjs out/<id>.mp4 [--max-stretch=0.6
 ```
 
 The opposite of a pop: too little change, for too long. A 15 s promo that passed every other check
-and scored 8 on motion measured 36% still (5.5 of its 15 s): its hook hold, both caption rests and
+and scored 8 on motion measured 36% still (5.5 of its 15 s): its opening, both caption rests and
 its end card moved by nothing but a camera breath, and every one of those frames looked finished. A frame a second
 cannot show it; this can. It lists every still stretch with its times, the total, and a drift
 timeline, and fails when a stretch runs longer than the profile's `stillness.maxStretchSeconds` or
@@ -105,8 +105,8 @@ scene that opens on an empty stage makes a blank thumbnail. Check both:
 ffmpeg -y -i clip.mp4 -vf "select='eq(n,0)+eq(n,<posterFrame>)',scale=640:-1,tile=2x1" -frames:v 1 _f0-vs-poster.png
 ```
 
-The best fix is a frame 0 that is already a settled, readable frame (the hook's
-picture, without its caption, is usually enough). A loop needs that: frame 0 is also
+The best fix is a frame 0 that is already a complete, readable picture (the hook's
+picture, mid-action, without its caption, is usually enough): complete, not still. A loop needs that: frame 0 is also
 the frame after its last, so a replaced frame 0 pops at the seam. Bake a poster only
 when frame 0 cannot be designed that way. The pop gate runs on the render before the
 bake: the bake itself is a one-frame change at frame 1 that the scan flags, and that
@@ -265,7 +265,7 @@ one owner per scene file, reviewers that never edit, a fixer only where a review
   node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cuts.json --moments=<turn frames>
   ```
 
-  It writes `out/_critic/`: the first two seconds (`hook.png`), a frame a second (`contact.png`), a
+  It writes `out/_critic/`: the first three seconds (`hook.png`), a frame a second (`contact.png`), a
   frame every 0.2 s with each row one second (`dense-<n>.png`), both sides of every cut (`cuts.png`)
   and 16 frames across the second around each (`cut-<frame>.png`), a 12-frame strip around each
   moment named (the turn, the close, the fastest move), frozen time (`motion.txt`), the loudness
@@ -299,11 +299,14 @@ one owner per scene file, reviewers that never edit, a fixer only where a review
   message; I would restructure them around ..."), instead of another round. A film with no defects
   is not yet a good film: "clean and basic" is a structure problem, not a pass.
 
-What the critic scores, each from 1 to 10 (the profile's `critique` list):
+What the critic scores, each from 1 to 10 (the profile's `critique` list; paste each with its line
+from here into the prompt, since a name alone tells a critic nothing):
 
 - **story and copy**: the one message clear after one viewing, every line specific to this brand,
   one call to action ([story](story.md));
-- **the hook** in the first 2 s; **readability** at phone size;
+- **the hook**: whether this viewer would stay, judged on the opening alone against what usually
+  opens this kind of video ([hooks](hooks.md)): something happening on frame 0, what it is about
+  clear within a second or so, something opened that the film closes; **readability** at phone size;
 - **motion**: springs, one move leading with smaller ones under it, nothing sliding linearly, frozen
   time inside the budget (`motion.txt`);
 - **variety**: something new on every beat, the scale changing, no layout used twice;

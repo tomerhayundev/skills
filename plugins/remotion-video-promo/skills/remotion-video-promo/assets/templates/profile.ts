@@ -14,10 +14,14 @@ export interface FormatProfile {
   popsGate: "strict" | "declared-cuts";
   /** Motif turns (a flood or a push through the real object) per 15 s, plus one at the close; every other boundary is a cut, a match cut or a shared element (transitions.ts). */
   transitions: { motifTurnsPerFifteenSeconds: number; closeTurn: boolean };
-  /** What lands in the first seconds, by when, and how long a hook line holds whole. */
-  hook: { kind: "line" | "outcome" | "problem"; deliverBySeconds: number; holdSeconds?: number };
+  /**
+   * What usually opens this format, and by when a viewer knows what the film is about (sooner in a
+   * feed). The film may open another way, with its reason in the brief (references/hooks.md). No
+   * hold is set: a line stays for its reading time and the picture under it keeps going.
+   */
+  hook: { kind: "picture" | "outcome" | "problem"; deliverBySeconds: number; inFeedSeconds?: number };
   captions: {
-    /** statements: short captions rising into a still picture. subtitles: word-synced lines of the voice. */
+    /** statements: short captions rising into a calm picture (the hook line is counted among them, but the picture under it keeps going). subtitles: word-synced lines of the voice. */
     mode: "statements" | "subtitles+titles" | "subtitles+statements";
     perFifteenSeconds?: number;
     words?: [number, number];
@@ -57,7 +61,7 @@ export const PROMO: FormatProfile = {
   continuity: "seamless",
   popsGate: "declared-cuts",
   transitions: { motifTurnsPerFifteenSeconds: 1, closeTurn: true },
-  hook: { kind: "line", deliverBySeconds: 1, holdSeconds: 2 },
+  hook: { kind: "picture", deliverBySeconds: 3, inFeedSeconds: 1 },
   captions: { mode: "statements", perFifteenSeconds: 3, words: [4, 6], holdSeconds: 1.5, riseIntoStill: true },
   music: { mode: "bed-with-lift" },
   durations: "grid",

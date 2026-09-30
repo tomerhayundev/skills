@@ -144,3 +144,11 @@ test("with no voice, only step-by-step formats get a quiet bed; the rest are mus
   const demo = run("product-demo", ["landing"]).captions.join("; ");
   assert.match(demo, /caption-led \(no voice\).*music-led at about -16 LUFS/);
 });
+
+test("each kind of video is told what usually opens it; none is given one fixed shape", () => {
+  assert.match(run("short-ad", ["reels"]).hook, /chosen for the film .*already happening on frame 0/);
+  assert.match(run("tutorial", ["youtube"], { steps: 3 }).hook, /the finished result and how long it takes/);
+  assert.match(run("testimonial", ["linkedin"]).hook, /the strongest sentence, cold/);
+  assert.match(run("landing-loop", ["landing"]).hook, /^none: it loops in silence/);
+  assert.match(run("app-store-preview", ["app-store"]).hook, /in use from frame 0/);
+});

@@ -4,7 +4,7 @@
  * cannot show a cut, a move, a 1.5 s shot or the music, so critics scored motion,
  * transitions and sound by guessing. This writes, into one folder:
  *
- *   hook.png        the first two seconds, 12 frames: what a thumb in a feed sees before it decides
+ *   hook.png        the first three seconds, 12 frames: what a viewer sees before deciding to stay
  *   contact.png     a frame a second, the whole film: the overview
  *   phone.png       15 frames across the film at 360 px wide: what reads at phone size
  *   dense-<n>.png   a frame every 0.2 s, 5 s a sheet, each row one second: where a short shot or a hold shows
@@ -75,7 +75,7 @@ export async function makePack(file, { cuts = [], moments = [], outDir, maxStret
 
   const perSecond = [];
   for (let n = 0; n < v.frames; n += Math.round(v.fps)) perSecond.push(n);
-  const hookFrames = Math.min(v.frames, Math.round(2 * v.fps));
+  const hookFrames = Math.min(v.frames, Math.round(3 * v.fps));
   sheet(file, Array.from({ length: 12 }, (_, i) => Math.min(hookFrames - 1, Math.round((i * (hookFrames - 1)) / 11))), 12, w, join(outDir, "hook.png"));
   written.push("hook.png");
   sheet(file, perSecond, 10, w, join(outDir, "contact.png"));
@@ -127,7 +127,7 @@ export async function makePack(file, { cuts = [], moments = [], outDir, maxStret
     "",
     `${v.frames} frames at ${v.fps} fps (${t(v.frames)} s), ${v.width}x${v.height}.`,
     "",
-    "- `hook.png`: the first two seconds, 12 frames: judge it first, as a stranger scrolling a feed would (does something move, does it open a question?).",
+    "- `hook.png`: the first three seconds, 12 frames: judge it first, as the viewer would (is frame 0 a full picture with something happening, does it open a question, does anything wait?).",
     "- `contact.png`: a frame a second, read left to right, 10 a row: the overview.",
     "- `phone.png`: 15 frames across the film, each 360 px wide, the size a phone shows it: every caption, label and number must read here.",
     ...dense.map((d) => `- \`${d.name}\`: from ${t(d.from)} s, a frame every 0.2 s, 5 a row: each row is one second.`),

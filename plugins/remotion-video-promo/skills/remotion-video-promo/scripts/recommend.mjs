@@ -36,6 +36,23 @@ function describeZone(zone) {
   return zone.unverified ? `${text} (approximate, unverified)` : text;
 }
 
+/** What usually opens each kind of video (references/hooks.md); the film may choose another way. */
+const HOOKS = {
+  promo: "chosen for the film (references/hooks.md): something already happening on frame 0, clear within 3 s (1 s in a feed)",
+  "bumper-ad": "the hook is the film: one picture, one line, the brand, within 1 s",
+  teaser: "a piece of the thing and a date, within 2 s",
+  "landing-loop": "none: it loops in silence beside the page headline; the product moving, and a seam nobody sees",
+  "feature-announcement": "the feature doing its thing, then that it is new; clear within 3 s",
+  "social-organic": "picture first, clear within 1 s",
+  "event-recap": "the peak of the day first, within 1 to 2 s",
+  "product-demo": "the result first, or the problem the viewer already has, within 3 s; the product by 15 s",
+  "app-store-preview": "the app in use from frame 0 (it autoplays muted): no title card",
+  tutorial: "the finished result and how long it takes, within 3 s; no greeting; step 1 by 15 s",
+  onboarding: "what they will have at the end of this step, within 3 s",
+  explainer: "the problem, or the fact that surprises, within 3 s",
+  testimonial: "the strongest sentence, cold, within 3 s",
+};
+
 /** The recommendation as data. Throws on unknown format or platform names. */
 export function recommend(specs, { format, platforms, steps, today = new Date().toISOString().slice(0, 10) }) {
   const f = specs.formats[format];
@@ -142,7 +159,7 @@ export function recommend(specs, { format, platforms, steps, today = new Date().
     voice: f.voice
       ? `this format usually carries a voiceover. ${process.env.ELEVENLABS_API_KEY ? "An AI voice key is set." : "No AI voice key is set: offer captions only (recommended), the user's own recording, or a draft machine voice."}`
       : "no voiceover by default: music bed and captions",
-    hook: "state the key message in the first 3 s",
+    hook: HOOKS[format] ?? HOOKS[f.module] ?? HOOKS.promo,
     warnings,
   };
 }

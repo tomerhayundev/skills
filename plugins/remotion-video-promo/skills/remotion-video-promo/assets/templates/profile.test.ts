@@ -6,7 +6,8 @@ describe("profile", () => {
     expect(PROMO.continuity).toBe("seamless");
     expect(PROMO.popsGate).toBe("declared-cuts");
     expect(PROMO.transitions).toEqual({ motifTurnsPerFifteenSeconds: 1, closeTurn: true });
-    expect(PROMO.hook).toEqual({ kind: "line", deliverBySeconds: 1, holdSeconds: 2 });
+    expect(PROMO.hook).toEqual({ kind: "picture", deliverBySeconds: 3, inFeedSeconds: 1 });
+    expect(PROMO.hook).not.toHaveProperty("holdSeconds");
     expect(PROMO.captions).toMatchObject({ perFifteenSeconds: 3, words: [4, 6], holdSeconds: 1.5, riseIntoStill: true });
     expect(PROMO.stillness).toEqual({ maxStretchSeconds: 0.6, perThirtySeconds: 1 });
     expect(PROMO.critique[0]).toBe("story and copy");

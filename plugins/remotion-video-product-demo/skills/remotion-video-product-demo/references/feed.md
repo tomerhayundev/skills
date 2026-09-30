@@ -10,9 +10,11 @@ feed, a promo above all, is built from its first two seconds outwards:
 - **Something visibly changes about every second in the first three:** a cut, a move, an action
   completing. A calm film can slow down after the hook, never before it.
 - **The hook line opens a question or speaks to the viewer** (6 words or fewer, on screen within
-  0.5 s). The brand's tagline is not a hook: it belongs to the close.
-- **Sound has energy on frame 0.** The track starts at its feed start (`feedStartSeconds` in
-  `track.json`: a point where the beat is already playing; see [music-bed](music-bed.md)), never at its quiet intro; its bigger lift
+  0.5 s). It stays for its reading time while the picture keeps moving; the picture never waits
+  for it. The brand's tagline is not a hook: it belongs to the close. The kinds of hook to choose
+  from: [hooks](hooks.md).
+- **Sound has energy on frame 0.** The track starts at its feed start (`feedStartSeconds` and
+  `feedStartBeat` in the `track.json` that `get-track.mjs` writes: a point where the beat is already playing; see [music-bed](music-bed.md)), never at its quiet intro; its bigger lift
   still lands on the payoff.
 - **The picture fills the vertical frame.** A split screen halves the subject; use one as a single
   gesture at the turn, never as the grammar of the whole film.
@@ -29,4 +31,5 @@ Checks: `visual-brief.mjs` with `"feed": true` refuses a film where nothing chan
 across it), a track with no
 start point, and a cut over 30 s without a reason; the concept and storyboard critics judge the first
 two seconds alone first; the film critic reads `hook.png` from `critic-pack.mjs` before anything else
-([verification](verification.md#critique-at-three-points)).
+([verification](verification.md#critique-at-three-points)). `hook.png` shows the first three
+seconds, so the second and third can be judged too.

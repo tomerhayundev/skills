@@ -38,7 +38,7 @@
  *   "plan": ["one line", "**bold** allowed"],
  *   "styleFrames": [{ "image": "out/style-turn.png", "caption": "..." }],
  *   "motionFrames": [{ "video": "out/motion-turn.mp4", "caption": "..." }],   // 3-6 s at final quality: the turn, the motif moving
- *   "hook": { "recommended": "...", "why": "...", "alternatives": ["..."] },
+ *   "hook": { "kind": "in the middle of it", "recommended": "...", "why": "...", "alternatives": ["..."] },   // kinds: references/hooks.md
  *   "next": "After your go: ...",
  *   "cuts": [{ "name": "30 s", "message": "...", "turnAt": 13.5,
  *     "source": "footage/all.mp4", "crop": { "x": 0, "y": 0, "w": 1920, "h": 1080 },
@@ -60,8 +60,9 @@
  * track's beat grid (60 / bpm s, 0.5 s when no bpm is given); a caption that cannot
  * be read in its beat (about 0.3 s a word, at least 1.5 s); a long dash in the words; a number
  * on screen that is in no fact. With "feed":
- * no music.startSeconds, nothing changing in the first 2 s (a cut, or a beat's changesAt), or a cut over
- * 30 s without a longWhy. For a promo (and the modules built on it): fewer than about 10 compositions
+ * no music.startSeconds, a wait of over 2 s in the first shot (to its cut, or between the times in its changesAt, one or a list), or a cut over
+ * 30 s without a longWhy. For a promo (and the modules built on it): a first shot with nothing
+ * changing in its first 3 s (2 s in a feed); fewer than about 10 compositions
  * per 30 s, a composition over 3.5 s with no change marked inside it, a shot with no scale, the
  * same scale three shots running or too few scales in a cut, a boundary that carries nothing
  * into the next shot, or fewer moments than the film's length asks for (three from 20 s).
@@ -85,6 +86,15 @@ const FAMILY = {
   explainer: "explainer", testimonial: "explainer",
 };
 const SCALES = ["macro", "close", "medium", "wide", "overhead", "type"];
+/** The longest stretch of the first shot's first 3 s in which nothing changes: changesAt is one time or a list. */
+function longestWait(first) {
+  if (!first) return 0;
+  const times = [first.changesAt].flat().map(Number).filter((t) => t > 0 && t < first.dur).sort((a, b) => a - b);
+  const marks = [0, ...times, first.dur];
+  let longest = 0;
+  for (let i = 1; i < marks.length; i++) if (marks[i - 1] < 3) longest = Math.max(longest, marks[i] - marks[i - 1]);
+  return longest;
+}
 /** How many moments a film of this length names: a thing, and what it becomes. */
 const momentsFor = (seconds) => (seconds >= 20 ? 3 : seconds >= 10 ? 2 : 1);
 const RTL = new Set(["he", "ar", "fa", "ur"]);
@@ -126,8 +136,8 @@ export function checkPlan(brief) {
   if (brief.feed) {
     for (const cut of brief.cuts ?? []) {
       const first = cut.beats?.[0];
-      // The first visible change: the cut, or one inside the shot (a push-in, an action completing), so a hook line can stay up across it.
-      const change = first ? Math.min(first.dur, Number(first.changesAt) > 0 ? Number(first.changesAt) : first.dur) : 0;
+      // The longest wait in the opening: to the cut, or between changes inside the shot (a push-in, a part arriving), so a hook line can stay up across them.
+      const change = longestWait(first);
       if (first && change > 2) problems.push(`feed, ${cut.name}: nothing changes for ${fmt(change)} s; in a feed something visibly changes within 2 s: cut sooner, or mark a change inside the shot (changesAt) (references/feed.md)`);
       const total = (cut.beats ?? []).reduce((s, b) => s + b.dur, 0);
       if (total > 30.5 && !has(cut.longWhy)) problems.push(`feed, ${cut.name}: ${fmt(total)} s; a promo in a feed is 15 to 30 s (say why in longWhy if it truly holds longer)`);
@@ -151,6 +161,13 @@ export function checkPlan(brief) {
   if (family && family !== "tutorial") {
     for (const f of brief.facts ?? []) if (!has(f?.text) || !has(f?.source)) problems.push(`facts: "${f?.text ?? "?"}" needs its text and where it comes from (source)`);
     for (const n of unsourced(brief.hook?.recommended)) problems.push(`the opening line: "${n}" is on screen but in no fact; every number shown comes from the facts list (facts: text, source), never from memory`);
+  }
+  if (promo && !brief.feed) {
+    for (const cut of brief.cuts ?? []) {
+      const first = cut.beats?.[0];
+      const change = longestWait(first);
+      if (first && change > 3) problems.push(`the opening, ${cut.name}: nothing changes for ${fmt(change)} s; a picture that waits under its line is not a hook: start it in the middle of something, or mark the change inside the shot (changesAt) (references/hooks.md)`);
+    }
   }
   if (promo) {
     const longest = Math.max(0, ...(brief.cuts ?? []).map((c) => (c.beats ?? []).reduce((s, b) => s + b.dur, 0)));
@@ -241,7 +258,7 @@ const LABELS = {
     idea: "The idea", motif: "What carries the film", moments: "The moments you will remember", becomes: "becomes", carried: "Carried over the cut:", asks: "What you asked for, and where it is in the film", asked: "You asked for", where: "Where it is",
     music: "The music", alsoMusic: "Also possible, each from where the film would start it:", plan: "The plan", look: "The look (final quality, from your assets)", motion: "The motion: the turn, at final quality",
     storyboard: "Storyboard", oneSentence: "In one sentence:", noWords: "no words",
-    hook: "The opening line", recommended: "recommended", also: "Also possible:",
+    hook: "The opening", recommended: "recommended", also: "Also possible:",
   },
   he: {
     title: "הסרטון שלכם: זה מה שיהיה",
@@ -255,7 +272,7 @@ const LABELS = {
     idea: "הרעיון", motif: "מה מוביל את הסרט", moments: "הרגעים שיזכרו", becomes: "הופך ל", carried: "עובר בחיתוך:", asks: "מה ביקשתם, ואיפה זה בסרט", asked: "ביקשתם", where: "איפה זה בסרט",
     music: "המוזיקה", alsoMusic: "אפשר גם, כל אחת מהמקום שבו הסרט יתחיל אותה:", plan: "התוכנית", look: "הלוק (באיכות סופית, מהחומרים שלכם)", motion: "התנועה: רגע המפנה, באיכות סופית",
     storyboard: "סטוריבורד", oneSentence: "במשפט אחד:", noWords: "בלי מילים",
-    hook: "שורת הפתיחה", recommended: "מומלץ", also: "אפשר גם:",
+    hook: "הפתיחה", recommended: "מומלץ", also: "אפשר גם:",
   },
 };
 
@@ -353,7 +370,7 @@ export function buildHtml(brief) {
       return `<figure>${player}<figcaption>${rich(m.caption ?? "")}</figcaption></figure>`;
     }).join("");
     const frames = (brief.styleFrames ?? []).map((f) => `<figure><img src="${imageUri(f.image)}" alt="${esc(f.caption)}"><figcaption>${rich(f.caption)}</figcaption></figure>`).join("");
-    const hook = brief.hook ? `<h2>${esc(L.hook)}</h2><div class="box"><b>${esc(brief.hook.recommended)}</b>${brief.hook.why ? ` <span class="mute">(${esc(L.recommended)}: ${esc(brief.hook.why)})</span>` : ""}${brief.hook.alternatives?.length ? `<br><span class="mute">${esc(L.also)}</span> ${brief.hook.alternatives.map((a) => `"${esc(a)}"`).join(" · ")}` : ""}</div>` : "";
+    const hook = brief.hook ? `<h2>${esc(L.hook)}</h2><div class="box">${has(brief.hook.kind) ? `<span class="job">${esc(brief.hook.kind)}</span><br>` : ""}<b>${esc(brief.hook.recommended)}</b>${brief.hook.why ? ` <span class="mute">(${esc(L.recommended)}: ${esc(brief.hook.why)})</span>` : ""}${brief.hook.alternatives?.length ? `<br><span class="mute">${esc(L.also)}</span> ${brief.hook.alternatives.map((a) => `"${esc(a)}"`).join(" · ")}` : ""}</div>` : "";
     return `<!doctype html><html lang="${esc(lang)}" dir="${dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Video brief</title><style>
 :root{--bg:#fff;--fg:#1d1f24;--mute:#6b6f7a;--line:#e6e7eb;--card:#f5f6f8;--tag:#f5d90a;--accent:#1d1f24}
 @media (prefers-color-scheme:dark){:root{--bg:#121418;--fg:#e9eaee;--mute:#9ea2ad;--line:#2a2d34;--card:#1a1d22;--accent:#e9eaee}}

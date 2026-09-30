@@ -30,7 +30,7 @@ is built past the style frames before that approval.
   "plan": ["A **30 s** master and a **15 s** cut, 16:9, for ...", "**No voiceover.** ...", "**The motif** ..."],
   "motionFrames": [{ "video": "out/motion-turn.mp4", "caption": "**The turn, moving.** ..." }],
   "styleFrames": [{ "image": "out/style-turn.png", "caption": "**The turn.** ..." }, { "image": "out/style-cover.png", "caption": "**The cover.** ..." }],
-  "hook": { "recommended": "...", "why": "...", "alternatives": ["...", "..."] },
+  "hook": { "kind": "<in the middle of it | the result first | the contradiction | ... (hooks.md)>", "recommended": "...", "why": "...", "alternatives": ["...", "..."] },
   "next": "**After your go**, I build it; the next thing you see is the finished <primary deliverable>.",
   "cuts": [{ "name": "30 s", "message": "...", "turnAt": 12, "source": "footage/...", "beats": [
     { "at": 0, "dur": 2.5, "src": 0, "len": 2.5, "changesAt": 1.5, "job": "hook", "scale": "macro", "motif": "<its part here>", "picture": "...", "words": "...", "in": "Opens mid-action" },
@@ -94,7 +94,7 @@ Languages: <every locale the product ships, RTL mirrored; or the ones the brief 
 ## Story, script and copy (references/story.md)
 - Who, the one message, the change: <three lines>
 - Arc: <tension, the turn, the payoff, in one line each>
-- Hook (first 3 s): <the chosen line>; runners-up: <two more>
+- Hook: <its kind (references/hooks.md), the first picture and what is already moving in it, the chosen line>; runners-up: <two more, of other kinds>
 - Close / CTA: <one verb, one destination>
 - Script: docs/script.md (beat, time, picture, words, motif), read aloud and timed
 

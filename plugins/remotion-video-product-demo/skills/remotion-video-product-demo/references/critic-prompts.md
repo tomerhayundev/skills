@@ -20,8 +20,10 @@ write it. Read <out/visual-brief.png>, watch <out/motion-1.mp4> (its frames: <ou
 The one message: "<message>". The brand's look, in its own words: "<Look row>".
 
 In this order:
-1. <feed only> The first two seconds alone: the first picture, its line, where the music starts.
-   Would a stranger scrolling stop? A slogan, a logo, a still product or a quiet intro fails.
+1. The opening alone (in a feed, the first two seconds): the first picture, its line, where the
+   music starts. Would this viewer stay? Is something already happening on frame 0, is it clear what
+   the film is about, does it open something the film closes? A slogan, a logo, a still product, a
+   quiet intro, or a finished picture that waits under its line fails.
 2. Each shot's job (hook, promise, proof, offer, close). Which shots have none?
 3. Every cut: what does the eye follow over it into the next shot? Name it per cut from the page's
    "carried over the cut" lines, and say where it would not hold on screen (a different place, size
@@ -68,8 +70,9 @@ by category>. <For a film in several aspects: one critic and one pack per aspect
 
 The pack is a starting point: pull any other frames you need from the film with ffmpeg.
 
-1. <feed only> hook.png and the first two seconds of audio.txt, as a stranger with a thumb on the
-   screen: would they stop?
+1. hook.png (the first three seconds) and the start of audio.txt, as the viewer this film is for (in
+   a feed: a stranger with a thumb on the screen): would they stay? Is frame 0 a full picture with
+   something already happening in it, or a sparse or finished one that waits?
 2. Say what a first-time viewer understands every 2 s, from the dense sheets, and what they would not.
 3. Per scene: its time range, what is on screen, how much of the frame is empty, how many seconds it
    could lose.
@@ -83,7 +86,8 @@ The pack is a starting point: pull any other frames you need from the film with 
    label on the wrong thing, unequal spacing, text too small on the phone sheet.
 7. Sound, from audio.txt: where the lift lands against the picture, the level, any effect louder
    than the music.
-8. Score each from 1 to 10: <the profile's critique list>.
+8. Score each from 1 to 10: <the profile's critique list, each with its one-line meaning from
+   verification.md>.
 
 Then the problems, ranked by how much each costs the film, each with its time, tagged polish (easing,
 size, a word, a few frames of timing inside a beat) or structure (a beat with no job, the order, the

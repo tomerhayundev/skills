@@ -67,7 +67,9 @@ One row per beat, written before the beat map, which is built from it:
 
 ## 4. The copy
 
-**The hook** (the first 3 s). Write five, pick one, and show the user the best two or three:
+**The hook.** How a film opens is chosen per film and differs by kind of video: the kinds, and
+what usually opens a promo, a demo, a tutorial, an explainer or a testimonial, are in
+[hooks](hooks.md). Write five, pick one, and show the user the best two or three. Its line:
 - specific and concrete: a number, a name, a real situation ("Re: Re: Re: Intro call", not "Scheduling
   is hard");
 - about the viewer ("you", their problem), not the company;
@@ -78,7 +80,8 @@ One row per beat, written before the beat map, which is built from it:
 A hook is a picture, a sound and a line together, and the line is the smallest part. In a feed
 (Reels, TikTok, Shorts, Stories) the picture is the strongest moving shot of the film, from frame 0,
 and the track is already on its beat ([feed](feed.md)).
-Write the five hooks as picture + line, and judge them with the sound on and the text off first.
+Write the five hooks as picture + line, of different kinds, and judge them with the sound on and the
+text off first.
 
 **Captions and lines.**
 - The product's own words and claims (its site, its UI labels). Tutorials use the exact labels.

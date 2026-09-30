@@ -4,7 +4,7 @@ description: Use when making an organic social clip for Reels, TikTok, Shorts or
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.7.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 9ec4b3145550 -->
+<!-- Generated from remotion-video-master 0.8.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 044fe4b0c490 -->
 
 # Remotion social clip video
 
@@ -66,7 +66,7 @@ Before any beat map: the one message in one sentence, the format's arc (tension 
 show then say), and every word written in a script table (beat, time, picture, words, motif), read
 aloud, timed (about 2.5 spoken words a second; about 0.3 s a word on screen, at least 1.5 s a line)
 and cut by a third. Each cutdown is a script of its own: its own one-sentence message, a cold read
-by someone who has not seen the long cut, and no scene whose setup was dropped. Five hooks written, the best two or three shown; the product's own words; no
+by someone who has not seen the long cut, and no scene whose setup was dropped. Five hooks written, of different kinds, the best two or three shown: how a film opens is chosen for that film and differs by kind of video ([hooks](references/hooks.md)); the product's own words; no
 filler a rival could say; one call to action; every number on screen from the brief's facts list,
 each with where it is written. The script is approved with the brief. Rules and
 templates: [story](references/story.md).
@@ -195,7 +195,7 @@ anything.
 | Manifest | `{ id, format, scenes: [{ scene, from?, to?, transition?, captionOverride?, captionTiming?, musicLift? }], aspects?, locales?, loop?, posterFrame }` |
 | `expand()` | Rows x aspects x locales into compositions. Validates windows, the grid, the transitions and the poster frame (`assets/templates/transitions.ts`), the music and the format's profile. Throws rather than renders something wrong. |
 | Chain | Every boundary is a cut on the beat unless its entry says otherwise: a match cut on the motif, a shared element or morph, or a motif turn (a flood, or a push through the real object) with its reason. Whatever its kind, it carries what the storyboard says it carries, on the same pixels on both sides. Every cut is written to `out/<id>.cuts.json` for the pops gate. |
-| Holds | A hold is cut to what its words need; the reading time that remains (the hook line, a caption, the end card) keeps a slow push, about 2% of scale a second, toward what the eye is on. A breath of 1% reads as frozen. |
+| Holds | A hold is cut to what its words need; the reading time that remains (a caption's rest, the end card) keeps a slow push, about 2% of scale a second, toward what the eye is on. A breath of 1% reads as frozen. |
 | Durations | On the beat grid of the chosen track: one beat is `FPS * 60 / BPM` frames (15 at 120 BPM, 18 at 100, 20 at 90, 25 at 72), set once in the tokens from its `track.json`. Voice-led formats size scenes from the audio with `calculateMetadata`, rounded up to the grid. |
 | Tokens | One source for every color, size and duration. One accent color. |
 | Safe zones | Every text rect inside each shipped platform's safe zone (`assets/templates/safe-zones.ts`), per aspect: Reels and Stories hide the bottom 35%. |
@@ -209,7 +209,8 @@ A new project scaffolds in this order: tokens, one scene on the square canvas, t
 Each module's "Engine profile" sets continuity, popsGate, transitions, hook, captions, music,
 durations, stillness, shortCut and critique (`assets/templates/profile.ts`, enforced by `expand()`). The promo
 profile is the base: no unmotivated cut (declared beat cuts pass the pops gate, any other pop
-fails), at most one motif turn per 15 s plus the close, a hook line held 2 s, 3 statement lines
+fails), at most one motif turn per 15 s plus the close, a hook chosen for the film with something
+already happening on frame 0 ([hooks](references/hooks.md)), 3 statement lines
 per 15 s counting the hook, each rising into a calm picture, no still stretch over 0.6 s (1 s per
 30 s in all), a bed with its lift on the payoff. A promo is also dense and varied: about 12 to 15
 compositions in 30 s, the subject spanning 60 to 85% of the usable frame, the scale changing, and one or
@@ -262,7 +263,8 @@ node ${CLAUDE_SKILL_DIR}/scripts/motif-coverage.mjs out/<id>.webp --accent=<hex>
 node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cuts.json --moments=<turn frames>
 ```
 
-- Stills per aspect: nothing clipped, text in the safe zones, legible, RTL mirrored; frame 0 settled.
+- Stills per aspect: nothing clipped, text in the safe zones, legible, RTL mirrored; frame 0 a full
+  picture with something already happening in it.
 - Pops: `--cuts=out/<id>.cuts.json`; only declared cuts may pop. Frozen time: no still stretch past
   the profile's limit (a promo: 0.6 s, and 1 s per 30 s in all). Motif coverage: flat accent over at
   most 5% of the runtime, a full frame of it only inside a declared turn or the close, none on the cover.
@@ -354,4 +356,6 @@ node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cu
 | The same track on every film | Pick from the library by the brand's look, and let the user hear it in the brief |
 | Approving the motion design from stills | Flow only shows in motion: the brief carries 3 to 6 s of the turn, the motif moving, at final quality |
 | A Reel that opens on the slogan, a still product or a quiet intro | Frame 0: the strongest moving picture, the beat already playing, a line that opens a question |
+| A finished picture that waits two seconds under its hook line | The picture is already happening on frame 0 and keeps going; the line stays for its reading time |
+| One opening shape for every film | The hook is chosen per film and per kind of video: a tutorial opens on the result, a testimonial on its strongest sentence |
 | A sixth round of polish when the scores stall | The problem is structure: back to the storyboard, or hand the user the one choice |

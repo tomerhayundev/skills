@@ -45,7 +45,7 @@ more than product UI.
 | --- | --- | --- | --- |
 | continuity | seamless | seamless | an argument is one continuous picture |
 | popsGate | declared cuts | declared cuts | |
-| hook | the problem in 3 s | a line held 2 s | an explainer opens on the viewer's problem |
+| hook | the problem in 3 s | chosen per film | an explainer opens on the viewer's problem |
 | captions | subtitles (2 lines) + key terms as statements | statements | voiced, so subtitled |
 | music | bed under the voice, a lift on the "aha" | bed with a lift | the voice carries the argument |
 | durations | from the voice or reading time, on the grid | grid | the words set the pace |

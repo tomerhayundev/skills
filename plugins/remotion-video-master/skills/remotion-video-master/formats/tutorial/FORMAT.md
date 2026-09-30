@@ -53,7 +53,7 @@ the action, show the result, hold 1 to 2 s with the camera breathing so a viewer
 | --- | --- | --- | --- |
 | continuity | chaptered | seamless | steps are chapters; hard cuts inside a recording keep it honest and short |
 | popsGate | declared cuts | declared cuts | beat cuts and cuts inside recordings are listed in `cuts.json`; any other pop still fails |
-| hook | the outcome and the time it takes, in 3 s | a line held 2 s | search viewers want the result, then step 1 |
+| hook | the outcome and the time it takes, in 3 s | chosen per film | search viewers want the result, then step 1 |
 | captions | step titles (statements, up to 8 words so exact UI labels fit) + subtitles, 2 lines, 32-42 characters, shown with the action | statements rising into a still | a tutorial says it while doing it |
 | music | none or a bed under the voice | bed with a lift | instruction is easier with little music |
 | durations | from the voice, or from reading time when caption-led, on the grid | grid | the words set the pace |

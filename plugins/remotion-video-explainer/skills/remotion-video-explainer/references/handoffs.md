@@ -97,7 +97,7 @@ For a promo and the modules built on it:
   hold's slow push.
 - **Nothing stands still for more than about 0.6 s,** and no more than about 1 s of a 30 s film in
   all (`frozen-time.mjs`). A hold is first cut to what its words need; the reading time that
-  remains (the hook line, a caption, the end card) keeps a slow push, about 2% of scale a second:
+  remains (a caption, the end card) keeps a slow push, about 2% of scale a second:
   calm enough to read, never frozen (architecture, One square canvas).
 - **The subject spans 60 to 85% of the usable frame,** along its longer side: its width for a wide
   subject, its height for a tall one. The usable frame is the aspect's frame less the caption band

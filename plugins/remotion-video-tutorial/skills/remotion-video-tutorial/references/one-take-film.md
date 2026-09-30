@@ -24,7 +24,7 @@ same film with a ball would be a template.
 1. A table per cut: beat, time, what changes, caption. Each moment is a throw in, an
    action, and (if it has a caption) a rest of about 4 beats.
 2. The visual brief (SKILL.md, Order of work): the storyboard of each cut, and style frames
-   at final quality of the hardest moments (the hook while it holds, the busiest station, a
+   at final quality of the hardest moments (the opening, the busiest station, a
    caption in its rest, the payoff).
 3. A 4 to 5 second motion clip of the trickiest stretch, at final quality, before rendering
    everything. Motion quality can't be judged from stills.
@@ -116,10 +116,12 @@ fails.
 
 ## Hook and captions
 
-- **Hook:** the line lands in about a second and holds whole for at least 2 seconds
-  before the action. The element flies in during the hold. Test: strike frame minus
-  (last word's start plus the spring's settle frames) is at least 60. Break tall lines
-  by hand; one word alone on a line reads as an accident.
+- **Hook:** chosen for the film ([hooks](hooks.md)); the picture is already moving on
+  frame 0 and never waits for its line. The line is whole for its reading time (about
+  0.3 s a word, at least 1.5 s) and sits in one place; what moves under it is what it
+  talks about, and the element's path stays out of its rect. Test the reading time, and
+  that something changes in every second of the first three. Break tall lines by hand;
+  one word alone on a line reads as an accident.
 - **Captions:** 4 to 6 words, bigger than you think. They rise only into a calm
   picture (the hold's slow push goes on, about 2% of scale a second; nothing else moves): the
   element and the camera move under 1.5 px a frame from the first word
@@ -139,7 +141,7 @@ score ring, and the score stepped up once per keyword, on the half beats.
 
 ## The tests that caught real problems
 
-- The hook holds 2 s before the strike, and the element enters only once it is readable.
+- The hook line is whole for its reading time, and something changes in each of the first three seconds.
 - Captions: word count, time fully shown, no overlap, a still picture while they rise.
 - Speed is continuous at every knot except the strike (compare the two one-sided
   derivatives at each leg boundary, epsilon 0.001 frames).

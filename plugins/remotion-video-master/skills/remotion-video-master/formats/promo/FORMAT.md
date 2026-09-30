@@ -37,7 +37,7 @@ A promo sells, so it is built on a spine of jobs, and the jobs come before any v
 
 | Job | Time (30 s) | What it does for the viewer |
 | --- | --- | --- |
-| Hook | 0-2 s (holds to 3) | Stops the thumb: the strongest moving picture, in the middle of the action, and a line that names the viewer's desire or problem, landed within 1 s |
+| Hook | the first 1 to 3 s | Makes this viewer stay: a picture already moving on frame 0 and, usually, a short line; chosen for the film from the kinds in [hooks](../../references/hooks.md) (in the middle of it, the result first, a question, the problem seen, a contradiction, the build), never a fixed shape |
 | Promise | 2-6 s | Says what this brand gives them, the one message, in the brand's own words; the brand is seen or named here, not only at the end |
 | Proof | 2 or 3 beats | Each answers one doubt a viewer has (is it good, is it for me, can I do it, why this one) with the real product, place or people: a cursor driving the real product, or the real thing and the hands that use it; the lift on the strongest proof |
 | Offer | 1 or 2 beats | Exactly what can be bought, booked or tried, concrete (not a list of everything the brand does) |
@@ -115,8 +115,8 @@ music-led, not caption-led: about -16 LUFS, the lift scored. A loop is silent.
 | continuity | seamless: no unmotivated cut | seamless | this is the base |
 | popsGate | declared cuts | declared cuts | only the beat cuts listed in `cuts.json` may pop |
 | transitions | 1 motif turn per 15 s, plus the close | same | a flood is an exclamation mark |
-| hook | line in 1 s, held 2 s | same | |
-| captions | statements: 3 per 15 s, 4-6 words, rise into a still, held 1.5 s | same | |
+| hook | chosen per film: a picture moving on frame 0, clear within 3 s (1 s in a feed) | same | no one opening fits every film |
+| captions | statements: 3 per 15 s, 4-6 words, rise into a calm picture, held 1.5 s; the hook line is counted but the picture under it keeps going | same | |
 | music | bed with its lift on the payoff | same | |
 | durations | grid | grid | |
 | stillness | no still stretch over 0.6 s; 1 s per 30 s in all | same | a hold keeps a slow push |
@@ -166,6 +166,8 @@ each cut on its own: the base criteria, all 8 or more, and the last critic's SHI
 | The 15 s cut is the 30 s cut, faster | Drop ideas, keep the pace |
 | Music under the landing loop | Loops are silent |
 | A feed promo that opens on the slogan, a packshot or a quiet intro | Frame 0 is the strongest moving picture, with a hook line and the beat already playing |
+| A finished picture on frame 0 that waits two seconds under its line | The picture is already happening and keeps going; the line stays for its reading time, the picture never waits for it |
+| The same opening shape on every film | Write five hooks of different kinds and choose by what this film has |
 | A calm brand, so a calm opening | The Look sets the frame and the timbre, not the energy: open clean and hard |
 | A 51 s Reel because engagement peaks at 45-60 s | That is organic storytelling; a feed promo is 15-30 s with the turn in the first half |
 | A split screen for the whole film | Every picture at half size; use a split once, at the turn |
@@ -173,7 +175,7 @@ each cut on its own: the base criteria, all 8 or more, and the last critic's SHI
 | A promo with no motif: good shots, no flow | One object from the brand's action runs through it: met in the hook, linking the shots, doing the turn, back in the close |
 | A motif named, then nine cuts "on the beat" | Each cut says what it carries: the motif, or a real object, shape or movement in the same place on both sides |
 | A small card in the middle of an empty frame, "with room to breathe" | The subject spans 60 to 85% of the usable frame along its longer side; minimal is fewer things, not smaller ones |
-| Holds where only the camera breathes (the hook line, each caption, the end card) | A slow push, about 2% of scale a second, across each hold; measure with `frozen-time.mjs` |
+| Holds where only the camera breathes (each caption's rest, the end card) | A slow push, about 2% of scale a second, across each hold; measure with `frozen-time.mjs` |
 | A long hold kept, with a push added so the measure passes | The push is for reading time; a hold nothing needs is cut, or something happens in it |
 | The same framing shot after shot | Change the scale: macro, close, medium, wide, overhead, type |
 | A calm brand, so long holds | Calm is fewer things and slower moves; the picture never stops |

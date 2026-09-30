@@ -48,7 +48,7 @@ const brief = () => ({
       source: footage,
       crop: null,
       beats: [
-        { at: 0, dur: 3.5, src: 0, len: 3, picture: "A dim basement", words: "Which box has the lights?", in: "Opens on the problem", job: "hook", scale: "wide" },
+        { at: 0, dur: 3.5, src: 0, len: 3, picture: "A dim basement", words: "Which box has the lights?", in: "Opens on the problem", job: "hook", scale: "wide", changesAt: 2 },
         { at: 3.5, dur: 3, src: 4, len: 2, picture: "The code on the shelf", words: "", in: "MATCH CUT on the code", job: "proof", scale: "close", motif: "the code, handed from the box to the shelf", carries: "the code, same place and size" },
         { at: 6.5, dur: 2, image: still, picture: "The end card", in: "CLOSE", job: "close", scale: "type", carries: "the code settles into the mark" },
       ],
@@ -302,6 +302,24 @@ test("the pace and carry rules are the promo's; every brief names its module", (
   assert.deepEqual(checkPlan(b), [], "a tutorial holds on a step and cuts inside a recording");
   delete b.format;
   assert.ok(checkPlan(b).some((p) => p.startsWith("format: name the module this film is")));
+});
+
+test("a promo's first shot does not wait: something changes within 3 s, in a feed or out of one", () => {
+  const b = brief();
+  delete b.cuts[0].beats[0].changesAt;
+  assert.ok(checkPlan(b).some((p) => p.startsWith("the opening, 30 s: nothing changes for 3.5 s; a picture that waits under its line is not a hook")));
+  b.cuts[0].beats[0].changesAt = 1;
+  assert.deepEqual(checkPlan(b), []);
+  b.feed = true;
+  b.music.startSeconds = 0;
+  assert.ok(checkPlan(b).some((p) => p.startsWith("feed, 30 s: nothing changes for 2.5 s")), "in a feed the wait after the one change is too long");
+  b.cuts[0].beats[0].changesAt = [1, 2, 3];
+  assert.deepEqual(checkPlan(b), [], "a part arriving each second");
+  delete b.feed;
+  b.format = "tutorial";
+  delete b.cuts[0].beats[0].changesAt;
+  assert.deepEqual(checkPlan(b).filter((p) => p.startsWith("the opening")), [], "a tutorial opens on its result, which may hold");
+  assert.ok(buildHtml({ ...brief(), hook: { ...brief().hook, kind: "the problem, seen" } }).includes('<span class="job">the problem, seen</span><br><b>Which box has the lights?</b>'));
 });
 
 test("a number on screen comes from the facts list, never from memory", () => {

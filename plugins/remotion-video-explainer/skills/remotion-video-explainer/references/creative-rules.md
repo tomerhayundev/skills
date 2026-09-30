@@ -75,12 +75,15 @@ a shipped promo system. Paraphrased; the reasoning is the point.
 These are the promo-tested rules; the method that applies them to every format (the one message,
 the arc, the script table, the copy rules, the hook options) is [story](story.md).
 
-- **The hook is everything.** The first 2 seconds decide whether anyone keeps
-  watching. Plan it before anything else. Its line lands in about a second and then
-  holds whole for 2 more; the action starts after the hold, never during it. The motif
-  may arrive during the hold (the needle flying in), but nothing changes the picture the
-  line talks about until the hold ends (the strike comes after).
-- **Shape:** hook (2 to 3 s), reveal (2 to 4 s), two or three sharp highlights,
+- **The hook is everything, and it is chosen, not prescribed.** The opening decides whether
+  anyone keeps watching, so plan it before anything else, and choose it for this film: in
+  the middle of the action, the result first, a question, the problem seen, a contradiction,
+  a picture that builds itself ([hooks](hooks.md) lists the kinds, and what usually opens each
+  kind of video). What holds for all of them: something is already happening on frame 0, the
+  viewer knows what it is about within a second or so, and a line stays up for its reading
+  time while the picture keeps going. A finished picture that waits under its line for two
+  seconds was ranked the worst problem of a film by five critics in a row.
+- **Shape:** hook, reveal (2 to 4 s), two or three sharp highlights,
   punchline or brand close (2 to 4 s). A starting shape, not a template.
 - **A short cut needs a narrative, not a montage.** The 15 s cut that worked:
   build it once, it multiplies per job, the score improves, brand. A feature shown
@@ -129,14 +132,15 @@ the arc, the script table, the copy rules, the hook options) is [story](story.md
   things moving at once with nothing leading.
 - **Something happens on every beat.** Map the beats before building (a table of beat,
   time, what changes): the storyboard and the style frames of the visual brief, approved first.
-  In a hook hold or a caption rest the something is a slow push, about 2% of scale a second:
+  In a caption's rest the something is a slow push, about 2% of scale a second:
   calm enough to read, never frozen. A breath of 1% is not enough: a film whose holds had only
   that measured over a third of its runtime still and nobody had seen it (`frozen-time.mjs`,
   verification). The push is for reading time, not for a hold nothing needs: that one is cut.
 - **Budget the captions.** Each one costs about 2.5 s of calm picture (words in, the
   1.5 s hold, a beat before motion resumes). A 15 s cut carries 3 lines, at most 4
   counting the close, and the hook line is one of them (a 15 s cut that passed: the
-  hook, two captions, the brand line); more leaves no time for the product to act.
+  hook, two captions, the brand line); more leaves no time for the product to act. The
+  hook line is counted but not calmed: the picture under it keeps going ([hooks](hooks.md)).
 - **Big moments on the music:** the zoom or payoff on the drop, a quiet scene in the
   breakdown, the brand returning with the beat.
 - **A cursor drives the product:** real clicks, drags and long-presses, with the camera

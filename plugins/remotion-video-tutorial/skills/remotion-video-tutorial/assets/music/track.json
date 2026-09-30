@@ -5,6 +5,8 @@
   "secondsPerBeat": 0.5,
   "firstBeatSeconds": 0,
   "framesPerBeat": 15,
+  "feedStartBeat": 0,
+  "feedStartSeconds": 0,
   "liftBeats": [
     32,
     96,

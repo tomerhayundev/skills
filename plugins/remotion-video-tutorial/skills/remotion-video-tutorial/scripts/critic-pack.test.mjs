@@ -41,7 +41,7 @@ test("the pack holds the dense sheets, both sides of every cut, a strip per mome
   const size = (f) => JSON.parse(spawnSync("ffprobe", ["-v", "error", "-show_entries", "stream=width,height", "-of", "json", join(out, f)], { encoding: "utf8" }).stdout).streams[0];
   assert.equal(size("cuts.png").width, 2 * 180 + 4, "one pair, tall video at 180 px, 4 px apart");
   assert.equal(size("strip-120.png").width, 12 * 180 + 11 * 4);
-  assert.equal(size("hook.png").width, 12 * 180 + 11 * 4, "12 frames across the first two seconds");
+  assert.equal(size("hook.png").width, 12 * 180 + 11 * 4, "12 frames across the first three seconds");
   const index = readFileSync(join(out, "index.md"), "utf8");
   assert.match(index, /1\. frame 120, 4\.00 s/);
   assert.match(index, /strip-120\.png`: 12 consecutive frames around frame 120 \(4\.00 s\)/);

@@ -81,7 +81,7 @@ export function fitRect(rect: Rect, aspect: AspectId, captionBand = 0) {
 ```
 
 **A held frame gets a push, not only a breath.** A hold is the time from when a line is whole, or an
-action has settled, to the next action (the hook line's hold, a caption's rest, the end card).
+action has settled, to the next action (a caption's rest, the end card).
 First make it no longer than its words need, or let something small happen in it; the push is for
 the reading time that remains, never a way to keep a hold nothing needs. What remains scales up at
 a steady rate of about 2% a second (3 to 5% across a hold of 1.5 to 2.5 s), blended in from the
