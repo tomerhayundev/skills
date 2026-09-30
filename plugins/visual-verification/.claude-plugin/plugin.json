@@ -1,13 +1,13 @@
 {
   "name": "visual-verification",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Makes the agent prove an output works before calling it done: scope the check from the user's words, verify on the real surface and environment (never tests, CI, health checks or localhost alone), screenshot it, use it (click, submit, run, open every page), read the evidence critically, and report each item as ✓/✗/?, in a strict tool order (real Chrome, in-app browser, headless Playwright, computer use), with a tool-traps guide, a rationalization table and red flags.",
   "author": {
     "name": "Tomer Hayun",
     "url": "https://github.com/tomerhayundev"
   },
   "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/visual-verification",
-  "license": "MIT",
+  "license": "CC-BY-ND-4.0",
   "keywords": [
     "verification",
     "testing",

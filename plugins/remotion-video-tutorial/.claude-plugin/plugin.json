@@ -1,13 +1,13 @@
 {
   "name": "remotion-video-tutorial",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Tutorial and how-to videos with Remotion: step by step, chaptered by the brand's motif, a voiceover or word-synced subtitles, cursor zooms, checked so a stranger can repeat every step. Single-purpose specialist of remotion-video-master, which covers every format.",
   "author": {
     "name": "Tomer Hayun",
     "url": "https://github.com/tomerhayundev"
   },
   "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-tutorial",
-  "license": "MIT",
+  "license": "CC-BY-ND-4.0",
   "keywords": [
     "remotion",
     "video",

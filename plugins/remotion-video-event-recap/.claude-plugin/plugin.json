@@ -1,13 +1,13 @@
 {
   "name": "remotion-video-event-recap",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Event recap and conference highlight videos with Remotion, cut from real footage and photos on the beat. Early single-purpose specialist of remotion-video-master, built on its promo module.",
   "author": {
     "name": "Tomer Hayun",
     "url": "https://github.com/tomerhayundev"
   },
   "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-event-recap",
-  "license": "MIT",
+  "license": "CC-BY-ND-4.0",
   "keywords": [
     "remotion",
     "video",

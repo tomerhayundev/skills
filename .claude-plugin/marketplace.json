@@ -26,7 +26,7 @@
         "captions"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-master",
-      "license": "MIT"
+      "license": "CC-BY-ND-4.0"
     },
     {
       "name": "remotion-video-promo",
@@ -45,7 +45,7 @@
         "promo"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-promo",
-      "license": "MIT"
+      "license": "CC-BY-ND-4.0"
     },
     {
       "name": "remotion-video-product-demo",
@@ -64,7 +64,7 @@
         "product-demo"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-product-demo",
-      "license": "MIT"
+      "license": "CC-BY-ND-4.0"
     },
     {
       "name": "remotion-video-tutorial",
@@ -83,7 +83,7 @@
         "tutorial"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-tutorial",
-      "license": "MIT"
+      "license": "CC-BY-ND-4.0"
     },
     {
       "name": "remotion-video-explainer",
@@ -102,7 +102,7 @@
         "explainer"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-explainer",
-      "license": "MIT"
+      "license": "CC-BY-ND-4.0"
     },
     {
       "name": "remotion-video-feature-announcement",
@@ -121,7 +121,7 @@
         "feature-announcement"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-feature-announcement",
-      "license": "MIT"
+      "license": "CC-BY-ND-4.0"
     },
     {
       "name": "remotion-video-social-organic",
@@ -140,7 +140,7 @@
         "social-organic"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-social-organic",
-      "license": "MIT"
+      "license": "CC-BY-ND-4.0"
     },
     {
       "name": "remotion-video-event-recap",
@@ -159,7 +159,7 @@
         "event-recap"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-event-recap",
-      "license": "MIT"
+      "license": "CC-BY-ND-4.0"
     },
     {
       "name": "remotion-video-app-store-preview",
@@ -178,7 +178,7 @@
         "app-store-preview"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-app-store-preview",
-      "license": "MIT"
+      "license": "CC-BY-ND-4.0"
     },
     {
       "name": "remotion-video-onboarding",
@@ -197,7 +197,7 @@
         "onboarding"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-onboarding",
-      "license": "MIT"
+      "license": "CC-BY-ND-4.0"
     },
     {
       "name": "remotion-video-testimonial",
@@ -216,7 +216,7 @@
         "testimonial"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-testimonial",
-      "license": "MIT"
+      "license": "CC-BY-ND-4.0"
     },
     {
       "name": "deploy-production-level",
@@ -237,7 +237,7 @@
         "rollback"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/deploy-production-level",
-      "license": "MIT"
+      "license": "CC-BY-ND-4.0"
     },
     {
       "name": "publish-skill",
@@ -256,7 +256,7 @@
         "secrets"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/publish-skill",
-      "license": "MIT"
+      "license": "CC-BY-ND-4.0"
     },
     {
       "name": "visual-verification",
@@ -275,7 +275,7 @@
         "screenshots"
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/visual-verification",
-      "license": "MIT"
+      "license": "CC-BY-ND-4.0"
     }
   ],
   "renames": {

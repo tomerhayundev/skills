@@ -131,7 +131,8 @@ try {
 } catch {
   /* no origin: no homepage */
 }
-const license = existsSync(join(repo, "LICENSE")) && /MIT License/.test(readFileSync(join(repo, "LICENSE"), "utf8")) ? "MIT" : undefined;
+const licenseText = existsSync(join(repo, "LICENSE")) ? readFileSync(join(repo, "LICENSE"), "utf8") : "";
+const license = /Attribution-NoDerivatives 4\.0/.test(licenseText) ? "CC-BY-ND-4.0" : /MIT License/.test(licenseText) ? "MIT" : undefined;
 const keywords = opt("keywords") ? opt("keywords").split(",").map((k) => k.trim()) : existingEntry?.keywords;
 
 const pjPath = join(dest, ".claude-plugin", "plugin.json");

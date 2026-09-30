@@ -13,7 +13,7 @@ session, like visual-verification), and the install command you hand Tomer.
 
 | Content | Repo | Marketplace name | Local clone |
 | --- | --- | --- | --- |
-| General technique, no client or product internals | `tomerhayundev/skills` (public, MIT) | `tomerhayundev-skills` | `~/claude-skill-repos/skills` |
+| General technique, no client or product internals | `tomerhayundev/skills` (public, CC BY-ND 4.0) | `tomerhayundev-skills` | `~/claude-skill-repos/skills` |
 | Client-specific, product internals, anything its owner marks as not public | `tomerhayundev/skills-private` | `tomerhayundev-private-skills` | `~/claude-skill-repos/skills-private` |
 | Secrets (keys, tokens, passwords) | **Neither.** Replace with an env var read, in the source project too. | | |
 

@@ -1,13 +1,13 @@
 {
   "name": "remotion-video-testimonial",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Customer testimonial and case study videos with Remotion, built from a real customer's quote, interview or numbers. Early single-purpose specialist of remotion-video-master, built on its explainer module.",
   "author": {
     "name": "Tomer Hayun",
     "url": "https://github.com/tomerhayundev"
   },
   "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-testimonial",
-  "license": "MIT",
+  "license": "CC-BY-ND-4.0",
   "keywords": [
     "remotion",
     "video",

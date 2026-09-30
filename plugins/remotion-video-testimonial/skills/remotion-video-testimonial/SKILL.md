@@ -4,7 +4,7 @@ description: Use when making a customer testimonial or case study video with Rem
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.8.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 0ce7629ebe08 -->
+<!-- Generated from remotion-video-master 0.8.2 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 05a382de9cf2 -->
 
 # Remotion testimonial video
 

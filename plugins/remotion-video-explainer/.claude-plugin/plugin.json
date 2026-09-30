@@ -1,13 +1,13 @@
 {
   "name": "remotion-video-explainer",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Explainer videos with Remotion: one idea made clear with diagrams and the brand's motif, voiced or caption-led, checked for one-sentence recall. Single-purpose specialist of remotion-video-master, which covers every format.",
   "author": {
     "name": "Tomer Hayun",
     "url": "https://github.com/tomerhayundev"
   },
   "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-explainer",
-  "license": "MIT",
+  "license": "CC-BY-ND-4.0",
   "keywords": [
     "remotion",
     "video",

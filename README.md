@@ -6,7 +6,7 @@
   <a href="https://github.com/tomerhayundev/skills/actions/workflows/validate.yml"><img alt="checks" src="https://img.shields.io/github/actions/workflow/status/tomerhayundev/skills/validate.yml?branch=main&label=checks&style=flat-square"></a>
   <a href="https://code.claude.com/docs"><img alt="Claude Code plugins" src="https://img.shields.io/badge/Claude%20Code-plugin%20marketplace-d97757?style=flat-square"></a>
   <a href="https://agentskills.io"><img alt="Agent Skills" src="https://img.shields.io/badge/Agent%20Skills-compatible-6d4aff?style=flat-square"></a>
-  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-3b82f6?style=flat-square"></a>
+  <a href="LICENSE"><img alt="CC BY-ND 4.0 license" src="https://img.shields.io/badge/license-CC_BY--ND_4.0-3b82f6?style=flat-square"></a>
 </p>
 
 <p align="center">
@@ -229,7 +229,8 @@ one anyway, copy its skill folder into `~/.claude/skills/`.
 
 ## License
 
-[MIT](LICENSE), except the bundled music track in
+[CC BY-ND 4.0](LICENSE): you may use these skills, also at work, and share them unchanged with
+credit, but not publish changed versions. The exception is the bundled music track in
 `plugins/remotion-video-master/skills/remotion-video-master/assets/music/` (and its copy in each
 `remotion-video-*` specialist), which is Sascha Ende's work under CC BY 4.0 (see its
 [CREDITS.md](plugins/remotion-video-master/skills/remotion-video-master/assets/music/CREDITS.md)).

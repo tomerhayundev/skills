@@ -1,13 +1,13 @@
 {
   "name": "remotion-video-app-store-preview",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "App Store previews and Google Play videos with Remotion: in-app footage only, 15 to 30 s, caption-led for muted autoplay, at the store's exact size. Early single-purpose specialist of remotion-video-master, built on its product-demo module.",
   "author": {
     "name": "Tomer Hayun",
     "url": "https://github.com/tomerhayundev"
   },
   "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/remotion-video-app-store-preview",
-  "license": "MIT",
+  "license": "CC-BY-ND-4.0",
   "keywords": [
     "remotion",
     "video",
