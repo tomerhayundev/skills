@@ -66,6 +66,9 @@ builds every specialist from the master:
   own module, and for a stub the module it builds on; never the other modules or `_template.md`;
 - its `plugin.json` and catalog entry take the module's `summary`, the master's author, license and
   keywords, and **the master's version**: a new master version releases every specialist with it;
+- the master's `SKILL.md` says "This is version x.y.z of the skill" (in a master-only block), and the
+  sync keeps that line equal to its `plugin.json`, so a session can say which copy it loaded; a
+  specialist says the same in its generated first line;
 - its `SKILL.md` records a fingerprint of what was generated. A hand edit makes the sync (and CI)
   stop with an error instead of overwriting it: move the edit into the master, run the sync again.
   `--force` exists only to throw a hand edit away.

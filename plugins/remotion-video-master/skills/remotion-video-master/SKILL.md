@@ -15,6 +15,9 @@ master-only markers are left out of the specialists; "specialist" comments becom
 One place for any Remotion video: agree what it is for, where it runs and how long it is, write
 its story, then build it with one engine. Each kind of video is a module in `formats/`; the engine,
 the motif and the verification are shared.
+
+This is version 0.8.1 of the skill. Asked which version is loaded, answer with this line: an
+installed copy changes only when it is updated, and a running session keeps the copy it started with.
 <!-- /master-only -->
 <!-- specialist
 # Remotion {{kind}} video

@@ -35,6 +35,8 @@ function fixture() {
       "<!-- master-only -->",
       "# Video master",
       "",
+      "This is version 1.0.0 of the skill.",
+      "",
       "Every kind: [alpha](formats/alpha/FORMAT.md), [beta](formats/beta/FORMAT.md).",
       "<!-- /master-only -->",
       "<!-- specialist",
@@ -130,6 +132,9 @@ test("a master edited without a bump: patch bump, specialists follow with its ve
   assert.equal(JSON.parse(f.read("plugins/vid-alpha/.claude-plugin/plugin.json")).version, "1.0.1");
   assert.equal(f.read("plugins/vid-alpha/skills/vid-alpha/references/guide.md"), "# Guide\n\nShared text, sharper.\n");
   assert.match(f.read("plugins/vid-alpha/skills/vid-alpha/SKILL.md"), /Generated from vid-master 1\.0\.1/);
+  assert.match(f.read("plugins/vid-master/skills/vid-master/SKILL.md"), /This is version 1\.0\.1 of the skill\./, "the master states the version it now has");
+  assert.doesNotMatch(f.read("plugins/vid-alpha/skills/vid-alpha/SKILL.md"), /This is version/, "a specialist states its version in its generated line");
+  assert.deepEqual(sync(f.root, { since: f.base, check: true }).changes, [], "and a second run agrees");
 });
 
 test("a version set by hand is kept; an unchanged plugin is not bumped", () => {
@@ -137,7 +142,8 @@ test("a version set by hand is kept; an unchanged plugin is not bumped", () => {
   f.w("plugins/vid-master/.claude-plugin/plugin.json", f.read("plugins/vid-master/.claude-plugin/plugin.json").replace("1.0.0", "1.1.0"));
   f.w("plugins/vid-master/skills/vid-master/formats/alpha/FORMAT.md", f.read("plugins/vid-master/skills/vid-master/formats/alpha/FORMAT.md") + "\nMore.\n");
   const r = sync(f.root, { since: f.base });
-  assert.ok(!r.changes.some((c) => /version/.test(c)), r.changes.join("\n"));
+  assert.ok(!r.changes.some((c) => /version \S+ -> /.test(c)), r.changes.join("\n"));
+  assert.match(f.read("plugins/vid-master/skills/vid-master/SKILL.md"), /This is version 1\.1\.0 of the skill/, "the stated version follows the one set by hand");
   assert.equal(JSON.parse(f.read("plugins/vid-beta/.claude-plugin/plugin.json")).version, "1.1.0");
   assert.equal(JSON.parse(f.read("plugins/other/.claude-plugin/plugin.json")).version, "0.1.0");
 });

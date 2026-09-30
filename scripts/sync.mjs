@@ -193,6 +193,24 @@ export function sync(root, { check = false, since, bump = true, force = false } 
     }
   }
 
+  // 1b. A skill that states its version ("This is version x.y.z of the skill") states the one in its
+  // plugin.json, so a session can say which copy it loaded: an installed copy only changes on update.
+  const STAMP = /This is version \d+\.\d+\.\d+ of the skill/;
+  for (const dir of pluginDirs) {
+    const r = `plugins/${dir}`;
+    if (generatedFrom(join(root, r)) || !versions.get(dir)) continue;
+    for (const skill of subdirs(join(root, r, "skills"))) {
+      const md = join(root, r, "skills", skill, "SKILL.md");
+      if (!existsSync(md)) continue;
+      const text = readFileSync(md, "utf8");
+      const want = `This is version ${versions.get(dir)} of the skill`;
+      if (STAMP.test(text) && !text.includes(want)) {
+        planned.set(md, text.replace(STAMP, want));
+        changes.push(`${r}/skills/${skill}/SKILL.md: states version ${versions.get(dir)}`);
+      }
+    }
+  }
+
   // 2. Specialists, one per module of each master
   const readmePath = join(root, "README.md");
   let readme = existsSync(readmePath) ? readFileSync(readmePath, "utf8").replace(/\r\n/g, "\n") : null;

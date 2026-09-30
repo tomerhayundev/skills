@@ -4,7 +4,7 @@ description: Use when making an explainer, concept video, "how it works" or anim
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.8.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: a00e0e342d8e -->
+<!-- Generated from remotion-video-master 0.8.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 9961f3898e36 -->
 
 # Remotion explainer video
 
