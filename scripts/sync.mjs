@@ -31,10 +31,15 @@
  * master. Between <!-- family:<master> --> and <!-- /family:<master> --> the
  * README gets a diagram of the master and its specialists, then the
  * specialists' table; the master's own card above the markers is written by hand.
+ *
+ * Sources. sources/catalog.json is copied, as assets/sources.json, with
+ * sources/find-sources.mjs as scripts/find-sources.mjs, into every skill of each
+ * plugin its "consumers" lists; a master passes them on to its specialists. A
+ * consumer whose copy changed gets its patch bump like any other change.
  */
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
-import { dirname, join, relative, resolve } from "node:path";
+import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -160,6 +165,54 @@ export function sync(root, { check = false, since, bump = true, force = false } 
   const market = readJson(marketPath);
   const pluginDirs = subdirs(join(root, "plugins"));
 
+  /** A folder's files as they will be once the planned writes land. */
+  const planTree = (dir) => {
+    const tree = readTree(dir);
+    for (const [p, content] of planned) {
+      const r = relative(dir, p);
+      if (!r || r.startsWith("..") || isAbsolute(r)) continue;
+      if (content === null) tree.delete(posix(r));
+      else tree.set(posix(r), Buffer.isBuffer(content) ? content : Buffer.from(content));
+    }
+    return tree;
+  };
+
+  // 0. The sources library: the catalog and its query, copied into every consumer skill.
+  const sourcesTouched = new Set();
+  const catalogPath = join(root, "sources", "catalog.json");
+  if (existsSync(catalogPath)) {
+    let consumers = [];
+    try {
+      consumers = readJson(catalogPath).consumers ?? [];
+    } catch (e) {
+      errors.push(`sources/catalog.json: ${e.message}`);
+    }
+    const queryPath = join(root, "sources", "find-sources.mjs");
+    if (consumers.length && !existsSync(queryPath)) errors.push("sources/find-sources.mjs is missing; consumers get it with the catalog");
+    const copies = [["assets/sources.json", catalogPath], ["scripts/find-sources.mjs", queryPath]].filter(([, from]) => existsSync(from)).map(([to, from]) => [to, norm(readFileSync(from))]);
+    for (const name of consumers) {
+      const pluginDir = join(root, "plugins", name);
+      if (!isDir(pluginDir)) {
+        errors.push(`sources/catalog.json: consumer "${name}" has no plugins/${name}`);
+        continue;
+      }
+      if (generatedFrom(pluginDir)) {
+        errors.push(`sources/catalog.json: consumer "${name}" is generated; list its master, which passes the library on`);
+        continue;
+      }
+      for (const skill of subdirs(join(pluginDir, "skills"))) {
+        for (const [to, buf] of copies) {
+          const p = join(pluginDir, "skills", skill, to);
+          if (!existsSync(p) || !same(readFileSync(p), buf)) {
+            planned.set(p, buf);
+            changes.push(`plugins/${name}/skills/${skill}/${to}: from sources/`);
+            sourcesTouched.add(name);
+          }
+        }
+      }
+    }
+  }
+
   // 1. Versions
   const versions = new Map();
   for (const dir of pluginDirs) {
@@ -184,7 +237,7 @@ export function sync(root, { check = false, since, bump = true, force = false } 
       }
       const changed = (git(root, ["diff", "--name-only", base, "--", r]) ?? "") + (git(root, ["ls-files", "--others", "--exclude-standard", "--", r]) ?? "");
       const pj = readJson(pjPath);
-      if (changed.trim() && pj.version === oldVersion) {
+      if ((changed.trim() || sourcesTouched.has(dir)) && pj.version === oldVersion) {
         const next = bumpPatch(pj.version);
         versions.set(dir, next);
         planned.set(pjPath, JSON.stringify({ ...pj, version: next }, null, 2) + "\n");
@@ -272,7 +325,7 @@ export function sync(root, { check = false, since, bump = true, force = false } 
 
         const files = new Map();
         const skillRel = `skills/${mod.name}`;
-        for (const [r, buf] of readTree(dir)) {
+        for (const [r, buf] of planTree(dir)) {
           if (r === "SKILL.md") continue;
           const inFormats = r.match(/^formats\/([^/]+)\//);
           if (r.startsWith("formats/") && !(inFormats && ship.has(inFormats[1]))) continue;

@@ -91,6 +91,8 @@ with you before it builds anything.
 - **Measured, not eyeballed.** Frame-pop and loudness checks, a phone-size contact sheet, and a
   critique loop until every score is 8 or more.
 - **Every format.** Promo, product demo, tutorial, explainer, and six more, each with its own rules.
+- **References built in.** With no reference from you, it pulls one from the [sources library](sources/README.md):
+  the exact page for the move it needs, how to read it and what to take, never a copy.
 
 ```bash
 claude plugin install remotion-video-master@tomerhayundev-skills
@@ -159,6 +161,21 @@ flowchart TB
 | [visual-verification](plugins/visual-verification/skills/visual-verification/SKILL.md) | Makes the agent prove an output works before calling it done: scope the check from the user's words, verify on the real surface and environment (never tests, CI, health checks or localhost alone), screenshot it, use it (click, submit, run, open every page), read the evidence critically, and report each item as ✓/✗/?, in a strict tool order (real Chrome, in-app browser, headless Playwright, computer use), with a tool-traps guide, a rationalization table and red flags. | `claude plugin install visual-verification@tomerhayundev-skills` |
 <!-- /catalog -->
 
+## The sources library
+
+The skills look up references in [one shared catalog](sources/README.md) instead of browsing: design
+and motion sites, each with the exact page for each need ("a transition", "a hero", "an app flow"),
+how a machine reads it (a page, its screenshots, a clip's frames, a code registry), who may use what,
+and what to take and never take. A skill runs one query and goes straight to the right page:
+
+```bash
+node scripts/find-sources.mjs --need=transition --format=promo
+```
+
+It reads the live catalog here first, so a new source reaches every installed skill at once. Sources
+are added from shared links: each site is opened, mapped and checked before it goes in, and a monthly
+job records the ones that died or went behind a paywall.
+
 ## How this repo is kept
 
 Nobody maintains this repo by hand. The [skills-maintainer](.claude/agents/skills-maintainer.md) agent
@@ -170,7 +187,8 @@ keeps every change honest.
 | The master changes | `scripts/sync.mjs` regenerates every specialist, its catalog entry and the tables on this page |
 | Any plugin changes | its version is bumped, so installed copies (CLI and Cowork) update |
 | Every push to `main` | checks, strict plugin validation and tests run; if a change skipped the sync, CI runs it and commits the result |
-| Any file, any time | no real company, client or competitor name: the check holds a list of them as salted hashes and fails on any |
+| Any file, any time | no real company, client or competitor name: the check holds a list of them as salted hashes and fails on any. The sources library is the one place reference sites are named, as tools |
+| The sources catalog changes | it is validated, copied into every skill that uses it, and those skills are bumped; monthly, every source is loaded again |
 
 <details>
 <summary><b>Layout</b></summary>
@@ -186,6 +204,8 @@ plugins/remotion-video-<format>/                specialists, generated from remo
 archive/<name>/                                 retired plugins, kept as they were, not in the catalog
 scripts/sync.mjs                                versions, specialists, catalog entries, README tables
 scripts/check-skills.mjs                        repo checks CI runs on every push
+scripts/sources.mjs                             the sources library's tool: validate, add, check
+sources/catalog.json                            the sources library, copied into the skills that use it
 MAINTAINING.md                                  how the repo is kept, and by whom
 .claude/agents/skills-maintainer.md             the agent that keeps it
 ```

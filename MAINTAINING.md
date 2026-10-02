@@ -19,9 +19,12 @@ written here in the same commit.
 5. **Nothing secret or private in this public repo.** Keys and tokens live in environment variables,
    never in a skill (not even a private one). Product internals and internal URLs go to
    `tomerhayundev/skills-private`. Run the scan before every push.
-6. **No real company names, ever.** Not the client a lesson came from, not its competitors, not
-   Tomer's own products as examples: not in a skill, a test prompt, a commit message or any file.
-   Describe the case by category. `scripts/blocked-names.txt` lists names that must never appear, as
+6. **No real company names, except as sources.** Not the client a lesson came from, not its
+   competitors, not Tomer's own products as examples: not in a skill, a test prompt, a commit message
+   or any file. Describe the case by category. The one exception is the sources library
+   (`sources/catalog.json` and its copies), which names public reference sites the way a skill names
+   a library it uses; a client, a competitor, a brand from a test or Tomer's own products never go
+   there either, and a skill's own text never names a source. `scripts/blocked-names.txt` lists names that must never appear, as
    salted hashes; add one with `node scripts/names.mjs add "<name>"` (it prints where the name already
    appears). `check-skills.mjs` fails on any of them on every push, and the scan does with `--public`;
    both print the place, never the name. A name that is also an ordinary word goes in only with the
@@ -42,6 +45,11 @@ scripts/sync.mjs                           versions, specialists, catalog entrie
 scripts/sync.test.mjs                      its tests
 scripts/check-skills.mjs                   every repo check (CI runs it; it also runs sync --check and the names check)
 scripts/names.mjs, blocked-names.txt       names that must never appear, kept as salted hashes
+scripts/sources.mjs                        the sources library's tool: validate, add, has, seen, check
+sources/catalog.json                       the sources library: the one file, copied into consumer skills
+sources/find-sources.mjs                   the query those skills run (copied as scripts/find-sources.mjs)
+sources/README.md, sources/INTAKE.md       the entry format, and the brief for intake agents
+.github/workflows/sources-check.yml        monthly: loads every source, records what died or went paid
 .github/workflows/validate.yml             CI: sync on push to main, then every check and test
 .claude/agents/skills-maintainer.md        the agent that follows this file
 CLAUDE.md                                  points any session in this repo here
@@ -90,6 +98,7 @@ Where a change goes:
 | --- | --- | --- |
 | A rule for every kind of video | the master's `SKILL.md`, or a shared file in `references/`, `assets/`, `scripts/` | patch (the sync does it) |
 | A rule for one kind | `formats/<id>/FORMAT.md` | patch |
+| A source added, changed or retired | `sources/catalog.json`, through `scripts/sources.mjs` ([the sources library](#the-sources-library)) | patch for every consumer (the sync does it) |
 | A specialist's trigger or catalog line | the module's frontmatter: `description` (its "Use when"), `summary` | patch |
 | Text for the master only, or for specialists only | the markers above | patch |
 | A new kind of video | copy `formats/_template.md` to `formats/<id>/FORMAT.md`, fill it, add a row to the master's formats table (row order is catalog order) | minor: set it by hand first |
@@ -153,6 +162,54 @@ then retire here with `"<name>": null`. Anything already pushed publicly by mist
 [purge-history](plugins/publish-skill/skills/publish-skill/references/purge-history.md): rotate the
 secret first, then rewrite history.
 
+## The sources library
+
+Design and motion references the skills look up instead of browsing: one entry per site, with the
+exact page for each need, how to read it, who may use what, and what to take. The format and its
+rules: [sources/README.md](sources/README.md). Tomer sends links ("add these to the sources"); this
+section turns them into entries.
+
+**Who uses it.** `consumers` in `sources/catalog.json` lists the plugins that get a copy. The sync
+writes `assets/sources.json` and `scripts/find-sources.mjs` into each of their skills (a master
+passes them to its specialists) and bumps their versions. A skill runs
+`node ${CLAUDE_SKILL_DIR}/scripts/find-sources.mjs --need=<need> --format=<id>` at the step where a
+reference helps, and its text names needs, never a site. The query reads the live catalog on GitHub
+first, so a new source reaches every installed copy at once; the bundled copy answers offline. To
+make a skill a consumer: add it to `consumers`, write the step that runs the query into its
+`SKILL.md`, and run the sync.
+
+**Intake** (links from Tomer):
+
+1. Read every link. X and other walled pages: Tomer's own Chrome (the claude-in-chrome tools), one
+   tab, one post at a time; read the text and the media, because a site is sometimes named only in a
+   video's address bar or a reply. A list post is split into its sites. The post is never an entry,
+   and who posted it is never recorded.
+2. `node scripts/sources.mjs has <url>...` for every site: a known one is counted
+   (`node scripts/sources.mjs seen <url>`), a new one is drafted.
+3. Draft the new ones with Sonnet agents (never Opus), five sites each, given
+   [sources/INTAKE.md](sources/INTAKE.md), their batch and an output file in the session's scratchpad.
+   They use the built-in browser, WebFetch and curl, each in its own tab; never Tomer's Chrome, which
+   they would fight over.
+4. `node scripts/sources.mjs add <drafts.json>...` merges and validates (nothing is written on an
+   error). Then read every new entry yourself: our words only, no person's name, nothing a site said
+   to an AI, an honest quality score, every route's `example` real. Run `check-skills.mjs`, whose
+   names check also covers the catalog.
+5. Sync, checks, tests, then commit `feat(sources): <n> new sources (<areas>)`, with no site named in
+   the message, and push.
+6. Report to Tomer: what was added (by area), what was known already, what was rejected and why, and
+   what needs his call.
+
+**Health check.** `.github/workflows/sources-check.yml` runs `node scripts/sources.mjs check --write`
+on the 1st of each month: every home and route is loaded; a bot wall (403) changes nothing; a route
+that now leads to a sign-in or pricing page makes the source `paywalled`; a source is `dead` after
+two failing checks in a row (`degraded` after one). Only a status change is written, then synced and
+pushed, with the report in the run's summary. `paywalled` and `dead` sources are never shown; a
+`degraded` one is shown last, with a warning. Read the summary when the run commits: a source whose
+site moved needs its routes mapped again (an intake of that one site).
+
+**Never** delete a source: a dead or rejected entry stays so the same link is not checked twice.
+Change a route only from a page someone loaded, never from memory.
+
 ## CI
 
 `.github/workflows/validate.yml` runs on every push to `main` and every pull request.
@@ -162,8 +219,9 @@ secret first, then rewrite history.
   versions` as github-actions[bot] and pushes it; your clone is then one commit behind. A
   hand-edited specialist fails the run instead of being overwritten.
 - **Pull request:** `node scripts/sync.mjs --check`; nothing is committed.
-- Then, on both: `check-skills.mjs`, `claude plugin validate . --strict`, the script tests, and
-  the beat fitter against the bundled track.
+- Then, on both: `check-skills.mjs` (which also validates `sources/catalog.json`), `claude plugin
+  validate . --strict`, the script tests, and the beat fitter against the bundled track.
+- Monthly, `sources-check.yml`: the sources health check (above).
 
 ## Health check
 
@@ -177,13 +235,15 @@ Asked to "check the skills repo", or when a scheduled run asks:
   `calculateMetadata`) and their `compatibility` line.
 - `diff -r` each `~/.claude/skills/<name>` against the repo: newer local edits come home (above),
   stale copies are refreshed.
+- `node scripts/sources.mjs check`: the sources library's loads, without writing (the monthly run
+  writes); `node scripts/sources.mjs stats` for what it covers.
 - The private repo's `scripts/check-skills.mjs` is identical to this one.
 
 ## The maintainer agent
 
 It lives in `.claude/agents/skills-maintainer.md`, with an identical copy in `~/.claude/agents/`
 so any session can hand it work ("add this skill to my repo", "update the master with what we
-learned"). When the agent file changes here, the maintainer copies it there in the same job.
+learned", "add these links to the sources"). When the agent file changes here, the maintainer copies it there in the same job.
 
 It acts without asking on everything above, including pushes to `main`. It asks Tomer first
 before it retires or deletes a skill, moves one between public and private, makes a major

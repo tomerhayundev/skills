@@ -24,7 +24,9 @@
  * - with scripts/sync.mjs present: a specialist, catalog entry or README family
  *   table out of step with its master, or a specialist edited by hand;
  * - with scripts/names.mjs present: a real company, client, product or competitor
- *   name from scripts/blocked-names.txt (salted hashes) anywhere in the repo.
+ *   name from scripts/blocked-names.txt (salted hashes) anywhere in the repo;
+ * - with scripts/sources.mjs present: a sources/catalog.json entry out of its format
+ *   or its vocab.
  * Warnings: a plugin no marketplace entry installs, a frontmatter key outside the
  * known set, an em dash (house style), SSH-style install instructions.
  */
@@ -221,6 +223,16 @@ if (existsSync(join(ROOT, "scripts", "names.mjs"))) {
   const { loadHashes, scanPath } = await import(pathToFileURL(join(ROOT, "scripts", "names.mjs")).href);
   for (const h of scanPath(ROOT, loadHashes(ROOT))) {
     errors.push(`${h.file}:${h.line}:${h.column}: a blocked company or product name; describe the case by category`);
+  }
+}
+
+// The sources library: the catalog keeps its format and its vocab (scripts/sources.mjs).
+if (existsSync(join(ROOT, "scripts", "sources.mjs")) && existsSync(join(ROOT, "sources", "catalog.json"))) {
+  const { validateCatalog } = await import(pathToFileURL(join(ROOT, "scripts", "sources.mjs")).href);
+  try {
+    for (const e of validateCatalog(JSON.parse(readFileSync(join(ROOT, "sources", "catalog.json"), "utf8")))) errors.push(`sources/catalog.json: ${e}`);
+  } catch (e) {
+    errors.push(`sources/catalog.json: ${e.message}`);
   }
 }
 

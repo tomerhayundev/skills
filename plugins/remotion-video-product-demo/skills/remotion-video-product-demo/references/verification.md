@@ -142,7 +142,24 @@ what is already in place under it: read it off that cut's 16 frames) and **how i
 film**. The moves that hold across the references become the film's grammar; match each to the
 catalog in [handoffs](handoffs.md). Take the grammar, never the content, footage, layouts, logos,
 characters or music. A folder of the client's own past work makes a reference nobody else can copy.
-With no reference, the catalog and the product's own look are the reference.
+
+With no reference from the user, take one from the sources library (`find-sources.mjs`, SKILL.md
+section 5) and read each result as its `read` says:
+
+- `frames` is video. When the entry's rights say `study`, fetch that one clip (the item's video
+  URL, often in the page's JSON-LD) into `refs/`, kept out of git and never rendered, and run the
+  pack on it. When they say `view`, read it in the page: pause the video, set its `currentTime`
+  from the page's script at 0.2 to 0.5 s steps around the key moment, and screenshot each step. A
+  seek lands on the nearest keyframe, so a time read this way is good to about 0.3 s: say so in
+  the guide.
+- `look` is screenshots: read them as stills. `registry`, `md` and `text` give code or words directly.
+- Write each into the style guide's three lines like any reference, and name it there by category
+  ("a fintech app's swipe-to-pay"), never by the site's or the brand's name. The pages themselves go
+  in `refs/sources.md` (their URLs and what each gave), kept out of git and out of anything the user
+  sees, so a later session can open them again.
+
+With nothing found, the catalog of moves in [handoffs](handoffs.md) and the product's own look are
+the reference.
 
 ## Phone test
 

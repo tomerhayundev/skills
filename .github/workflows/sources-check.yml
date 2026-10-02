@@ -1,0 +1,45 @@
+name: sources-check
+
+# Monthly: load every source in sources/catalog.json and record the ones that died or went
+# behind a paywall, so no skill is sent to a page that is gone. Only a status change is written;
+# the sync then carries it to the consumer skills and bumps them.
+on:
+  schedule:
+    - cron: "17 6 1 * *"
+  workflow_dispatch:
+
+# Shares validate's group, so this commit and a sync commit never race.
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Load every source
+        run: node scripts/sources.mjs check --write | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Sync and commit the status changes
+        run: |
+          if [ -z "$(git status --porcelain sources)" ]; then
+            echo "No status changed."
+            exit 0
+          fi
+          node scripts/sync.mjs --since=HEAD
+          CHECK_BASE_REF=HEAD node scripts/check-skills.mjs
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "chore(sources): monthly health check"
+          git push origin "HEAD:$GITHUB_REF_NAME"

@@ -214,3 +214,37 @@ test("broken input is refused with a reason", () => {
   h.w("README.md", "# Skills\n");
   assert.ok(sync(h.root, { since: h.base }).errors.some((e) => /add the lines "<!-- family:vid-master -->"/.test(e)));
 });
+
+test("the sources library reaches every consumer skill and its specialists, with a bump", () => {
+  const f = fixture();
+  sync(f.root, { since: f.base });
+  const cat = { schema: 1, updated: "2026-10-02", consumers: ["vid-master"], vocab: {}, sources: [] };
+  f.w("sources/catalog.json", JSON.stringify(cat, null, 2) + "\n");
+  f.w("sources/find-sources.mjs", "// the query\n");
+  const r = sync(f.root, { since: f.base });
+  assert.deepEqual(r.errors, []);
+  for (const skill of ["vid-master/skills/vid-master", "vid-alpha/skills/vid-alpha", "vid-beta/skills/vid-beta"]) {
+    assert.equal(JSON.parse(f.read(`plugins/${skill}/assets/sources.json`)).consumers[0], "vid-master", skill);
+    assert.equal(f.read(`plugins/${skill}/scripts/find-sources.mjs`), "// the query\n", skill);
+  }
+  assert.ok(!f.has("plugins/other/skills/other/assets/sources.json"), "only consumers get it");
+  assert.equal(JSON.parse(f.read("plugins/vid-master/.claude-plugin/plugin.json")).version, "1.0.1");
+  assert.equal(JSON.parse(f.read("plugins/vid-alpha/.claude-plugin/plugin.json")).version, "1.0.1");
+  assert.deepEqual(sync(f.root, { since: f.base, check: true }).changes, [], "a second run agrees");
+  // A catalog change reaches the copies on the next run.
+  f.w("sources/catalog.json", JSON.stringify({ ...cat, updated: "2026-10-03" }, null, 2) + "\n");
+  const stale = sync(f.root, { since: f.base, check: true, bump: false });
+  assert.ok(stale.changes.some((c) => /plugins\/vid-master\/skills\/vid-master\/assets\/sources\.json: from sources\//.test(c)), stale.changes.join("\n"));
+  sync(f.root, { since: f.base });
+  assert.equal(JSON.parse(f.read("plugins/vid-beta/skills/vid-beta/assets/sources.json")).updated, "2026-10-03");
+});
+
+test("a generated plugin cannot be a consumer", () => {
+  const f = fixture();
+  sync(f.root, { since: f.base });
+  f.w("sources/catalog.json", JSON.stringify({ schema: 1, consumers: ["vid-alpha", "nope"] }) + "\n");
+  f.w("sources/find-sources.mjs", "// the query\n");
+  const errors = sync(f.root, { since: f.base }).errors.join("\n");
+  assert.match(errors, /consumer "vid-alpha" is generated; list its master/);
+  assert.match(errors, /consumer "nope" has no plugins\/nope/);
+});
