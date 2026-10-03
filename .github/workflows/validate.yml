@@ -86,3 +86,8 @@ jobs:
 
       - name: remotion-video-master scripts (length recommendations, declared-cut pops)
         run: node --test plugins/remotion-video-master/skills/remotion-video-master/scripts/*.test.mjs
+
+      - name: seo-geo-master scripts (crawler, robots, schema, Search Console, shared libs)
+        run: |
+          S=plugins/seo-geo-master/skills/seo-geo-master/scripts
+          node --test $S/*.test.mjs $S/lib/*.test.mjs

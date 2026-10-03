@@ -220,7 +220,9 @@ Change a route only from a page someone loaded, never from memory.
   hand-edited specialist fails the run instead of being overwritten.
 - **Pull request:** `node scripts/sync.mjs --check`; nothing is committed.
 - Then, on both: `check-skills.mjs` (which also validates `sources/catalog.json`), `claude plugin
-  validate . --strict`, the script tests, and the beat fitter against the bundled track.
+  validate . --strict`, the script tests, the beat fitter against the bundled track, the
+  `remotion-video-master` script tests, and the `seo-geo-master` script tests (`scripts/*.test.mjs` and
+  `scripts/lib/*.test.mjs` under its skill folder; they open local servers on 127.0.0.1 and need no installs).
 - Monthly, `sources-check.yml`: the sources health check (above).
 
 ## Health check
