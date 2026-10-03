@@ -1,0 +1,18 @@
+{
+  "verified": "2026-10-02",
+  "source": "https://status.search.google.com/products/rGHU1u87FJnkP6W2GwMi/history",
+  "note": "Dates are US Pacific as shown on the Search Status Dashboard. Smaller core updates also happen without an announcement.",
+  "updates": [
+    { "name": "March 2025 core update", "type": "core", "start": "2025-03-13", "end": "2025-03-27", "scope": "global" },
+    { "name": "June 2025 core update", "type": "core", "start": "2025-06-30", "end": "2025-07-17", "scope": "global" },
+    { "name": "August 2025 spam update", "type": "spam", "start": "2025-08-26", "end": "2025-09-22", "scope": "global" },
+    { "name": "December 2025 core update", "type": "core", "start": "2025-12-11", "end": "2025-12-29", "scope": "global" },
+    { "name": "February 2026 Discover core update", "type": "discover-core", "start": "2026-02-05", "end": "2026-02-27", "scope": "Discover only, English, US" },
+    { "name": "March 2026 spam update", "type": "spam", "start": "2026-03-24", "end": "2026-03-25", "scope": "global" },
+    { "name": "March 2026 core update", "type": "core", "start": "2026-03-27", "end": "2026-04-08", "scope": "global" },
+    { "name": "May 2026 core update", "type": "core", "start": "2026-05-21", "end": "2026-06-02", "scope": "global" },
+    { "name": "June 2026 spam update", "type": "spam", "start": "2026-06-24", "end": "2026-06-26", "scope": "global" },
+    { "name": "August 2026 spam update", "type": "spam", "start": "2026-08-18", "end": "2026-08-21", "scope": "global" },
+    { "name": "September 2026 spam update", "type": "spam", "start": "2026-09-24", "end": null, "scope": "global; up to two weeks; still rolling out on 2026-10-02" }
+  ]
+}

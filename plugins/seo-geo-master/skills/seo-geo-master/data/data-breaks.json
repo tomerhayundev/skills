@@ -1,0 +1,8 @@
+{
+  "verified": "2026-10-02",
+  "breaks": [
+    { "id": "gsc-impressions-logging-error", "start": "2025-05-13", "end": "2026-04-27", "affects": ["impressions", "ctr", "position"], "notAffected": ["clicks"], "what": "Google's logging error made Search Console impressions, CTR and position wrong in this window; clicks were not affected. Compare clicks only across it.", "source": "https://support.google.com/webmasters/answer/6211453" },
+    { "id": "results-per-page-change", "start": "2025-09-10", "end": null, "approximate": true, "affects": ["impressions", "position", "query-count"], "notAffected": ["clicks"], "what": "Around mid-September 2025 Google stopped supporting 100 results per page; most sites saw impressions and ranking-query counts fall as a measurement change, not a visibility loss.", "source": "https://searchengineland.com/google-num100-impact-data-462231" },
+    { "id": "gen-ai-report-logging-dip", "start": "2026-08-13", "end": "2026-08-17", "affects": ["generative-ai-report impressions"], "notAffected": ["clicks"], "what": "A logging issue lowered impressions in the Search Console Generative AI performance report; restored 2026-08-21.", "source": "https://support.google.com/webmasters/answer/6211453" }
+  ]
+}

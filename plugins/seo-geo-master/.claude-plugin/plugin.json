@@ -1,0 +1,20 @@
+{
+  "name": "seo-geo-master",
+  "version": "0.1.0",
+  "description": "One master skill for search visibility: classic SEO and GEO (being found, cited and recommended in Google AI Overviews and AI Mode, ChatGPT, Claude, Perplexity and Copilot). Reads the site first, asks once, never invents numbers, proposes one measured change at a time, and ships tested zero-dependency scripts for crawling, robots.txt and AI crawlers, structured data, Search Console exports and Core Web Vitals.",
+  "author": {
+    "name": "Tomer Hayun",
+    "url": "https://github.com/tomerhayundev"
+  },
+  "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/seo-geo-master",
+  "license": "CC-BY-ND-4.0",
+  "keywords": [
+    "seo",
+    "geo",
+    "ai-search",
+    "search-console",
+    "schema",
+    "technical-seo",
+    "local-seo"
+  ]
+}

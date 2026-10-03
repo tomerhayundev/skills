@@ -1,0 +1,18 @@
+{
+  "note": "Patterns are case-insensitive regular expressions tested line by line; a line that also matches unless is allowed. Text between <!-- myths --> and <!-- /myths --> is not scanned.",
+  "claims": [
+    { "id": "faq-rich-result", "pattern": "FAQ[^.\\n]{0,80}rich (result|snippet)", "unless": "no longer|ended|retired|removed|not shown|no rich|stopped|gone", "why": "FAQ rich results ended for all sites on 2026-05-07" },
+    { "id": "howto-rich-result", "pattern": "HowTo[^.\\n]{0,80}rich (result|snippet)", "unless": "no longer|ended|retired|removed|not shown|no rich|gone", "why": "HowTo rich results were removed in 2023" },
+    { "id": "fid-metric", "pattern": "\\bFID\\b|First Input Delay", "unless": "replac|retired|no longer|instead of", "why": "INP replaced FID on 2024-03-12" },
+    { "id": "keyword-density", "pattern": "keyword density", "unless": "\\bno\\b|\\bnot\\b|never|myth|isn't|doesn't|does not", "why": "Google has no notion of optimal keyword density" },
+    { "id": "lsi-keywords", "pattern": "\\bLSI\\b", "unless": "\\bno\\b|\\bnot\\b|never|myth|no such", "why": "Google says there is no such thing as LSI keywords" },
+    { "id": "llms-txt-lever", "pattern": "llms\\.txt", "unless": "ignore|no effect|neither|\\bnot\\b|optional|harmless|doesn't|does not|myth|never|no evidence|unverified", "why": "Google Search ignores llms.txt; no major AI provider documents reading it" },
+    { "id": "dec-2025-eeat", "pattern": "Dec(ember)?\\.? 2025[^.\\n]{0,80}E-?E-?A-?T|E-?E-?A-?T[^.\\n]{0,80}Dec(ember)?\\.? 2025", "unless": "no such|never|myth|false|did not|didn't", "why": "No Google source says the December 2025 update extended E-E-A-T" },
+    { "id": "google-extended-search", "pattern": "Google-Extended[^.\\n]{0,100}(AI Overviews|AI Mode|Search)", "unless": "does not|doesn't|no effect|not affect|only|training", "why": "Google-Extended does not affect Search, AI Overviews or AI Mode" },
+    { "id": "passage-length-rule", "pattern": "\\b(134|40)\\s*(-|\u2013|to)\\s*(167|60)[- ]words?\\b", "unless": "\\bnot\\b|\\bno\\b|myth|never|isn't", "why": "Google says chunking content for AI is not needed" },
+    { "id": "buy-links", "pattern": "\\bbuy(ing)?\\s+(back)?links\\b|link buying|paid links", "unless": "\\bnot\\b|\\bno\\b|never|don't|do not|spam|sponsored|violat", "why": "Buying links that pass ranking credit is link spam" },
+    { "id": "lcp-2s", "pattern": "LCP[^.\\n]{0,30}\\b2\\.0\\s?s", "unless": "myth|\\bnot\\b|\\bno\\b", "why": "The LCP threshold is 2.5 s; 2.0 s has no primary source" },
+    { "id": "indexnow-google", "pattern": "IndexNow[^.\\n]{0,60}Google", "unless": "\\bnot\\b|doesn't|does not|exclud|\\bno\\b", "why": "Google does not use IndexNow" },
+    { "id": "ai-score", "pattern": "(AI|GEO) (visibility )?score[^.\\n\\d]{0,12}\\d+\\s*(/|out of)\\s*100", "unless": "never|no single|\\bnot\\b|don't", "why": "A single AI visibility score is not a measurement" }
+  ]
+}
