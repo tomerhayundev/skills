@@ -29,7 +29,7 @@ Read this while writing `brand/brand.json`. Every rule here is enforced by `vali
 ## logo
 
 - `original`: `{ path, sha256, width, height }`. The path is `logo/original.<ext>` (copied by `sample-logo.mjs`). The sha256 must match the file: the original never changes.
-- `versions`: written by `make-variants.mjs`. `monoDark`, `monoLight` and `reversed` are required, `tint` is optional. Each is `{ path, sha256, color }`. Never write these by hand.
+- `versions`: written by `make-variants.mjs`. `monoDark`, `monoLight` and `reversed` are required, `tint` is optional. Each is `{ path, sha256, color }`, plus `colors` when a version keeps several colours (the reversed version of a logo of several colours). Never write these by hand.
 - `clearSpace`: between 0.1 and 2, as a share of the mark's height.
 - `minSize`: `{ screenPx, printMm }`, from `logo-read.json`. `screenPx` is a whole number of at least 16; `printMm` is at least 5.
 - `allowedBackgrounds`: names of colour roles the logo may sit on.
@@ -81,6 +81,9 @@ Use a pairing from `data/fonts.json` that the direction allows. A role may add `
 - `doSay`: 2 to 3 lines `{ text, source }`. Use the brand's own words (`url` or `user`); a line you wrote must be `example` and is shown marked as one.
 - `dontSay`: 2 to 3 lines the brand must not sound like. They are shown marked as examples.
 - `tone`: optional, a map from a context (welcome, service, social) to a few words.
+- `imageStyle`: optional, one sentence of photo and image guidance (light, crops, materials). It is guidance, never a fact.
+
+`weAre[i]` pairs with `weAreNot[i]` on the board, as "calm, not loud".
 
 ## copy
 

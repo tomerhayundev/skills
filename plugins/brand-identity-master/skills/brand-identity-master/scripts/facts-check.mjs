@@ -13,6 +13,7 @@ const SYSTEM_TOKENS = [
   /\d+(?:\.\d+)?\s*(?:px|mm|pt|em|%|:1|x|units?)(?![a-z])/gi,
   /\b(?:50|950|[1-9]00)\b/g,
   /\b\d\.\d+\b/g,
+  /^\s*\d{1,2}\s*$/g,
 ];
 
 const PATTERNS = [

@@ -83,3 +83,8 @@ test('a board over 5600 px tall gets a length warning', () => {
   const f = checkBoard(M({ doc: { width: 1600, height: 7600, viewport: 1600, dir: 'ltr', fonts: [] } }), brand, { fonts });
   assert.ok(f.some((x) => x.code === 'BOARD_LONG' && x.level === 'warn'));
 });
+
+test('cards with the page ground and no edge warn that they melt into the page', () => {
+  const f = checkBoard(M({ page: 'rgb(21, 18, 14)', cards: [{ cls: 'card', bg: 'rgb(21, 18, 14)', image: false, edge: false }, { cls: 'card', bg: 'rgb(201, 162, 75)', image: false, edge: false }] }), brand, { fonts });
+  assert.ok(f.some((x) => x.code === 'CARD_BLENDS' && /1 card/.test(x.message)));
+});

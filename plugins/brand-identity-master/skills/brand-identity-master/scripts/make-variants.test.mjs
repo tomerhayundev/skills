@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { recolorSvg, matte, makeVariants, variantColours } from './make-variants.mjs';
+import { recolorSvg, matte, makeVariants, variantColours, variantPlan, recolorRaster } from './make-variants.mjs';
 import { readLogo } from './sample-logo.mjs';
 import { findChrome } from './lib/chrome.mjs';
 import { deltaOk } from './lib/color.mjs';
@@ -48,4 +48,18 @@ test('makeVariants writes one-colour PNG versions and records them in brand.json
   assert.equal(r.background.kind, 'transparent');
   assert.equal(r.inks.length, 1);
   assert.ok(deltaOk(r.inks[0].hex, '#F4EFE6') < 0.02, r.inks[0].hex);
+});
+
+test('a two-colour raster keeps its bright details in the reversed version', () => {
+  const img = makeImage(60, 60, [255, 255, 255, 255]);
+  fillCircle(img, 30, 30, 22, [107, 62, 38, 255]);
+  fillCircle(img, 30, 30, 6, [232, 131, 58, 255]);
+  const inks = [{ hex: '#6B3E26', share: 0.9 }, { hex: '#E8833A', share: 0.1 }];
+  const plan = variantPlan(sampleBrand(), inks);
+  assert.deepEqual(plan.reversed, ['#F4EFE6', '#E8833A']);
+  const out = recolorRaster(img, detectBackground(img), inks, plan.reversed);
+  const at = (x, y) => [...out.slice((y * 60 + x) * 4, (y * 60 + x) * 4 + 4)];
+  assert.deepEqual(at(30, 30), [232, 131, 58, 255]);
+  assert.deepEqual(at(30, 14), [244, 239, 230, 255]);
+  assert.equal(at(2, 2)[3], 0);
 });

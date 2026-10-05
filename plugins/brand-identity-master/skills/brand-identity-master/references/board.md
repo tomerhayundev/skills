@@ -12,6 +12,8 @@ The default order is below. A direction may reorder or merge blocks, but never l
    - the essence (the feels-like line, a quote from the brand);
    - reading the logo: its parts, each shown as a crop of the original (`data-detail`) with a short note, plus the mood words.
 3. **Logo system**:
+   - a construction card: the logo over a grid at its own unit, with the measured unit, clear space and minimum size from `logo-read.json`;
+   - a "logo on colour" row: the original on light, on dark, reversed and one colour. For a logo of several colours, the reversed version turns its dark colours light and keeps its bright details;
    - primary, on light, reversed;
    - clear space and minimum size, with their values;
    - three misuse tiles and a minimum-size tile.
@@ -19,7 +21,7 @@ The default order is below. A direction may reorder or merge blocks, but never l
    - colour as stacked bars (name, role, hex, RGB, written in the role's own text colour) plus the scale strip;
    - type specimens of the display and text faces, and a hierarchy.
 5. **Voice, patterns, icons**:
-   - voice: we are / we are not, say and don't say, examples marked;
+   - voice: each trait with what it is not ("calm, not loud"), say and don't say lines marked as examples, and a note on image style (light, crops, materials: guidance, never a fact);
    - three patterns from different recipes;
    - eight icons from `data/icons/` picked by sector, each with a plain label naming what it depicts.
 6. **Applications**: three rows of scenes from the mockup kit (stationery and packaging, website and app, the world and social), four to six pieces in all (see `mockups.md`).
@@ -46,7 +48,7 @@ A studio board is dense with real content and looks finished. Empty tiles and gr
   - the brand's quotes.
 - **Headlines are always real words**: the brand's quotes, the feels-like line, mood words, labels, or example lines marked `data-example`. Grey bars stand only for secondary lines, at most three per piece.
 - **No dead ground.** Outside the hero, no empty stretch taller than about 160 px. Cards in a row share their height, and their content uses it.
-- **The brand name in type** may appear in a nav bar, a footer or a heading. It is never set beside the mark like a new lockup. When the logo is itself a wordmark, specimens use "Aa" and the brand's quotes, not the brand name.
+- **The brand name in type** may appear as the hero title, in a nav bar, a footer, on packaging and signage as product text, and the brand's own lines may run on packaging. It is never presented as a logo version in the logo system. When the logo is itself a wordmark, specimens use "Aa" and the brand's quotes, not the brand name.
 
 ## Conventions the checks read
 
@@ -63,6 +65,16 @@ A studio board is dense with real content and looks finished. Empty tiles and gr
 - **`.bar`** for content that has no source.
 
 ## Layout
+
+- **Two layout families.** Each direction's three variants say which to use:
+  - `assets/board/editorial.html`: a light page under dark and coloured panels, a name-led hero with a strategy strip, numbered sections, palette columns, and a collage of the brand in use;
+  - `assets/board/skeleton.html`: a grid of full cards with three rows of mockup scenes.
+
+  Never copy a layout's look as it is: change the grounds, the hero, the order and the bold move for this brand.
+- **The hero.**
+  - **Name-led** (`.hero-name`, the default when the logo has no wordmark): the brand name set big in the display face, the mark beside it, the sector and the feels-like line, and a strategy strip (sector, audience, mood, voice). The name is a title: never captioned as a logo or a lockup.
+  - **When the logo is a wordmark:** use a mark crop or a band hero (`.hero-band`) instead, so the name is not set twice.
+- **The page ground contrasts with the cards.** Set `--page` in the brand layer: a light page under dark and coloured cards, or a lifted dark page (a step lighter than the dark cards). board-check warns when a card has the page's ground and no edge (CARD_BLENDS).
 
 - The page is 1600 px wide, a 12-column grid (`.sheet`). Rows of cards use `.cards` with `.c-3` to `.c-12`.
 - The direction file names three layout variants. Build the chosen one in the board's brand-layer `<style>` by changing spans, order, card grounds and gaps. Do not edit `base.css`: `tokens.mjs` copies it fresh.

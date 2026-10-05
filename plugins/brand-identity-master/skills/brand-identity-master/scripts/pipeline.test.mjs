@@ -40,7 +40,7 @@ test('the sample brand is valid after make-variants', { skip }, () => {
   assert.deepEqual(validateBrand(readJson(path.join(dir, 'brand.json')), { brandDir: dir, data }).errors, []);
 });
 
-for (const [file, name] of [['skeleton.html', 'board'], ['mockups.html', 'mockups'], ['direction.html', 'direction']]) {
+for (const [file, name] of [['skeleton.html', 'board'], ['editorial.html', 'editorial'], ['mockups.html', 'mockups'], ['direction.html', 'direction']]) {
   test(`${file} renders with the sample brand and passes both checks`, { skip }, () => {
     const dir = brandDir();
     const findings = renderAndCheck(dir, path.join(SKILL_DIR, 'assets', 'board', file), name);

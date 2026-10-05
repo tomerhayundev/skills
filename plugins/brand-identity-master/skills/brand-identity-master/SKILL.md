@@ -8,7 +8,7 @@ compatibility: Node 18+, and Chrome or Edge (any Chromium browser) for reading t
 
 Turns a logo into a visual identity: a brand file other skills read (`brand/brand.json`), and a brand identity board ready to show a client. Everything comes from the logo and the brand's own words. The board is HTML rendered to PNG by a headless browser, and the logo file is placed as it is, never redrawn.
 
-This is version 0.2.0 of the skill. Asked which version is loaded, answer with this line: an installed copy changes only when it is updated, and a running session keeps the copy it started with.
+This is version 0.3.0 of the skill. Asked which version is loaded, answer with this line: an installed copy changes only when it is updated, and a running session keeps the copy it started with.
 
 Scripts live in this skill's `scripts/` folder: run them as `node <this skill>/scripts/<name>.mjs`. Output goes to `brand/` in the working folder. Answer the user in their language; the board is in the brand's language.
 
@@ -64,7 +64,7 @@ In this order; each step passes before the next.
 1. Complete `brand.json`: logo rules, voice, copy ([brand file](references/brand-file.md)). If a colour changed since the card, run `make-variants.mjs` again.
 2. `node scripts/validate-brand.mjs brand/brand.json`: fix every error.
 3. `node scripts/tokens.mjs brand/brand.json` and `node scripts/design-md.mjs brand/brand.json`. Never write `tokens.css` or `DESIGN.md` by hand.
-4. Write `brand/board.html` from [the board skeleton](assets/board/skeleton.html), following the [board rules](references/board.md), the direction's layout, [patterns](references/patterns.md), [icons](data/icons.json) chosen for the sector and [mockups](references/mockups.md) built from [the mockup kit](assets/board/mockups.html). The skeleton shows structure and conventions only: its look is not a look to copy.
+4. Write `brand/board.html` from one of the two board layouts the direction names: [editorial](assets/board/editorial.html) (a light page, a name-led hero, numbered sections, a collage) or [cards](assets/board/skeleton.html) (a grid of full cards with scenes). Follow the [board rules](references/board.md), the direction's layout, [patterns](references/patterns.md), [icons](data/icons.json) chosen for the sector and [mockups](references/mockups.md) built from [the mockup kit](assets/board/mockups.html). The skeleton shows structure and conventions only: its look is not a look to copy.
 5. `node scripts/render.mjs brand/board.html`: it measures the height, writes `board-vN.png` and `board-vN@2x.png`, and copies the latest to `board.png`.
 6. `node scripts/board-check.mjs brand/board.metrics.json --brand brand/brand.json` and `node scripts/facts-check.mjs brand/board.metrics.json --brand brand/brand.json`. Fix every failure in the page or in `brand.json`, never by weakening a check, then render again ([checks](references/checks.md)).
 
@@ -74,6 +74,7 @@ Look at `brand/board.png` and answer briefly, in writing:
 
 - The swap test: put another logo of the same sector on this board. What would still be true? If most of it, the board is generic: bring in more of what comes from this logo (its parts, its pattern, its colours, its stroke and corners in the layout).
 - The finished test: would it hold up next to a studio's board? Any card of grey bars only, any empty stretch, any card with one small thing in a big field, any mockup that is mostly placeholder is unfinished: fill it with the brand's words, its parts, its pattern and notes ([a full board](references/board.md)).
+- The sibling test: would this board pass for another brand's board from this skill? Change the layout family, the hero, the rhythm of light and dark grounds or the mockup arrangement until it would not.
 - Where is the one bold move? There is exactly one.
 
 Then at most two refine passes. Render and run both checks after each.

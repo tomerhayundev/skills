@@ -48,6 +48,8 @@ A large hero carried by the `storefront-sign` mockup with the mark, then the sys
 
 In every variant, corners follow the logo (round marks get 8 to 16 px radii), and shadows are short and soft.
 
+Layout families: A uses the editorial layout with the name-led hero and a collage; B the cards layout with a band hero of the mark tiled; C the editorial layout with the sign as the hero.
+
 ## Pattern
 
 `mark-tile` from the tint version (the mark repeated like a stamp), `detail-dots` as a quiet grain, `mark-crop` on a kraft band.

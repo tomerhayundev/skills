@@ -48,6 +48,8 @@ Specifications set as ruled tables: colours, type sizes and logo rules in rows w
 
 In every variant, alignment is strict, rules are hairline, and nothing is tilted.
 
+Layout families: A uses the editorial layout with the name-led hero; B the cards layout with a band hero; C the editorial layout with ruled tables in every section.
+
 ## Pattern
 
 `proportion-grid` at a very low strength, behind the hero or a band; `stroke-lines` as fine horizontal rules. Patterns stay in the background and never carry meaning.

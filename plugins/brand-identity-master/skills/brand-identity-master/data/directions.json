@@ -1,11 +1,43 @@
 {
   "directions": [
-    { "id": "quiet-luxury", "name": "Quiet luxury", "file": "directions/quiet-luxury.md" },
-    { "id": "precise-tech", "name": "Precise tech", "file": "directions/precise-tech.md" },
-    { "id": "warm-handmade", "name": "Warm handmade", "file": "directions/warm-handmade.md" },
-    { "id": "trusted-authority", "name": "Trusted authority", "file": "directions/trusted-authority.md" },
-    { "id": "bright-playful", "name": "Bright playful", "file": "directions/bright-playful.md" },
-    { "id": "natural-organic", "name": "Natural organic", "file": "directions/natural-organic.md" }
+    {
+      "id": "quiet-luxury",
+      "name": "Quiet luxury",
+      "file": "directions/quiet-luxury.md"
+    },
+    {
+      "id": "precise-tech",
+      "name": "Precise tech",
+      "file": "directions/precise-tech.md"
+    },
+    {
+      "id": "warm-handmade",
+      "name": "Warm handmade",
+      "file": "directions/warm-handmade.md"
+    },
+    {
+      "id": "trusted-authority",
+      "name": "Trusted authority",
+      "file": "directions/trusted-authority.md"
+    },
+    {
+      "id": "bright-playful",
+      "name": "Bright playful",
+      "file": "directions/bright-playful.md"
+    },
+    {
+      "id": "natural-organic",
+      "name": "Natural organic",
+      "file": "directions/natural-organic.md"
+    }
   ],
-  "recipes": ["mark-tile", "mark-crop", "stroke-lines", "stroke-rings", "proportion-grid", "detail-dots"]
+  "recipes": [
+    "mark-tile",
+    "mark-crop",
+    "stroke-lines",
+    "stroke-rings",
+    "proportion-grid",
+    "detail-dots",
+    "mark-scatter"
+  ]
 }

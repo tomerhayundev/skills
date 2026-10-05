@@ -47,6 +47,8 @@ Wide horizontal bands, one per block, stepping through the palette from light to
 
 In every variant, curves come from the logo, corners are soft (8 to 16 px), and nothing is crowded.
 
+Layout families: A uses the editorial layout with the name-led hero; B the cards layout with a mark-crop hero; C the editorial layout with horizon bands.
+
 ## Pattern
 
 `mark-crop` (a soft, oversize crop of the mark), `stroke-lines` with wide gaps, light `detail-dots` like seeds. Patterns are pale and few.

@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parseArgs, isMain, readJson, writeJson, sha256File } from './lib/cli.mjs';
-import { parseCssColor, contrast, blendOver } from './lib/color.mjs';
+import { parseCssColor, contrast, blendOver, deltaOk } from './lib/color.mjs';
 import { loadData } from './lib/brand.mjs';
 
 const RTL_CHARS = /[\u0590-\u05FF\u0600-\u06FF]/;
@@ -71,6 +71,12 @@ export function checkBoard(m, brand, { fonts }) {
     if (overlapArea(m.blocks[i].rect, m.blocks[j].rect) > 4) add('fail', 'BLOCK_OVERLAP', `Block "${m.blocks[i].id}" overlaps block "${m.blocks[j].id}"`);
   }
 
+  // Cards that melt into the page: the same ground as the page and no edge to separate them.
+  const pageHex = parseCssColor(m.page || '')?.hex;
+  if (pageHex && m.cards) {
+    const melt = m.cards.filter((k) => { const c = parseCssColor(k.bg); const clear = !c || c.alpha < 0.05; return !k.edge && !k.image && (clear || deltaOk(c.hex, pageHex) < 0.03); });
+    if (melt.length) add('warn', 'CARD_BLENDS', `${melt.length} card(s) have the page's own ground and no edge, so they melt into the page: set them on a ground that contrasts with --page, or give them an outline`);
+  }
   if (m.doc.height > 5600) add('warn', 'BOARD_LONG', `The board is ${Math.round(m.doc.height)} px tall; aim for 5200 or less: merge rows, cut a weak card or mockup`);
   if (m.doc.width > m.doc.viewport + 1) add('fail', 'OFF_PAGE', `The page is ${m.doc.width} px wide, wider than its ${m.doc.viewport} px window`);
   for (const t of visible) if (t.rect.x < -1 || t.rect.x + t.rect.w > m.doc.viewport + 1) add('fail', 'OFF_PAGE', `Text runs off the page: "${short(t.text)}"`);

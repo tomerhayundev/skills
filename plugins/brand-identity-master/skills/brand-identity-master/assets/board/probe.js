@@ -59,12 +59,13 @@
       const card = e.closest('[data-swatch-card]') || e;
       return { declared: e.dataset.swatch, bg: getComputedStyle(e).backgroundColor, printed: [...card.querySelectorAll('[data-hex]')].map((h) => h.textContent.trim()) };
     });
+    const cards = [...document.querySelectorAll('.card, .scene, .tile, .collage, .hero-name, .hero')].map((e) => { const s = getComputedStyle(e); return { cls: e.className, bg: s.backgroundColor, image: s.backgroundImage !== 'none', edge: s.boxShadow !== 'none' || (s.borderTopStyle !== 'none' && parseFloat(s.borderTopWidth) > 0) || (s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0) }; });
     const blocks = [...document.querySelectorAll('[data-block]')].map((e) => ({ id: e.dataset.block, rect: rect(e) }));
     const de = document.documentElement;
     emit({
       ok: true,
       doc: { width: de.scrollWidth, height: de.scrollHeight, viewport: innerWidth, dir: getComputedStyle(document.body).direction, lang: de.lang, fonts: [...document.fonts].map((f) => ({ family: f.family.replace(/["']/g, ''), weight: f.weight, status: f.status })) },
-      texts, logos, swatches, blocks,
+      texts, logos, swatches, blocks, cards, page: getComputedStyle(document.body).backgroundColor,
     });
   } catch (err) {
     emit({ ok: false, error: String((err && err.stack) || err) });

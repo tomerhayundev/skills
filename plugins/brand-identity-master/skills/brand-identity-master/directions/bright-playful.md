@@ -51,6 +51,8 @@ In every variant:
 - spacing is generous but energetic (gaps of 48 to 64 px);
 - the logo appears large at least twice.
 
+Layout families: A uses the cards layout with a band hero in the primary; B the editorial layout with the name-led hero set heavy; C the cards layout with the mark scattered as the hero.
+
 ## Pattern
 
 `detail-dots` bold and bright, `mark-tile` in two brand colours, thick `stroke-lines`. Patterns can be loud here, but never behind small text.

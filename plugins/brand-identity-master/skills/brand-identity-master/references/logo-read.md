@@ -54,7 +54,7 @@ Every `inferred` conclusion is listed in the reply, so the owner can correct it 
 
 - **One colour, black or near-black.** The palette comes from the direction and the site. Mark those roles `derived` or `site`, and say in the reply that the logo gave no colour.
 - **The logo fills its frame** (`background: none`). Clean one-colour versions are not possible. `make-variants.mjs` says so. Show the logo on grounds it suits and say why there is no reversed version.
-- **A multicolour raster.** One-colour versions only if the silhouette still reads at the minimum size. Check the tile by eye.
+- **A logo of several colours.** The reversed version turns its dark colours light and keeps its bright ones, so inner details (dots, accents) survive on dark grounds; the one-colour versions merge everything into one silhouette, so use them only where one colour is required, and say so.
 - **A hairline.** The minimum size is large. Show the logo big. Never shrink it under the minimum to fit a tile; make the tile bigger.
 - **A wordmark only.** The pattern comes from the letterforms' stroke and proportions, not from a symbol.
 - **A symbol only.** Ask for the brand name in the one question round. The board needs it, and it is never guessed.

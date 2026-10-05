@@ -49,6 +49,8 @@ Equal modules with 1 px borders and the logo's own corner radius (0 to 8 px). Th
 
 In every variant, the spacing is on an 8 px rhythm and every edge aligns to the grid.
 
+Layout families: A uses the cards layout with a split hero; B the editorial layout with the name-led hero; C the cards layout with a band hero on the drawn grid.
+
 ## Pattern
 
 `proportion-grid` (cells from the logo's bounding-box ratio), `stroke-lines` at the logo's stroke, a fine `detail-dots` field. A pattern here is structural, never decorative noise.

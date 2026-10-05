@@ -80,7 +80,7 @@ img { display: block; }
 .tilt-r { transform: rotate(5deg); }
 
 /* Scenes: a ground the pieces sit on */
-.scene { border-radius: calc(var(--radius) + 6px); padding: 56px 32px 40px; position: relative; overflow: hidden; min-height: 440px; display: flex; align-items: center; justify-content: center; gap: 28px; flex-wrap: wrap; }
+.scene { box-shadow: inset 0 0 0 1px rgb(127 127 127 / 0.2); border-radius: calc(var(--radius) + 6px); padding: 56px 32px 40px; position: relative; overflow: hidden; min-height: 440px; display: flex; align-items: center; justify-content: center; gap: 28px; flex-wrap: wrap; }
 .scene > :not(.pattern):not(.caption) { position: relative; }
 .scene > .caption { position: absolute; left: 24px; top: 20px; }
 .scene.desk { background-color: var(--scene, #2B2620); }
@@ -250,3 +250,84 @@ img { display: block; }
 .icon-grid figure { margin: 0; border-radius: var(--radius); padding: 26px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 13px; }
 .icon-grid svg { width: 32px; height: 32px; fill: none; stroke: currentColor; stroke-width: var(--icon-stroke); stroke-linecap: var(--icon-caps); stroke-linejoin: round; }
 .stack { position: relative; display: flex; align-items: flex-end; gap: 18px; }
+
+/* Page ground: the page must contrast with its cards, so set --page apart from the card grounds
+   (a light page under dark and coloured panels, or the reverse). */
+body { background-color: var(--page, var(--color-surface)); }
+
+/* Editorial layout: numbered section heads with a rule */
+.sec-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 18px; font-family: var(--font-label); font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; }
+.sec-head .n { font-weight: 700; }
+.sec-head .rule { flex: 1; height: 1px; background: currentColor; opacity: 0.25; }
+
+/* Heroes: the board's opening. Pick one per board (see references/board.md). */
+.hero-name { border-radius: calc(var(--radius) + 6px); overflow: hidden; position: relative; }
+.hero-name .top { display: grid; grid-template-columns: 1.35fr 1fr; gap: 40px; align-items: center; padding: 72px 64px 56px; position: relative; }
+.hero-name .top > :not(.pattern) { position: relative; }
+.brand-name { font-family: var(--font-display); font-weight: 400; font-size: 120px; line-height: 0.98; margin: 0; overflow-wrap: anywhere; }
+.brand-name.tracked { text-transform: uppercase; letter-spacing: 0.08em; }
+.hero-name .line { width: 96px; height: 2px; background: var(--accent, var(--color-primary)); margin: 30px 0 18px; }
+.hero-name .sub { font-family: var(--font-label); font-size: 14px; letter-spacing: 0.2em; text-transform: uppercase; margin: 0 0 18px; }
+.hero-name .say { font-family: var(--font-display); font-style: italic; font-size: 26px; line-height: 1.3; margin: 0; }
+.hero-name .mark { display: flex; align-items: center; justify-content: center; }
+.hero-name .mark img[data-logo] { width: 82%; max-width: 420px; height: auto; }
+.strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid rgb(127 127 127 / 0.35); position: relative; }
+.strip > div { padding: 20px 24px 24px; border-left: 1px solid rgb(127 127 127 / 0.35); }
+.strip > div:first-child { border-left: 0; }
+.strip .eyebrow { margin: 0 0 6px; }
+.strip p { margin: 0; font-size: 14px; line-height: 1.45; }
+.hero-band { position: relative; border-radius: calc(var(--radius) + 6px); overflow: hidden; min-height: 520px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 64px; text-align: center; }
+.hero-band > :not(.pattern) { position: relative; }
+.hero-band img[data-logo] { width: 300px; height: auto; }
+
+/* Palette as tall colour columns */
+.pal-cols { display: flex; border-radius: var(--radius); overflow: hidden; min-height: 260px; }
+.pal-cols > div { flex: 1 1 0; min-width: 0; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; }
+.pal-cols .nm { font-family: var(--font-display); font-size: 28px; line-height: 1.05; margin: 4px 0 0; }
+.pal-cols .codes { font-family: var(--font-label); font-size: 13px; line-height: 1.5; }
+.usage { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin: 14px 0 8px; }
+
+/* A collage: pieces laid together on one ground, placed by hand. Only one piece in a stack may carry text. */
+.collage { position: relative; border-radius: calc(var(--radius) + 6px); overflow: hidden; min-height: 760px; }
+.collage > .mockup { position: absolute; }
+.collage > .caption { position: absolute; left: 24px; top: 20px; margin: 0; font-family: var(--font-label); font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; }
+.stack-col { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+
+/* Mark scatter: the logo itself (a version file set in --mark) scattered at a few sizes, in its own colours */
+.p-mark-scatter { --mark: url("logo/reversed.png"); background-image: var(--mark), var(--mark), var(--mark), var(--mark), var(--mark), var(--mark), var(--mark); background-repeat: no-repeat; background-size: 92px auto, 54px auto, 104px auto, 62px auto, 46px auto, 84px auto, 58px auto; background-position: 6% 8%, 50% 4%, 94% 12%, 30% 56%, 72% 46%, 8% 96%, 90% 94%; }
+
+/* Voice as traits, each with what it is not */
+.traits { display: grid; gap: 0; }
+.traits > div { display: flex; align-items: baseline; gap: 14px; padding: 12px 0; border-top: 1px solid rgb(127 127 127 / 0.3); }
+.traits b { font-family: var(--font-display); font-weight: 400; font-size: 26px; min-width: 7ch; }
+.traits span { font-size: 14px; }
+
+/* Construction: the logo over a grid at its own unit, with its measured values */
+.construct { position: relative; display: flex; align-items: center; justify-content: center; min-height: 220px; border-radius: var(--radius); overflow: hidden; }
+.construct > :not(.pattern) { position: relative; }
+.construct .p-proportion-grid { --pattern-ink: rgb(127 127 127 / 0.28); --stroke: 1px; }
+
+/* Paper bag, second take: a front with a folded top, a creased side gusset and rope handles */
+.k-bag2 { position: relative; width: 210px; height: 260px; margin: 70px 40px 0 0; }
+.k-bag2 .front { position: absolute; inset: 0; background-color: var(--paper); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 46px 22px 22px; overflow: hidden; }
+.k-bag2 .front::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 34px; background: linear-gradient(rgb(0 0 0 / 0.18), rgb(0 0 0 / 0.04) 70%, transparent); border-bottom: 1px solid rgb(0 0 0 / 0.08); }
+.k-bag2 .front::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, rgb(255 255 255 / 0.1), transparent 40%, rgb(0 0 0 / 0.08)); pointer-events: none; }
+.k-bag2 .front > * { position: relative; }
+.k-bag2 .front img[data-logo] { width: 58%; height: auto; }
+.k-bag2 .gusset { position: absolute; top: 0; left: 100%; width: 40px; height: 100%; background-color: var(--paper); filter: brightness(0.78); clip-path: polygon(0 0, 100% 6%, 100% 100%, 0 100%); }
+.k-bag2 .gusset::after { content: ""; position: absolute; top: 0; bottom: 0; left: 48%; width: 1px; background: rgb(0 0 0 / 0.25); }
+.k-bag2 .front { z-index: 1; }
+.k-bag2 .rope { position: absolute; left: 31%; width: 38%; height: 86px; top: -60px; border: 4px solid var(--rope, rgb(0 0 0 / 0.55)); border-bottom: 0; border-radius: 50% 50% 0 0 / 80% 80% 0 0; }
+.k-bag2 .rope.a { z-index: 2; }
+.k-bag2 .rope.a::before, .k-bag2 .rope.a::after { content: ""; position: absolute; bottom: -5px; width: 9px; height: 9px; border-radius: 50%; background: rgb(0 0 0 / 0.45); box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.15); }
+.k-bag2 .rope.a::before { left: -7px; } .k-bag2 .rope.a::after { right: -7px; }
+.k-bag2 .rope.b { z-index: 0; top: -70px; height: 86px; opacity: 0.7; filter: brightness(0.75); }
+.k-tag { font-family: var(--font-display); font-size: 20px; line-height: 1.15; text-align: center; margin: 0; }
+.k-small { font-family: var(--font-label); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; text-align: center; margin: 0; }
+
+/* Stand-up pouch: rounded shoulders, a seal band with a tear notch, a shaded base */
+.k-pouch { position: relative; width: 190px; height: 270px; border-radius: 22px 22px 14px 14px; background-color: var(--paper); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 50px 18px 34px; overflow: hidden; }
+.k-pouch::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 26px; background: repeating-linear-gradient(90deg, rgb(0 0 0 / 0.12) 0 2px, transparent 2px 6px); border-bottom: 1px solid rgb(0 0 0 / 0.12); }
+.k-pouch::after { content: ""; position: absolute; inset: auto 0 0 0; height: 34px; background: linear-gradient(transparent, rgb(0 0 0 / 0.16)); }
+.k-pouch > * { position: relative; }
+.k-pouch img[data-logo] { width: 62%; height: auto; }

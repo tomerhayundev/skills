@@ -41,6 +41,14 @@ Text never sits directly on a pattern without help. Put it in a box with a plain
 - **Variables:** `--pattern-ink`, `--stroke`, `--grid-w`, `--grid-h`.
 - **Directions:** precise tech, trusted authority. In precise tech it can be the drawn grid the whole board sits on.
 
+## mark-scatter
+
+- **Made from:** the logo itself, a version file set in `--mark` (the reversed version by default), scattered at a few sizes. For a logo of several colours, its own colours carry the pattern.
+- **Class:** `.p-mark-scatter`.
+- **Variables:** `--mark`, for example `url("logo/monoDark.png")` on a light ground; the sizes and positions are set in `base.css`.
+- **Directions:** warm handmade, bright playful, natural organic; in quiet luxury only sparse and in one colour.
+- Patterns use the brand's colours (the accent on the primary, a tint on the dark), never only grey.
+
 ## detail-dots
 
 - **Made from:** the logo's smallest detail. Set `--dot` to about half of `strokeMin`, scaled to the board, so it lands between 1.5 and 4 px.

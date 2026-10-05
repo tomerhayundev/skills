@@ -53,6 +53,8 @@ In every variant:
 - every card full and finished: quiet means few colours and fine lines, never empty tiles;
 - body copy never spans more than 8 columns.
 
+Layout families: A uses the editorial layout with the name-led hero; B the cards layout with a mark-crop hero; C the editorial layout with a band hero.
+
 ## Pattern
 
 `stroke-rings` for round marks, `mark-crop` for marks with a strong curve or serif, fine `stroke-lines` for straight-edged marks. Never a dense `detail-dots`. The pattern is a whisper: ink at 10 to 16% of the text colour, or the metal at low strength.
