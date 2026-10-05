@@ -297,6 +297,18 @@
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/seo-geo-master",
       "license": "CC-BY-ND-4.0"
+    },
+    {
+      "name": "brand-identity-master",
+      "description": "Turns a logo into a visual identity: it reads the logo's real colours and shape and the brand's own words, picks one of six design directions, and writes a validated brand file (brand.json, DESIGN.md, tokens.css) plus a premium brand identity board rendered from HTML by headless Chrome or Edge. The logo is never redrawn, no fact is invented, and no image model or API key is needed.",
+      "source": "./plugins/brand-identity-master",
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "development",
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/brand-identity-master",
+      "license": "CC-BY-ND-4.0"
     }
   ],
   "renames": {

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Mockup gallery</title>
+<!-- All ten mockups, built in HTML and CSS. Copy the ones the direction and the sector call for into the board.
+     Text with no source is a .bar; labels come from data/labels.json; captions are deliverable names. -->
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
+</head>
+<body>
+<main class="sheet">
+  <section class="block span-12" data-block="gallery">
+    <p class="eyebrow">Applications</p>
+    <div class="mockups">
+      <div class="mockup m-card" data-mockup="card">
+        <div class="face paper tilt" data-ground="#15120E" style="--paper: var(--color-neutral-dark)"><img data-logo src="logo/original.svg" alt=""></div>
+        <div class="face paper" data-ground="#F4EFE6"><span class="bar w50"></span><span><span class="bar w70"></span><span class="bar w40"></span></span></div>
+        <p class="caption">Business card</p>
+      </div>
+      <div class="mockup m-letterhead" data-mockup="letterhead">
+        <div class="a4 paper" data-ground="#F4EFE6"><img data-logo src="logo/monoDark.png" alt=""><span class="bar w40"></span><span class="bar w90"></span><span class="bar w90"></span><span class="bar w70"></span><span class="bar w90"></span><span class="bar w60"></span></div>
+        <p class="caption">Letterhead</p>
+      </div>
+      <div class="mockup m-envelope" data-mockup="envelope">
+        <div class="face paper" data-ground="#F4EFE6"><img data-logo src="logo/monoDark.png" alt=""></div>
+        <p class="caption">Envelope</p>
+      </div>
+      <div class="mockup m-phone" data-mockup="phone">
+        <div class="body"><div class="screen"><img data-logo src="logo/monoLight.png" alt=""><span class="bar w90"></span><span class="bar w60"></span><p class="eyebrow" style="color: var(--color-primary)">Book</p></div></div>
+        <p class="caption">App screen</p>
+      </div>
+      <div class="mockup m-browser" data-mockup="browser">
+        <div class="window"><div class="chrome"><i></i><i></i><i></i></div><div class="page"><div class="nav"><img data-logo src="logo/monoLight.png" alt=""><span>About</span><span>Contact</span></div><span class="bar w70" style="height: 1.4em"></span><span class="bar w50"></span></div></div>
+        <p class="caption">Website home</p>
+      </div>
+      <div class="mockup m-social" data-mockup="social">
+        <div class="post" data-ground="#C9A24B" style="background: var(--color-primary); color: var(--color-primary-on)"><img data-logo src="logo/reversed.png" alt=""><span><span class="bar w90"></span><span class="bar w60"></span></span></div>
+        <p class="caption">Social post</p>
+      </div>
+      <div class="mockup m-bag" data-mockup="bag">
+        <div class="front paper" data-ground="#15120E" style="--paper: var(--color-neutral-dark)"><span class="handle"></span><img data-logo src="logo/original.svg" alt=""></div>
+        <p class="caption">Shopping bag</p>
+      </div>
+      <div class="mockup m-box" data-mockup="box">
+        <div class="lid paper" data-ground="#C9A24B" style="--paper: var(--color-primary)"><img data-logo src="logo/reversed.png" alt=""></div>
+        <p class="caption">Product box</p>
+      </div>
+      <div class="mockup m-label" data-mockup="label">
+        <div class="tag paper" data-ground="#F4EFE6"><img data-logo src="logo/monoDark.png" alt=""><span class="bar w70"></span><span class="bar w50"></span></div>
+        <div class="round paper" data-ground="#C9A24B" style="--paper: var(--color-primary)"><img data-logo src="logo/reversed.png" alt=""></div>
+        <p class="caption" style="position: absolute; bottom: -34px">Product label</p>
+      </div>
+      <div class="mockup m-sign" data-mockup="sign">
+        <div class="panel paper" data-ground="#15120E" style="--paper: var(--color-neutral-dark)"><img data-logo src="logo/original.svg" alt=""></div>
+        <p class="caption">Storefront sign</p>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

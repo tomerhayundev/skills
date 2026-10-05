@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Direction card</title>
+<!-- Direction card: the one screen shown for approval before the board is built. Same conventions as the board.
+     Replace the sample brand's words and values with this brand's. Reasons go in the chat reply, not on the card. -->
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
+<style>
+  .sheet { width: 1200px; padding: 64px; row-gap: 48px; }
+  .card-hero { display: flex; align-items: center; justify-content: center; min-height: 360px; border-radius: var(--radius); overflow: hidden; }
+  .card-hero img[data-logo] { width: 260px; height: auto; position: relative; }
+  .name { font-family: var(--font-display); font-size: 64px; line-height: 1.05; margin: 0 0 20px; }
+  .chip { height: 96px; }
+</style>
+</head>
+<body>
+<main class="sheet">
+  <section class="block span-12 card-hero" data-block="hero" data-ground="#15120E" style="background: var(--color-surface)">
+    <div class="pattern p-stroke-rings"></div>
+    <img data-logo src="logo/original.svg" alt="">
+  </section>
+  <section class="block span-6" data-block="direction">
+    <p class="eyebrow">Direction</p>
+    <p class="name">Quiet luxury</p>
+    <p class="eyebrow">Runner-up</p>
+    <p class="lede">Trusted authority</p>
+    <p class="eyebrow">Feels like</p>
+    <p class="lede">A lamp left on in a quiet hall.</p>
+  </section>
+  <section class="block span-6" data-block="mood">
+    <p class="eyebrow">Mood</p>
+    <ul class="tags"><li>quiet</li><li>warm metal</li><li>unhurried</li></ul>
+    <p class="eyebrow">Avoid</p>
+    <ul class="tags"><li>loud</li><li>glossy</li><li>crowded</li></ul>
+  </section>
+  <section class="block span-7" data-block="palette">
+    <p class="eyebrow">Palette</p>
+    <div class="row">
+      <figure class="swatch" data-swatch-card><div class="chip" data-swatch="#C9A24B" style="background: var(--color-primary)"></div><figcaption><b>Aurelle Gold</b><span class="mono" data-system data-hex>#C9A24B</span></figcaption></figure>
+      <figure class="swatch" data-swatch-card><div class="chip" data-swatch="#7A6230" style="background: var(--color-secondary)"></div><figcaption><b>Antique Brass</b><span class="mono" data-system data-hex>#7A6230</span></figcaption></figure>
+      <figure class="swatch" data-swatch-card><div class="chip" data-swatch="#15120E" style="background: var(--color-neutral-dark)"></div><figcaption><b>Night Umber</b><span class="mono" data-system data-hex>#15120E</span></figcaption></figure>
+      <figure class="swatch" data-swatch-card><div class="chip" data-swatch="#F4EFE6" style="background: var(--color-neutral-light)"></div><figcaption><b>Bone</b><span class="mono" data-system data-hex>#F4EFE6</span></figcaption></figure>
+    </div>
+  </section>
+  <section class="block span-5" data-block="type">
+    <p class="eyebrow">Type</p>
+    <p class="name">Aurelle</p>
+    <p class="mono" data-system>Gloock 400 and Instrument Sans 400, 700</p>
+  </section>
+</main>
+</body>
+</html>

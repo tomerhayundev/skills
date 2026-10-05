@@ -1,0 +1,524 @@
+{
+  "source": "drawn for this skill",
+  "license": "same as the skill",
+  "note": "Inline these SVGs in .icons; base.css sets the stroke width and caps from the brand.",
+  "icons": [
+    {
+      "name": "house",
+      "sectors": [
+        "*"
+      ]
+    },
+    {
+      "name": "phone",
+      "sectors": [
+        "*"
+      ]
+    },
+    {
+      "name": "mail",
+      "sectors": [
+        "*"
+      ]
+    },
+    {
+      "name": "map-pin",
+      "sectors": [
+        "*"
+      ]
+    },
+    {
+      "name": "clock",
+      "sectors": [
+        "*"
+      ]
+    },
+    {
+      "name": "calendar",
+      "sectors": [
+        "*"
+      ]
+    },
+    {
+      "name": "search",
+      "sectors": [
+        "*"
+      ]
+    },
+    {
+      "name": "arrow-right",
+      "sectors": [
+        "*"
+      ]
+    },
+    {
+      "name": "check",
+      "sectors": [
+        "*"
+      ]
+    },
+    {
+      "name": "star",
+      "sectors": [
+        "*"
+      ]
+    },
+    {
+      "name": "heart",
+      "sectors": [
+        "*"
+      ]
+    },
+    {
+      "name": "globe",
+      "sectors": [
+        "*"
+      ]
+    },
+    {
+      "name": "message",
+      "sectors": [
+        "*"
+      ]
+    },
+    {
+      "name": "user",
+      "sectors": [
+        "*"
+      ]
+    },
+    {
+      "name": "bed",
+      "sectors": [
+        "hospitality"
+      ]
+    },
+    {
+      "name": "key",
+      "sectors": [
+        "hospitality"
+      ]
+    },
+    {
+      "name": "wine",
+      "sectors": [
+        "hospitality",
+        "food"
+      ]
+    },
+    {
+      "name": "coffee",
+      "sectors": [
+        "hospitality",
+        "food"
+      ]
+    },
+    {
+      "name": "utensils",
+      "sectors": [
+        "hospitality",
+        "food"
+      ]
+    },
+    {
+      "name": "bell",
+      "sectors": [
+        "hospitality"
+      ]
+    },
+    {
+      "name": "bath",
+      "sectors": [
+        "hospitality",
+        "beauty"
+      ]
+    },
+    {
+      "name": "croissant",
+      "sectors": [
+        "food"
+      ]
+    },
+    {
+      "name": "cake",
+      "sectors": [
+        "food"
+      ]
+    },
+    {
+      "name": "wheat",
+      "sectors": [
+        "food",
+        "nonprofit"
+      ]
+    },
+    {
+      "name": "chef-hat",
+      "sectors": [
+        "food"
+      ]
+    },
+    {
+      "name": "cookie",
+      "sectors": [
+        "food"
+      ]
+    },
+    {
+      "name": "bowl",
+      "sectors": [
+        "food"
+      ]
+    },
+    {
+      "name": "bag",
+      "sectors": [
+        "retail",
+        "fashion",
+        "beauty"
+      ]
+    },
+    {
+      "name": "cart",
+      "sectors": [
+        "retail"
+      ]
+    },
+    {
+      "name": "tag",
+      "sectors": [
+        "retail",
+        "fashion"
+      ]
+    },
+    {
+      "name": "gift",
+      "sectors": [
+        "retail"
+      ]
+    },
+    {
+      "name": "package",
+      "sectors": [
+        "retail",
+        "tech",
+        "home-services"
+      ]
+    },
+    {
+      "name": "store",
+      "sectors": [
+        "retail",
+        "food"
+      ]
+    },
+    {
+      "name": "shirt",
+      "sectors": [
+        "fashion"
+      ]
+    },
+    {
+      "name": "scissors",
+      "sectors": [
+        "fashion",
+        "beauty",
+        "creative"
+      ]
+    },
+    {
+      "name": "sparkles",
+      "sectors": [
+        "beauty",
+        "creative"
+      ]
+    },
+    {
+      "name": "flower",
+      "sectors": [
+        "beauty",
+        "nonprofit"
+      ]
+    },
+    {
+      "name": "gem",
+      "sectors": [
+        "beauty",
+        "fashion"
+      ]
+    },
+    {
+      "name": "code",
+      "sectors": [
+        "tech"
+      ]
+    },
+    {
+      "name": "cpu",
+      "sectors": [
+        "tech"
+      ]
+    },
+    {
+      "name": "cloud",
+      "sectors": [
+        "tech"
+      ]
+    },
+    {
+      "name": "zap",
+      "sectors": [
+        "tech",
+        "fitness",
+        "home-services"
+      ]
+    },
+    {
+      "name": "terminal",
+      "sectors": [
+        "tech"
+      ]
+    },
+    {
+      "name": "layers",
+      "sectors": [
+        "tech",
+        "creative"
+      ]
+    },
+    {
+      "name": "branch",
+      "sectors": [
+        "tech"
+      ]
+    },
+    {
+      "name": "shield",
+      "sectors": [
+        "tech",
+        "finance",
+        "health",
+        "professional-services"
+      ]
+    },
+    {
+      "name": "landmark",
+      "sectors": [
+        "finance",
+        "professional-services",
+        "education"
+      ]
+    },
+    {
+      "name": "wallet",
+      "sectors": [
+        "finance"
+      ]
+    },
+    {
+      "name": "chart",
+      "sectors": [
+        "finance",
+        "tech",
+        "professional-services"
+      ]
+    },
+    {
+      "name": "scale",
+      "sectors": [
+        "finance",
+        "professional-services"
+      ]
+    },
+    {
+      "name": "stethoscope",
+      "sectors": [
+        "health"
+      ]
+    },
+    {
+      "name": "heart-pulse",
+      "sectors": [
+        "health",
+        "fitness"
+      ]
+    },
+    {
+      "name": "pill",
+      "sectors": [
+        "health"
+      ]
+    },
+    {
+      "name": "activity",
+      "sectors": [
+        "health",
+        "fitness"
+      ]
+    },
+    {
+      "name": "dumbbell",
+      "sectors": [
+        "fitness"
+      ]
+    },
+    {
+      "name": "bike",
+      "sectors": [
+        "fitness"
+      ]
+    },
+    {
+      "name": "timer",
+      "sectors": [
+        "fitness"
+      ]
+    },
+    {
+      "name": "trophy",
+      "sectors": [
+        "fitness",
+        "education"
+      ]
+    },
+    {
+      "name": "graduation-cap",
+      "sectors": [
+        "education"
+      ]
+    },
+    {
+      "name": "book",
+      "sectors": [
+        "education",
+        "nonprofit"
+      ]
+    },
+    {
+      "name": "pencil",
+      "sectors": [
+        "education",
+        "creative"
+      ]
+    },
+    {
+      "name": "lightbulb",
+      "sectors": [
+        "education",
+        "tech",
+        "creative"
+      ]
+    },
+    {
+      "name": "briefcase",
+      "sectors": [
+        "professional-services",
+        "finance"
+      ]
+    },
+    {
+      "name": "building",
+      "sectors": [
+        "professional-services",
+        "finance"
+      ]
+    },
+    {
+      "name": "document",
+      "sectors": [
+        "professional-services",
+        "education"
+      ]
+    },
+    {
+      "name": "handshake",
+      "sectors": [
+        "professional-services",
+        "nonprofit"
+      ]
+    },
+    {
+      "name": "brush",
+      "sectors": [
+        "creative",
+        "home-services"
+      ]
+    },
+    {
+      "name": "camera",
+      "sectors": [
+        "creative"
+      ]
+    },
+    {
+      "name": "music",
+      "sectors": [
+        "creative"
+      ]
+    },
+    {
+      "name": "palette",
+      "sectors": [
+        "creative"
+      ]
+    },
+    {
+      "name": "hand-heart",
+      "sectors": [
+        "nonprofit",
+        "health"
+      ]
+    },
+    {
+      "name": "users",
+      "sectors": [
+        "nonprofit",
+        "education",
+        "professional-services"
+      ]
+    },
+    {
+      "name": "sprout",
+      "sectors": [
+        "nonprofit",
+        "food",
+        "health"
+      ]
+    },
+    {
+      "name": "leaf",
+      "sectors": [
+        "nonprofit",
+        "food",
+        "beauty"
+      ]
+    },
+    {
+      "name": "hammer",
+      "sectors": [
+        "home-services"
+      ]
+    },
+    {
+      "name": "truck",
+      "sectors": [
+        "home-services",
+        "retail",
+        "food"
+      ]
+    },
+    {
+      "name": "roller",
+      "sectors": [
+        "home-services"
+      ]
+    },
+    {
+      "name": "plug",
+      "sectors": [
+        "home-services",
+        "tech"
+      ]
+    }
+  ]
+}

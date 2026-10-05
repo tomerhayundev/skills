@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Brand identity board</title>
+<!--
+  Board skeleton for the sample brand (a fictional boutique hotel). It shows how a full board is built:
+  a grid of full cards, each with a label, its content and a short designer's note. Do not copy its look:
+  the direction file picks the layout; tokens.css and the brand layer below set the look. Replace every
+  word and value with this brand's own.
+
+  Conventions the checks read:
+  data-block on each block; data-logo on every logo <img> (the original or a version file);
+  data-detail on a crop of the original that shows one part of it; data-ground="#HEX" on a box whose ground
+  is not a plain background colour; data-swatch="#HEX" with data-hex inside data-swatch-card;
+  data-system on technical values; data-note on designer's notes (they explain choices, never state facts
+  about the business); data-example on example lines; data-misuse on "never do this" tiles;
+  data-mockup on mockups; .bar for content that has no source.
+-->
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
+<style>
+  /* Brand layer: the direction's layout variant, spacing and its one bold move go here. */
+  .sheet { row-gap: 64px; }
+</style>
+</head>
+<body>
+<main class="sheet">
+  <header class="block span-12 masthead" data-block="masthead">
+    <p class="eyebrow">Aurelle</p>
+    <p class="eyebrow">Brand identity</p>
+    <p class="eyebrow">Guidelines</p>
+  </header>
+
+  <section class="block span-12 cards" data-block="intro">
+    <div class="card dark c-5 hero" data-ground="#15120E" style="padding: 40px">
+      <div class="pattern p-stroke-rings" style="--pattern-ink: rgb(201 162 75 / 0.22)"></div>
+      <p class="eyebrow">Primary logo</p>
+      <div class="big-logo"><img data-logo src="logo/original.svg" alt="Aurelle logo"></div>
+      <p class="note" data-note>The supplied artwork, unchanged. Gold on the darkest neutral is its home ground.</p>
+    </div>
+    <div class="card primary c-3" data-ground="#C9A24B">
+      <p class="eyebrow">Essence</p>
+      <p class="statement">A lamp left on in a quiet hall.</p>
+      <p class="lede" style="margin: auto 0 0">A small house for slow weekends.</p>
+    </div>
+    <div class="card light c-4" data-ground="#F4EFE6">
+      <p class="eyebrow">Reading the logo</p>
+      <p class="note" data-note>A gold capital inside one fine ring: a seal, drawn with restraint. The identity grows from these three parts.</p>
+      <div class="parts">
+        <div class="part" style="background: var(--color-neutral-dark); color: var(--color-neutral-light)" data-ground="#15120E">
+          <div class="crop" data-detail><img data-logo src="logo/original.svg" alt="" style="left: -80%; top: -12%"></div>
+          <b>The ring</b><span class="note" data-note>One line, one weight.</span>
+        </div>
+        <div class="part" style="background: var(--color-neutral-dark); color: var(--color-neutral-light)" data-ground="#15120E">
+          <div class="crop" data-detail><img data-logo src="logo/original.svg" alt="" style="left: -80%; top: -95%"></div>
+          <b>The capital</b><span class="note" data-note>Upright, open, unhurried.</span>
+        </div>
+        <div class="part" style="background: var(--color-primary); color: var(--color-primary-on)" data-ground="#C9A24B">
+          <div class="crop" style="background: var(--color-primary)"></div>
+          <b>The gold</b><span class="note" data-note>The only accent.</span>
+        </div>
+      </div>
+      <div class="row">
+        <div><p class="eyebrow">Mood</p><ul class="tags"><li>quiet</li><li>warm metal</li><li>unhurried</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block span-12" data-block="logo">
+    <div class="section-head"><h2 class="title">Logo system</h2><p class="note" data-note>One logo, used whole. Versions change only its colour.</p></div>
+    <div class="cards">
+      <div class="card outline c-3" data-ground="#15120E" style="background: var(--color-surface)"><div class="big-logo" style="min-height: 200px"><img data-logo src="logo/original.svg" alt="" style="width: 56%"></div><p class="caption eyebrow">Primary logo</p></div>
+      <div class="card light c-3" data-ground="#F4EFE6"><div class="big-logo" style="min-height: 200px"><img data-logo src="logo/monoDark.png" alt="" style="width: 56%"></div><p class="caption eyebrow">On light</p></div>
+      <div class="card primary c-3" data-ground="#C9A24B"><div class="big-logo" style="min-height: 200px"><img data-logo src="logo/reversed.png" alt="" style="width: 56%"></div><p class="caption eyebrow">Reversed</p></div>
+      <div class="card dark c-3" data-ground="#15120E">
+        <p class="eyebrow">Clear space</p>
+        <div class="big-logo" style="min-height: 150px"><div class="clear-space" style="color: var(--color-primary)"><img data-logo src="logo/monoLight.png" alt="" style="width: 110px"></div></div>
+        <p class="mono" data-system>Clear space 0.25 of the mark height. Minimum size 48 px, 12 mm.</p>
+      </div>
+      <div class="tile c-3" data-misuse data-ground="#15120E" style="background: var(--color-surface); grid-column: span 3"><img data-logo src="logo/original.svg" alt="" style="transform: scaleX(1.45)"><p class="caption">Do not stretch the logo</p></div>
+      <div class="tile" data-misuse data-ground="#F4EFE6" style="background: var(--color-neutral-light); color: var(--color-neutral-dark); grid-column: span 3"><img data-logo src="logo/monoDark.png" alt="" style="filter: hue-rotate(160deg) saturate(4) brightness(1.6)"><p class="caption">Do not recolour it outside the palette</p></div>
+      <div class="tile" data-misuse data-ground="#7A6230" style="background: var(--color-secondary); grid-column: span 3"><div class="pattern p-detail-dots" style="--pattern-ink: rgb(244 239 230 / 0.6); --dot: 3px"></div><img data-logo src="logo/original.svg" alt="" style="position: relative"><p class="caption">Do not place it on a busy ground</p></div>
+      <div class="tile" data-ground="#15120E" style="background: var(--color-surface); grid-column: span 3"><div class="sizes"><img data-logo src="logo/monoLight.png" alt="" style="width: 120px"><img data-logo src="logo/monoLight.png" alt="" style="width: 72px"><img data-logo src="logo/monoLight.png" alt="" style="width: 48px"></div><p class="caption">Minimum size</p></div>
+    </div>
+  </section>
+
+  <section class="block span-12 cards" data-block="colour-type">
+    <div class="card light c-5" data-ground="#F4EFE6">
+      <p class="eyebrow">Palette</p>
+      <p class="note" data-note>Taken from the logo's gold, with neutrals warmed toward it. Gold stays an accent.</p>
+      <div class="colour-bars">
+        <div data-swatch-card data-swatch="#C9A24B" data-ground="#C9A24B" style="background: var(--color-primary); color: var(--color-primary-on)"><span><b>Aurelle Gold</b><span>Primary</span></span><span class="mono" data-system><span data-hex>#C9A24B</span> RGB 201, 162, 75</span></div>
+        <div data-swatch-card data-swatch="#7A6230" data-ground="#7A6230" style="background: var(--color-secondary); color: var(--color-secondary-on)"><span><b>Antique Brass</b><span>Secondary</span></span><span class="mono" data-system><span data-hex>#7A6230</span> RGB 122, 98, 48</span></div>
+        <div data-swatch-card data-swatch="#15120E" data-ground="#15120E" style="background: var(--color-neutral-dark); color: var(--color-neutral-light)"><span><b>Night Umber</b><span>Surface</span></span><span class="mono" data-system><span data-hex>#15120E</span> RGB 21, 18, 14</span></div>
+        <div data-swatch-card data-swatch="#F4EFE6" data-ground="#F4EFE6" style="background: var(--color-neutral-light); color: var(--color-neutral-dark); box-shadow: inset 0 0 0 1px rgb(127 127 127 / 0.3)"><span><b>Bone</b><span>Text</span></span><span class="mono" data-system><span data-hex>#F4EFE6</span> RGB 244, 239, 230</span></div>
+      </div>
+      <div class="scale" style="margin-top: 4px"><div style="background: var(--primary-50)"></div><div style="background: var(--primary-100)"></div><div style="background: var(--primary-200)"></div><div style="background: var(--primary-300)"></div><div style="background: var(--primary-400)"></div><div style="background: var(--primary-500)"></div><div style="background: var(--primary-600)"></div><div style="background: var(--primary-700)"></div><div style="background: var(--primary-800)"></div><div style="background: var(--primary-900)"></div><div style="background: var(--primary-950)"></div></div>
+      <div class="scale-labels mono" data-system><span>50</span><span>100</span><span>200</span><span>300</span><span>400</span><span>500</span><span>600</span><span>700</span><span>800</span><span>900</span><span>950</span></div>
+    </div>
+    <div class="card outline c-7" data-ground="#15120E">
+      <p class="eyebrow">Typography</p>
+      <div class="row" style="align-items: flex-end">
+        <div><p class="specimen" style="margin: 0">Aa</p><p class="mono" data-system>Gloock 400 · Display</p></div>
+        <div><p class="specimen" style="margin: 0; font-family: var(--font-text); font-size: 150px">Aa</p><p class="mono" data-system>Instrument Sans 400, 700 · Text and label</p></div>
+      </div>
+      <p class="note" data-note>A soft high-contrast serif for the voice, a quiet sans for everything that has to be read fast.</p>
+      <div class="h-row"><span class="mono" data-system>44 / 52 px</span><span class="title" style="font-size: 44px">A small house for slow weekends.</span></div>
+      <div class="h-row"><span class="mono" data-system>17 / 26 px</span><span><span class="bar w90"></span><span class="bar w70"></span></span></div>
+      <div class="h-row"><span class="mono" data-system>13 px</span><span class="eyebrow">Brand identity</span></div>
+    </div>
+  </section>
+
+  <section class="block span-12 cards" data-block="voice-pattern-icons">
+    <div class="card dark c-4" data-ground="#15120E">
+      <p class="eyebrow">Voice</p>
+      <p class="statement" style="font-size: 30px; color: var(--color-primary)">calm, precise, warm</p>
+      <div class="row">
+        <div><p class="eyebrow">We are</p><ul class="tags"><li>calm</li><li>precise</li><li>warm</li></ul></div>
+        <div><p class="eyebrow">We are not</p><ul class="tags"><li>loud</li><li>salesy</li><li>cold</li></ul></div>
+      </div>
+      <p class="eyebrow">Say</p>
+      <p class="lede" data-example>Your room is ready when you are.</p>
+      <p class="eyebrow">Don't say</p>
+      <p class="lede" data-example>Unbeatable deals, book now!</p>
+      <p class="note" data-note>Lines marked as examples show the voice; they are not the brand's words.</p>
+    </div>
+    <div class="card light c-4" data-ground="#F4EFE6">
+      <p class="eyebrow">Patterns</p>
+      <div class="pattern-trio">
+        <div style="background: var(--color-neutral-dark)"><div class="pattern p-stroke-rings" style="--pattern-ink: rgb(201 162 75 / 0.6)"></div></div>
+        <div style="background: var(--color-primary)"><div class="pattern p-stroke-lines" style="--pattern-ink: rgb(21 18 14 / 0.35)"></div></div>
+        <div style="background: var(--color-neutral-dark)"><div class="pattern p-mark-tile"></div></div>
+      </div>
+      <p class="note" data-note>Rings at the logo's stroke, lines at the same weight, and the mark itself as a quiet tile.</p>
+    </div>
+    <div class="card outline c-4" data-ground="#15120E">
+      <p class="eyebrow">Icons</p>
+      <div class="icon-grid" style="color: var(--color-primary)">
+        <figure style="background: var(--color-surface); color: var(--color-primary)" data-ground="#15120E"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V7M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="2"/></svg><figcaption style="color: var(--color-text)">Bed</figcaption></figure>
+        <figure style="background: var(--color-surface); color: var(--color-primary)" data-ground="#15120E"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M15 8l2 2"/></svg><figcaption style="color: var(--color-text)">Key</figcaption></figure>
+        <figure style="background: var(--color-surface); color: var(--color-primary)" data-ground="#15120E"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h16M6 17a6 6 0 0 1 12 0M12 8V6M10 6h4M3 20h18"/></svg><figcaption style="color: var(--color-text)">Bell</figcaption></figure>
+        <figure style="background: var(--color-surface); color: var(--color-primary)" data-ground="#15120E"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l-.5 5a3.5 3.5 0 0 1-7 0z"/><path d="M12 11.5V20M8 20h8"/></svg><figcaption style="color: var(--color-text)">Glass</figcaption></figure>
+        <figure style="background: var(--color-surface); color: var(--color-primary)" data-ground="#15120E"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17M8 3v3M12 3v3"/></svg><figcaption style="color: var(--color-text)">Cup</figcaption></figure>
+        <figure style="background: var(--color-surface); color: var(--color-primary)" data-ground="#15120E"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v18M4 3v5a3 3 0 0 0 6 0V3M17 21V3c-2 1-3 4-3 7h3"/></svg><figcaption style="color: var(--color-text)">Table</figcaption></figure>
+        <figure style="background: var(--color-surface); color: var(--color-primary)" data-ground="#15120E"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><figcaption style="color: var(--color-text)">Pin</figcaption></figure>
+        <figure style="background: var(--color-surface); color: var(--color-primary)" data-ground="#15120E"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><figcaption style="color: var(--color-text)">Calendar</figcaption></figure>
+      </div>
+      <p class="note" data-note>Outline icons at the logo's stroke weight, round ends.</p>
+    </div>
+  </section>
+
+  <section class="block span-12" data-block="applications">
+    <div class="section-head"><h2 class="title">Applications</h2><p class="note" data-note>Every piece carries the logo whole and the brand's own words; grey bars stand for text it has not written yet.</p></div>
+    <div class="cards">
+      <div class="scene c-7" data-ground="#2A241C" style="background: #2A241C">
+        <p class="caption" style="color: var(--color-neutral-light)">Stationery</p>
+        <div class="mockup m-letterhead" data-mockup="letterhead" style="width: 230px">
+          <div class="a4 paper" data-ground="#F4EFE6"><img data-logo src="logo/monoDark.png" alt=""><span class="bar w40"></span><span class="bar w90"></span><span class="bar w90"></span><span class="bar w70"></span><span class="bar w90"></span><span class="bar w60"></span></div>
+          <p class="caption" style="color: var(--color-neutral-light)">Letterhead</p>
+        </div>
+        <div class="stack" style="flex-direction: column; align-items: stretch; width: 300px">
+          <div class="mockup m-card" data-mockup="card" style="gap: 14px">
+            <div class="face paper tilt" data-ground="#15120E" style="--paper: var(--color-neutral-dark)"><img data-logo src="logo/original.svg" alt=""></div>
+            <div class="face paper" data-ground="#F4EFE6"><span class="bar w50"></span><span><span class="bar w70"></span><span class="bar w40"></span></span></div>
+            <p class="caption" style="color: var(--color-neutral-light)">Business card</p>
+          </div>
+        </div>
+      </div>
+      <div class="scene c-5" data-ground="#C9A24B" style="background: var(--color-primary)">
+        <p class="caption" style="color: var(--color-primary-on)">Packaging</p>
+        <div class="mockup m-bag" data-mockup="bag" style="width: 210px">
+          <div class="front paper" data-ground="#15120E" style="--paper: var(--color-neutral-dark)"><span class="handle"></span><img data-logo src="logo/original.svg" alt=""></div>
+          <p class="caption" style="color: var(--color-primary-on)">Shopping bag</p>
+        </div>
+        <div class="mockup m-card" data-mockup="card" style="width: 190px">
+          <div class="face paper" data-ground="#15120E" style="--paper: var(--color-neutral-dark)"><img data-logo src="logo/monoLight.png" alt="" style="width: 56%"></div>
+          <p class="caption" style="color: var(--color-primary-on)">Room key card</p>
+        </div>
+      </div>
+      <div class="scene c-5" data-ground="#F4EFE6" style="background: var(--color-neutral-light); color: var(--color-neutral-dark)">
+        <p class="caption">Social post</p>
+        <div class="social-grid" data-mockup="social" style="margin-top: 24px">
+          <div data-ground="#15120E" style="background: var(--color-neutral-dark)"><img data-logo src="logo/original.svg" alt=""></div>
+          <div data-ground="#C9A24B" style="background: var(--color-primary); color: var(--color-primary-on)"><p class="title" style="font-size: 22px">quiet</p></div>
+          <div data-ground="#15120E" style="background: var(--color-neutral-dark)"><div class="pattern p-stroke-rings" style="--pattern-ink: rgb(201 162 75 / 0.5)"></div></div>
+          <div data-ground="#7A6230" style="background: var(--color-secondary); color: var(--color-secondary-on)"><p class="title" style="font-size: 19px">A small house for slow weekends.</p></div>
+          <div data-ground="#C9A24B" style="background: var(--color-primary)"><img data-logo src="logo/reversed.png" alt=""></div>
+          <div data-ground="#15120E" style="background: var(--color-neutral-dark); color: var(--color-neutral-light)"><p class="title" style="font-size: 22px">unhurried</p></div>
+        </div>
+      </div>
+      <div class="scene c-7" data-ground="#15120E" style="background: var(--color-neutral-dark)">
+        <p class="caption" style="color: var(--color-neutral-light)">Website home</p>
+        <div class="mockup m-browser" data-mockup="browser" style="width: 100%; margin-top: 24px">
+          <div class="window"><div class="chrome"><i></i><i></i><i></i></div><div class="page" data-ground="#15120E" style="position: relative"><div class="pattern p-stroke-rings" style="--pattern-ink: rgb(201 162 75 / 0.16)"></div><div class="nav" style="position: relative"><img data-logo src="logo/original.svg" alt="" style="width: 64px"><span>About</span><span>Book</span><span>Contact</span></div><p class="title" style="font-size: 40px; position: relative">A small house for slow weekends.</p><span class="bar w60" style="position: relative"></span><p class="eyebrow" style="position: relative; color: var(--color-primary)">Reserve</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="block span-12 colophon" data-block="footer">
+    <p class="eyebrow">Aurelle</p>
+    <p class="eyebrow">Guidelines</p>
+  </footer>
+</main>
+</body>
+</html>
