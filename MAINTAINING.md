@@ -47,6 +47,7 @@ scripts/check-skills.mjs                   every repo check (CI runs it; it also
 scripts/names.mjs, blocked-names.txt       names that must never appear, kept as salted hashes
 scripts/sources.mjs                        the sources library's tool: validate, add, has, seen, check
 sources/catalog.json                       the sources library: the one file, copied into consumer skills
+sources/pending-seen.json                  seen counts held until the next real addition (never copied)
 sources/find-sources.mjs                   the query those skills run (copied as scripts/find-sources.mjs)
 sources/README.md, sources/INTAKE.md       the entry format, and the brief for intake agents
 .github/workflows/sources-check.yml        monthly: loads every source, records what died or went paid
@@ -185,7 +186,7 @@ make a skill a consumer: add it to `consumers`, write the step that runs the que
    video's address bar or a reply. A list post is split into its sites. The post is never an entry,
    and who posted it is never recorded.
 2. `node scripts/sources.mjs has <url>...` for every site: a known one is counted
-   (`node scripts/sources.mjs seen <url>`), a new one is drafted.
+   (`node scripts/sources.mjs seen <url>`, held as below), a new one is drafted.
 3. Draft the new ones with Sonnet agents (never Opus), five sites each, given
    [sources/INTAKE.md](sources/INTAKE.md), their batch and an output file in the session's scratchpad.
    They use the built-in browser, WebFetch and curl, each in its own tab; never Tomer's Chrome, which
@@ -198,6 +199,21 @@ make a skill a consumer: add it to `consumers`, write the step that runs the que
    the message, and push.
 6. Report to Tomer: what was added (by area), what was known already, what was rejected and why, and
    what needs his call.
+
+**Counts are held, not released.** A change to `catalog.json` is copied into every consumer, so even
+a `seen` increment releases the master and its ten specialists. Therefore `seen` writes to
+`sources/pending-seen.json` (source id to count), which the sync never copies and the checks never
+read (`validate` only checks that its ids are sources). Rules:
+
+- A list or post whose sites are all known: run `seen` for each, commit **only** the pending file
+  (`chore(sources): hold seen counts`), push. No plugin version moves, and none should: a sync that
+  bumps anything after such a commit is a mistake to look into. `has` shows a count as `seen 2 + 1 pending`.
+- A real addition (a new source, or a known one gaining a route) through `add` folds the pending
+  counts into `catalog.json` in the same commit and writes `{}` to the pending file. A count-only
+  `add` keeps them held. Commit both files together.
+- `seen --now` counts straight into the catalog, for when the release happens anyway (a route change).
+- Never hand-edit `seen` in `catalog.json`; the held counts are what `find-sources` ranking does not
+  see until the next addition, which is the accepted cost.
 
 **Health check.** `.github/workflows/sources-check.yml` runs `node scripts/sources.mjs check --write`
 on the 1st of each month: every home and route is loaded; a bot wall (403) changes nothing; a route

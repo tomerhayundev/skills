@@ -5,8 +5,11 @@
  *   node scripts/sources.mjs validate [--file=<catalog>]   format and vocab; exit 1 on an error
  *   node scripts/sources.mjs normalize <url>...            a URL as the catalog stores it (no tracking)
  *   node scripts/sources.mjs has <url>...                  known (and its id) or new, per URL
- *   node scripts/sources.mjs seen <url>...                 a known site recommended again: seen + 1
- *   node scripts/sources.mjs add <drafts.json>...          merge drafted entries; a known site gains routes
+ *   node scripts/sources.mjs seen <url>... [--now]         a known site recommended again: +1, held in
+ *                                                          sources/pending-seen.json (releases nothing);
+ *                                                          --now writes it into the catalog at once
+ *   node scripts/sources.mjs add <drafts.json>...          merge drafted entries; a known site gains routes;
+ *                                                          a new source or route also folds in pending counts
  *   node scripts/sources.mjs check [--write] [--id=<id>]   load every route; --write records status changes
  *   node scripts/sources.mjs stats                         counts by kind, area, need and status
  *
@@ -20,6 +23,9 @@ import { fileURLToPath } from "node:url";
 export const SCHEMA = 1;
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const CATALOG = join(ROOT, "sources", "catalog.json");
+// Counts of known sites recommended again, held until a real source is added. The sync and the checks
+// never copy or read this file, so a count alone releases no plugin.
+const pendingFile = (catalogFile) => join(dirname(catalogFile), "pending-seen.json");
 
 const TRACKING = [/^utm_/i, /^(ref|ref_src|ref_url|via|fbclid|gclid|dclid|msclkid|igshid|si|mc_cid|mc_eid|_ga)$/i];
 const SOCIAL_HOSTS = /(^|\.)(x|twitter)\.com$/i;
@@ -327,6 +333,27 @@ function writeCatalog(cat, file = CATALOG) {
   writeFileSync(file, JSON.stringify(cat, null, 2) + "\n");
 }
 
+export function readPending(file) {
+  try {
+    return JSON.parse(readFileSync(file, "utf8"));
+  } catch {
+    return {};
+  }
+}
+
+/** Adds each pending count to its source (by id); returns the folded ids. Unknown ids are left alone. */
+export function foldPending(cat, pending) {
+  const folded = [];
+  for (const [id, n] of Object.entries(pending)) {
+    const s = cat.sources.find((x) => x.id === id);
+    if (s && Number.isInteger(n) && n > 0) {
+      s.seen = (s.seen ?? 1) + n;
+      folded.push(id);
+    }
+  }
+  return folded;
+}
+
 async function main() {
   const [cmd, ...rest] = process.argv.slice(2);
   const opt = (k) => rest.find((a) => a.startsWith(`--${k}=`))?.slice(k.length + 3);
@@ -334,9 +361,10 @@ async function main() {
   const file = opt("file") ? resolve(opt("file")) : CATALOG;
 
   if (cmd === "validate") {
-    const errors = validateCatalog(readCatalog(file));
-    for (const e of errors) console.log(`error  ${e}`);
     const cat = readCatalog(file);
+    const errors = validateCatalog(cat);
+    for (const id of Object.keys(readPending(pendingFile(file)))) if (!cat.sources.some((x) => x.id === id)) errors.push(`pending-seen.json: "${id}" is not a source`);
+    for (const e of errors) console.log(`error  ${e}`);
     console.log(errors.length ? `\n${errors.length} error(s)` : `ok: ${cat.sources.length} sources`);
     process.exit(errors.length ? 1 : 0);
   }
@@ -348,24 +376,39 @@ async function main() {
     const cat = readCatalog(file);
     for (const u of args) {
       const s = findSource(cat, u);
-      console.log(s ? `known  ${s.id} (${s.status}, seen ${s.seen})  ${normalizeUrl(u)}` : `new    ${normalizeUrl(u)}`);
+      const held = s ? readPending(pendingFile(file))[s.id] : 0;
+      console.log(s ? `known  ${s.id} (${s.status}, seen ${s.seen}${held ? ` + ${held} pending` : ""})  ${normalizeUrl(u)}` : `new    ${normalizeUrl(u)}`);
     }
     return;
   }
   if (cmd === "seen") {
     const cat = readCatalog(file);
+    const now = rest.includes("--now");
+    const pending = readPending(pendingFile(file));
     for (const u of args) {
       const s = findSource(cat, u);
       if (!s) console.log(`new    ${normalizeUrl(u)}: draft it first`);
-      else console.log(`seen   ${s.id}: ${s.seen} -> ${++s.seen}`);
+      else if (now) console.log(`seen   ${s.id}: ${s.seen} -> ${++s.seen}`);
+      else {
+        pending[s.id] = (pending[s.id] ?? 0) + 1;
+        console.log(`seen   ${s.id}: ${s.seen} + ${pending[s.id]} pending (counted at the next real addition)`);
+      }
     }
-    cat.updated = today();
-    writeCatalog(cat, file);
+    if (now) {
+      cat.updated = today();
+      writeCatalog(cat, file);
+    } else {
+      writeFileSync(pendingFile(file), JSON.stringify(Object.fromEntries(Object.entries(pending).sort()), null, 2) + "\n");
+    }
     return;
   }
   if (cmd === "add") {
     const drafts = args.flatMap((f) => [JSON.parse(readFileSync(f, "utf8"))].flat());
     const { cat, added, updated } = mergeEntries(readCatalog(file), drafts);
+    // A real addition (a new source, or a route a known one lacked) is a release anyway: fold the held counts in.
+    const real = added.length > 0 || updated.some((u) => /new route/.test(u));
+    const pending = readPending(pendingFile(file));
+    const folded = real ? foldPending(cat, pending) : [];
     const errors = validateCatalog(cat);
     if (errors.length) {
       for (const e of errors) console.log(`error  ${e}`);
@@ -373,7 +416,10 @@ async function main() {
       process.exit(1);
     }
     writeCatalog(cat, file);
+    if (real && Object.keys(pending).length) writeFileSync(pendingFile(file), "{}\n");
     for (const a of added) console.log(`added    ${a}`);
+    if (folded.length) console.log(`counted  ${folded.length} held seen count(s), pending-seen.json cleared`);
+    else if (Object.keys(pending).length) console.log(`held     ${Object.keys(pending).length} seen count(s) stay pending (no new source or route)`);
     for (const u of updated) console.log(`known    ${u}`);
     console.log(`\n${added.length} added, ${updated.length} already known; ${cat.sources.length} sources in all`);
     return;

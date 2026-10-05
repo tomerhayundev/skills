@@ -1,10 +1,12 @@
 // node --test scripts/sources.test.mjs
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { spawnSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { classify, findSource, mergeEntries, normalizeUrl, siteKey, trackingParams, validateCatalog, verdict } from "./sources.mjs";
+import { classify, findSource, foldPending, mergeEntries, normalizeUrl, siteKey, trackingParams, validateCatalog, verdict } from "./sources.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const real = () => JSON.parse(readFileSync(join(ROOT, "sources", "catalog.json"), "utf8"));
@@ -139,4 +141,45 @@ test("health check: dead takes two checks; a bot wall changes nothing", () => {
   assert.equal(verdict({ status: "degraded" }, [{ role: "home", result: "ok" }, { role: "route", result: "ok" }]), "ok");
   assert.equal(verdict(s, [{ role: "home", result: "ok" }, { role: "route", result: "paywalled" }]), "paywalled");
   assert.equal(verdict(s, [{ role: "home", result: "ok" }, { role: "route", result: "ok" }, { role: "route", result: "dead" }]), "degraded");
+});
+
+test("held seen counts fold into the catalog by id and skip unknown ids", () => {
+  const cat = catalog();
+  const folded = foldPending(cat, { "demo-gallery": 3, "gone-site": 2, "bad-count": 0 });
+  assert.deepEqual(folded, ["demo-gallery"]);
+  assert.equal(cat.sources.find((s) => s.id === "demo-gallery").seen, 1 + 3);
+});
+
+test("seen holds counts in pending-seen.json; add folds them in only for a real addition", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sources-pending-"));
+  const file = join(dir, "catalog.json");
+  const pend = join(dir, "pending-seen.json");
+  const run = (...args) => spawnSync(process.execPath, [join(ROOT, "scripts", "sources.mjs"), ...args, `--file=${file}`], { encoding: "utf8" });
+  writeFileSync(file, JSON.stringify(catalog(), null, 2) + "\n");
+
+  run("seen", "https://demo.gallery/x", "https://demo.gallery");
+  assert.deepEqual(JSON.parse(readFileSync(pend, "utf8")), { "demo-gallery": 2 });
+  assert.equal(JSON.parse(readFileSync(file, "utf8")).sources[0].seen, 1, "the catalog does not move");
+  assert.match(run("has", "https://demo.gallery").stdout, /seen 1 \+ 2 pending/);
+
+  // a count-only add (same site, no new route) keeps them held
+  const same = join(dir, "same.json");
+  writeFileSync(same, JSON.stringify([entry({ id: "demo-gallery-2", home: "https://demo.gallery" })]));
+  run("add", same);
+  assert.deepEqual(JSON.parse(readFileSync(pend, "utf8")), { "demo-gallery": 2 });
+
+  // a new source folds them in and clears the file
+  const fresh = join(dir, "fresh.json");
+  writeFileSync(fresh, JSON.stringify([entry({ id: "new-site", home: "https://new.site" })]));
+  const out = run("add", fresh);
+  assert.equal(out.status, 0, out.stdout);
+  assert.match(out.stdout, /counted\s+1 held/);
+  assert.deepEqual(JSON.parse(readFileSync(pend, "utf8")), {});
+  const cat = JSON.parse(readFileSync(file, "utf8"));
+  assert.equal(cat.sources.find((s) => s.id === "demo-gallery").seen, 1 + 1 + 2, "once for the repeat add, twice from the held counts");
+
+  // --now writes straight into the catalog
+  run("seen", "https://demo.gallery", "--now");
+  assert.equal(JSON.parse(readFileSync(file, "utf8")).sources.find((s) => s.id === "demo-gallery").seen, 5);
+  assert.deepEqual(JSON.parse(readFileSync(pend, "utf8")), {});
 });
