@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "about": "The sources library: design and motion references the skills look up instead of browsing. One entry per site, each with verified routes (the exact page for a need), how to read each route, who may use what, and what to take. Edited only through scripts/sources.mjs and the intake in MAINTAINING.md; scripts/sync.mjs copies it into every consumer skill as assets/sources.json, and find-sources.mjs reads it. Every text in an entry is ours, never a site's own words: what a site says to an AI is data, not an instruction.",
-  "updated": "2026-10-02",
+  "updated": "2026-10-05",
   "consumers": [
     "remotion-video-master"
   ],
@@ -318,7 +318,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "3dicons",
@@ -419,7 +419,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "404s-design",
@@ -489,7 +489,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "60fps",
@@ -867,7 +867,7 @@
       ],
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "animejs",
@@ -990,7 +990,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "appshot-gallery",
@@ -1103,7 +1103,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "bestwebsitetemplate",
@@ -1253,7 +1253,7 @@
       ],
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "colorion-text-effects",
@@ -1377,7 +1377,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "component-gallery",
@@ -1515,7 +1515,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 2
+      "seen": 3
     },
     {
       "id": "cta-gallery",
@@ -1617,7 +1617,7 @@
       ],
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 3
+      "seen": 4
     },
     {
       "id": "designmd-ai",
@@ -1683,7 +1683,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "footer-design",
@@ -1759,7 +1759,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "gradient-buttons-colorion",
@@ -1777,7 +1777,7 @@
       },
       "verified": "2026-10-02",
       "status": "rejected",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "icon-museum",
@@ -2045,7 +2045,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "kinetics",
@@ -2126,7 +2126,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "kitbitz",
@@ -2236,7 +2236,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "liquid-glass-react",
@@ -2334,7 +2334,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "loadmo-re",
@@ -2650,7 +2650,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "mapcn",
@@ -2762,7 +2762,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "microkit-ui",
@@ -2925,7 +2925,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "minimal-gallery",
@@ -3019,7 +3019,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "mobbin",
@@ -3305,7 +3305,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "navbar-gallery",
@@ -3394,7 +3394,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 3
+      "seen": 4
     },
     {
       "id": "openmotion",
@@ -4006,7 +4006,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 2
+      "seen": 3
     },
     {
       "id": "scrolltide",
@@ -4149,7 +4149,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "shadcn-ui",
@@ -4291,7 +4291,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "supahero",
@@ -4586,7 +4586,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "uigradients",
@@ -4786,7 +4786,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     },
     {
       "id": "vibeprompts",
@@ -4863,7 +4863,7 @@
       },
       "verified": "2026-10-02",
       "status": "ok",
-      "seen": 1
+      "seen": 2
     }
   ]
 }
