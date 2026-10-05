@@ -24,6 +24,27 @@ export function neutralsFor(hex) {
   return { dark: oklchToHex([0.2, c * 1.3, h]), light: oklchToHex([0.97, c, h]) };
 }
 
+// Hue families among the chromatic inks: inks within 35 degrees of hue are one family (a brown and an orange).
+export function hueFamilies(hexes) {
+  const fams = [];
+  for (const hex of hexes) {
+    const h = hexToOklch(hex)[2];
+    if (!fams.some((f) => Math.min(Math.abs(f - h), 360 - Math.abs(f - h)) < 35)) fams.push(h);
+  }
+  return fams.length;
+}
+
+// Support colours for a logo of one hue family, so the palette is more than tints of one colour: foils around the
+// wheel (deep and soft), and neutrals of stone and sand with a character of their own.
+export function supportFor(hex) {
+  const [, C, h] = hexToOklch(hex);
+  const c = Math.max(0.05, Math.min(0.09, C * 0.6));
+  const at = (dh, L, cc) => oklchToHex([L, cc, (h + dh + 360) % 360]);
+  const foils = [[75, 'near'], [120, 'third'], [180, 'opposite'], [-120, 'third'], [-75, 'near']].map(([dh, relation]) => ({ relation, hue: Math.round((h + dh + 360) % 360), deep: at(dh, 0.34, c), soft: at(dh, 0.8, c * 0.5) }));
+  const neutrals = [{ hint: 'stone', hex: oklchToHex([0.68, 0.012, h]) }, { hint: 'sand', hex: oklchToHex([0.87, 0.03, (h + 10) % 360]) }, { hint: 'linen', hex: oklchToHex([0.93, 0.015, h]) }];
+  return { foils, neutrals };
+}
+
 export function pickOn(bg, candidates) {
   let best = null;
   for (const c of candidates) {
@@ -74,5 +95,10 @@ export function buildPalette(inks, { siteColors = [], ground = 'light' } = {}) {
     Object.assign(role, { name: null, rgb: hexToRgb(role.hex), on: on.on, contrast: on.contrast, share: share[name] ?? null });
     if (on.contrast < 4.5) notes.push(`No text colour reaches 4.5:1 on ${name} ${role.hex}; use it for shapes and large display text only.`);
   }
-  return { roles, primitives, notes };
+  let support = null;
+  if (chromatic.length && hueFamilies([roles.primary, roles.secondary, roles.accent].filter(Boolean).map((r) => r.hex)) < 2) {
+    support = supportFor(roles.primary.hex);
+    notes.push('The logo holds one hue family, so its tints alone make a flat palette. Add one support colour from support.foils that suits the direction (deep or soft) as secondary or accent, source "derived", with its why; and name two of support.neutrals.');
+  }
+  return { roles, primitives, notes, ...(support ? { support } : {}) };
 }

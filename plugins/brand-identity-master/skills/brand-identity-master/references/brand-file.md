@@ -29,7 +29,7 @@ Read this while writing `brand/brand.json`. Every rule here is enforced by `vali
 ## logo
 
 - `original`: `{ path, sha256, width, height }`. The path is `logo/original.<ext>` (copied by `sample-logo.mjs`). The sha256 must match the file: the original never changes.
-- `versions`: written by `make-variants.mjs`. `monoDark`, `monoLight` and `reversed` are required, `tint` is optional. Each is `{ path, sha256, color }`, plus `colors` when a version keeps several colours (the reversed version of a logo of several colours). Never write these by hand.
+- `versions`: written by `make-variants.mjs`. `monoDark`, `monoLight` and `reversed` are required; `tint` is optional, and `clear` (the original raster with its solid ground taken out) is written when the logo file has one. Each is `{ path, sha256, color }`, plus `colors` when a version keeps several colours (the reversed version of a logo of several colours). Never write these by hand.
 - `clearSpace`: between 0.1 and 2, as a share of the mark's height.
 - `minSize`: `{ screenPx, printMm }`, from `logo-read.json`. `screenPx` is a whole number of at least 16; `printMm` is at least 5.
 - `allowedBackgrounds`: names of colour roles the logo may sit on.

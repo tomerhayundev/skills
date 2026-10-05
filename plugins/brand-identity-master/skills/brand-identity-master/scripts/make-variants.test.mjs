@@ -3,7 +3,9 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { recolorSvg, matte, makeVariants, variantColours, variantPlan, recolorRaster } from './make-variants.mjs';
+import { recolorSvg, matte, makeVariants, variantColours, variantPlan, recolorRaster, clearRaster } from './make-variants.mjs';
+import { encodePng } from './lib/png.mjs';
+import { sha256File, writeJson } from './lib/cli.mjs';
 import { readLogo } from './sample-logo.mjs';
 import { findChrome } from './lib/chrome.mjs';
 import { deltaOk } from './lib/color.mjs';
@@ -62,4 +64,33 @@ test('a two-colour raster keeps its bright details in the reversed version', () 
   assert.deepEqual(at(30, 30), [232, 131, 58, 255]);
   assert.deepEqual(at(30, 14), [244, 239, 230, 255]);
   assert.equal(at(2, 2)[3], 0);
+});
+
+test('clearRaster keeps the logo pixels and takes out a solid ground', () => {
+  const img = makeImage(60, 60, [255, 255, 255, 255]);
+  fillCircle(img, 30, 30, 22, [107, 62, 38, 255]);
+  fillCircle(img, 30, 30, 6, [232, 131, 58, 255]);
+  const out = clearRaster(img, detectBackground(img));
+  const at = (x, y) => [...out.slice((y * 60 + x) * 4, (y * 60 + x) * 4 + 4)];
+  assert.deepEqual(at(30, 30), [232, 131, 58, 255]);
+  assert.deepEqual(at(30, 14), [107, 62, 38, 255]);
+  assert.equal(at(2, 2)[3], 0);
+});
+
+test('makeVariants writes a clear version for a raster logo on a solid ground', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'bim-'));
+  const img = makeImage(60, 60, [255, 255, 255, 255]);
+  fillCircle(img, 30, 30, 22, [107, 62, 38, 255]);
+  fs.mkdirSync(path.join(dir, 'logo'));
+  const file = path.join(dir, 'logo', 'original.png');
+  fs.writeFileSync(file, encodePng(60, 60, img.data));
+  const brand = sampleBrand();
+  brand.logo.original = { path: 'logo/original.png', sha256: sha256File(file), width: 60, height: 60 };
+  writeJson(path.join(dir, 'logo-read.json'), { inks: [{ hex: '#6B3E26', share: 1 }] });
+  writeJson(path.join(dir, 'brand.json'), brand);
+  const r = makeVariants(path.join(dir, 'brand.json'));
+  assert.equal(r.versions.clear.path, 'logo/clear.png');
+  assert.equal(r.versions.clear.sha256, sha256File(path.join(dir, 'logo', 'clear.png')));
+  assert.ok(r.notes.some((n) => n.includes('clear.png')));
+  assert.equal(readLogo(path.join(dir, 'logo', 'clear.png')).background.kind, 'transparent');
 });

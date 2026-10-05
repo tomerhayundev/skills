@@ -28,7 +28,7 @@ ornate, vague, nostalgic, glossy, mystical.
 ## Colour
 
 - A light ground, or a tinted near-black for a product that lives in dark mode. The logo decides: a dark logo gets a light ground.
-- The logo's primary is the action colour: buttons, links, one highlight. One secondary at most.
+- The logo's primary is the action colour: buttons, links, one highlight. One secondary at most: when the logo holds one hue, a soft foil from `support.foils` for charts and states.
 - The full 50 to 950 scale strip is shown, because products use it for states (hover, disabled, surfaces).
 - Contrast pairs are shown for every state colour.
 - No purple-to-blue gradient unless the logo has one.
@@ -49,7 +49,6 @@ Equal modules with 1 px borders and the logo's own corner radius (0 to 8 px). Th
 
 In every variant, the spacing is on an 8 px rhythm and every edge aligns to the grid.
 
-Layout families: A uses the cards layout with a split hero; B the editorial layout with the name-led hero; C the cards layout with a band hero on the drawn grid.
 
 ## Pattern
 

@@ -4,13 +4,17 @@ Read this when choosing `shape.pattern`. Every recipe is built from the logo its
 
 Text never sits directly on a pattern without help. Put it in a box with a plain ground, or set `data-ground` on the patterned box to the colour under the pattern, so the contrast check measures the real ground.
 
+## Never behind a logo
+
+A pattern, ring, frame, glow or drawing inside a logo's clear space reads as part of the logo, so the logo looks changed. Patterns live on their own blocks, on grounds away from the logo, or on applications where the logo is not. board-check fails a board with a pattern inside a logo's clear space (LOGO_CROWDED); only labelled proposed extensions (a seal ring set around the logo) are exempt.
+
 ## mark-tile
 
 - **Made from:** the `tint` version of the logo (`logo/tint.png`, written by `make-variants.mjs`).
 - **Class:** `.p-mark-tile`, a layer inside a box with `position: relative`.
 - **Variables:** set the tile size with `background-size` in the brand layer. Use about 3 to 5 times the logo's minimum size, so the mark reads as a mark.
 - **Directions:** warm handmade and bright playful, and quiet luxury only at a very low tint.
-- **Never** under the primary logo in the hero, where it competes with the logo.
+- **Never** behind or around any logo.
 
 ## mark-crop
 

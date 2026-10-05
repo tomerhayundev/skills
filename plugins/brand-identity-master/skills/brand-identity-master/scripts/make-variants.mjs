@@ -69,6 +69,23 @@ export function recolorRaster(img, bg, inks, colours) {
   return out;
 }
 
+// The original raster with its solid ground taken out: the same pixels, unblended from the ground at the edges, so
+// the logo can sit on any ground without the box of its file's own background around it.
+export function clearRaster(img, bg) {
+  const n = img.width * img.height;
+  const out = new Uint8Array(n * 4);
+  const a = matte(img, bg);
+  const bgRgb = hexToRgb(bg.hex);
+  for (let p = 0; p < n; p++) {
+    const alpha = a[p * 4 + 3];
+    if (!alpha) continue;
+    const k = Math.max(alpha / 255, 0.15);
+    for (let i = 0; i < 3; i++) out[p * 4 + i] = Math.round(Math.max(0, Math.min(255, (img.data[p * 4 + i] - bgRgb[i] * (1 - k)) / k)));
+    out[p * 4 + 3] = alpha;
+  }
+  return out;
+}
+
 // Recolours an SVG by mapping each colour it declares to the new colour of the nearest ink.
 export function recolorSvgInks(svg, inks, colours) {
   const nearest = nearestInk(inks);
@@ -121,6 +138,13 @@ export function makeVariants(brandFile) {
       }
       const uniq = [...new Set(colours)];
       brand.logo.versions[name] = { path: `logo/${name}.png`, sha256: sha256File(out), color: uniq[0], ...(uniq.length > 1 ? { colors: uniq } : {}) };
+    }
+    if (!d.vector && bg.kind === 'solid') {
+      const out = path.join(dir, 'logo', 'clear.png');
+      fs.writeFileSync(out, encodePng(d.img.width, d.img.height, clearRaster(d.img, bg)));
+      const own = inks.map((i) => i.hex);
+      brand.logo.versions.clear = { path: 'logo/clear.png', sha256: sha256File(out), color: own[0], ...(own.length > 1 ? { colors: own } : {}) };
+      notes.push(`The logo file has a solid ${bg.hex} ground. logo/clear.png is the same logo with that ground taken out: use it on every other ground, never the original inside a box of ${bg.hex}.`);
     }
   } finally { fs.rmSync(tmp, { force: true }); }
   writeJson(brandFile, brand);

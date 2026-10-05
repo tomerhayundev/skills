@@ -28,7 +28,7 @@ trendy, playful, flashy, vague, loud.
 ## Colour
 
 - The deep primary from the logo, on a light ground. Body text reaches 7:1 or more.
-- Accents are restrained: one, used for links or one highlight.
+- Accents are restrained: one, used for links or one highlight. When the logo holds one hue, a deep foil from `support.foils` may carry one band.
 - Neutrals are cool or neutral, following the primary.
 - A dark ground is used only for one band (the reversed logo).
 
@@ -36,19 +36,17 @@ trendy, playful, flashy, vague, loud.
 
 ### A Report
 
-Two columns: a narrow label sidebar (3 spans) and the content (9 spans), like a well-set annual report. Section heads are aligned in the sidebar.
+Two zones: a narrow label sidebar (3 spans) and the content (9 spans) set in two or three columns, like a well-set annual report. Section heads are aligned in the sidebar.
 
 ### B Charter
 
-The mark centred at the top on generous space. Below, ruled sections in a single 8-span column with hairline rules between them.
+The mark centred at the top on generous space, the name beneath it. Below, ruled sections in two columns with hairline rules between them.
 
 ### C Ledger
 
-Specifications set as ruled tables: colours, type sizes and logo rules in rows with labels and values. The logo system sits above in a calm 4-up row.
+Specifications set as ruled tables side by side: colours, type sizes and logo rules in rows with labels and values. The logo system sits above in a calm 4-up row.
 
 In every variant, alignment is strict, rules are hairline, and nothing is tilted.
-
-Layout families: A uses the editorial layout with the name-led hero; B the cards layout with a band hero; C the editorial layout with ruled tables in every section.
 
 ## Pattern
 

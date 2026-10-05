@@ -15,6 +15,7 @@ export function loadData(skillDir = SKILL_DIR) {
     labels: d('labels.json').labels,
     deliverables: d('deliverables.json').deliverables,
     cliches: d('banned-copy.json').cliches,
+    placeholders: d('placeholders.json'),
   };
 }
 

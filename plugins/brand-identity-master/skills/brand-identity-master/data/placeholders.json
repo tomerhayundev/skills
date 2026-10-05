@@ -1,0 +1,10 @@
+{
+  "note": "Sample details a mockup may show inside data-placeholder, so stationery reads as finished. The board then carries a footnote in data-placeholder-note saying the details are placeholders. {brand} is the brand name in lower case without spaces.",
+  "names": ["Name Surname", "First Last", "Your Name", "שם משפחה", "ישראל ישראלי"],
+  "roles": ["Role", "Role title", "Position", "תפקיד"],
+  "emails": ["hello@{brand}.com", "name@{brand}.com", "info@{brand}.com"],
+  "domains": ["{brand}.com", "www.{brand}.com"],
+  "handles": ["@{brand}"],
+  "phones": ["+00 000 000 000", "000 000 0000", "00-000-0000"],
+  "addresses": ["Street 00, City", "רחוב 00, עיר"]
+}

@@ -27,7 +27,7 @@ muted, stiff, formal, gloomy, fussy.
 ## Colour
 
 - The logo's colours at full strength on a light ground.
-- Up to two accents, each with a job: one for action, one for highlights.
+- Up to two accents, each with a job: one for action, one for highlights. When the logo holds one hue, a foil from `support.foils` at full strength becomes the second colour.
 - Text on yellow, lime or light orange is always dark. `palette.mjs` sets the `on` colour; trust it.
 - Colour fields are big and flat: no gradients unless the logo has one.
 
@@ -35,23 +35,21 @@ muted, stiff, formal, gloomy, fussy.
 
 ### A Sticker sheet
 
-Mockups and logo tiles tilted by up to 4 degrees, scattered on large colour fields, as if stuck down by hand. The grid underneath stays straight, and no text is tilted.
+Mockups and logo tiles tilted by up to 4 degrees, scattered on large colour fields in rows of two or three, as if stuck down by hand. The grid underneath stays straight, and no text is tilted.
 
 ### B Poster stack
 
-Full-bleed colour bands, one per block, alternating the logo's colours. Each band carries one idea at a big size.
+Colour bands alternating the logo's colours, each band holding two or three blocks side by side, each block carrying one idea at a big size.
 
 ### C Toy box
 
-Modules with a 24 px or larger radius on a light ground, each module a different brand colour, arranged like blocks in a box.
+Modules with a 24 px or larger radius on a light ground, each module a different brand colour, packed like blocks in a box.
 
 In every variant:
 
 - shapes are round;
-- spacing is generous but energetic (gaps of 48 to 64 px);
+- spacing is energetic (gaps of 24 to 40 px);
 - the logo appears large at least twice.
-
-Layout families: A uses the cards layout with a band hero in the primary; B the editorial layout with the name-led hero set heavy; C the cards layout with the mark scattered as the hero.
 
 ## Pattern
 
@@ -65,7 +63,7 @@ Layout families: A uses the cards layout with a band hero in the primary; B the 
 
 Choose one:
 
-- the mark huge and cropped in a full-bleed primary band;
+- the mark huge and whole in a full-bleed primary band;
 - a wall of `mark-tile` in two brand colours;
 - the brand name in the display face at full board width.
 

@@ -1,0 +1,333 @@
+/* Board base: structure and conventions only. The look comes from tokens.css and the brand layer in each board. */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--color-surface); color: var(--color-text); font-family: var(--font-text); font-size: 17px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+img { display: block; }
+.sheet { width: 1600px; padding: 96px 104px 112px; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 32px; row-gap: 88px; }
+.span-12 { grid-column: span 12; } .span-9 { grid-column: span 9; } .span-8 { grid-column: span 8; } .span-7 { grid-column: span 7; }
+.span-6 { grid-column: span 6; } .span-5 { grid-column: span 5; } .span-4 { grid-column: span 4; } .span-3 { grid-column: span 3; }
+.block { min-width: 0; position: relative; }
+.masthead, .colophon { display: flex; justify-content: space-between; align-items: baseline; }
+.masthead { border-bottom: var(--stroke) solid currentColor; padding-bottom: 16px; }
+.colophon { border-top: var(--stroke) solid currentColor; padding-top: 16px; }
+.eyebrow { font-family: var(--font-label); font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; margin: 0 0 14px; }
+.title { font-family: var(--font-display); font-weight: 400; font-size: 44px; line-height: 1.12; margin: 0 0 24px; }
+.lede { font-size: 19px; line-height: 1.55; max-width: 34em; margin: 0 0 24px; }
+.mono { font-family: var(--font-label); font-size: 14px; letter-spacing: 0.04em; }
+.row { display: flex; gap: 24px; align-items: stretch; }
+.row > * { flex: 1 1 0; min-width: 0; }
+.tags { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 24px; padding: 0; }
+.tags li { border: var(--stroke) solid currentColor; border-radius: 999px; padding: 4px 14px; font-size: 14px; }
+
+/* Hero */
+.hero { overflow: hidden; border-radius: var(--radius); padding: 128px 64px 96px; display: flex; flex-direction: column; align-items: center; gap: 36px; }
+.hero > img[data-logo] { width: 380px; height: auto; }
+.hero > :not(.pattern) { position: relative; }
+
+/* Logo tiles */
+.tile { position: relative; border-radius: var(--radius); padding: 40px 32px 92px; display: flex; align-items: center; justify-content: center; min-height: 300px; overflow: hidden; }
+.tile img[data-logo] { width: 56%; max-width: 280px; height: auto; }
+.tile .caption { position: absolute; left: 24px; right: 24px; bottom: 18px; margin: 0; font-family: var(--font-label); font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; }
+.clear-space { outline: 1px dashed currentColor; padding: calc(var(--clear-space) * 160px); }
+.clear-space img[data-logo] { width: 160px; max-width: none; }
+.sizes { display: flex; align-items: flex-end; justify-content: center; gap: 32px; }
+.misuse::after { content: ""; position: absolute; inset: 20px 20px 64px 20px; pointer-events: none;
+  background: linear-gradient(to top right, transparent calc(50% - 1.5px), #C0392B calc(50% - 1.5px), #C0392B calc(50% + 1.5px), transparent calc(50% + 1.5px)); }
+
+/* Colour */
+.swatch { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.chip { height: 168px; border-radius: var(--radius); box-shadow: inset 0 0 0 1px rgb(127 127 127 / 0.25); }
+.swatch figcaption { display: flex; flex-direction: column; gap: 2px; }
+.swatch b { font-weight: 700; font-size: 17px; }
+.scale { display: grid; grid-template-columns: repeat(11, 1fr); border-radius: var(--radius); overflow: hidden; margin-top: 32px; }
+.scale > div { height: 64px; }
+.scale-labels { display: grid; grid-template-columns: repeat(11, 1fr); margin-top: 8px; }
+.pair { border-radius: var(--radius); padding: 20px; display: flex; justify-content: space-between; align-items: flex-end; min-height: 120px; }
+.pair .aa { font-family: var(--font-display); font-size: 44px; line-height: 1; }
+
+/* Type */
+.specimen { font-family: var(--font-display); font-size: 220px; line-height: 0.95; margin: 0 0 24px; }
+.h-row { display: grid; grid-template-columns: 150px 1fr; gap: 24px; align-items: baseline; padding: 16px 0; border-top: 1px solid rgb(127 127 127 / 0.35); }
+
+/* Text bars stand in for content that has no source */
+.bar { display: block; height: 0.62em; border-radius: 0.31em; background: currentColor; opacity: 0.22; margin: 0.5em 0; }
+.w90 { width: 90%; } .w70 { width: 70%; } .w60 { width: 60%; } .w50 { width: 50%; } .w40 { width: 40%; } .w30 { width: 30%; }
+
+/* Patterns: every recipe is built from the logo or its measured stroke */
+.pattern { position: absolute; inset: 0; pointer-events: none; --pattern-ink: rgb(127 127 127 / 0.16); }
+.pattern-swatch { position: relative; border-radius: var(--radius); height: 320px; overflow: hidden; }
+.p-mark-tile { background: url("logo/tint.png") 0 0 / 120px auto space; }
+.p-mark-crop { background: url("logo/tint.png") 115% 40% / 140% auto no-repeat; }
+.p-stroke-lines { background-image: repeating-linear-gradient(90deg, var(--pattern-ink) 0 var(--stroke), transparent var(--stroke) 28px); }
+.p-stroke-rings { background-image: repeating-radial-gradient(circle at 50% 50%, var(--pattern-ink) 0 var(--stroke), transparent var(--stroke) 36px); }
+.p-proportion-grid { background-image: linear-gradient(var(--pattern-ink) var(--stroke), transparent var(--stroke)), linear-gradient(90deg, var(--pattern-ink) var(--stroke), transparent var(--stroke)); background-size: var(--grid-w, 120px) var(--grid-h, 120px); }
+.p-detail-dots { background-image: radial-gradient(circle, var(--pattern-ink) var(--dot, 2px), transparent calc(var(--dot, 2px) + 0.5px)); background-size: 24px 24px; }
+
+/* Icons: outline icons restyled to the logo's stroke */
+.icons { display: grid; grid-template-columns: repeat(8, 1fr); gap: 24px; }
+.icons svg { width: 44px; height: 44px; fill: none; stroke: currentColor; stroke-width: var(--icon-stroke); stroke-linecap: var(--icon-caps); stroke-linejoin: round; }
+
+/* Mockup kit: real-looking pieces built in HTML and CSS. Each piece reads --paper (its ground), --ink (text on it)
+   and --accent from the element or its scene. Content with no source is an icon row, a pattern or a .bar,
+   never an invented name, number or contact. */
+.mockup { position: relative; min-width: 0; }
+.mockup .caption, .scene > .caption { margin: 0; font-family: var(--font-label); font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; }
+.kit { --paper: var(--color-neutral-light); --ink: var(--color-neutral-dark); --accent: var(--color-primary); --accent-on: var(--color-primary-on); color: var(--ink); }
+.lit { box-shadow: 0 1px 1px rgb(0 0 0 / 0.12), 0 12px 20px -10px rgb(0 0 0 / 0.38), 0 44px 64px -34px rgb(0 0 0 / 0.5); }
+.grain { background-image: radial-gradient(rgb(0 0 0 / 0.05) 0.7px, transparent 0.8px), radial-gradient(rgb(255 255 255 / 0.06) 0.7px, transparent 0.8px); background-size: 3px 3px, 4px 4px; background-position: 0 0, 1px 2px; }
+.tilt { transform: perspective(1400px) rotateX(10deg) rotateZ(-2deg); }
+.tilt-l { transform: rotate(-6deg); }
+.tilt-r { transform: rotate(5deg); }
+
+/* Scenes: a ground the pieces sit on */
+.scene { box-shadow: inset 0 0 0 1px rgb(127 127 127 / 0.2); border-radius: calc(var(--radius) + 6px); padding: 56px 32px 40px; position: relative; overflow: hidden; min-height: 440px; display: flex; align-items: center; justify-content: center; gap: 28px; flex-wrap: wrap; }
+.scene > :not(.pattern):not(.caption) { position: relative; }
+.scene > .caption { position: absolute; left: 24px; top: 20px; }
+.scene.desk { background-color: var(--scene, #2B2620); }
+
+/* Business cards */
+.k-card { width: 320px; aspect-ratio: 85 / 55; border-radius: 6px; padding: 24px 26px; background-color: var(--paper); color: var(--ink); display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+.k-card.front { align-items: center; justify-content: center; }
+.k-card.front img[data-logo] { width: 44%; height: auto; position: relative; }
+.k-name { font-family: var(--font-display); font-size: 21px; line-height: 1.1; margin: 0; }
+.k-rows { display: grid; gap: 9px; }
+.k-row { display: flex; align-items: center; gap: 10px; }
+.k-row svg { width: 14px; height: 14px; flex: none; color: var(--accent); fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.k-row .bar { flex: 1; margin: 0; height: 7px; }
+.k-pair { position: relative; width: 540px; height: 300px; }
+.k-pair > :first-child { position: absolute; left: 0; top: 12px; }
+.k-pair > :nth-child(2) { position: absolute; right: 0; bottom: 6px; }
+
+/* Letterhead and envelope */
+.k-letter { width: 250px; aspect-ratio: 210 / 297; background-color: var(--paper); color: var(--ink); padding: 26px 24px; display: flex; flex-direction: column; gap: 6px; position: relative; }
+.k-letter img[data-logo] { width: 36%; height: auto; margin-bottom: 22px; }
+.k-letter .bar { height: 6px; margin: 2px 0; }
+.k-letter .rule { height: 2px; background: var(--accent); margin-top: auto; }
+.k-letter .foot { display: flex; gap: 12px; color: var(--accent); padding-top: 6px; }
+.k-letter .foot svg, .k-post svg, .k-phone svg, .k-site svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.k-letter .foot svg { width: 12px; height: 12px; }
+.k-envelope { width: 300px; aspect-ratio: 220 / 110; background-color: var(--paper); position: relative; padding: 16px 18px; overflow: hidden; }
+.k-envelope::before { content: ""; position: absolute; inset: 0; background: linear-gradient(162deg, transparent 49.6%, rgb(0 0 0 / 0.1) 50%, transparent 50.4%), linear-gradient(18deg, transparent 49.6%, rgb(0 0 0 / 0.1) 50%, transparent 50.4%); }
+.k-envelope img[data-logo] { width: 24%; height: auto; position: relative; }
+
+/* Phone with an app screen */
+.k-phone { width: 260px; aspect-ratio: 9 / 19; border-radius: 40px; padding: 10px; background: #0E0E10; box-shadow: inset 0 0 0 2px #2C2C31, 0 34px 56px -24px rgb(0 0 0 / 0.6); }
+.k-phone .scr { height: 100%; border-radius: 31px; overflow: hidden; background-color: var(--paper); color: var(--ink); display: flex; flex-direction: column; position: relative; }
+.k-phone .status { height: 36px; flex: none; display: flex; justify-content: space-between; align-items: center; padding: 0 22px; }
+.k-phone .status i { display: block; width: 28px; height: 6px; border-radius: 3px; background: currentColor; opacity: 0.45; }
+.k-phone .notch { position: absolute; top: 9px; left: 50%; width: 76px; height: 20px; margin-left: -38px; border-radius: 12px; background: #0E0E10; }
+.k-phone .head { display: flex; align-items: center; justify-content: space-between; padding: 6px 18px 12px; }
+.k-phone .head img[data-logo] { width: 86px; height: auto; }
+.k-phone .head svg { width: 20px; height: 20px; }
+.k-phone .card-hero { margin: 0 14px; border-radius: 16px; padding: 18px; min-height: 150px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; }
+.k-phone .card-hero > :not(.pattern) { position: relative; }
+.k-phone .card-hero p { margin: 0; font-family: var(--font-display); font-size: 19px; line-height: 1.2; }
+.k-list { display: grid; gap: 8px; padding: 14px; }
+.k-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: rgb(127 127 127 / 0.12); }
+.k-item svg { width: 18px; height: 18px; color: var(--accent); flex: none; }
+.k-item .bar { margin: 0; flex: 1; }
+.k-btn { display: inline-flex; align-items: center; justify-content: center; height: 40px; padding: 0 20px; border-radius: 999px; background: var(--accent); color: var(--accent-on); font-weight: 700; font-size: 14px; }
+.k-phone .k-btn { margin: 2px 14px 0; }
+.k-tabs { margin-top: auto; display: flex; justify-content: space-around; padding: 12px 10px 20px; border-top: 1px solid rgb(127 127 127 / 0.22); }
+.k-tabs svg { width: 20px; height: 20px; }
+
+/* Browser with a home page */
+.k-browser { width: 100%; border-radius: 12px; overflow: hidden; background: #1F1F22; box-shadow: 0 34px 64px -30px rgb(0 0 0 / 0.6); }
+.k-browser .top { height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 14px; }
+.k-browser .top i { width: 10px; height: 10px; border-radius: 50%; background: #5A5A60; }
+.k-browser .top .url { margin-left: 18px; flex: 1; max-width: 44%; height: 16px; border-radius: 8px; background: #303035; }
+.k-site { background-color: var(--paper); color: var(--ink); }
+.k-site nav { display: flex; align-items: center; gap: 24px; padding: 18px 30px; font-size: 14px; }
+.k-site nav img[data-logo] { width: 90px; height: auto; margin-inline-end: auto; }
+.k-site .split { display: grid; grid-template-columns: 1.1fr 1fr; gap: 26px; padding: 18px 30px 26px; align-items: center; }
+.k-site h4 { font-family: var(--font-display); font-weight: 400; font-size: 34px; line-height: 1.1; margin: 0 0 16px; }
+.k-site .panel { position: relative; height: 210px; border-radius: 14px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.k-site .panel img[data-logo] { width: 52%; height: auto; position: relative; }
+.k-site .features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 0 30px 28px; }
+.k-site .feature { border-radius: 12px; padding: 16px; background: rgb(127 127 127 / 0.12); display: flex; flex-direction: column; gap: 6px; }
+.k-site .feature svg { width: 22px; height: 22px; color: var(--accent); }
+.k-site .feature b { font-size: 15px; }
+.k-site .feature .bar { margin: 2px 0; }
+
+/* Packaging */
+.k-bag { position: relative; width: 200px; height: 250px; margin: 64px 54px 0 0; }
+.k-bag .face { position: absolute; inset: 0; background-color: var(--paper); display: flex; align-items: flex-start; justify-content: center; padding-top: 64px; }
+.k-bag .face img[data-logo] { width: 58%; height: auto; }
+.k-bag .face::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 24px; background: linear-gradient(rgb(0 0 0 / 0.16), transparent); }
+.k-bag .side { position: absolute; top: 0; left: 100%; width: 54px; height: 100%; transform-origin: 0 0; transform: skewY(-24deg); background-color: var(--accent); overflow: hidden; }
+.k-bag .side::after { content: ""; position: absolute; inset: 0; background: rgb(0 0 0 / 0.22); }
+.k-bag .handle { position: absolute; top: -58px; left: 30%; width: 40%; height: 82px; border: 5px solid var(--handle, rgb(0 0 0 / 0.6)); border-bottom: 0; border-radius: 60px 60px 0 0; }
+.k-box { position: relative; width: 190px; height: 170px; margin: 46px 46px 0 0; }
+.k-box .front { position: absolute; inset: 0; background-color: var(--paper); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.k-box .front img[data-logo] { width: 54%; height: auto; position: relative; }
+.k-box .top { position: absolute; left: 0; bottom: 100%; width: 100%; height: 46px; transform-origin: 0 100%; transform: skewX(-45deg); background-color: var(--paper); overflow: hidden; }
+.k-box .top::after { content: ""; position: absolute; inset: 0; background: linear-gradient(rgb(255 255 255 / 0.16), rgb(0 0 0 / 0.08)); }
+.k-box .front::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 1px; background: rgb(0 0 0 / 0.18); }
+.k-box .side { position: absolute; left: 100%; top: 0; width: 46px; height: 100%; transform-origin: 0 0; transform: skewY(-45deg); background-color: var(--accent); overflow: hidden; }
+.k-box .side::after { content: ""; position: absolute; inset: 0; background: rgb(0 0 0 / 0.24); }
+.k-cup { position: relative; width: 140px; height: 190px; margin-top: 16px; }
+.k-cup .body { position: absolute; inset: 16px 0 0; background-color: var(--paper); clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%); }
+.k-cup .body::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgb(0 0 0 / 0.14), transparent 30%, transparent 70%, rgb(0 0 0 / 0.2)); }
+.k-cup .lid { position: absolute; left: -6px; right: -6px; top: 0; height: 20px; border-radius: 9px 9px 3px 3px; background: var(--lid, var(--color-neutral-dark)); }
+.k-cup .sleeve { position: absolute; left: 7%; right: 7%; top: 42%; height: 32%; background: var(--accent); clip-path: polygon(0 0, 100% 0, 96% 100%, 4% 100%); display: flex; align-items: center; justify-content: center; }
+.k-cup .sleeve img[data-logo] { width: 50%; height: auto; }
+.k-sticker { width: 118px; aspect-ratio: 1; border-radius: 50%; background-color: var(--accent); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 6px var(--paper), 0 14px 24px -10px rgb(0 0 0 / 0.45); }
+.k-sticker img[data-logo] { width: 60%; height: auto; }
+.k-tote { position: relative; width: 200px; height: 230px; margin-top: 76px; background-color: var(--paper); display: flex; align-items: center; justify-content: center; }
+.k-tote img[data-logo] { width: 56%; height: auto; }
+.k-tote::before, .k-tote::after { content: ""; position: absolute; top: -76px; width: 14px; height: 92px; background: var(--strap, var(--paper)); filter: brightness(0.9); }
+.k-tote::before { left: 46px; transform: rotate(-8deg); }
+.k-tote::after { right: 46px; transform: rotate(8deg); }
+
+/* Storefront */
+.k-front { position: relative; width: 100%; height: 400px; border-radius: 10px; overflow: hidden; background: linear-gradient(#3D3833, #29251F); }
+.k-front .fascia { position: absolute; left: 7%; right: 7%; top: 30px; height: 112px; background-color: var(--paper); display: flex; align-items: center; justify-content: center; box-shadow: 0 18px 26px -12px rgb(0 0 0 / 0.65); }
+.k-front .fascia img[data-logo] { height: 68%; width: auto; max-width: 80%; }
+.k-front .awning { position: absolute; left: 4%; right: 4%; top: 154px; height: 46px; background: repeating-linear-gradient(90deg, var(--accent) 0 36px, var(--paper) 36px 72px); clip-path: polygon(0 0, 100% 0, 97% 100%, 3% 100%); }
+.k-front .window { position: absolute; left: 11%; right: 11%; top: 214px; bottom: 0; background: linear-gradient(170deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.03) 60%); border: 4px solid rgb(0 0 0 / 0.45); border-bottom: 0; }
+
+/* A single social post */
+.k-post { width: 290px; border-radius: 14px; overflow: hidden; background: #FFFFFF; color: #17171A; }
+.k-post .who { display: flex; align-items: center; gap: 10px; padding: 12px 14px; }
+.k-post .avatar { width: 30px; height: 30px; border-radius: 50%; background-color: var(--paper); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.k-post .avatar img[data-logo] { width: 70%; height: auto; }
+.k-post .who .bar { flex: 1; margin: 0; max-width: 40%; }
+.k-post .img { aspect-ratio: 4 / 5; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 26px; background-color: var(--paper); color: var(--ink); }
+.k-post .img > :not(.pattern) { position: relative; }
+.k-post .img p { margin: 0; font-family: var(--font-display); font-size: 26px; line-height: 1.15; }
+.k-post .img img[data-logo] { width: 64px; height: auto; }
+.k-post .acts { display: flex; gap: 14px; padding: 12px 14px 4px; }
+.k-post .acts svg { width: 20px; height: 20px; }
+.k-post .lines { padding: 0 14px 14px; }
+.k-post .lines .bar { height: 7px; }
+
+/* A grid of social tiles */
+.social-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: 100%; }
+.social-grid > div { aspect-ratio: 1; border-radius: 4px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 14px; text-align: center; }
+.social-grid > div > :not(.pattern) { position: relative; }
+.social-grid img[data-logo] { width: 64%; height: auto; }
+
+[dir="rtl"] .tile .caption { left: 24px; right: 24px; text-align: right; }
+[dir="rtl"] .scene > .caption { left: auto; right: 24px; }
+
+/* Cards: a finished board is a grid of full cards, each with a label, its content and a short note */
+.cards { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; }
+.card { position: relative; border-radius: calc(var(--radius) + 6px); padding: 32px; overflow: hidden; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.card > :not(.pattern) { position: relative; }
+.card.light { background: var(--color-neutral-light); color: var(--color-neutral-dark); }
+.card.dark { background: var(--color-neutral-dark); color: var(--color-neutral-light); }
+.card.primary { background: var(--color-primary); color: var(--color-primary-on); }
+.card.secondary { background: var(--color-secondary); color: var(--color-secondary-on); }
+.card.outline { box-shadow: inset 0 0 0 1px rgb(127 127 127 / 0.32); }
+.card .eyebrow { margin: 0; }
+.card .title { margin: 0; }
+.note { font-size: 14px; line-height: 1.5; margin: 0; max-width: 40em; }
+.c-3 { grid-column: span 3; } .c-4 { grid-column: span 4; } .c-5 { grid-column: span 5; } .c-6 { grid-column: span 6; }
+.c-7 { grid-column: span 7; } .c-8 { grid-column: span 8; } .c-9 { grid-column: span 9; } .c-12 { grid-column: span 12; }
+.section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; margin: 0 0 20px; }
+.section-head .title { font-size: 34px; margin: 0; }
+.big-logo { display: flex; align-items: center; justify-content: center; flex: 1; min-height: 280px; }
+.big-logo img[data-logo] { width: 70%; max-width: 360px; height: auto; }
+.statement { font-family: var(--font-display); font-size: 34px; line-height: 1.18; margin: 0; }
+
+/* Reading the logo: each part is shown by cropping the original file (data-detail), never by redrawing it */
+.parts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.part { border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.part .crop { height: 104px; border-radius: var(--radius); overflow: hidden; position: relative; }
+.part .crop img[data-logo] { position: absolute; width: 260%; max-width: none; height: auto; }
+.part b { font-size: 15px; }
+
+/* Colour as stacked bars, each written in its own text colour */
+.colour-bars { display: flex; flex-direction: column; border-radius: var(--radius); overflow: hidden; }
+.colour-bars > div { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 18px 20px; }
+.colour-bars b { font-size: 18px; font-weight: 700; }
+.colour-bars span { display: block; }
+
+/* Patterns, icons and scenes */
+.pattern-trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.pattern-trio > div { position: relative; height: 230px; border-radius: var(--radius); overflow: hidden; }
+.icon-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.icon-grid figure { margin: 0; border-radius: var(--radius); padding: 26px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 13px; }
+.icon-grid svg { width: 32px; height: 32px; fill: none; stroke: currentColor; stroke-width: var(--icon-stroke); stroke-linecap: var(--icon-caps); stroke-linejoin: round; }
+.stack { position: relative; display: flex; align-items: flex-end; gap: 18px; }
+
+/* Page ground: the page must contrast with its cards, so set --page apart from the card grounds
+   (a light page under dark and coloured panels, or the reverse). */
+body { background-color: var(--page, var(--color-surface)); }
+
+/* Editorial layout: numbered section heads with a rule */
+.sec-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 18px; font-family: var(--font-label); font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; }
+.sec-head .n { font-weight: 700; }
+.sec-head .rule { flex: 1; height: 1px; background: currentColor; opacity: 0.25; }
+
+/* Heroes: the board's opening. Pick one per board (see references/board.md). */
+.hero-name { border-radius: calc(var(--radius) + 6px); overflow: hidden; position: relative; }
+.hero-name .top { display: grid; grid-template-columns: 1.35fr 1fr; gap: 40px; align-items: center; padding: 72px 64px 56px; position: relative; }
+.hero-name .top > :not(.pattern) { position: relative; }
+.brand-name { font-family: var(--font-display); font-weight: 400; font-size: 120px; line-height: 0.98; margin: 0; overflow-wrap: anywhere; }
+.brand-name.tracked { text-transform: uppercase; letter-spacing: 0.08em; }
+.hero-name .line { width: 96px; height: 2px; background: var(--accent, var(--color-primary)); margin: 30px 0 18px; }
+.hero-name .sub { font-family: var(--font-label); font-size: 14px; letter-spacing: 0.2em; text-transform: uppercase; margin: 0 0 18px; }
+.hero-name .say { font-family: var(--font-display); font-style: italic; font-size: 26px; line-height: 1.3; margin: 0; }
+.hero-name .mark { display: flex; align-items: center; justify-content: center; }
+.hero-name .mark img[data-logo] { width: 82%; max-width: 420px; height: auto; }
+.strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid rgb(127 127 127 / 0.35); position: relative; }
+.strip > div { padding: 20px 24px 24px; border-left: 1px solid rgb(127 127 127 / 0.35); }
+.strip > div:first-child { border-left: 0; }
+.strip .eyebrow { margin: 0 0 6px; }
+.strip p { margin: 0; font-size: 14px; line-height: 1.45; }
+.hero-band { position: relative; border-radius: calc(var(--radius) + 6px); overflow: hidden; min-height: 520px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 64px; text-align: center; }
+.hero-band > :not(.pattern) { position: relative; }
+.hero-band img[data-logo] { width: 300px; height: auto; }
+
+/* Palette as tall colour columns */
+.pal-cols { display: flex; border-radius: var(--radius); overflow: hidden; min-height: 260px; }
+.pal-cols > div { flex: 1 1 0; min-width: 0; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; }
+.pal-cols .nm { font-family: var(--font-display); font-size: 28px; line-height: 1.05; margin: 4px 0 0; }
+.pal-cols .codes { font-family: var(--font-label); font-size: 13px; line-height: 1.5; }
+.usage { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin: 14px 0 8px; }
+
+/* A collage: pieces laid together on one ground, placed by hand. Only one piece in a stack may carry text. */
+.collage { position: relative; border-radius: calc(var(--radius) + 6px); overflow: hidden; min-height: 760px; }
+.collage > .mockup { position: absolute; }
+.collage > .caption { position: absolute; left: 24px; top: 20px; margin: 0; font-family: var(--font-label); font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; }
+.stack-col { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+
+/* Mark scatter: the logo itself (a version file set in --mark) scattered at a few sizes, in its own colours */
+.p-mark-scatter { --mark: url("logo/reversed.png"); background-image: var(--mark), var(--mark), var(--mark), var(--mark), var(--mark), var(--mark), var(--mark); background-repeat: no-repeat; background-size: 92px auto, 54px auto, 104px auto, 62px auto, 46px auto, 84px auto, 58px auto; background-position: 6% 8%, 50% 4%, 94% 12%, 30% 56%, 72% 46%, 8% 96%, 90% 94%; }
+
+/* Voice as traits, each with what it is not */
+.traits { display: grid; gap: 0; }
+.traits > div { display: flex; align-items: baseline; gap: 14px; padding: 12px 0; border-top: 1px solid rgb(127 127 127 / 0.3); }
+.traits b { font-family: var(--font-display); font-weight: 400; font-size: 26px; min-width: 7ch; }
+.traits span { font-size: 14px; }
+
+/* Construction: the logo over a grid at its own unit, with its measured values */
+.construct { position: relative; display: flex; align-items: center; justify-content: center; min-height: 220px; border-radius: var(--radius); overflow: hidden; }
+.construct > :not(.pattern) { position: relative; }
+.construct .p-proportion-grid { --pattern-ink: rgb(127 127 127 / 0.28); --stroke: 1px; }
+
+/* Paper bag, second take: a front with a folded top, a creased side gusset and rope handles */
+.k-bag2 { position: relative; width: 210px; height: 260px; margin: 70px 40px 0 0; }
+.k-bag2 .front { position: absolute; inset: 0; background-color: var(--paper); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 46px 22px 22px; overflow: hidden; }
+.k-bag2 .front::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 34px; background: linear-gradient(rgb(0 0 0 / 0.18), rgb(0 0 0 / 0.04) 70%, transparent); border-bottom: 1px solid rgb(0 0 0 / 0.08); }
+.k-bag2 .front::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, rgb(255 255 255 / 0.1), transparent 40%, rgb(0 0 0 / 0.08)); pointer-events: none; }
+.k-bag2 .front > * { position: relative; }
+.k-bag2 .front img[data-logo] { width: 58%; height: auto; }
+.k-bag2 .gusset { position: absolute; top: 0; left: 100%; width: 40px; height: 100%; background-color: var(--paper); filter: brightness(0.78); clip-path: polygon(0 0, 100% 6%, 100% 100%, 0 100%); }
+.k-bag2 .gusset::after { content: ""; position: absolute; top: 0; bottom: 0; left: 48%; width: 1px; background: rgb(0 0 0 / 0.25); }
+.k-bag2 .front { z-index: 1; }
+.k-bag2 .rope { position: absolute; left: 31%; width: 38%; height: 86px; top: -60px; border: 4px solid var(--rope, rgb(0 0 0 / 0.55)); border-bottom: 0; border-radius: 50% 50% 0 0 / 80% 80% 0 0; }
+.k-bag2 .rope.a { z-index: 2; }
+.k-bag2 .rope.a::before, .k-bag2 .rope.a::after { content: ""; position: absolute; bottom: -5px; width: 9px; height: 9px; border-radius: 50%; background: rgb(0 0 0 / 0.45); box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.15); }
+.k-bag2 .rope.a::before { left: -7px; } .k-bag2 .rope.a::after { right: -7px; }
+.k-bag2 .rope.b { z-index: 0; top: -70px; height: 86px; opacity: 0.7; filter: brightness(0.75); }
+.k-tag { font-family: var(--font-display); font-size: 20px; line-height: 1.15; text-align: center; margin: 0; }
+.k-small { font-family: var(--font-label); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; text-align: center; margin: 0; }
+
+/* Stand-up pouch: rounded shoulders, a seal band with a tear notch, a shaded base */
+.k-pouch { position: relative; width: 190px; height: 270px; border-radius: 22px 22px 14px 14px; background-color: var(--paper); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 50px 18px 34px; overflow: hidden; }
+.k-pouch::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 26px; background: repeating-linear-gradient(90deg, rgb(0 0 0 / 0.12) 0 2px, transparent 2px 6px); border-bottom: 1px solid rgb(0 0 0 / 0.12); }
+.k-pouch::after { content: ""; position: absolute; inset: auto 0 0 0; height: 34px; background: linear-gradient(transparent, rgb(0 0 0 / 0.16)); }
+.k-pouch > * { position: relative; }
+.k-pouch img[data-logo] { width: 62%; height: auto; }

@@ -3,50 +3,58 @@
 <head>
 <meta charset="utf-8">
 <title>Direction card</title>
-<!-- Direction card: the one screen shown for approval before the board is built. Same conventions as the board.
-     Replace the sample brand's words and values with this brand's. Reasons go in the chat reply, not on the card. -->
+<!-- Direction card: the one screen shown for approval before the board is built. Replace the sample brand's words and
+     values with this brand's, and restyle it freely. Reasons go in the chat reply, not on the card.
+     Keep the conventions: data-logo on the logo, data-swatch and data-hex on colour chips, data-system on codes. -->
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="base.css">
 <style>
-  .sheet { width: 1200px; padding: 64px; row-gap: 48px; }
-  .card-hero { display: flex; align-items: center; justify-content: center; min-height: 360px; border-radius: var(--radius); overflow: hidden; }
-  .card-hero img[data-logo] { width: 260px; height: auto; position: relative; }
-  .name { font-family: var(--font-display); font-size: 64px; line-height: 1.05; margin: 0 0 20px; }
-  .chip { height: 96px; }
+  :root { --page: var(--color-neutral-light); }
+  .card { width: 1200px; padding: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px 48px; }
+  .hero { grid-column: span 2; position: relative; display: flex; align-items: center; gap: 56px; min-height: 340px; padding: 48px 56px; border-radius: 14px; overflow: hidden; background: var(--color-neutral-dark); color: var(--color-neutral-light); }
+  .hero > :not(.pattern) { position: relative; }
+  .hero img[data-logo] { width: 230px; height: auto; flex: none; }
+  .name { font-family: var(--font-display); font-size: 76px; line-height: 1; margin: 0 0 14px; }
+  .label { font-family: var(--font-label); font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; margin: 0 0 10px; }
+  .big { font-family: var(--font-display); font-size: 40px; line-height: 1.1; margin: 0 0 18px; }
+  p { margin: 0 0 18px; font-size: 18px; line-height: 1.45; }
+  ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; padding: 0; }
+  li { border: 1.5px solid currentColor; border-radius: 999px; padding: 4px 14px; font-size: 15px; }
+  .chips { display: flex; gap: 12px; }
+  .chips figure { margin: 0; flex: 1; }
+  .chip { height: 92px; border-radius: 8px; box-shadow: inset 0 0 0 1px rgb(127 127 127 / 0.3); }
+  .chips b { display: block; margin-top: 8px; font-size: 15px; }
+  .mono { font-family: var(--font-label); font-size: 14px; }
 </style>
 </head>
 <body>
-<main class="sheet">
-  <section class="block span-12 card-hero" data-block="hero" data-ground="#15120E" style="background: var(--color-surface)">
-    <div class="pattern p-stroke-rings"></div>
+<main class="card">
+  <section class="hero" data-ground="#15120E">
     <img data-logo src="logo/original.svg" alt="">
-  </section>
-  <section class="block span-6" data-block="direction">
-    <p class="eyebrow">Direction</p>
-    <p class="name">Quiet luxury</p>
-    <p class="eyebrow">Runner-up</p>
-    <p class="lede">Trusted authority</p>
-    <p class="eyebrow">Feels like</p>
-    <p class="lede">A lamp left on in a quiet hall.</p>
-  </section>
-  <section class="block span-6" data-block="mood">
-    <p class="eyebrow">Mood</p>
-    <ul class="tags"><li>quiet</li><li>warm metal</li><li>unhurried</li></ul>
-    <p class="eyebrow">Avoid</p>
-    <ul class="tags"><li>loud</li><li>glossy</li><li>crowded</li></ul>
-  </section>
-  <section class="block span-7" data-block="palette">
-    <p class="eyebrow">Palette</p>
-    <div class="row">
-      <figure class="swatch" data-swatch-card><div class="chip" data-swatch="#C9A24B" style="background: var(--color-primary)"></div><figcaption><b>Aurelle Gold</b><span class="mono" data-system data-hex>#C9A24B</span></figcaption></figure>
-      <figure class="swatch" data-swatch-card><div class="chip" data-swatch="#7A6230" style="background: var(--color-secondary)"></div><figcaption><b>Antique Brass</b><span class="mono" data-system data-hex>#7A6230</span></figcaption></figure>
-      <figure class="swatch" data-swatch-card><div class="chip" data-swatch="#15120E" style="background: var(--color-neutral-dark)"></div><figcaption><b>Night Umber</b><span class="mono" data-system data-hex>#15120E</span></figcaption></figure>
-      <figure class="swatch" data-swatch-card><div class="chip" data-swatch="#F4EFE6" style="background: var(--color-neutral-light)"></div><figcaption><b>Bone</b><span class="mono" data-system data-hex>#F4EFE6</span></figcaption></figure>
+    <div>
+      <p class="label" style="color: var(--color-primary)">Direction</p>
+      <p class="name">Quiet luxury</p>
+      <p>A lamp left on in a quiet hall.</p>
     </div>
   </section>
-  <section class="block span-5" data-block="type">
-    <p class="eyebrow">Type</p>
-    <p class="name">Aurelle</p>
+  <section>
+    <p class="label">Runner-up</p>
+    <p class="big">Trusted authority</p>
+    <p class="label">Mood</p>
+    <ul><li>quiet</li><li>warm metal</li><li>unhurried</li></ul>
+    <p class="label">Avoid</p>
+    <ul><li>loud</li><li>glossy</li><li>crowded</li></ul>
+  </section>
+  <section>
+    <p class="label">Palette</p>
+    <div class="chips">
+      <figure data-swatch-card><div class="chip" data-swatch="#C9A24B" style="background: var(--color-primary)"></div><b>Aurelle Gold</b><span class="mono" data-system data-hex>#C9A24B</span></figure>
+      <figure data-swatch-card><div class="chip" data-swatch="#7A6230" style="background: var(--color-secondary)"></div><b>Antique Brass</b><span class="mono" data-system data-hex>#7A6230</span></figure>
+      <figure data-swatch-card><div class="chip" data-swatch="#15120E" style="background: var(--color-neutral-dark)"></div><b>Night Umber</b><span class="mono" data-system data-hex>#15120E</span></figure>
+      <figure data-swatch-card><div class="chip" data-swatch="#F4EFE6" style="background: var(--color-neutral-light)"></div><b>Bone</b><span class="mono" data-system data-hex>#F4EFE6</span></figure>
+    </div>
+    <p class="label" style="margin-top: 26px">Type</p>
+    <p class="big" style="margin: 0 0 8px">Aurelle</p>
     <p class="mono" data-system>Gloock 400 and Instrument Sans 400, 700</p>
   </section>
 </main>

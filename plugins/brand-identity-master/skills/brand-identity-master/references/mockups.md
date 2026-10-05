@@ -1,63 +1,60 @@
-# Mockups
+# Applications
 
-Read this when building the applications section. Mockups show the identity at work. They are built from the mockup kit in `assets/board/mockups.html` (HTML and CSS): no image model, no photos, no stand-in logo.
+Read this when designing the applications, the largest and richest part of the board. Applications show the identity at work in this business's own world. They are drawn in HTML and CSS for this brand: no image model, no photos, no stand-in logo, and no reused kit.
 
 ## Choosing
 
-- **Pick four to six deliverables** from `data/deliverables.json` whose `sectors` include the brand's sector or `*`. Take them in the order the direction file lists under "Mockups first".
-- **Mix the kinds:** always at least one paper piece (card, letterhead, envelope, bag, box, label), one screen (app screen, website home, social post) and, when the sector has a place, one piece out in the world (storefront sign, cup, tote).
-- **No site?** Prefer pieces that need few words: cards, bags, boxes, stickers, cups, signs, a social post carrying a mood word or the feels-like line.
-- **Follow each deliverable's notes.** It has `logo`, `colour` and `avoid` notes: they are how a studio would set that piece.
+- **Ask what this business actually makes, hands out and uses,** and draw that. For example:
+
+  | Business | Pieces |
+  | --- | --- |
+  | A bakery | a bread bag with a window, a pastry box, a paper cup and sleeve, a chalkboard or printed menu, an apron, a delivery sticker |
+  | A boutique hotel | a key card in its sleeve, a room folder, a door hanger, an amenity box, a wax-sealed envelope, a brass door plate |
+  | A developer tool | the product screen or dashboard, a docs page, a terminal, stickers, a conference badge |
+  | An advisory firm | a letterhead and envelope, a report cover, a door plate, a presentation slide, an email signature |
+
+  `data/deliverables.json` lists more, with their sizes and notes.
+- **Six to ten pieces in one large scene, with one or two smaller panels beside it.** For example: a desk or counter scene two thirds wide, with the website and a social grid stacked next to it. Not one piece per card, and not a row of separate bands.
+- **The pieces fill the scene.** They overlap as on a real desk or shelf, at different sizes, some cropped by the scene's edge. The ground shows less than the pieces do: a scene with empty bands between small pieces gets its pieces enlarged or regrouped.
+- **At least one paper or packaging piece and one screen piece.** The screen piece is the website's first screen with the brand's own line and product nouns, or a social grid of three to six posts (a logo version on colour, a quote, a pattern, a product noun).
 
 ## Building
 
-- **Scenes.** Build three rows, each a `.cards` row of two scenes, so the section stays near 1,500 px tall:
+- **Draw each piece for this brand:**
+  - real proportions;
+  - its material: paper grain, kraft, foil, glass, card, fabric, all done with CSS gradients;
+  - light from one side and soft layered shadows;
+  - perspective with `transform` where it helps;
+  - the parts that make it read as its object at a glance: a bag has its gusset, folds and handles set into the bag, a box has a lid edge and a side, a card has thickness and a shadow, a cup has a rim and a sleeve.
+- **Carry the identity on every surface:** the logo (an `<img data-logo>`, a version on dark or coloured grounds), the patterns, the palette, the type.
+- **A scene has a ground of its own** from the palette or a material (a wood desk, a stone counter, a linen cloth), with `data-ground` on it, and the pieces overlap naturally. Only one piece in an overlapping stack carries text, so texts never collide.
+- **Every piece keeps `data-mockup`.** A short caption names the scene. Tilt and perspective are allowed (the checks warn, not fail).
 
-  | Row | Scenes |
-  | --- | --- |
-  | 1 | stationery (`c-8`) and packaging (`c-4`) |
-  | 2 | website (`c-8`) and app screen (`c-4`) |
-  | 3 | storefront or merchandise (`c-6`) and social (`c-6`) |
+## Hard pieces
 
-  Swap scenes to suit the sector; keep three rows.
-- **Copy the pieces** from `mockups.html`. Each kit piece reads three variables, set on the piece or its scene from palette roles:
-  - `--paper`: its ground;
-  - `--ink`: the text on it;
-  - `--accent`: buttons, rules, icons and sleeves, with `--accent-on` for text on the accent.
-- **What the kit holds:**
-  - stationery: `k-letter`, `k-envelope`, `k-card` (`.front` with the logo, the back with the name and icon rows), `k-pair` (two cards set together);
-  - screens: `k-phone` (status bar, head, hero card, icon list, `k-btn`, tab bar), `k-browser` with `k-site` (nav, split hero with a pattern panel, three feature cards);
-  - packaging and merchandise: `k-bag` (3D, a patterned side), `k-box` (3D), `k-cup` (sleeve), `k-sticker`, `k-tote`;
-  - out in the world: `k-front` (fascia, awning, window);
-  - social: `k-post` and the six-tile `social-grid`.
-- **Finish:** `.lit` adds a layered shadow, `.grain` a paper grain, `.tilt-l` and `.tilt-r` a small turn. Use a pattern inside panels, side faces, hero cards and posts.
-- **Every piece keeps `data-mockup`,** and every scene has a caption that is a deliverable name from `data/deliverables.json` (or "Stationery", "Packaging").
-- **The logo** is the original or a version file in an `<img data-logo>`:
-  - `monoDark` on light paper;
-  - `monoLight` or the original on dark;
-  - `reversed` on the primary.
-- **Perspective and tilt** are allowed in mockups only. There the checks warn about the logo's ratio and size instead of failing.
-- **Grounds:** set `data-ground` on any piece whose ground is a pattern, a grain or a scene, so text on it is measured against the real ground.
+Bags, cups, clothing and bottles are hard to draw in CSS, and one badly drawn piece pulls the whole board down. Draw one only when it is central to this business, and then build it right; otherwise let flat pieces carry the scene (letters, envelopes, cards, tags, boxes seen from above, stickers, seals, screens).
+
+- **A bag:** portrait, about 3:4. Two thin handles set into punched holes just inside the top edge (both ends inside the bag's width), a folded band along the top, a darker strip down one side for the gusset, and a soft shadow at the base. The logo sits in the upper half at about a third of the front's width; the name is small beneath it, never edge to edge. Partly hidden behind a flat piece, it reads best.
+- **A cup:** a slight taper, a rolled rim, a lid or a sleeve band carrying the mark.
+- **Cut rather than keep:** a scene with five good pieces beats seven with one bad one.
 
 ## Content
 
-- **A headline on every screen and post**, in real words: a quote from the brand read, the feels-like line, a mood word, or a `doSay` example inside `data-example` when the brand has no quote.
-- **Feature cards and list rows:** an icon from `data/icons/` and a mood or voice word as the title, with text bars for the body.
-- **The back of a business card:** the brand name, then rows of icons (user, mail, phone) with text bars: a real layout, no invented details.
-- **Navigation and buttons** use plain labels from `data/labels.json` in the brand's language ("Menu", "Book", "Contact", "Reserve").
-- **Never made up for a mockup:**
-  - a price, a dish, a product name;
-  - a date, opening hours, a person's name;
-  - an address, a phone number, an email, a domain;
-  - a count, a rating, a review.
+- **Every piece has real words:**
+  - the brand name;
+  - a quote from the brand read;
+  - the feels-like line;
+  - labels from `data/labels.json` in the brand's language;
+  - product nouns the site itself uses ("Sourdough", "Rye").
+- **Stationery carries sample details** from `data/placeholders.json` in `data-placeholder`, with the board footnote. A letter shows a heading and a few real lines from the brand's words rather than grey bars; use text bars only where a line has no content at all, and never as the main content of a piece.
+- **Never made up:** prices, dishes or products the site does not name, dates, opening hours, real-sounding names, addresses, counts, ratings, reviews.
 
 ## Looking at them
 
-After the render, look at the applications rows in `board.png`:
+After the render:
 
-- Does each piece read as its real object at a glance?
-- Is the logo on each piece the right version for its ground?
-- Do the pieces share one light direction and one shadow?
-- Is any scene half empty? Then the other scene in its row is too tall, or the piece is too small.
+- Does each piece read as its real object at a glance, made of its real material? Look at each piece alone, at thumbnail size: would it pass for a photo of the real thing? Fix it or cut it.
+- Does the scene look like this business's world, or like any business?
+- Would a studio post it?
 
-Fix or drop a piece that fails. Four strong pieces beat six weak ones.
+Redraw what fails. Fewer, better pieces beat a row of thin ones.

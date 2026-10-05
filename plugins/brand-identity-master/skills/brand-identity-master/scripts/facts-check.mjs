@@ -46,7 +46,15 @@ export function knownTexts(brand, data) {
   return k;
 }
 
-export function checkFacts(texts, brand, data) {
+export function placeholderSet(brand, data) {
+  const slug = String(brand.identity?.name || '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
+  const p = data.placeholders || {};
+  return new Set(Object.values(p).filter(Array.isArray).flat().map((v) => norm(v.replaceAll('{brand}', slug))));
+}
+
+export function checkFacts(texts, brand, data, doc = {}) {
+  const placeholders = placeholderSet(brand, data);
+  let placeholderSeen = false;
   const known = knownTexts(brand, data);
   const sourced = (brand.copy || []).filter((c) => c.source !== 'example').map((c) => norm(c.text));
   const dont = new Set((brand.voice?.dontSay || []).map(norm));
@@ -59,6 +67,12 @@ export function checkFacts(texts, brand, data) {
   const add = (level, code, message, text) => out.push({ level, code, message, text });
   for (const t of texts) {
     const n = norm(t.text);
+    // Sample details on mockups: only from data/placeholders.json, and only with a footnote saying so.
+    if (t.placeholder) {
+      placeholderSeen = true;
+      if (!placeholders.has(n) && !known.has(n)) add('fail', 'PLACEHOLDER_UNKNOWN', 'A sample detail that is not in data/placeholders.json', t.text);
+      continue;
+    }
     const isKnown = known.has(n) || (n.length >= 12 && sourced.some((s) => s.includes(n)));
     if (EMOJI.test(t.text)) add('fail', 'EMOJI', 'An emoji on the board', t.text);
     if (t.text.includes('\u2014')) add('warn', 'EM_DASH', 'An em dash on the board', t.text);
@@ -86,6 +100,7 @@ export function checkFacts(texts, brand, data) {
     if (!flagged && /\d/.test(t.text)) { add('fail', 'FACT_NUMBER', 'An unsourced number', t.text); flagged = true; }
     if (!flagged && n.split(' ').length > 4) add('fail', 'UNSOURCED', 'A sentence that is not in brand.json copy, voice or the labels', t.text);
   }
+  if (placeholderSeen && !doc.placeholderNote) add('fail', 'PLACEHOLDER_UNMARKED', 'Sample details are shown but no footnote (data-placeholder-note) says they are placeholders', '');
   return out;
 }
 
@@ -93,7 +108,8 @@ if (isMain(import.meta.url)) {
   const args = parseArgs(process.argv.slice(2));
   const file = args._[0];
   if (!file || args.help || typeof args.brand !== 'string') { console.log('Usage: node facts-check.mjs brand/board.metrics.json --brand brand/brand.json'); process.exit(file ? 0 : 1); }
-  const findings = checkFacts(readJson(file).texts, readJson(args.brand), loadData());
+  const metrics = readJson(file);
+  const findings = checkFacts(metrics.texts, readJson(args.brand), loadData(), metrics.doc);
   const fails = findings.filter((f) => f.level === 'fail');
   writeJson(path.join(path.dirname(path.resolve(file)), 'facts-check.json'), findings);
   for (const f of findings) console.log(`${f.level === 'fail' ? 'FAIL' : 'warn'} ${f.code}: ${f.message}: "${f.text}"`);

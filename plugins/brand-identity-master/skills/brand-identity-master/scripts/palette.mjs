@@ -18,6 +18,11 @@ if (isMain(import.meta.url)) {
   writeJson(out, pal);
   console.log(`Palette written to ${out} (ground: ${ground})`);
   for (const [name, r] of Object.entries(pal.roles)) console.log(`  ${name.padEnd(13)} ${r.hex}  text ${r.on}  ${r.contrast}:1  ${r.source}${r.share != null ? `  share ${r.share}` : ''}`);
+  if (pal.support) {
+    console.log('Support foils (deep / soft):');
+    for (const f of pal.support.foils) console.log(`  ${f.relation.padEnd(9)} hue ${String(f.hue).padStart(3)}  ${f.deep} / ${f.soft}`);
+    console.log(`Support neutrals: ${pal.support.neutrals.map((n) => `${n.hint} ${n.hex}`).join(', ')}`);
+  }
   for (const n of pal.notes) console.log(`Note: ${n}`);
   console.log('Next: give every role a descriptive name in brand.json (e.g. "Antique Brass").');
 }

@@ -132,7 +132,7 @@
       "name": "Shopping bag",
       "size": "320 x 420 x 120 mm",
       "mockup": "bag",
-      "logo": "centred on the front, large",
+      "logo": "centred in the upper half, about a third of the front's width; the name small beneath, never edge to edge",
       "colour": "one solid ground; kraft or neutral for handmade and organic brands",
       "avoid": "small text on the side panel",
       "sectors": [
@@ -327,7 +327,7 @@
       "name": "Tote bag",
       "size": "380 x 420 mm",
       "mockup": "tote",
-      "logo": "centred on the front, large",
+      "logo": "centred on the front, about a third of its width",
       "colour": "natural cotton or one palette ground, the mark in one colour",
       "avoid": "fine hairlines that print badly on fabric",
       "sectors": [

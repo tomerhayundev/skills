@@ -26,7 +26,7 @@ synthetic, glossy, loud, techy, chrome.
 
 ## Colour
 
-- Earth and plant tones from the logo; neutrals of sand, stone and oat.
+- Earth and plant tones from the logo; neutrals of sand, stone and oat. When the logo holds one hue, a second earth or plant tone from the near foils in `support.foils`.
 - Low-chroma tints for grounds.
 - A light ground; a deep green or clay band may carry the reversed logo once.
 - Never pure white, never pure black.
@@ -35,19 +35,17 @@ synthetic, glossy, loud, techy, chrome.
 
 ### A Field notes
 
-Generous margins and a single centred column. Thin pattern bands (`stroke-lines`, wide gaps) separate the blocks like pages of a notebook.
+Generous outer margins, and rows of two blocks set like a notebook spread. Thin pattern bands (`stroke-lines`, wide gaps) separate the rows like pages.
 
 ### B Botanical plate
 
-The mark centred on a light ground, with a large `mark-crop` in a soft tint behind it. The system blocks are laid out below like the captions of a plate.
+The mark whole and centred on a light ground, the name beneath, with a large `mark-crop` in a soft tint at one side. The system blocks follow in rows of two or three, like the captions of a plate.
 
 ### C Horizon
 
-Wide horizontal bands, one per block, stepping through the palette from light to deep, like layers of a landscape.
+Wide bands stepping through the palette from light to deep, like layers of a landscape, each band holding two or three blocks side by side.
 
-In every variant, curves come from the logo, corners are soft (8 to 16 px), and nothing is crowded.
-
-Layout families: A uses the editorial layout with the name-led hero; B the cards layout with a mark-crop hero; C the editorial layout with horizon bands.
+In every variant, curves come from the logo, corners are soft (8 to 16 px), and blocks breathe inside without empty bands between them.
 
 ## Pattern
 
@@ -61,7 +59,7 @@ Layout families: A uses the editorial layout with the name-led hero; B the cards
 
 Choose one:
 
-- one oversize, softly cropped mark across a band of the primary;
+- the mark large and whole on a band of the primary, with the pattern grown from it around it;
 - a single large word of the brand's own in the display face;
 - the horizon bands themselves, at full width.
 

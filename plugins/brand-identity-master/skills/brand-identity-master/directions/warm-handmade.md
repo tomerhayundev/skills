@@ -28,7 +28,7 @@ cold, sterile, corporate, glossy, rigid.
 ## Colour
 
 - Grounds of paper and kraft: the light neutral warmed toward the logo's hue, and a kraft tone from the scale.
-- Primary from the logo. The accent comes from its second ink.
+- Primary from the logo. The accent comes from its second ink. When the logo holds one hue family, one muted foil from `support.foils` (a sage, a slate blue) sets off the warm tones on a few pieces.
 - Neutrals are always warm, never grey; the near-black is a dark brown or a warm charcoal.
 - Two grounds may alternate (paper and kraft) to separate blocks.
 
@@ -36,19 +36,17 @@ cold, sterile, corporate, glossy, rigid.
 
 ### A Market table
 
-A straight grid. Mockups are tilted by at most 2 degrees, as if set down on a table. Blocks sit on a paper ground with kraft bands between sections.
+A straight grid of two or three blocks to a row. Mockups are tilted by at most 2 degrees, as if set down on a table. Blocks sit on a paper ground with kraft bands between rows.
 
 ### B Recipe card
 
-Stacked full-width bands, each one block, with a low-density `detail-dots` paper grain on alternate bands. Labels sit like handwritten tabs at the top left of each band.
+Bands, each holding two or three blocks side by side, with a low-density `detail-dots` paper grain on alternate bands. Labels sit like handwritten tabs at the top left of each block.
 
 ### C Shopfront
 
-A large hero carried by the `storefront-sign` mockup with the mark, then the system blocks below in a simple 6/6 grid.
+A large hero carried by the `storefront-sign` mockup with the mark, then the system blocks below in a 6/6 or 4/4/4 grid.
 
 In every variant, corners follow the logo (round marks get 8 to 16 px radii), and shadows are short and soft.
-
-Layout families: A uses the editorial layout with the name-led hero and a collage; B the cards layout with a band hero of the mark tiled; C the editorial layout with the sign as the hero.
 
 ## Pattern
 

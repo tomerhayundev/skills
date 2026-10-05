@@ -54,6 +54,7 @@ Every `inferred` conclusion is listed in the reply, so the owner can correct it 
 
 - **One colour, black or near-black.** The palette comes from the direction and the site. Mark those roles `derived` or `site`, and say in the reply that the logo gave no colour.
 - **The logo fills its frame** (`background: none`). Clean one-colour versions are not possible. `make-variants.mjs` says so. Show the logo on grounds it suits and say why there is no reversed version.
+- **A logo file with a solid ground** (a JPG, or a PNG on white). `make-variants.mjs` also writes `logo/clear.png`: the same pixels with the ground taken out. Use it on every ground other than the file's own; the original is shown only in detail crops.
 - **A logo of several colours.** The reversed version turns its dark colours light and keeps its bright ones, so inner details (dots, accents) survive on dark grounds; the one-colour versions merge everything into one silhouette, so use them only where one colour is required, and say so.
 - **A hairline.** The minimum size is large. Show the logo big. Never shrink it under the minimum to fit a tile; make the tile bigger.
 - **A wordmark only.** The pattern comes from the letterforms' stroke and proportions, not from a symbol.

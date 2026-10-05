@@ -13,6 +13,10 @@ Read this before putting any words on the board or in a mockup. The board shows 
 - **Designer's notes** inside `data-note`: one or two sentences per card on why a choice comes from the logo or the brand's words. A note explains the design. It never states a fact about the business: no years, counts, prices, awards, clients or services.
 - **Technical values** inside `data-system`: hex codes, RGB, sizes in px or mm, weights (400, 700), ratios (4.5:1), scale steps (50 to 950), and short rule sentences ("Clear space 0.25 of the mark height on every side").
 
+## Sample details
+
+Mockups may carry sample details from `data/placeholders.json` inside `data-placeholder` (a sample name, role, email, phone, address, with the brand name filled in), when the board also carries the footnote in `data-placeholder-note`. Nothing else may pass as a detail: no real-sounding names, no prices, dates, counts or ratings.
+
 ## Text bars
 
 Content with no source is a text bar: `<span class="bar w70"></span>`. It is drawn in the text colour at about 22% strength, widths `w30` to `w90`.
@@ -23,7 +27,7 @@ Bars carry no text, so they never fail a check.
 
 ## Never
 
-- **Facts with no source.** Never a number, year, price, currency, percentage, address, phone number, email, person's name, rating, review, star or count without one.
+- **Facts with no source.** Never a number, year, price, currency, percentage, address, phone number, email, person's name, rating, review, star or count without one, except the sample details above, from the list, with the footnote.
 - **Claims with no source.** No "since", "est." or "established" line, and no claim to be the first, the best or award-winning, unless the site says it word for word.
 - **Emojis.** None anywhere on the board.
 - **Em dashes** in board text.

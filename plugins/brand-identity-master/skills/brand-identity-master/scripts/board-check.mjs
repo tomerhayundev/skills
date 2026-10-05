@@ -18,6 +18,7 @@ export function checkBoard(m, brand, { fonts }) {
   const pageDir = path.dirname(m.file);
   const allowed = new Set([brand.logo.original.sha256, ...Object.values(brand.logo.versions || {}).map((v) => v.sha256)]);
   const hashes = new Map();
+  const clear = brand.logo.versions?.clear;
 
   for (const l of m.logos) {
     const where = l.mockup ? 'in a mockup' : l.misuse ? 'in a misuse example' : 'on the board';
@@ -28,13 +29,28 @@ export function checkBoard(m, brand, { fonts }) {
     if (!allowed.has(hashes.get(file))) add('fail', 'LOGO_CHANGED', `A logo ${where} uses a file that is neither the original nor a recorded version`, { src: l.src });
     // Misuse examples distort on purpose; detail figures crop the original to show one part of it.
     if (l.misuse || l.detail) continue;
-    const level = l.mockup ? 'warn' : 'fail';
+    if (clear && hashes.get(file) === brand.logo.original.sha256) add('warn', 'LOGO_BOXED', `A logo ${where} uses the original file with its own solid ground, which shows as a box on any other ground: use ${clear.path}`, { src: l.src });
+    const level = l.mockup || l.proposed ? 'warn' : 'fail';
     const natural = l.natural.w / l.natural.h;
     const shown = l.content.w / l.content.h;
     if (Math.abs(shown / natural - 1) > 0.01) add(level, 'LOGO_DISTORTED', `A logo ${where} is shown at ratio ${shown.toFixed(3)}, not its own ${natural.toFixed(3)}`, { src: l.src });
     if (l.content.w + 0.5 < brand.logo.minSize.screenPx) add(level, 'LOGO_TOO_SMALL', `A logo ${where} is ${Math.round(l.content.w)} px wide, under its minimum of ${brand.logo.minSize.screenPx} px`, { src: l.src });
   }
   if (!m.logos.some((l) => l.misuse)) add('warn', 'MISUSE_MISSING', 'The board shows no "never do this" examples');
+
+  // Nothing is drawn behind or around a logo: a pattern or drawing inside its clear space reads as part of the logo.
+  const space = brand.logo.clearSpace ?? 0.25;
+  for (const l of m.logos) {
+    if (l.misuse || l.detail || l.proposed || l.tag !== 'img') continue;
+    const pad = space * l.content.h;
+    const x = l.box.x + (l.box.w - l.content.w) / 2, y = l.box.y + (l.box.h - l.content.h) / 2;
+    const zone = { x: x - pad, y: y - pad, w: l.content.w + 2 * pad, h: l.content.h + 2 * pad };
+    // In a mockup, a fine texture is the material the piece is made of (grain, weave); only patterns count there.
+    const hits = (m.decor || []).filter((d) => overlapArea(d.rect, zone) > 1 && !(l.mockup && d.kind === 'texture'));
+    if (!hits.length) continue;
+    const level = !l.mockup && hits.some((h) => h.kind === 'pattern') ? 'fail' : 'warn';
+    add(level, 'LOGO_CROWDED', `A ${hits[0].kind} (${hits[0].cls}) is drawn inside the clear space of a logo ${l.mockup ? 'in a mockup' : 'on the board'}, so it reads as part of the logo: move the pattern to its own block or away from the logo`, { src: l.src });
+  }
 
   for (const s of m.swatches) {
     const declared = s.declared.toUpperCase();
@@ -48,7 +64,7 @@ export function checkBoard(m, brand, { fonts }) {
   }
 
   for (const t of m.texts) {
-    if (t.misuse) continue;
+    if (t.misuse || t.svg) continue;
     if (t.size < 12) add('fail', 'TEXT_TOO_SMALL', `Text at ${t.size} px is under 12 px: "${short(t.text)}"`);
     if (t.clipped) add('fail', 'CLIPPED', `Text is cut off by its box: "${short(t.text)}"`);
     if (t.ground.image) { add('warn', 'GROUND_UNKNOWN', `Text sits on a pattern or gradient with no data-ground: "${short(t.text)}"`); continue; }
@@ -60,7 +76,7 @@ export function checkBoard(m, brand, { fonts }) {
     if (ratio < need) add('fail', 'CONTRAST', `"${short(t.text)}" is ${ratio}:1 on its ground, under ${need}:1`, { color: shown, ground: bg.hex });
   }
 
-  const visible = m.texts.filter((t) => !t.misuse);
+  const visible = m.texts.filter((t) => !t.misuse && !t.svg);
   const byIndex = new Map(m.texts.map((t) => [t.i, t]));
   const isAncestor = (a, b) => { for (let p = b.parent; p != null; p = byIndex.get(p)?.parent ?? null) if (p === a.i) return true; return false; };
   for (let i = 0; i < visible.length; i++) for (let j = i + 1; j < visible.length; j++) {
@@ -77,7 +93,7 @@ export function checkBoard(m, brand, { fonts }) {
     const melt = m.cards.filter((k) => { const c = parseCssColor(k.bg); const clear = !c || c.alpha < 0.05; return !k.edge && !k.image && (clear || deltaOk(c.hex, pageHex) < 0.03); });
     if (melt.length) add('warn', 'CARD_BLENDS', `${melt.length} card(s) have the page's own ground and no edge, so they melt into the page: set them on a ground that contrasts with --page, or give them an outline`);
   }
-  if (m.doc.height > 5600) add('warn', 'BOARD_LONG', `The board is ${Math.round(m.doc.height)} px tall; aim for 5200 or less: merge rows, cut a weak card or mockup`);
+  if (m.doc.height > 4600) add('warn', 'BOARD_LONG', `The board is ${Math.round(m.doc.height)} px tall; aim for 3600 to 4200: set blocks side by side, merge rows, cut a weak card`);
   if (m.doc.width > m.doc.viewport + 1) add('fail', 'OFF_PAGE', `The page is ${m.doc.width} px wide, wider than its ${m.doc.viewport} px window`);
   for (const t of visible) if (t.rect.x < -1 || t.rect.x + t.rect.w > m.doc.viewport + 1) add('fail', 'OFF_PAGE', `Text runs off the page: "${short(t.text)}"`);
 

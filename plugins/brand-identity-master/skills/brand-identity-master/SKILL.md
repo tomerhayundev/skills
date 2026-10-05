@@ -8,13 +8,13 @@ compatibility: Node 18+, and Chrome or Edge (any Chromium browser) for reading t
 
 Turns a logo into a visual identity: a brand file other skills read (`brand/brand.json`), and a brand identity board ready to show a client. Everything comes from the logo and the brand's own words. The board is HTML rendered to PNG by a headless browser, and the logo file is placed as it is, never redrawn.
 
-This is version 0.3.0 of the skill. Asked which version is loaded, answer with this line: an installed copy changes only when it is updated, and a running session keeps the copy it started with.
+This is version 0.4.0 of the skill. Asked which version is loaded, answer with this line: an installed copy changes only when it is updated, and a running session keeps the copy it started with.
 
 Scripts live in this skill's `scripts/` folder: run them as `node <this skill>/scripts/<name>.mjs`. Output goes to `brand/` in the working folder. Answer the user in their language; the board is in the brand's language.
 
 ## The floor (never broken)
 
-1. The logo is never redrawn, traced, retyped, cropped, recoloured by hand or stretched. The board shows only the original file and the versions `make-variants.mjs` writes, always at their own aspect ratio.
+1. The logo is never redrawn, traced, retyped, cropped, recoloured by hand or stretched. The board shows only the original file and the versions `make-variants.mjs` writes, always at their own aspect ratio, and nothing is drawn behind or around it: a pattern or ring in its clear space reads as part of the logo.
 2. No invented facts: no slogan, date, "since" line, number, price, address, phone, email, person's name, rating or count unless the user gave it or the brand's site states it, recorded in `brand.json` `copy` with its source. Content with no source is a text bar or a plain label ([copy rules](references/copy.md)).
 3. Every hex code on the board is the colour drawn next to it. Every text passes contrast: 4.5:1, or 3:1 for large display text.
 4. Nothing overlaps, nothing is clipped, the board fits its own height.
@@ -48,13 +48,13 @@ Read the chosen direction file now, and only that one (and the runner-up's named
 
 `node scripts/palette.mjs brand/logo-read.json --ground <light|dark> [--site-colors "#hex,#hex"] --out brand/palette.json`
 
-It sets primary, secondary and accent from the logo's inks (a small accent stays an accent), builds even OKLCH scales, tints the neutrals toward the logo's hue (never pure black or white) and gives each role a text colour that passes 4.5:1. Name each colour descriptively ("Antique Brass", not "Gold 2"). The direction may change the 60/30/10 split; write the reason in the role's `why`.
+It sets primary, secondary and accent from the logo's inks (a small accent stays an accent), builds even OKLCH scales, tints the neutrals toward the logo's hue (never pure black or white) and gives each role a text colour that passes 4.5:1. Name each colour descriptively ("Antique Brass", not "Gold 2"). The direction may change the 60/30/10 split; write the reason in the role's `why`. When the logo holds one hue family, `palette.json` lists `support` colours: add one foil the direction suits as secondary or accent, and two of its neutrals as named colours, so the palette is never only tints of one colour.
 
 ## 4. Direction card (the approval point)
 
 1. Write `brand/brand.json` as far as the direction goes ([brand file](references/brand-file.md)): identity with basis, atmosphere, colour roles from `palette.json` with names, type from a pairing the direction allows in [fonts](data/fonts.json), shape and pattern, logo rules from `logo-read.json`.
 2. `node scripts/make-variants.mjs brand/brand.json`, then `node scripts/tokens.mjs brand/brand.json`. When a font comes from Google Fonts, `tokens.mjs` prints a font link: put it in the `<head>` of every page you render.
-3. Copy [the direction card](assets/board/direction.html) to `brand/direction.html`, put this brand's words and values in it, and render it: `node scripts/render.mjs brand/direction.html --width 1200 --no-retina`. Run both checks on `brand/direction.metrics.json` (section 5, step 6).
+3. Copy [the direction card](assets/board/direction.html) to `brand/direction.html`, put this brand's words and values in it (restyle it freely), and render it: `node scripts/render.mjs brand/direction.html --width 1200 --no-retina`. Run both checks on `brand/direction.metrics.json` (section 5, step 6).
 4. Show `brand/direction.png` with two lines: the direction and why, and what was inferred rather than read. Ask "go, or what should change?". A change re-renders the card. Nothing else is built before "go". If the user is away, continue on your recommendation and say so.
 
 ## 5. Build
@@ -64,20 +64,21 @@ In this order; each step passes before the next.
 1. Complete `brand.json`: logo rules, voice, copy ([brand file](references/brand-file.md)). If a colour changed since the card, run `make-variants.mjs` again.
 2. `node scripts/validate-brand.mjs brand/brand.json`: fix every error.
 3. `node scripts/tokens.mjs brand/brand.json` and `node scripts/design-md.mjs brand/brand.json`. Never write `tokens.css` or `DESIGN.md` by hand.
-4. Write `brand/board.html` from one of the two board layouts the direction names: [editorial](assets/board/editorial.html) (a light page, a name-led hero, numbered sections, a collage) or [cards](assets/board/skeleton.html) (a grid of full cards with scenes). Follow the [board rules](references/board.md), the direction's layout, [patterns](references/patterns.md), [icons](data/icons.json) chosen for the sector and [mockups](references/mockups.md) built from [the mockup kit](assets/board/mockups.html). The skeleton shows structure and conventions only: its look is not a look to copy.
+4. Design `brand/board.html` from scratch, as the best branding studio would for this one brand. There is no template: the layout, the rhythm of grounds, the palette display, the patterns and every application are composed for this brand alone, from its logo and its world ([what a great board holds](references/board.md), [applications](references/mockups.md), [patterns](references/patterns.md), [icons](data/icons.json)). Write the HTML and CSS yourself; `base.css` gives only the conventions the checks read and a few utilities. Start from the opening, a cover a studio would sign: the logo whole and large, the name as the biggest type, one short line, the strategy in plain columns. Then compose a mosaic of two or three blocks to a row, 3,600 to 4,200 px tall.
 5. `node scripts/render.mjs brand/board.html`: it measures the height, writes `board-vN.png` and `board-vN@2x.png`, and copies the latest to `board.png`.
 6. `node scripts/board-check.mjs brand/board.metrics.json --brand brand/brand.json` and `node scripts/facts-check.mjs brand/board.metrics.json --brand brand/brand.json`. Fix every failure in the page or in `brand.json`, never by weakening a check, then render again ([checks](references/checks.md)).
 
-## 6. Critique, then refine once
+## 6. Critique, then refine
 
 Look at `brand/board.png` and answer briefly, in writing:
 
-- The swap test: put another logo of the same sector on this board. What would still be true? If most of it, the board is generic: bring in more of what comes from this logo (its parts, its pattern, its colours, its stroke and corners in the layout).
-- The finished test: would it hold up next to a studio's board? Any card of grey bars only, any empty stretch, any card with one small thing in a big field, any mockup that is mostly placeholder is unfinished: fill it with the brand's words, its parts, its pattern and notes ([a full board](references/board.md)).
-- The sibling test: would this board pass for another brand's board from this skill? Change the layout family, the hero, the rhythm of light and dark grounds or the mockup arrangement until it would not.
-- Where is the one bold move? There is exactly one.
+- The studio test: would it hold up next to the best brand boards on a design portfolio site? A rich palette, several patterns grown from the logo, applications that belong to this business, real depth and texture. Anything that reads as a template, a filler or a placeholder gets redrawn.
+- The swap test: put another logo of the same sector on this board. What would still be true? If most of it, bring in more of what comes from this logo: its parts, its colours, its stroke, its shapes.
+- The opening: cover the rest of the board. Is the first screen alone a cover a studio would sign: the logo whole and calm on a ground it suits (no box of the file's own background), the name big, one short line, nothing noisy? Is the page ground clean, not muddy?
+- The density test: is the board 3,600 to 4,200 px, with blocks side by side and no empty bands? Is each application scene filled by its pieces?
+- The crop test: look at each "reading the logo" crop alone. Does it show the part its name says?
 
-Then at most two refine passes. Render and run both checks after each.
+Then up to two refine passes. Render and run both checks after each.
 
 ## 7. Deliver
 
@@ -94,7 +95,7 @@ Every delivered board is kept (`board-v1.png`, `board-v2.png`); none is overwrit
 
 - A rule from one direction is being applied to another.
 - The board would look the same with another brand's logo on it.
-- The palette has a colour the logo does not have and the direction does not justify.
+- The palette has a colour the logo does not have and the direction does not justify, or is only tints of one colour.
 - The board says something the brand never said.
 - You are about to deliver without running both checks, or after a failing one.
 - You are drawing, tracing or retyping the logo.

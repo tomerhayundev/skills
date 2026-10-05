@@ -1,6 +1,6 @@
 {
   "name": "brand-identity-master",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Turns a logo into a visual identity: it reads the logo's real colours and shape and the brand's own words, picks one of six design directions, and writes a validated brand file (palette, fonts, logo rules, voice) plus a premium brand identity board rendered from HTML. The logo is never redrawn, no fact is invented, and no image model or API key is needed.",
   "author": {
     "name": "Tomer Hayun",

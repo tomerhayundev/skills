@@ -30,7 +30,9 @@
     const ids = new Map();
     const texts = [];
     for (const e of document.body.querySelectorAll('*')) {
-      if (e.closest('script, style, svg, [data-probe-skip]')) continue;
+      if (e.closest('script, style, [data-probe-skip]')) continue;
+      const inSvg = !!e.closest('svg');
+      if (inSvg && !/^(text|textPath|tspan)$/i.test(e.tagName)) continue;
       const own = [...e.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join(' ').replace(/\s+/g, ' ').trim();
       if (!own) continue;
       const s = getComputedStyle(e);
@@ -41,7 +43,7 @@
       texts.push({
         i: texts.length, parent, text: own, rect: rect(e), size: parseFloat(s.fontSize), weight: Number(s.fontWeight) || 400,
         color: s.color, ground: ground(e), family: s.fontFamily, dir: s.direction,
-        system: !!e.closest('[data-system]'), note: !!e.closest('[data-note]'), misuse: !!e.closest('[data-misuse]'), example: !!e.closest('[data-example]'), mockup: !!e.closest('[data-mockup]'),
+        system: !!e.closest('[data-system]'), note: !!e.closest('[data-note]'), svg: inSvg, placeholder: !!e.closest('[data-placeholder]'), proposed: !!e.closest('[data-proposed]'), misuse: !!e.closest('[data-misuse]'), example: !!e.closest('[data-example]'), mockup: !!e.closest('[data-mockup]'),
         clipped: s.overflow !== 'visible' && (e.scrollWidth > e.clientWidth + 1 || e.scrollHeight > e.clientHeight + 1),
       });
     }
@@ -53,8 +55,21 @@
         const k = Math.min(box.w / e.naturalWidth, box.h / e.naturalHeight);
         content = { ...box, w: e.naturalWidth * k, h: e.naturalHeight * k };
       }
-      return { tag: e.tagName.toLowerCase(), src: e.getAttribute('src'), natural: isImg ? { w: e.naturalWidth, h: e.naturalHeight } : null, box, content, misuse: !!e.closest('[data-misuse]'), mockup: !!e.closest('[data-mockup]'), detail: !!e.closest('[data-detail]') };
+      return { tag: e.tagName.toLowerCase(), src: e.getAttribute('src'), natural: isImg ? { w: e.naturalWidth, h: e.naturalHeight } : null, box, content, misuse: !!e.closest('[data-misuse]'), mockup: !!e.closest('[data-mockup]'), proposed: !!e.closest('[data-proposed]'), detail: !!e.closest('[data-detail]') };
     });
+    // Patterns, drawings and textures, so the checks can keep them out of every logo's clear space.
+    const decor = [];
+    for (const e of document.body.querySelectorAll('*')) {
+      if (e.matches('[data-logo]') || e.closest('script, style, [data-probe-skip], [data-misuse], [data-detail], [data-construction]')) continue;
+      if (e.parentElement && e.parentElement.closest('svg')) continue;
+      const s = getComputedStyle(e);
+      if (s.display === 'none' || s.visibility === 'hidden' || Number(s.opacity) === 0) continue;
+      const bg = s.backgroundImage || 'none';
+      let kind = null;
+      if (e.matches('.pattern, [data-pattern]') || e.tagName.toLowerCase() === 'svg' || /repeating-radial|url\(/.test(bg)) kind = 'pattern';
+      else if (/repeating-/.test(bg)) kind = 'texture';
+      if (kind) decor.push({ kind, cls: String(e.getAttribute('class') || e.tagName.toLowerCase()).slice(0, 40), rect: rect(e), mockup: !!e.closest('[data-mockup]') });
+    }
     const swatches = [...document.querySelectorAll('[data-swatch]')].map((e) => {
       const card = e.closest('[data-swatch-card]') || e;
       return { declared: e.dataset.swatch, bg: getComputedStyle(e).backgroundColor, printed: [...card.querySelectorAll('[data-hex]')].map((h) => h.textContent.trim()) };
@@ -64,8 +79,8 @@
     const de = document.documentElement;
     emit({
       ok: true,
-      doc: { width: de.scrollWidth, height: de.scrollHeight, viewport: innerWidth, dir: getComputedStyle(document.body).direction, lang: de.lang, fonts: [...document.fonts].map((f) => ({ family: f.family.replace(/["']/g, ''), weight: f.weight, status: f.status })) },
-      texts, logos, swatches, blocks, cards, page: getComputedStyle(document.body).backgroundColor,
+      doc: { width: de.scrollWidth, height: de.scrollHeight, viewport: innerWidth, dir: getComputedStyle(document.body).direction, lang: de.lang, placeholderNote: !!document.querySelector('[data-placeholder-note]'), fonts: [...document.fonts].map((f) => ({ family: f.family.replace(/["']/g, ''), weight: f.weight, status: f.status })) },
+      texts, logos, swatches, blocks, cards, decor, page: getComputedStyle(document.body).backgroundColor,
     });
   } catch (err) {
     emit({ ok: false, error: String((err && err.stack) || err) });

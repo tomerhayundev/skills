@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { STEPS, buildScale, buildPalette, isNeutral } from './palette.mjs';
+import { STEPS, buildScale, buildPalette, isNeutral, hueFamilies } from './palette.mjs';
 import { hexToOklch, deltaOk, contrast } from './color.mjs';
 
 test('a scale gets darker at every step and neighbours stay apart', () => {
@@ -52,4 +52,14 @@ test('a dark slate wordmark is the dark neutral, not an accent, and tints the ne
   assert.equal(roles.neutralDark.source, 'logo');
   assert.equal(roles.accent, undefined);
   assert.ok(Math.abs(hexToOklch(roles.neutralLight.hex)[2] - hexToOklch('#0F172A')[2]) < 20);
+});
+
+test('a logo of one hue family gets support colours; two families get none', () => {
+  const one = buildPalette([{ hex: '#C9A24B', share: 1 }]);
+  assert.equal(one.support.foils.length, 5);
+  for (const f of one.support.foils) assert.ok(deltaOk(f.deep, '#C9A24B') > 0.15, f.deep);
+  assert.ok(one.notes.some((n) => /one hue family/.test(n)));
+  assert.equal(hueFamilies(['#6B3E26', '#E8833A']), 1);
+  assert.ok(buildPalette([{ hex: '#6B3E26', share: 0.9 }, { hex: '#E8833A', share: 0.1 }]).support);
+  assert.equal(buildPalette([{ hex: '#1E40AF', share: 0.6 }, { hex: '#E8833A', share: 0.4 }]).support, undefined);
 });

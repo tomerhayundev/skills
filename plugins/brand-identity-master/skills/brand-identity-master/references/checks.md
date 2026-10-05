@@ -23,8 +23,10 @@ node scripts/facts-check.mjs brand/board.metrics.json --brand brand/brand.json
 | LOGO_CHANGED | A logo file is neither the original nor a recorded version | Use the original, or run `make-variants.mjs` again |
 | LOGO_DISTORTED | A logo is shown at another ratio than its own | `height: auto` or `object-fit: contain` |
 | LOGO_TOO_SMALL | A logo is under its minimum width | Make the tile or the logo bigger |
+| LOGO_CROWDED | A pattern or drawing sits inside a logo's clear space, so it reads as part of the logo (a warning in mockups) | Move the pattern to its own block or away from the logo; never behind it |
+| LOGO_BOXED (warn) | The original file, with its own solid ground, is shown outside a detail crop | Use `logo/clear.png`, the same logo with the ground taken out |
 | MISUSE_MISSING (warn) | No "never do this" tiles | Add the three misuse tiles |
-| BOARD_LONG (warn) | The board is over 5,600 px tall | Merge rows, cut the weakest card or mockup |
+| BOARD_LONG (warn) | The board is over 4,600 px tall | Set blocks side by side, merge rows, cut the weakest card |
 | CARD_BLENDS (warn) | A card has the page's ground and no edge, so it melts into the page | Set `--page` apart from the card grounds, or outline the card |
 | SWATCH_MISMATCH | A chip is drawn in another colour than it declares | Use the role's CSS variable and its real hex |
 | HEX_MISMATCH | The printed code is not the chip's colour | Print the role's hex |
@@ -59,3 +61,5 @@ node scripts/facts-check.mjs brand/board.metrics.json --brand brand/brand.json
 | FACT_NUMBER_SYSTEM (warn) | A number in system text that is not a known unit | Check it is a real value |
 | UNSOURCED | A sentence over four words that is in no source | Put the brand's quote in `copy`; mark an explanation as `data-note`; or use a label or bars |
 | EXAMPLE_UNMARKED | An example line shown as the brand's own | Wrap it in `data-example` |
+| PLACEHOLDER_UNKNOWN | A sample detail that is not in `data/placeholders.json` | Use a listed placeholder, or a text bar |
+| PLACEHOLDER_UNMARKED | Sample details with no footnote saying they are placeholders | Add the footnote in `data-placeholder-note` |

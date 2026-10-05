@@ -62,3 +62,10 @@ test('a designer note may explain the system in its own words, but never state a
   assert.ok(fails([t('Write to hello@aurelle.example to book.', { note: true })]).includes('FACT_EMAIL'));
   assert.ok(fails([t('A seamless, warm welcome.', { note: true })]).includes('CLICHE'));
 });
+
+test('sample details are allowed only from the placeholder list, and only with a footnote', () => {
+  const ph = (text) => t(text, { placeholder: true });
+  assert.deepEqual(checkFacts([ph('Name Surname'), ph('hello@aurelle.com'), ph('+00 000 000 000')], brand, data, { placeholderNote: true }).filter((f) => f.level === 'fail'), []);
+  assert.ok(checkFacts([ph('Name Surname')], brand, data, {}).some((f) => f.code === 'PLACEHOLDER_UNMARKED'));
+  assert.ok(checkFacts([ph('Élise Marchand')], brand, data, { placeholderNote: true }).some((f) => f.code === 'PLACEHOLDER_UNKNOWN'));
+});

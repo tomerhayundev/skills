@@ -28,32 +28,30 @@ loud, glossy, busy, discount, cute, techy.
 ## Colour
 
 - The ground is the darkest neutral or the light neutral (bone, ivory), never a mid-grey.
-- The logo's metal or colour is the only accent and covers at most a tenth of the board.
+- The logo's metal or colour is the signature and covers at most a tenth of the board. When the logo holds one hue, one deep jewel tone from `support.foils` (bottle green, ink blue, oxblood) joins it as the ground of one or two blocks, so the palette is not only tints of the metal.
 - Tints stay close to their base. No bright steps from the scale on the board itself; show them in the strip only.
 - Neutrals are warm when the logo is warm (gold, brass), cool when it is cool (silver, ink blue).
 - Gradients only as a whisper on the hero ground (a few percent of lightness), or none.
 
 ## Layout
 
-### A Gallery column
+### A Folio mosaic
 
-A tall full-width hero, then every block in a centred 8-span column with wide margins. Mockups sit in a row of three below. It feels like walking through a quiet gallery.
+A framed hero with the name and the logo side by side on the deep ground, then rows of two or three blocks of unequal width (7/5, 4/4/4). The palette runs as tall columns across one full row. It reads like a jeweller's catalogue spread.
 
 ### B Split folio
 
-The hero takes 7 spans and the essence sits beside it in 5. Then rows alternate 7/5 and 5/7, each with one block. Captions sit under the blocks like folio notes.
+The hero takes 8 spans with the logo and the name; the essence and the strategy sit beside it in 4, on a lighter panel. Then rows alternate 7/5 and 5/7, two blocks to a row. Captions sit under the blocks like folio notes.
 
-### C Monogram grid
+### C Monogram tray
 
-A square hero with the mark centred inside `stroke-rings`. Then equal tiles four across for the logo system and the palette, as if laid out on a jeweller's tray.
+A square hero with the mark whole and alone on the deep ground, the name beside it; a band of faint `stroke-rings` may run along the hero's far edge, well clear of the logo. Then tiles four across for the logo system and the palette, as if laid out on a jeweller's tray, and one wide application scene.
 
 In every variant:
 
-- generous space between cards and sections (96 px between sections);
+- gaps of 24 to 32 px between blocks and 48 to 64 px between rows, with wide padding inside each block;
 - every card full and finished: quiet means few colours and fine lines, never empty tiles;
 - body copy never spans more than 8 columns.
-
-Layout families: A uses the editorial layout with the name-led hero; B the cards layout with a mark-crop hero; C the editorial layout with a band hero.
 
 ## Pattern
 
@@ -67,7 +65,7 @@ Layout families: A uses the editorial layout with the name-led hero; B the cards
 
 Choose one:
 
-- an oversize crop of the mark across the hero, cut by the edge;
+- the logo large and alone on a deep ground, nothing behind or around it;
 - one line of display type at 120 px or more, a quote from the brand;
 - the full mark large and alone, with a whole screen of empty ground around it.
 

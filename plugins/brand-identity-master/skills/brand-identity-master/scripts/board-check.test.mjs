@@ -79,12 +79,30 @@ test('a detail figure may crop the original; an unknown font with Hebrew only wa
   assert.ok(!f.some((x) => x.level === 'fail'));
 });
 
-test('a board over 5600 px tall gets a length warning', () => {
-  const f = checkBoard(M({ doc: { width: 1600, height: 7600, viewport: 1600, dir: 'ltr', fonts: [] } }), brand, { fonts });
+test('a board over 4600 px tall gets a length warning; 4200 does not', () => {
+  assert.ok(!checkBoard(M({ doc: { width: 1600, height: 4200, viewport: 1600, dir: 'ltr', fonts: [] } }), brand, { fonts }).some((x) => x.code === 'BOARD_LONG'));
+  const f = checkBoard(M({ doc: { width: 1600, height: 4700, viewport: 1600, dir: 'ltr', fonts: [] } }), brand, { fonts });
   assert.ok(f.some((x) => x.code === 'BOARD_LONG' && x.level === 'warn'));
 });
 
 test('cards with the page ground and no edge warn that they melt into the page', () => {
   const f = checkBoard(M({ page: 'rgb(21, 18, 14)', cards: [{ cls: 'card', bg: 'rgb(21, 18, 14)', image: false, edge: false }, { cls: 'card', bg: 'rgb(201, 162, 75)', image: false, edge: false }] }), brand, { fonts });
   assert.ok(f.some((x) => x.code === 'CARD_BLENDS' && /1 card/.test(x.message)));
+});
+
+test('the original with a solid ground warns when a clear version exists, except in a detail crop', () => {
+  const b = { ...brand, logo: { ...brand.logo, versions: { clear: { path: 'logo/clear.png', sha256: 'x' } } } };
+  const f = checkBoard(M(), b, { fonts });
+  assert.ok(f.some((x) => x.code === 'LOGO_BOXED' && x.level === 'warn'));
+  assert.ok(!checkBoard(M({ logos: [L({ detail: true }), L({ misuse: true })] }), b, { fonts }).some((x) => x.code === 'LOGO_BOXED'));
+  assert.ok(!checkBoard(M(), brand, { fonts }).some((x) => x.code === 'LOGO_BOXED'));
+});
+
+test('a pattern behind a logo fails; in a mockup it warns; away from the logo it passes', () => {
+  const ring = { kind: 'pattern', cls: 'pattern p-stroke-rings', rect: { x: -40, y: -40, w: 300, h: 200 }, mockup: false };
+  assert.ok(codes(M({ decor: [ring] })).includes('LOGO_CROWDED'));
+  const f = checkBoard(M({ logos: [L({ mockup: true }), L({ misuse: true })], decor: [ring] }), brand, { fonts });
+  assert.ok(f.some((x) => x.code === 'LOGO_CROWDED' && x.level === 'warn'));
+  assert.ok(!checkBoard(M({ decor: [{ ...ring, rect: { x: 600, y: 0, w: 300, h: 200 } }] }), brand, { fonts }).some((x) => x.code === 'LOGO_CROWDED'));
+  assert.ok(!checkBoard(M({ logos: [L({ proposed: true }), L({ misuse: true })], decor: [ring] }), brand, { fonts }).some((x) => x.code === 'LOGO_CROWDED'));
 });
