@@ -91,3 +91,18 @@ jobs:
         run: |
           S=plugins/seo-geo-master/skills/seo-geo-master/scripts
           node --test $S/*.test.mjs $S/lib/*.test.mjs
+
+      # The render tests drive headless Chrome and skip themselves when none is found, so this
+      # step fails if Chrome is missing (a skipped render test must never pass CI unnoticed).
+      # The font-existence checks stay skipped: they need BRAND_NET=1 and the network.
+      - name: brand-identity-master scripts (render, boards, palette, checks, shared libs)
+        run: |
+          S=plugins/brand-identity-master/skills/brand-identity-master/scripts
+          node -e '
+            import(process.argv[1]).then((m) => {
+              const c = m.findChrome();
+              if (!c) { console.error("No Chrome on this runner: the render tests would skip"); process.exit(1); }
+              console.log("Chrome for the render tests:", c);
+            });
+          ' "$PWD/$S/lib/chrome.mjs"
+          node --test $S/*.test.mjs $S/lib/*.test.mjs
