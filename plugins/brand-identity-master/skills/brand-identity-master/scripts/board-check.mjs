@@ -71,6 +71,7 @@ export function checkBoard(m, brand, { fonts }) {
     if (overlapArea(m.blocks[i].rect, m.blocks[j].rect) > 4) add('fail', 'BLOCK_OVERLAP', `Block "${m.blocks[i].id}" overlaps block "${m.blocks[j].id}"`);
   }
 
+  if (m.doc.height > 5600) add('warn', 'BOARD_LONG', `The board is ${Math.round(m.doc.height)} px tall; aim for 5200 or less: merge rows, cut a weak card or mockup`);
   if (m.doc.width > m.doc.viewport + 1) add('fail', 'OFF_PAGE', `The page is ${m.doc.width} px wide, wider than its ${m.doc.viewport} px window`);
   for (const t of visible) if (t.rect.x < -1 || t.rect.x + t.rect.w > m.doc.viewport + 1) add('fail', 'OFF_PAGE', `Text runs off the page: "${short(t.text)}"`);
 

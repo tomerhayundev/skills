@@ -22,9 +22,7 @@ The default order is below. A direction may reorder or merge blocks, but never l
    - voice: we are / we are not, say and don't say, examples marked;
    - three patterns from different recipes;
    - eight icons from `data/icons/` picked by sector, each with a plain label naming what it depicts.
-6. **Applications**, as scenes:
-   - stationery, packaging, a social grid of six tiles, a website;
-   - four to six mockups in all (see `mockups.md`).
+6. **Applications**: three rows of scenes from the mockup kit (stationery and packaging, website and app, the world and social), four to six pieces in all (see `mockups.md`).
 7. **Colophon**: the brand name and "Guidelines".
 
 ## A full board
@@ -77,6 +75,7 @@ A studio board is dense with real content and looks finished. Empty tiles and gr
 - No `vh` units or full-window heights. `render.mjs` refuses a page whose height follows the window.
 - Every logo outside a mockup or a detail crop is at least `logo.minSize.screenPx` wide. Make the card bigger rather than the logo smaller.
 - Space sits between cards (24 px) and between sections (56 to 96 px), not inside empty tiles.
+- The whole board stays near 5,200 px tall at 1,600 px wide. Past 5,600 px board-check warns (BOARD_LONG): merge rows, or cut the weakest card or mockup. Long boards read as unedited.
 - Every text sits on a ground it passes contrast on: use the role's `on` colour.
 
 ## The one bold move

@@ -24,6 +24,7 @@ node scripts/facts-check.mjs brand/board.metrics.json --brand brand/brand.json
 | LOGO_DISTORTED | A logo is shown at another ratio than its own | `height: auto` or `object-fit: contain` |
 | LOGO_TOO_SMALL | A logo is under its minimum width | Make the tile or the logo bigger |
 | MISUSE_MISSING (warn) | No "never do this" tiles | Add the three misuse tiles |
+| BOARD_LONG (warn) | The board is over 5,600 px tall | Merge rows, cut the weakest card or mockup |
 | SWATCH_MISMATCH | A chip is drawn in another colour than it declares | Use the role's CSS variable and its real hex |
 | HEX_MISMATCH | The printed code is not the chip's colour | Print the role's hex |
 | HEX_MISSING (warn) | A chip has no printed code | Add the code in `data-hex` |

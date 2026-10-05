@@ -1,21 +1,12 @@
 {
   "name": "brand-identity-master",
-  "version": "0.1.0",
-  "description": "Turns a logo into a visual identity: it reads the logo's real colours and shape and the brand's own words, picks one of six design directions, and writes a validated brand file (brand.json, DESIGN.md, tokens.css) plus a premium brand identity board rendered from HTML by headless Chrome or Edge. The logo is never redrawn, no fact is invented, and no image model or API key is needed.",
+  "version": "0.2.0",
+  "description": "Turns a logo into a visual identity: it reads the logo's real colours and shape and the brand's own words, picks one of six design directions, and writes a validated brand file (palette, fonts, logo rules, voice) plus a premium brand identity board rendered from HTML. The logo is never redrawn, no fact is invented, and no image model or API key is needed.",
   "author": {
     "name": "Tomer Hayun",
     "url": "https://github.com/tomerhayundev"
   },
   "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/brand-identity-master",
   "license": "CC-BY-ND-4.0",
-  "keywords": [
-    "brand",
-    "brand-identity",
-    "logo",
-    "brand-guidelines",
-    "style-guide",
-    "palette",
-    "typography",
-    "design-system"
-  ]
+  "keywords": ["brand", "brand-identity", "logo", "brand-guidelines", "style-guide", "palette", "typography", "design-system"]
 }

@@ -78,3 +78,8 @@ test('a detail figure may crop the original; an unknown font with Hebrew only wa
   assert.ok(f.some((x) => x.code === 'RTL_FONT' && x.level === 'warn'));
   assert.ok(!f.some((x) => x.level === 'fail'));
 });
+
+test('a board over 5600 px tall gets a length warning', () => {
+  const f = checkBoard(M({ doc: { width: 1600, height: 7600, viewport: 1600, dir: 'ltr', fonts: [] } }), brand, { fonts });
+  assert.ok(f.some((x) => x.code === 'BOARD_LONG' && x.level === 'warn'));
+});

@@ -8,7 +8,7 @@ compatibility: Node 18+, and Chrome or Edge (any Chromium browser) for reading t
 
 Turns a logo into a visual identity: a brand file other skills read (`brand/brand.json`), and a brand identity board ready to show a client. Everything comes from the logo and the brand's own words. The board is HTML rendered to PNG by a headless browser, and the logo file is placed as it is, never redrawn.
 
-This is version 0.1.0 of the skill. Asked which version is loaded, answer with this line: an installed copy changes only when it is updated, and a running session keeps the copy it started with.
+This is version 0.2.0 of the skill. Asked which version is loaded, answer with this line: an installed copy changes only when it is updated, and a running session keeps the copy it started with.
 
 Scripts live in this skill's `scripts/` folder: run them as `node <this skill>/scripts/<name>.mjs`. Output goes to `brand/` in the working folder. Answer the user in their language; the board is in the brand's language.
 
@@ -64,7 +64,7 @@ In this order; each step passes before the next.
 1. Complete `brand.json`: logo rules, voice, copy ([brand file](references/brand-file.md)). If a colour changed since the card, run `make-variants.mjs` again.
 2. `node scripts/validate-brand.mjs brand/brand.json`: fix every error.
 3. `node scripts/tokens.mjs brand/brand.json` and `node scripts/design-md.mjs brand/brand.json`. Never write `tokens.css` or `DESIGN.md` by hand.
-4. Write `brand/board.html` from [the board skeleton](assets/board/skeleton.html), following the [board rules](references/board.md), the direction's layout, [patterns](references/patterns.md), [icons](data/icons.json) chosen for the sector and [mockups](references/mockups.md) copied from [the mockup gallery](assets/board/mockups.html). The skeleton shows structure and conventions only: its look is not a look to copy.
+4. Write `brand/board.html` from [the board skeleton](assets/board/skeleton.html), following the [board rules](references/board.md), the direction's layout, [patterns](references/patterns.md), [icons](data/icons.json) chosen for the sector and [mockups](references/mockups.md) built from [the mockup kit](assets/board/mockups.html). The skeleton shows structure and conventions only: its look is not a look to copy.
 5. `node scripts/render.mjs brand/board.html`: it measures the height, writes `board-vN.png` and `board-vN@2x.png`, and copies the latest to `board.png`.
 6. `node scripts/board-check.mjs brand/board.metrics.json --brand brand/brand.json` and `node scripts/facts-check.mjs brand/board.metrics.json --brand brand/brand.json`. Fix every failure in the page or in `brand.json`, never by weakening a check, then render again ([checks](references/checks.md)).
 

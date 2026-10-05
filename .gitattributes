@@ -5,3 +5,5 @@
 *.mp3 binary
 *.png binary
 *.jpg binary
+# Licence files are shipped byte for byte as their authors wrote them.
+*-OFL.txt -text
