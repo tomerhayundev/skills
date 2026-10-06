@@ -4,7 +4,7 @@ description: Use when making an event recap, conference highlight or launch-even
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.9.3 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 73c419b29bcc -->
+<!-- Generated from remotion-video-master 0.9.4 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: f8d2533f117d -->
 
 # Remotion event recap video
 

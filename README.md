@@ -89,7 +89,8 @@ with you before it builds anything.
 - **One engine.** The brand's own motif in every transition, beat-locked music, each platform's safe
   zones, one manifest for every aspect and language.
 - **Measured, not eyeballed.** Frame-pop and loudness checks, a phone-size contact sheet, and a
-  critique loop until every score is 8 or more.
+  critique loop until every score is 8 or more. The critics also run five positive tests (poster,
+  timid, one glance, handshake, rests), so a film with no defects still has to be worth posting.
 - **Every format.** Promo, product demo, tutorial, explainer, and six more, each with its own rules.
 - **References built in.** With no reference from you, it pulls one from the [sources library](sources/README.md):
   the exact page for the move it needs, how to read it and what to take, never a copy.

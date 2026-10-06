@@ -54,9 +54,16 @@ pops; anything blank or half-drawn between states; text over text, text leaving 
 labels on the wrong thing; unequal spacing in rows and lists; edges that do not line up; holds where
 nothing moves; whether it adds what it should.
 
+Then three positive tests on its settled frame, each PASS or FAIL with the frame's time. Poster:
+would the brand post this frame alone as a still, or does it need the motion to excuse it? Timid: is
+any line small, parked in a corner or far from its subject by default rather than by choice?
+Handshake: name the ways the type or graphics acknowledge this picture (an accent taken from the
+shot, the subject passing in front of the type, the shot's light or depth, the palette's warmth, the
+motif); fewer than two is a sticker. A failed test is a defect (visible).
+
 You only report: edit nothing. Return: KEEP, REVISE or REJECT; the defects ranked, each with how bad
 it is (stops the film, visible, minor), its time and where in the frame, and its fix; the three
-fixes worth the most. Under 400 words.
+fixes worth the most. Under 450 words.
 ```
 
 ## Film critic (round one)
@@ -86,14 +93,30 @@ The pack is a starting point: pull any other frames you need from the film with 
    label on the wrong thing, unequal spacing, text too small on the phone sheet.
 7. Sound, from audio.txt: where the lift lands against the picture, the level, any effect louder
    than the music.
-8. Score each from 1 to 10: <the profile's critique list, each with its one-line meaning from
+8. Five positive tests. A film can be free of defects and still not worth posting; these ask what
+   it does well. For each: PASS or FAIL, with the time of the frame that proves it.
+   a. Poster: the turn's frame and the close's frame, each alone. Would the brand post it as a
+      still? If it needs the motion to excuse the composition, the composition is not done.
+   b. Timid: is any line apologizing (small, parked in a corner, far from its subject)? Small is a
+      choice; timid is a default.
+   c. One glance: look at contact.png shrunk to a thumbnail. Can you still tell the hook line, the
+      body lines and the hero (the payoff or the offer) apart? If they blur together, their sizes
+      and contrast are too close.
+   d. Handshake: for each scene with type or graphics, name the ways they acknowledge this picture or
+      this brand (an accent taken from the shot, the subject passing in front of the type, the
+      shot's light or depth on the graphic, the palette's warmth, the motif). Fewer than two: a
+      sticker on the film, not part of it.
+   e. Rests: each stretch with no line on screen. A composed rest (the subject carries the frame) or
+      a gap (the design just stopped)?
+9. Score each from 1 to 10: <the profile's critique list, each with its one-line meaning from
    verification.md>.
 
-Then the problems, ranked by how much each costs the film, each with its time, tagged polish (easing,
-size, a word, a few frames of timing inside a beat) or structure (a beat with no job, the order, the
-turn, the concept, and any fix that changes a beat's length or what happens in it), and one fix from
-the material that exists. End with one line: SHIP or ONE MORE PASS.
-Reply with the whole report, under 900 words.
+Then the problems, ranked by how much each costs the film (a failed positive test is a problem
+too), each with its time, tagged polish (easing, size, a word, a few frames of timing inside a beat)
+or structure (a beat with no job, the order, the turn, the concept, and any fix that changes a
+beat's length or what happens in it), and one fix from the material that exists. End with one line:
+SHIP or ONE MORE PASS.
+Reply with the whole report, under 1000 words.
 ```
 
 ## Verification critic (round two and three: a new critic each time)
@@ -106,9 +129,11 @@ The new film: <out/<id>.mp4>, its critic pack: <out/_critic/>. The last critic's
 For every problem in that report: FIXED, PARTLY or STILL THERE, with the time and what you see now.
 Check it against the frames; nobody has told you what was changed. Then hunt for what broke: a fix
 often makes the next defect (something now covered, a moved object crossing a line of text, a hold
-where the cut used to be). Then the scores, and why each moved or did not.
+where the cut used to be). Then the five positive tests (poster, timid, one glance, handshake,
+rests, as the round-one critic ran them) again from the frames, each PASS or FAIL with its time.
+Then the scores, and why each moved or did not.
 
-End with SHIP or ONE MORE PASS (at most three fixes). Reply with the whole report, under 600 words.
+End with SHIP or ONE MORE PASS (at most three fixes). Reply with the whole report, under 700 words.
 ```
 
 Save each report as it comes back, word for word, as `docs/critic-round-<n>.md`: the next critic

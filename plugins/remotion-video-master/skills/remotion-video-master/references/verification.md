@@ -294,6 +294,16 @@ one owner per scene file, reviewers that never edit, a fixer only where a review
   else, as a stranger with a thumb on the screen: would they stop? The hook score is capped by this.
 - Before scoring, it narrates what a first-time viewer understands every 2 s, and what they would
   not. Anything the message needs that a first-time viewer would not understand is a problem.
+- It runs five positive tests, because a critic that only hunts defects passes a clean, basic film:
+  **poster** (the turn's and the close's frames alone: would the brand post them as stills?),
+  **timid** (no line small or parked in a corner by default), **one glance** (at thumbnail size the
+  hook line, the body lines and the hero are still told apart), **handshake** (the type and graphics
+  in each scene acknowledge the picture or the brand in at least two ways: an accent from the shot,
+  the subject passing in front of the type, the shot's light or depth, the palette's warmth, the
+  motif) and **rests** (each stretch with no line is a composed rest, not a gap). Each verdict
+  names the frame that proves it; a verdict with no frame does not count. A failed test is a
+  problem in the ranked list like any other. A scene critic runs the first three on its scene's
+  settled frame.
 - It returns the problems ranked by what each costs the film, with times, then the scores, and ends
   with one line: SHIP or ONE MORE PASS. Fix the biggest first: a weak opening is not averaged away
   by strengths elsewhere.
