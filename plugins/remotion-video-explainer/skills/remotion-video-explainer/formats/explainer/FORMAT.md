@@ -58,6 +58,8 @@ The motif is the argument's through-line (it becomes the diagram). Charts with `
 the base's spring; numbers count up only to real values. Every point is built out of the last picture:
 no slide-deck cuts.
 
+Diagrams follow an editorial grammar in the brand's own tokens. The accent marks only the one or two things the viewer should look at first; the rest is ink and muted. Every node earns its place: about four in view, never twelve. A diagram draws in the order the voice explains it, at most two items entering per beat, its lines drawn with `evolvePath`; secondary flows are dashed. Text at the film's reading sizes: no small mono labels or eyebrows, and a label is cut before it is shrunk. A diagram never stands still: the camera pushes toward what the voice names, and the next point is built out of this picture. Types that read on screen: a loop, a flow, layers, a pyramid or funnel, before and after, a timeline, a quadrant, a simple sankey; tables, schemas and class diagrams do not. A product made of parts (a device, an app stack) can open as an exploded view, its layers lifting apart on one axis; the same shot serves a launch film. References for this: `find-sources.mjs --need=svg-animation --format=explainer`.
+
 ## Verification
 
 Pops with `--cuts`. Loudness about -16 LUFS. Critique: the base criteria plus one-sentence recall: someone who
@@ -70,3 +72,4 @@ watched it once says the idea back.
 | Three ideas in one explainer | One idea; the others are other videos |
 | Animation before the script is timed | Time the script aloud first |
 | Diagrams that appear whole | Draw them in the order the voice explains them |
+| A diagram in a print skin (tiny labels, its own palette, two accents) | The brand's tokens, one accent, film reading sizes |
