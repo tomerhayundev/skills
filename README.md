@@ -83,7 +83,11 @@ One master skill that makes every kind of Remotion video, and ten specialists br
 **Every kind of Remotion video, in one skill.** Say "make a video for my app" and it brainstorms
 with you before it builds anything.
 
-- **Brief first.** What the video is for, where it runs, and a length recommended for those platforms.
+- **A chooser, not a questionnaire.** One local page replaces the question call: what the video is for, its
+  kind, where it runs, a length recommended for those platforms, and the look. Every look in the library
+  plays as an 8 s sample film on one screen; Claude picks the look unless you tap one (two to mix them). Each
+  step fits the screen, in English or Hebrew, and the samples play in the shape of the platform you chose
+  (wide, tall, square or portrait).
 - **The story is the core.** One message, a timed script and hooks to choose from, approved before
   anything moves.
 - **One engine.** The brand's own motif in every transition, beat-locked music, each platform's safe
@@ -257,6 +261,11 @@ credit, but not publish changed versions. The exception is the bundled music tra
 `plugins/remotion-video-master/skills/remotion-video-master/assets/music/` (and its copy in each
 `remotion-video-*` specialist), which is Sascha Ende's work under CC BY 4.0 (see its
 [CREDITS.md](plugins/remotion-video-master/skills/remotion-video-master/assets/music/CREDITS.md)).
+
+The `remotion-video-master` chooser plays ten sample films, published as the `styles-v1` release of this repo and
+all made for a fictional product. The few photos and clips in them are CC0 or public domain, and their fonts are
+open-licensed; credits are in
+[SOURCES.md](plugins/remotion-video-master/skills/remotion-video-master/assets/styles/SOURCES.md).
 
 The `brand-identity-master` skill bundles open-licensed fonts (SIL Open Font License 1.1, unmodified,
 each with its licence file). Its method adapts ideas, with no text copied, from an MIT-licensed design

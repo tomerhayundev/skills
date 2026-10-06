@@ -1,0 +1,1071 @@
+{
+  "version": 1,
+  "about": "The looks the chooser offers: how a film looks and feels (what it is made of, its light, line, colour and texture), never what happens in it. Order is priority: the first look that fits the format and has its material is the default recommendation. Any two may be mixed.",
+  "loopBase": "https://github.com/tomerhayundev/skills/releases/download/styles-v1/",
+  "defaultWhy": "fits this kind of video and uses what you have",
+  "defaultWhyI18n": {
+    "he": "מתאים לסוג הסרטון הזה ולחומרים שיש לכם"
+  },
+  "styles": [
+    {
+      "id": "footage",
+      "name": "Real footage and photos",
+      "line": "Your real world on screen: true light, real textures, honest and close.",
+      "needsAny": [
+        "footage",
+        "photos"
+      ],
+      "missing": "Needs your own clips or photos",
+      "fits": [
+        "short-ad",
+        "standard-ad",
+        "bumper-ad",
+        "teaser",
+        "launch-film",
+        "social-organic",
+        "event-recap",
+        "testimonial"
+      ],
+      "poster": "footage.webp",
+      "loop": {
+        "file": "footage.mp4",
+        "seconds": 8,
+        "sha256": "42a41bb4258778c6627c5e0f6f558c7f18b46d5c86c2ceb5cec5e1a1aec533f9",
+        "bytes": 654604
+      },
+      "i18n": {
+        "he": {
+          "name": "צילומים אמיתיים",
+          "line": "העולם האמיתי שלכם על המסך: אור אמיתי, מרקמים אמיתיים, כן וקרוב.",
+          "missing": "צריך סרטונים או תמונות משלכם",
+          "feel": [
+            "אמיתי",
+            "חם",
+            "קרוב"
+          ],
+          "poster": "footage-he.webp",
+          "loop": {
+            "file": "footage-he.mp4",
+            "seconds": 8,
+            "sha256": "5e43910e16d24a14129409c6bde05277ffe6199f4f0b9675c12c41c1f0aa1132",
+            "bytes": 645117
+          },
+          "loops": {
+            "tall": {
+              "file": "footage-he-tall.mp4",
+              "seconds": 8,
+              "sha256": "729a31e5df7f43a043b3f8bea76bfb6501299b845e12d9d55b4287265f8a4a4c",
+              "bytes": 595346
+            },
+            "square": {
+              "file": "footage-he-square.mp4",
+              "seconds": 8,
+              "sha256": "2070bc6a76ffb72b418a71b513390ec8b824e23358a4dcc4647f5fa911202cb0",
+              "bytes": 466405
+            },
+            "portrait": {
+              "file": "footage-he-portrait.mp4",
+              "seconds": 8,
+              "sha256": "ec7511c0abfdf480b44260c4ea89a49c3048f0bc59e9d50dc551eeaa9155ef71",
+              "bytes": 519318
+            }
+          }
+        }
+      },
+      "feel": [
+        "real",
+        "warm",
+        "close"
+      ],
+      "loops": {
+        "tall": {
+          "file": "footage-tall.mp4",
+          "seconds": 8,
+          "sha256": "17d1a66eb15525e22ae9e2dd35d07d8b411a793dc63e02b4817bda8c3db0f009",
+          "bytes": 603178
+        },
+        "square": {
+          "file": "footage-square.mp4",
+          "seconds": 8,
+          "sha256": "64e584f40957ef6435c4a9e211e8220b31e76d101f6074e86e8ae05f1fe24a3a",
+          "bytes": 474415
+        },
+        "portrait": {
+          "file": "footage-portrait.mp4",
+          "seconds": 8,
+          "sha256": "dfb2a666ed244e6d7b69e7cfb86e6eabf0ec83ee347985d1f69b77b5e75cc853",
+          "bytes": 526219
+        }
+      }
+    },
+    {
+      "id": "ui-device",
+      "name": "Your product's screens",
+      "line": "Your real product, crisp and clean, on a phone or a laptop.",
+      "needsAny": [
+        "ui"
+      ],
+      "missing": "Needs your app or website",
+      "fits": [
+        "product-demo",
+        "tutorial",
+        "onboarding",
+        "app-store-preview",
+        "feature-announcement",
+        "launch-film",
+        "landing-loop",
+        "short-ad",
+        "standard-ad"
+      ],
+      "poster": "ui-device.webp",
+      "loop": {
+        "file": "ui-device.mp4",
+        "seconds": 8,
+        "sha256": "d86e723c1fbb0bd3bb9d809d9afe4988ad2d37d2f41d1b2f312750fb206caa3e",
+        "bytes": 334533
+      },
+      "i18n": {
+        "he": {
+          "name": "המסכים של המוצר",
+          "line": "המוצר האמיתי שלכם, חד ונקי, בטלפון או במחשב.",
+          "missing": "צריך אפליקציה או אתר",
+          "feel": [
+            "ברור",
+            "מודרני",
+            "מדויק"
+          ],
+          "poster": "ui-device-he.webp",
+          "loop": {
+            "file": "ui-device-he.mp4",
+            "seconds": 8,
+            "sha256": "25dd2d944e34a84b3bb1a3b9ef1a966b36257caf4778ac50093178c03b0275f7",
+            "bytes": 302790
+          },
+          "loops": {
+            "tall": {
+              "file": "ui-device-he-tall.mp4",
+              "seconds": 8,
+              "sha256": "e1e11c2dcd221fa299680fc40b6d783aa38f29160828fa1f02efe2103e03cd68",
+              "bytes": 336020
+            },
+            "square": {
+              "file": "ui-device-he-square.mp4",
+              "seconds": 8,
+              "sha256": "14b44f0ed6ef5ff9e41b71fbaeeb900061193726a2474f7c1b89823ff714a041",
+              "bytes": 223325
+            },
+            "portrait": {
+              "file": "ui-device-he-portrait.mp4",
+              "seconds": 8,
+              "sha256": "83fb331e7d775c7b2ecb83ef695c99870c891c64e603660af73cabde25939117",
+              "bytes": 288362
+            }
+          }
+        }
+      },
+      "feel": [
+        "clear",
+        "modern",
+        "precise"
+      ],
+      "loops": {
+        "tall": {
+          "file": "ui-device-tall.mp4",
+          "seconds": 8,
+          "sha256": "6a1e1a928da80c9d35b6e165681e2cc4fc682583560363507e0f9350822681c3",
+          "bytes": 365947
+        },
+        "square": {
+          "file": "ui-device-square.mp4",
+          "seconds": 8,
+          "sha256": "807573d497dfa3c756175667d79fba9fab0d5f5b73eb4458069c04264177a404",
+          "bytes": 243961
+        },
+        "portrait": {
+          "file": "ui-device-portrait.mp4",
+          "seconds": 8,
+          "sha256": "b6f94f7d06e4cebde4482f541cec32b6e15d85e5ea16f83820c5d7646532bc50",
+          "bytes": 311419
+        }
+      }
+    },
+    {
+      "id": "line-art",
+      "name": "Wireframe and line drawing",
+      "line": "Fine lines on a clean ground, like a blueprint.",
+      "fits": [
+        "explainer",
+        "landing-loop",
+        "feature-announcement",
+        "teaser",
+        "product-demo",
+        "onboarding",
+        "launch-film"
+      ],
+      "poster": "line-art.webp",
+      "loop": {
+        "file": "line-art.mp4",
+        "seconds": 8,
+        "sha256": "db3d15ca4dbe60295b1c17376105997b908f426fab903e0704dcc73b30f20038",
+        "bytes": 836337
+      },
+      "i18n": {
+        "he": {
+          "name": "קווים ושרטוט",
+          "line": "קווים דקים על רקע נקי, כמו שרטוט.",
+          "feel": [
+            "מדויק",
+            "אוורירי",
+            "טכני"
+          ],
+          "poster": "line-art-he.webp",
+          "loop": {
+            "file": "line-art-he.mp4",
+            "seconds": 8,
+            "sha256": "e204b361b448cd17b1675f6843f1f51e387ba076c8bb1711a6c96402effadc51",
+            "bytes": 827019
+          },
+          "loops": {
+            "tall": {
+              "file": "line-art-he-tall.mp4",
+              "seconds": 8,
+              "sha256": "efb577902214a944fee2f066402bdb895bb9ca5ea60d05bc1563a8648b38425c",
+              "bytes": 987227
+            },
+            "square": {
+              "file": "line-art-he-square.mp4",
+              "seconds": 8,
+              "sha256": "c360ccfb4591333fdbbee3a8be2c28a05938373f360a9b6bad2dd916e9e2c281",
+              "bytes": 549951
+            },
+            "portrait": {
+              "file": "line-art-he-portrait.mp4",
+              "seconds": 8,
+              "sha256": "2aa6f3b250c9f7f143964e2f77b39612e16b225f7a8057e6385a8e1a8a9a3b96",
+              "bytes": 748038
+            }
+          }
+        }
+      },
+      "feel": [
+        "precise",
+        "airy",
+        "technical"
+      ],
+      "loops": {
+        "tall": {
+          "file": "line-art-tall.mp4",
+          "seconds": 8,
+          "sha256": "4caa0d9e8e1d41f5f300cda1e52804744ce5895ae01ece42792bf25ca1053d66",
+          "bytes": 973292
+        },
+        "square": {
+          "file": "line-art-square.mp4",
+          "seconds": 8,
+          "sha256": "8dbb06d8e19a2c48eb028fd12c952be2b75d36396170d9242d0d001bd2b575e8",
+          "bytes": 553059
+        },
+        "portrait": {
+          "file": "line-art-portrait.mp4",
+          "seconds": 8,
+          "sha256": "0703afdae0311b5796a9521682709bb4ecfcf494edb96ce4ccec271fd3cba8c9",
+          "bytes": 756989
+        }
+      }
+    },
+    {
+      "id": "vector",
+      "name": "Flat illustration",
+      "line": "Simple shapes in solid colours, easy to read at a glance.",
+      "fits": [
+        "explainer",
+        "onboarding",
+        "social-organic",
+        "short-ad",
+        "standard-ad",
+        "tutorial"
+      ],
+      "poster": "vector.webp",
+      "loop": {
+        "file": "vector.mp4",
+        "seconds": 8,
+        "sha256": "2f16f3d767d62daea9ebee9ae6a5940c3964c66aa8aae65f31497ae42f11e659",
+        "bytes": 300721
+      },
+      "i18n": {
+        "he": {
+          "name": "איור שטוח",
+          "line": "צורות פשוטות בצבעים מלאים, קלות לקריאה במבט.",
+          "feel": [
+            "ידידותי",
+            "נועז",
+            "שובב"
+          ],
+          "poster": "vector-he.webp",
+          "loop": {
+            "file": "vector-he.mp4",
+            "seconds": 8,
+            "sha256": "3e7b53cbd43779b64de10fada376e10141766036a85ae6025be3dc25d3ea526e",
+            "bytes": 298564
+          },
+          "loops": {
+            "tall": {
+              "file": "vector-he-tall.mp4",
+              "seconds": 8,
+              "sha256": "142e1973af31241753533e8b2461b8cbe6fd5b3f03e30d2ea28a1269f325ea79",
+              "bytes": 314892
+            },
+            "square": {
+              "file": "vector-he-square.mp4",
+              "seconds": 8,
+              "sha256": "abdb845681263d20619c7dfa200f62761c75534ee38295531af124bfb5132424",
+              "bytes": 238668
+            },
+            "portrait": {
+              "file": "vector-he-portrait.mp4",
+              "seconds": 8,
+              "sha256": "4d8efc88e1b52d5355654f7e881d545b5133bfc494d0667b1bc44e8443a048c6",
+              "bytes": 270210
+            }
+          }
+        }
+      },
+      "feel": [
+        "friendly",
+        "bold",
+        "playful"
+      ],
+      "loops": {
+        "tall": {
+          "file": "vector-tall.mp4",
+          "seconds": 8,
+          "sha256": "95be8757e4f275ae74d42323af1b2482439c57f845f303bce08044995b38e14a",
+          "bytes": 311765
+        },
+        "square": {
+          "file": "vector-square.mp4",
+          "seconds": 8,
+          "sha256": "e03c7c64f0adcd7e51fcf99eeae14fb737334e16c8b580de5fcb7781b1c336a1",
+          "bytes": 237607
+        },
+        "portrait": {
+          "file": "vector-portrait.mp4",
+          "seconds": 8,
+          "sha256": "6f6f800f2d951e8b661327172843869228156b1383f182131d3b919ca96d52b5",
+          "bytes": 271721
+        }
+      }
+    },
+    {
+      "id": "kinetic-type",
+      "name": "Moving type",
+      "line": "Words are the main picture: big, confident type in your fonts.",
+      "fits": [
+        "bumper-ad",
+        "teaser",
+        "short-ad",
+        "standard-ad",
+        "testimonial",
+        "social-organic",
+        "launch-film",
+        "feature-announcement"
+      ],
+      "poster": "kinetic-type.webp",
+      "loop": {
+        "file": "kinetic-type.mp4",
+        "seconds": 8,
+        "sha256": "ffd5e4674a3705048808f5d0ad7c0a610bf8dcdb01deb8374f7effb348f978e9",
+        "bytes": 400948
+      },
+      "i18n": {
+        "he": {
+          "name": "טיפוגרפיה בתנועה",
+          "line": "המילים הן התמונה: אותיות גדולות ובטוחות בפונטים שלכם.",
+          "feel": [
+            "נועז",
+            "ישיר",
+            "אנרגטי"
+          ],
+          "poster": "kinetic-type-he.webp",
+          "loop": {
+            "file": "kinetic-type-he.mp4",
+            "seconds": 8,
+            "sha256": "3c346c5ccf61b3c63e417c5cff7bf4c98ce0d546cd150625466807f60ddeaeb5",
+            "bytes": 240303
+          },
+          "loops": {
+            "tall": {
+              "file": "kinetic-type-he-tall.mp4",
+              "seconds": 8,
+              "sha256": "4b03744a8feb3f8d54f410b1ed9a23c9cde04f375031b2ab45d03bc8ddbdfb67",
+              "bytes": 165900
+            },
+            "square": {
+              "file": "kinetic-type-he-square.mp4",
+              "seconds": 8,
+              "sha256": "175e82bad27da56d0886dc29c975029b4bd2b8a610691347ef70dea54fc79b8f",
+              "bytes": 139754
+            },
+            "portrait": {
+              "file": "kinetic-type-he-portrait.mp4",
+              "seconds": 8,
+              "sha256": "0ca993a84342bb60cde9d4aa822df9300f27d9fde72c1b0356960032529cf0c9",
+              "bytes": 158734
+            }
+          }
+        }
+      },
+      "feel": [
+        "bold",
+        "direct",
+        "energetic"
+      ],
+      "loops": {
+        "tall": {
+          "file": "kinetic-type-tall.mp4",
+          "seconds": 8,
+          "sha256": "65c8b1d32a213f5cd195d5aa63be17a568be7993bd00abb0d25bcad6ac8718a1",
+          "bytes": 249873
+        },
+        "square": {
+          "file": "kinetic-type-square.mp4",
+          "seconds": 8,
+          "sha256": "149a05c007d40dfb267083cf4d8dee77041df618edc5359e6b52886e0946e162",
+          "bytes": 207606
+        },
+        "portrait": {
+          "file": "kinetic-type-portrait.mp4",
+          "seconds": 8,
+          "sha256": "5ac34cefb652b3ed8054b7cabeb4e6a8ae7f91b2d256d7ad8b7588fa2c5fe147",
+          "bytes": 246645
+        }
+      }
+    },
+    {
+      "id": "diagram",
+      "name": "Diagrams and data",
+      "line": "Clean charts and flows on a calm grid.",
+      "fits": [
+        "explainer",
+        "product-demo",
+        "launch-film",
+        "feature-announcement",
+        "tutorial"
+      ],
+      "poster": "diagram.webp",
+      "loop": {
+        "file": "diagram.mp4",
+        "seconds": 8,
+        "sha256": "6d73361a04fce7a1bc3c17ff943168b50ab438398720d213898c136432e444d2",
+        "bytes": 363463
+      },
+      "i18n": {
+        "he": {
+          "name": "תרשימים ונתונים",
+          "line": "גרפים ותהליכים נקיים על גריד רגוע.",
+          "feel": [
+            "חכם",
+            "אמין",
+            "מסודר"
+          ],
+          "poster": "diagram-he.webp",
+          "loop": {
+            "file": "diagram-he.mp4",
+            "seconds": 8,
+            "sha256": "2ff2d61b114ee07e4090cc8515cda798b1dc68b675a5305deeccf89e0c7a67b8",
+            "bytes": 327086
+          },
+          "loops": {
+            "tall": {
+              "file": "diagram-he-tall.mp4",
+              "seconds": 8,
+              "sha256": "0ebc0d94f2eb779d6cc9fd7e999835088af604924c125939fb66dc42cba9d57c",
+              "bytes": 260663
+            },
+            "square": {
+              "file": "diagram-he-square.mp4",
+              "seconds": 8,
+              "sha256": "673bf49c00c7ba809a2b8f2cf74997f7ba59d566f8811937e7d831923988e18a",
+              "bytes": 244516
+            },
+            "portrait": {
+              "file": "diagram-he-portrait.mp4",
+              "seconds": 8,
+              "sha256": "fe477cdbd361ff5c1149c3b4c396d9225654954d8c04716bb27487564ef533ef",
+              "bytes": 256229
+            }
+          }
+        }
+      },
+      "feel": [
+        "smart",
+        "credible",
+        "organised"
+      ],
+      "loops": {
+        "tall": {
+          "file": "diagram-tall.mp4",
+          "seconds": 8,
+          "sha256": "9c96ebeb1ebbf002354113d44727ffbb206ac746d67087752f0a473eccebd2a6",
+          "bytes": 280816
+        },
+        "square": {
+          "file": "diagram-square.mp4",
+          "seconds": 8,
+          "sha256": "536c56855e28d8ffbc21f249a39c131d8965d5557e84673ed90a55f1e935ffa3",
+          "bytes": 273471
+        },
+        "portrait": {
+          "file": "diagram-portrait.mp4",
+          "seconds": 8,
+          "sha256": "e45f9c321d942a6195944580dc63817091e580efc350dd6dcfc816c0f3f4ee2c",
+          "bytes": 274392
+        }
+      }
+    },
+    {
+      "id": "collage",
+      "name": "Cut-out collage",
+      "line": "Cut-out photos on paper and colour, layered like a magazine page.",
+      "needsAny": [
+        "photos"
+      ],
+      "missing": "Needs photos of your products or people",
+      "fits": [
+        "short-ad",
+        "standard-ad",
+        "social-organic",
+        "teaser",
+        "event-recap",
+        "testimonial"
+      ],
+      "poster": "collage.webp",
+      "loop": {
+        "file": "collage.mp4",
+        "seconds": 8,
+        "sha256": "b7ca3135fda4e909390c14ef84268640ed4a80f8326c48a089ad98e7b1e7c9fd",
+        "bytes": 739813
+      },
+      "i18n": {
+        "he": {
+          "name": "קולאז' גזירות",
+          "line": "תמונות גזורות על נייר וצבע, בשכבות כמו עמוד מגזין.",
+          "missing": "צריך תמונות של המוצרים או של אנשים",
+          "feel": [
+            "עבודת יד",
+            "מגזיני",
+            "שובב"
+          ],
+          "poster": "collage-he.webp",
+          "loop": {
+            "file": "collage-he.mp4",
+            "seconds": 8,
+            "sha256": "449bd8809047ed48165438c16c0782efbdd774db9f1da7d4bb5ca1223ac0c4a5",
+            "bytes": 730601
+          },
+          "loops": {
+            "tall": {
+              "file": "collage-he-tall.mp4",
+              "seconds": 8,
+              "sha256": "b2baba635932965418202024cbcf8e4493bfea39f1596688168768c0320d2554",
+              "bytes": 822929
+            },
+            "square": {
+              "file": "collage-he-square.mp4",
+              "seconds": 8,
+              "sha256": "c821f5b840c3a253072e81447ca0c4cfd9a35bd36b16ffe3e73e66bc6337115a",
+              "bytes": 450886
+            },
+            "portrait": {
+              "file": "collage-he-portrait.mp4",
+              "seconds": 8,
+              "sha256": "c2d8b12a0692d6f7fce57d6e2a48ef4aec2728d2c86bdbe1174e75aff766704a",
+              "bytes": 642503
+            }
+          }
+        }
+      },
+      "feel": [
+        "crafted",
+        "editorial",
+        "playful"
+      ],
+      "loops": {
+        "tall": {
+          "file": "collage-tall.mp4",
+          "seconds": 8,
+          "sha256": "1b9c41524317eacc515e6daa44221498b71b08fd714685ddb10a52c56b1b5aba",
+          "bytes": 847510
+        },
+        "square": {
+          "file": "collage-square.mp4",
+          "seconds": 8,
+          "sha256": "338b91da1fe0827e8078af38a6dff2e605527663d8b263337a50aa6c5953bf20",
+          "bytes": 457637
+        },
+        "portrait": {
+          "file": "collage-portrait.mp4",
+          "seconds": 8,
+          "sha256": "fbf607684a2eadf9c94feae520257e5ca23e1ced4bf0461ffbdd56a34bae66fc",
+          "bytes": 649832
+        }
+      }
+    },
+    {
+      "id": "3d",
+      "name": "3D scene",
+      "line": "Solid objects with depth, soft light and real shadows.",
+      "fits": [
+        "launch-film",
+        "teaser",
+        "landing-loop",
+        "feature-announcement",
+        "standard-ad"
+      ],
+      "poster": "3d.webp",
+      "loop": {
+        "file": "3d.mp4",
+        "seconds": 8,
+        "sha256": "76e43b1ca1d42cbf2e0d17459f0e74d3e33e5b6c49a20faf7392b3e42ae594ad",
+        "bytes": 294959
+      },
+      "i18n": {
+        "he": {
+          "name": "סצנת תלת־ממד",
+          "line": "אובייקטים מוצקים עם עומק, אור רך וצללים אמיתיים.",
+          "feel": [
+            "יוקרתי",
+            "מוחשי",
+            "קולנועי"
+          ],
+          "poster": "3d-he.webp",
+          "loop": {
+            "file": "3d-he.mp4",
+            "seconds": 8,
+            "sha256": "87a575cfd1ed2783a8f01b9b6aa842c6bae8be77fce53fb8fadbe30175af55b8",
+            "bytes": 286724
+          },
+          "loops": {
+            "tall": {
+              "file": "3d-he-tall.mp4",
+              "seconds": 8,
+              "sha256": "bc43c16af9e6765c0722e6856091e8340020cf188b2486ea24ec434291c143dc",
+              "bytes": 384136
+            },
+            "square": {
+              "file": "3d-he-square.mp4",
+              "seconds": 8,
+              "sha256": "5fe799649fba8187b6a226998e902f5d21c3fe1d0d831e9cbcbcb1880e5e91c1",
+              "bytes": 252285
+            },
+            "portrait": {
+              "file": "3d-he-portrait.mp4",
+              "seconds": 8,
+              "sha256": "20a31fd3a8dc8ff3253c7f26c4255dcf16dcbdeb03daaaf322fc5ea07bbc0772",
+              "bytes": 302194
+            }
+          }
+        }
+      },
+      "feel": [
+        "premium",
+        "tangible",
+        "cinematic"
+      ],
+      "loops": {
+        "tall": {
+          "file": "3d-tall.mp4",
+          "seconds": 8,
+          "sha256": "2fd3992826aee4616b734d3517eb980b908397567c3570dc39ff5a011b33b18d",
+          "bytes": 396146
+        },
+        "square": {
+          "file": "3d-square.mp4",
+          "seconds": 8,
+          "sha256": "8d75ebbb7e774638202ca961f62de4b9ec36b0dc6af03abcf800f48cf1b73ffd",
+          "bytes": 261444
+        },
+        "portrait": {
+          "file": "3d-portrait.mp4",
+          "seconds": 8,
+          "sha256": "141fdede3d08f5748a1107f196a76f80aaf1d8834f5e2a3001a67edad776ba2a",
+          "bytes": 313903
+        }
+      }
+    },
+    {
+      "id": "sketch",
+      "name": "Hand-drawn",
+      "line": "Marker lines by a human hand, unpolished on purpose.",
+      "fits": [
+        "explainer",
+        "tutorial",
+        "social-organic",
+        "testimonial",
+        "onboarding"
+      ],
+      "poster": "sketch.webp",
+      "loop": {
+        "file": "sketch.mp4",
+        "seconds": 8,
+        "sha256": "d05b4be3384a11840da39f2325ae71185aeded403dde7abfe2d4d00271f8b8fb",
+        "bytes": 625681
+      },
+      "i18n": {
+        "he": {
+          "name": "ציור יד",
+          "line": "קווי טוש ביד אנושית, לא מלוטשים בכוונה.",
+          "feel": [
+            "אישי",
+            "חם",
+            "קליל"
+          ],
+          "poster": "sketch-he.webp",
+          "loop": {
+            "file": "sketch-he.mp4",
+            "seconds": 8,
+            "sha256": "faf2fc2f77963aee354db884e95770b6a25454815aa83868dfc4a6b2d1acd9c6",
+            "bytes": 614632
+          },
+          "loops": {
+            "tall": {
+              "file": "sketch-he-tall.mp4",
+              "seconds": 8,
+              "sha256": "0a527a32328d54cdab7f3a0667f716791eced2db27ac795a97bd1598deec3e75",
+              "bytes": 683791
+            },
+            "square": {
+              "file": "sketch-he-square.mp4",
+              "seconds": 8,
+              "sha256": "81674c4d0dda191d268ecb0ed9dcc1a44aa2c985a90a60a02e9638b85217183b",
+              "bytes": 508536
+            },
+            "portrait": {
+              "file": "sketch-he-portrait.mp4",
+              "seconds": 8,
+              "sha256": "2893c79ef036870e054207e3a639735f8c5e6f750015258322b43c4a9a38d95b",
+              "bytes": 572519
+            }
+          }
+        }
+      },
+      "feel": [
+        "personal",
+        "warm",
+        "casual"
+      ],
+      "loops": {
+        "tall": {
+          "file": "sketch-tall.mp4",
+          "seconds": 8,
+          "sha256": "070123bf62a0a8bc713c2dc5a502517bef348bd13120e2b18ab6025c8b40585c",
+          "bytes": 703302
+        },
+        "square": {
+          "file": "sketch-square.mp4",
+          "seconds": 8,
+          "sha256": "efd32da4bb3269cc251bcab764dd4c8b6c79157c243e42dba781b40680d13ab1",
+          "bytes": 523014
+        },
+        "portrait": {
+          "file": "sketch-portrait.mp4",
+          "seconds": 8,
+          "sha256": "9c5f584657f911a145e7ce657b58b4872ae1bf878c905bd4240ea82d6d1bf39a",
+          "bytes": 582315
+        }
+      }
+    },
+    {
+      "id": "realistic",
+      "name": "Realistic scenes",
+      "line": "Photo-real places and textures around your story: from your photos, free photo libraries, stock or an image tool. Never shown as your product.",
+      "fits": [
+        "launch-film",
+        "teaser",
+        "standard-ad",
+        "explainer"
+      ],
+      "poster": "realistic.webp",
+      "loop": {
+        "file": "realistic.mp4",
+        "seconds": 8,
+        "sha256": "e1949f4f2be2cc23be992ec7f70e23e18afe860c5806d7911b351afff63e5d02",
+        "bytes": 1017255
+      },
+      "i18n": {
+        "he": {
+          "name": "סצנות ריאליסטיות",
+          "line": "מקומות ומרקמים ריאליסטיים סביב הסיפור: מהתמונות שלכם, מספריות תמונות חופשיות, ממאגר או מכלי תמונות. אף פעם לא מוצגים כמוצר שלכם.",
+          "feel": [
+            "אווירתי",
+            "עשיר",
+            "קולנועי"
+          ],
+          "poster": "realistic-he.webp",
+          "loop": {
+            "file": "realistic-he.mp4",
+            "seconds": 8,
+            "sha256": "f1282d9efeff7e3c8110063be2f90e9d4230cae0efb5e82e247b568c3785a544",
+            "bytes": 1008382
+          },
+          "loops": {
+            "tall": {
+              "file": "realistic-he-tall.mp4",
+              "seconds": 8,
+              "sha256": "fb7ce4f622af863f56c8a858c08a2e0b8307f4ff9c484cbd299e25c54a33b8d8",
+              "bytes": 854227
+            },
+            "square": {
+              "file": "realistic-he-square.mp4",
+              "seconds": 8,
+              "sha256": "2a0bd98fdc9ef827154799d879494b4722a7488d5d78c7db4e89e7a2fc0f9273",
+              "bytes": 897436
+            },
+            "portrait": {
+              "file": "realistic-he-portrait.mp4",
+              "seconds": 8,
+              "sha256": "c8d251e0ea6e1f4d6f2571edeb6a46f82b18f2c8cca370f0d8f60b8a42aced4d",
+              "bytes": 900877
+            }
+          }
+        }
+      },
+      "feel": [
+        "atmospheric",
+        "rich",
+        "cinematic"
+      ],
+      "loops": {
+        "tall": {
+          "file": "realistic-tall.mp4",
+          "seconds": 8,
+          "sha256": "5c2a91a1595a62213e990a32ab92b9dc4a391fc2fbaab019243679e5c75ad8ef",
+          "bytes": 862605
+        },
+        "square": {
+          "file": "realistic-square.mp4",
+          "seconds": 8,
+          "sha256": "8ec8da9f10bfd1269368628037c15de07d80ff77d0838c513e8327276405cb85",
+          "bytes": 902261
+        },
+        "portrait": {
+          "file": "realistic-portrait.mp4",
+          "seconds": 8,
+          "sha256": "5e856e9c62d9840028a9ebfa5b1f940e328ab8a80cec6002fa66a9dfad5f5a8f",
+          "bytes": 905929
+        }
+      }
+    }
+  ],
+  "tools": [
+    {
+      "id": "voice",
+      "name": "AI voice",
+      "adds": "A voiceover read from your script, instead of captions only.",
+      "providers": [
+        {
+          "name": "ElevenLabs",
+          "env": [
+            "ELEVENLABS_API_KEY"
+          ],
+          "uses": "Text to speech with the eleven_multilingual_v2 model, one file per line of the script",
+          "i18n": {
+            "he": {
+              "uses": "המרת טקסט לדיבור עם המודל eleven_multilingual_v2, קובץ לכל שורה בתסריט"
+            }
+          }
+        }
+      ],
+      "i18n": {
+        "he": {
+          "name": "קול AI",
+          "adds": "קריינות שמוקראת מהתסריט, במקום כתוביות בלבד."
+        }
+      }
+    },
+    {
+      "id": "image",
+      "name": "Image generation",
+      "adds": "Backdrops and textures made for this film. Never your product: that always comes from your own photos and screens.",
+      "providers": [
+        {
+          "name": "OpenAI",
+          "env": [
+            "OPENAI_API_KEY"
+          ],
+          "uses": "Its image generation API, for backdrops and textures",
+          "i18n": {
+            "he": {
+              "uses": "ממשק יצירת התמונות שלה, לרקעים ולמרקמים"
+            }
+          }
+        },
+        {
+          "name": "Google Gemini",
+          "env": [
+            "GEMINI_API_KEY",
+            "GOOGLE_API_KEY"
+          ],
+          "uses": "Gemini image generation, for backdrops and textures",
+          "i18n": {
+            "he": {
+              "uses": "יצירת תמונות של Gemini, לרקעים ולמרקמים"
+            }
+          }
+        },
+        {
+          "name": "Replicate",
+          "env": [
+            "REPLICATE_API_TOKEN"
+          ],
+          "uses": "An image model hosted on Replicate",
+          "i18n": {
+            "he": {
+              "uses": "מודל תמונות שמתארח ב־Replicate"
+            }
+          }
+        },
+        {
+          "name": "fal",
+          "env": [
+            "FAL_KEY"
+          ],
+          "uses": "An image model hosted on fal",
+          "i18n": {
+            "he": {
+              "uses": "מודל תמונות שמתארח ב־fal"
+            }
+          }
+        },
+        {
+          "name": "Stability AI",
+          "env": [
+            "STABILITY_API_KEY"
+          ],
+          "uses": "The Stable Image API",
+          "i18n": {
+            "he": {
+              "uses": "ממשק Stable Image"
+            }
+          }
+        }
+      ],
+      "i18n": {
+        "he": {
+          "name": "יצירת תמונות",
+          "adds": "רקעים ומרקמים שנוצרים לסרט. אף פעם לא המוצר: הוא תמיד מהתמונות והמסכים שלכם."
+        }
+      }
+    },
+    {
+      "id": "video",
+      "name": "Video generation",
+      "adds": "Short moving backgrounds where the film has no footage, never shown as your real place or product.",
+      "providers": [
+        {
+          "name": "Runway",
+          "env": [
+            "RUNWAY_API_KEY"
+          ],
+          "uses": "Its video generation API, for short moving backgrounds",
+          "i18n": {
+            "he": {
+              "uses": "ממשק יצירת הווידאו שלה, לרקעים קצרים בתנועה"
+            }
+          }
+        },
+        {
+          "name": "Luma AI",
+          "env": [
+            "LUMA_API_KEY"
+          ],
+          "uses": "Its video generation API, for short moving backgrounds",
+          "i18n": {
+            "he": {
+              "uses": "ממשק יצירת הווידאו שלה, לרקעים קצרים בתנועה"
+            }
+          }
+        },
+        {
+          "name": "Replicate",
+          "env": [
+            "REPLICATE_API_TOKEN"
+          ],
+          "uses": "A video model hosted on Replicate",
+          "i18n": {
+            "he": {
+              "uses": "מודל וידאו שמתארח ב־Replicate"
+            }
+          }
+        },
+        {
+          "name": "fal",
+          "env": [
+            "FAL_KEY"
+          ],
+          "uses": "A video model hosted on fal",
+          "i18n": {
+            "he": {
+              "uses": "מודל וידאו שמתארח ב־fal"
+            }
+          }
+        }
+      ],
+      "i18n": {
+        "he": {
+          "name": "יצירת וידאו",
+          "adds": "רקעים קצרים בתנועה כשאין צילום, אף פעם לא כאילו זה המקום או המוצר האמיתיים שלכם."
+        }
+      }
+    },
+    {
+      "id": "stock",
+      "name": "Stock footage and photos",
+      "adds": "Licensed clips for moments you have no footage of, such as a street or a kitchen.",
+      "providers": [
+        {
+          "name": "Pexels",
+          "env": [
+            "PEXELS_API_KEY"
+          ],
+          "uses": "Its free video and photo search",
+          "i18n": {
+            "he": {
+              "uses": "חיפוש הווידאו והתמונות החינמי שלה"
+            }
+          }
+        },
+        {
+          "name": "Pixabay",
+          "env": [
+            "PIXABAY_API_KEY"
+          ],
+          "uses": "Its free video and photo search",
+          "i18n": {
+            "he": {
+              "uses": "חיפוש הווידאו והתמונות החינמי שלה"
+            }
+          }
+        },
+        {
+          "name": "Unsplash",
+          "env": [
+            "UNSPLASH_ACCESS_KEY"
+          ],
+          "uses": "Its free photo search (photos only)",
+          "i18n": {
+            "he": {
+              "uses": "חיפוש התמונות החינמי שלה (תמונות בלבד)"
+            }
+          }
+        }
+      ],
+      "i18n": {
+        "he": {
+          "name": "צילומי מאגר",
+          "adds": "קטעים ברישיון לרגעים שאין לכם צילום שלהם, כמו רחוב או מטבח."
+        }
+      }
+    }
+  ]
+}

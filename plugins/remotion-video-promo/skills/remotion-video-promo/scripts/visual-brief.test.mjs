@@ -23,6 +23,7 @@ spawnSync("ffmpeg", ["-v", "error", "-y", "-f", "lavfi", "-i", "sine=f=440:d=20"
 
 const brief = () => ({
   format: "promo",
+  style: { primary: "footage", secondary: "kinetic-type", chosenBy: "user" },
   title: "A promo for a storage brand",
   plan: ["A **30 s** master and a 15 s cut", "No voiceover: <captions> carry it"],
   styleFrames: [{ image: still, caption: "**The turn.** The finder locks onto the real code." }],
@@ -402,4 +403,33 @@ test("a picture under another name, and a track only offered, still count as use
   const out = checkPlan(b).join("\n");
   assert.match(out, /already used or offered the track "calm-90"/);
   assert.match(out, /30 s, beat 1: opens on public\/821203_ab12cd34ef\.webp, which already opened an earlier film/);
+});
+
+test("the brief names the style chosen on the chooser page, from the library", () => {
+  const b = brief();
+  delete b.style;
+  assert.ok(checkPlan(b).some((p) => p.startsWith("the style: missing")));
+  b.style = { primary: "watercolour", chosenBy: "user" };
+  assert.ok(checkPlan(b).some((p) => p.includes('"watercolour" is not in the library')));
+  b.style = { primary: "footage", secondary: "3d", chosenBy: "user" };
+  assert.deepEqual(checkPlan(b).filter((p) => p.startsWith("the style")), [], "any two looks mix");
+  b.style = { primary: "footage", secondary: "footage", chosenBy: "user" };
+  assert.ok(checkPlan(b).some((p) => p.includes("the same look")));
+  b.style = { primary: "footage", secondary: "watercolour", chosenBy: "user" };
+  assert.ok(checkPlan(b).some((p) => p.includes('accent "watercolour"')));
+  b.style = { primary: "footage", secondary: null };
+  assert.ok(checkPlan(b).some((p) => p.includes("chosenBy")));
+  b.style = { primary: "footage", secondary: null, chosenBy: "assumed" };
+  assert.deepEqual(checkPlan(b).filter((p) => p.startsWith("the style")), []);
+});
+
+test("the page shows the chosen style by its name in the page's language, and says when it was chosen for the user", () => {
+  const b = brief();
+  b.lang = "he";
+  b.style.chosenBy = "assumed";
+  const html = buildHtml(b);
+  assert.match(html, /הסגנון שבחרתם/);
+  assert.match(html, /צילומים אמיתיים/);
+  assert.match(html, /טיפוגרפיה בתנועה/);
+  assert.match(html, /בחרתי בשבילכם/);
 });

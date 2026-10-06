@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "remotion-video-master",
-      "description": "The master Remotion video skill, every format in one: a guided brief (what the video is for, where it runs, a recommended length), the story and script, then one engine for promos, demos, tutorials, explainers and more, with the brand motif in every transition, platform safe zones and measured verification.",
+      "description": "The master Remotion video skill, every format in one: a one-screen chooser (what the video is for, where it runs, the length, the look shown as moving samples), the story and script, then one engine for promos, demos, tutorials, explainers and more, with the brand motif in every transition, platform safe zones and measured verification.",
       "source": "./plugins/remotion-video-master",
       "author": {
         "name": "Tomer Hayun",

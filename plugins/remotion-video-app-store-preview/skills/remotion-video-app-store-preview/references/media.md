@@ -7,7 +7,7 @@ remotion-captions, remotion-multimedia); the method stays this skill's. Checked 
 
 ## Voice: decide what is possible before offering it
 
-Check before the intake's voice question, and offer only what works:
+Check before writing the chooser's voice question, and offer only what works:
 
 1. **The user's own recording** (a file they hand over). Most authentic; transcribe it for captions.
 2. **An AI voice** only when a key is already in the environment (`ELEVENLABS_API_KEY`, or the
@@ -28,7 +28,9 @@ Check before the intake's voice question, and offer only what works:
      burned in, and an SRT is optional (useful for search and translation);
    - music can sit higher (no voice to duck under), but it is still a bed.
 
-Say which rung was taken in the brief and why.
+Say which rung was taken in the brief and why. A voice key or a connected voice tool appears on
+the chooser under its tools, off until the user turns it on; an AI voice is used only when it is on
+(`choices.tools`).
 
 ## Voiceover mechanics
 

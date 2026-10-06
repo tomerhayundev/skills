@@ -258,7 +258,7 @@ nothing later makes up for it. Then it judges structure:
 
 What it finds is fixed on the page before the user sees it. The rough cut is never shown to the
 user. The critic, like the film, works with the material that exists: "film the warehouse" or "get a
-screen recording" is not a fix, unless the user offered it in the question call; the fix is another
+screen recording" is not a fix, unless the user offered it on the chooser; the fix is another
 shot, a still, the brand's layer or the end card ([intake](intake.md#build-from-what-exists)).
 
 ### 3. The film: each scene alone, then the whole film in at most three rounds

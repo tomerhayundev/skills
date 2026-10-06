@@ -16,7 +16,7 @@ One place for any Remotion video: agree what it is for, where it runs and how lo
 its story, then build it with one engine. Each kind of video is a module in `formats/`; the engine,
 the motif and the verification are shared.
 
-This is version 0.10.4 of the skill. Asked which version is loaded, answer with this line: an
+This is version 0.11.0 of the skill. Asked which version is loaded, answer with this line: an
 installed copy changes only when it is updated, and a running session keeps the copy it started with.
 <!-- /master-only -->
 <!-- specialist
@@ -67,18 +67,23 @@ Details and hands-off rules: [intake](references/intake.md).
    its product and collection copy, the tag under the logo. The ask is raw material: a user who
    lists things ("the products, the workshops and more") is asking for a story, not a chapter each.
 <!-- master-only -->
-2. Ask only what is still open, in **one question call at most**, recommended option first: usually
-   what the video is for (Sell it / Show how it works / Explain an idea / Social or story) or where it
-   runs.
+2. **The chooser** ([styles](references/styles.md), [intake](references/intake.md#the-chooser)): one
+   page, run with `node ${CLAUDE_SKILL_DIR}/scripts/choose.mjs`, where the user sees what the skill can
+   make and picks what the video is for, where it runs, how long it is, its style (every look the skill
+   makes, each a moving sample, on one screen, Claude's pick unless the user taps one) and the tools found on this machine. Your
+   recommendation is already selected, so Done alone gives the recommended film. Anything still open
+   is one of at most three questions on the same page; there is no other question call.
 <!-- /master-only -->
 <!-- specialist
-2. The goal is set: this skill makes {{kind}} videos. Ask only what is still open, in **one question
-   call at most**, recommended option first: usually where it runs, or the kind of {{kind}} when the
-   module lists several. If the ask is really another kind of video, say so and recommend {{master}}.
+2. The goal is set: this skill makes {{kind}} videos. **The chooser** ([styles](references/styles.md),
+   [intake](references/intake.md#the-chooser)): run `node ${CLAUDE_SKILL_DIR}/scripts/choose.mjs
+   --lock-format`, and the user picks where it runs, how long it is, its style and the tools found,
+   with your recommendation already selected; anything still open is one of at most three questions
+   on the page. If the ask is really another kind of video, say so and recommend {{master}}.
 -->
-3. Run `node ${CLAUDE_SKILL_DIR}/scripts/recommend.mjs --format=<id> --platforms=<id,id>` (a tutorial
-   or onboarding video adds `--steps=<n>`) and take its recommended length; its aspects, safe zones,
-   captions and warnings go in the brief.
+3. Run `node ${CLAUDE_SKILL_DIR}/scripts/recommend.mjs --format=<id> --platforms=<id,id>` with the
+   chosen kind and platforms (a tutorial or onboarding video adds `--steps=<n>`): its aspects, safe
+   zones, captions and warnings go in the brief. The length is the one chosen on the page.
 4. **Read the brand and pick the concept** ([brand-read](references/brand-read.md)): four
    conclusions from the brand's own words (its difference, its look, its signature, its spine),
    three concepts built on them, and a fresh critic who scores the concepts before the user sees
@@ -87,7 +92,8 @@ Details and hands-off rules: [intake](references/intake.md).
    recognizable in the first 3 s and is what most of the film shows; the brand's story serves it in
    a beat or two, never replaces it. "Products at 20% off" is a film of the products and the offer,
    not a film about how they are made.
-5. Decide the source, the voice (only what is possible), the music (section 11), the motif and the
+5. In the chosen style, decide the source, the voice (as answered on the chooser), the music
+   (section 11), the motif and the
    reference (the user's, or one from the sources library: section 5) yourself, as recommendations, and write the script (section 3), each cutdown as its own.
 6. Show the **visual brief** (section 6, step 1) and ask one thing: go, or change any line or shot.
    Hands-off, "just make it", or running as a subagent: show it and continue.
@@ -161,7 +167,7 @@ on: this brand's own products, recognizable, doing what the offer does.
 | Motif | The object that phrase suggests | a tailor's thread and needle |
 | First meeting | Where the viewer first sees the real object, held at least 1 s before it is ever abstracted, moved or used as a shape | the needle, threaded, over the first CV |
 | Verb | What the motif does, which must be what the product does (tailor, scan and reveal, sort) | it stitches |
-| World | Filmed footage or drawn UI, and where the motif lives in it: on a real surface, on a device's screen, or in the brand's graphic layer ([creative-rules](references/creative-rules.md#graphics-over-footage)) | drawn: the whole film is UI |
+| World | The chosen style ([styles](references/styles.md)), and where the motif lives in it: on a real surface, on a device's screen, or in the brand's graphic layer ([creative-rules](references/creative-rules.md#graphics-over-footage)) | drawn: the whole film is UI |
 | Travels, grows or morphs | Travels (thread, road, cable): a one-take film ([one-take-film](references/one-take-film.md)). Morphs (one element of the product's UI): that element is shared across the boundaries it crosses. Grows or opens (page, box, lid, code): it opens once, at the turn, to reveal what the product does | travels |
 | Turns | The one or two boundaries the motif carries: the turn (problem to solution) and the close. Every other boundary is a cut on the beat, a match cut on the motif, or a shared element | the first stitch; the sewn wordmark |
 | Links | How it carries the shots between the turns, so the film flows: match cuts on it, the same object handed from shot to shot, a path the camera follows, or a move from the catalog in [handoffs](references/handoffs.md). Name it for each beat in the script's motif column | the thread runs out of one CV and into the next job tag |
@@ -208,7 +214,7 @@ and the pace they keep: [handoffs](references/handoffs.md).
   fonts) and list what you found before animating. A product with no UI yet gets its UI designed
   once, as components, treated as the real ones. A native app (iOS, Android, React Native) has no
   web components to import: record the device or simulator from a shot list (when this machine
-  cannot run the simulator, ask in the one question call whether the user can record it), or use
+  cannot run the simulator, make it one of the chooser's questions whether the user can record it), or use
   react-native-web if the app already runs on the web.
   Recordings, captions and voice: [media](references/media.md).
 
@@ -221,6 +227,8 @@ and the pace they keep: [handoffs](references/handoffs.md).
    - **the idea** in one sentence, **what carries the film** (the motif, its verb and how it links
      the shots), **the moments you will remember** (each a thing and what it becomes), and **what
      you asked for and where it is in the film**, one line per item the user named;
+   - **the style** chosen on the chooser, by name (when it was chosen for the user, the page says
+     so), with the style frames made in it;
    - the plan in a few lines ([brief template](references/brief-template.md));
    - **the music**: the recommended track and two alternatives of a different energy, each with why
      it fits and 15 s to play from where the film would start it; the user chooses by ear;
@@ -313,7 +321,7 @@ profile's critique starts with **story and copy**.
 | Rule | Why |
 | --- | --- |
 | Durations on the grid | Loops seam, cuts land on beats, grain repeats cleanly. Enforce it in `expand()`. |
-| Build from what exists | No beat, score or fix waits on material the user has not said they have or will make, and the user is never handed a task ("record a clip of"). A missing picture is solved in the film: another shot, a still, the brand's layer, or the end card. Material is asked for once, in the question call, if at all ([intake](references/intake.md#build-from-what-exists)). |
+| Build from what exists | No beat, score or fix waits on material the user has not said they have or will make, and the user is never handed a task ("record a clip of"). A missing picture is solved in the film: another shot, a still, the brand's layer, or the end card. Material is asked for once, on the chooser, if at all ([intake](references/intake.md#build-from-what-exists)). |
 | Show the real product | Import its components; without code, real captures; never a redrawn version of a UI that exists. |
 | Every transition is motivated; the motif carries only the turns | A flood on every boundary reads as an effect pasted over the film: six floods in 30 s put flat color over a third of it, and no boundary mattered more than another. At most one motif turn per 15 s plus the close; the rest are cuts on the beat, match cuts, shared elements (`transitions.ts` counts them). |
 | Every cut carries something | The motif, or a real object, shape or movement in the same place on both sides. A film that cuts "on the beat" with nothing carried restarts at every cut ([handoffs](references/handoffs.md)). |
@@ -438,7 +446,7 @@ node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cu
 | A chapter for each item the user listed | One story from the brand read's spine; each item a step or a proof in it, placed in the brief |
 | The motif is the most filmable action (the kneading, the typing) | Every rival of the same kind has it; take the brand's stated difference or its signature |
 | The motif is one collection's detail because it is on the home page | Check what each quote is about: a new line is a proof in the film, not the brand; ask the owner when unsure |
-| "The scores reach 8 once you record a clip of..." | The user never offered it: solve it with what exists, and ask for material only in the question call |
+| "The scores reach 8 once you record a clip of..." | The user never offered it: solve it with what exists, and ask for material only on the chooser |
 | A clean, minimal brand filmed busy | The brand's own adjectives are the film's style: space, pace, how many words |
 | The same track on every film | Pick from the library by the brand's look, and let the user hear it in the brief |
 | Approving the motion design from stills | Flow only shows in motion: the brief carries 3 to 6 s of the turn, the motif moving, at final quality |

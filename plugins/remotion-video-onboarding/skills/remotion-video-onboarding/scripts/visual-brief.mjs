@@ -19,6 +19,7 @@
  *
  * {
  *   "format": "promo",                 // the module (formats/<id>): its rules are the ones checked
+ *   "style": { "primary": "footage", "secondary": "kinetic-type", "chosenBy": "user" },   // from docs/choices.json (choose.mjs); "assumed" when nobody could answer
  *   "lang": "he",                      // the page's language; he, ar, fa, ur read right to left
  *   "labels": { "idea": "..." },       // optional: headings for a language without built-in ones
  *   "title": "...",
@@ -84,6 +85,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+import { loadStyles } from "./styles.mjs";
 
 const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const rich = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
@@ -142,6 +144,17 @@ export function checkPlan(brief) {
   if (!has(brief.idea)) problems.push("the idea: missing. Write the concept in one sentence (idea)");
   const mo = brief.motif;
   if (!mo || !has(mo.object) || !has(mo.verb)) problems.push("the motif: name the one object that carries the film and what it does, which is what the brand does (motif.object, motif.verb); it is what makes the film flow");
+  const st = brief.style;
+  if (!st || !has(st.primary)) {
+    problems.push("the style: missing. Copy it from docs/choices.json (style.primary, style.secondary, chosenBy); the chooser comes before the brand read (references/styles.md)");
+  } else {
+    const lib = loadStyles();
+    const p = lib.styles.find((s) => s.id === st.primary);
+    if (!p) problems.push(`the style: "${st.primary}" is not in the library (${lib.styles.map((s) => s.id).join(", ")})`);
+    if (has(st.secondary) && !lib.styles.some((s) => s.id === st.secondary)) problems.push(`the style: the accent "${st.secondary}" is not in the library`);
+    if (has(st.secondary) && st.secondary === st.primary) problems.push("the style: the main look and the accent are the same look; name it once");
+    if (!["user", "assumed"].includes(st.chosenBy)) problems.push('the style: say who chose it (chosenBy: "user", or "assumed" when nobody could answer)');
+  }
   if (!Array.isArray(brief.asks)) problems.push("asks: list every item the user asked for, with where it lands in the film (an empty list when the ask named none)");
   else for (const a of brief.asks) if (!has(a.where)) problems.push(`asks: "${a.item ?? "?"}" has no place in the film; put it inside the story, or say which film it gets`);
   if (promo && Array.isArray(brief.asks) && brief.asks.length) {
@@ -315,6 +328,7 @@ const LABELS = {
     music: "The music", alsoMusic: "Also possible, each from where the film would start it:", plan: "The plan", look: "The look (final quality, from your assets)", motion: "The motion: the turn, at final quality",
     storyboard: "Storyboard", oneSentence: "In one sentence:", noWords: "no words",
     hook: "The opening", recommended: "recommended", also: "Also possible:",
+    style: "The style you chose", styleAssumed: "Chosen for you: say if you want another.",
   },
   he: {
     title: "הסרטון שלכם: זה מה שיהיה",
@@ -330,6 +344,7 @@ const LABELS = {
     music: "המוזיקה", alsoMusic: "אפשר גם, כל אחת מהמקום שבו הסרט יתחיל אותה:", plan: "התוכנית", look: "הלוק (באיכות סופית, מהחומרים שלכם)", motion: "התנועה: רגע המפנה, באיכות סופית",
     storyboard: "סטוריבורד", oneSentence: "במשפט אחד:", noWords: "בלי מילים",
     hook: "הפתיחה", recommended: "מומלץ", also: "אפשר גם:",
+    style: "הסגנון שבחרתם", styleAssumed: "בחרתי בשבילכם: אפשר לבקש אחר.",
   },
 };
 
@@ -406,6 +421,14 @@ export function buildHtml(brief) {
     }).join("");
     const brand = brandRows ? `<h2>${esc(L.brand)}</h2><table class="kv"><thead><tr><th></th><th>${esc(L.said)}</th><th>${esc(L.meaning)}</th></tr></thead><tbody>${brandRows}</tbody></table><p class="note">${esc(L.brandNote)}</p>` : "";
     const idea = has(brief.idea) ? `<h2>${esc(L.idea)}</h2><div class="box idea">${rich(brief.idea)}</div>` : "";
+    const styles = loadStyles();
+    const styleName = (id) => {
+      const s = styles.styles.find((x) => x.id === id);
+      return s ? (s.i18n?.[lang.split("-")[0]]?.name ?? s.name) : id;
+    };
+    const st = brief.style && has(brief.style.primary)
+      ? `<h2>${esc(L.style)}</h2><div class="box"><b>${esc(styleName(brief.style.primary))}</b>${has(brief.style.secondary) ? ` <span class="mute">+</span> <b>${esc(styleName(brief.style.secondary))}</b>` : ""}${brief.style.chosenBy === "assumed" ? `<p class="mute">${esc(L.styleAssumed)}</p>` : ""}</div>`
+      : "";
     const mo = brief.motif && has(brief.motif.object) ? `<h2>${esc(L.motif)}</h2><div class="box"><b>${esc(brief.motif.object)}</b>${has(brief.motif.verb) ? ` <span class="mute">· ${esc(brief.motif.verb)}</span>` : ""}${has(brief.motif.links) ? `<p>${rich(brief.motif.links)}</p>` : ""}</div>` : "";
     const moments = (brief.moments ?? []).filter((x) => has(x?.thing) && has(x?.becomes));
     const mm = moments.length ? `<h2>${esc(L.moments)}</h2><ol class="moments">${moments.map((x) => `<li><b>${esc(x.thing)}</b> <span class="mute">${esc(L.becomes)}</span> <b>${esc(x.becomes)}</b></li>`).join("")}</ol>` : "";
@@ -447,7 +470,7 @@ h2{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute
 q{display:block;margin-top:5px;font-weight:600}i{display:block;margin-top:5px;color:var(--mute)}.msg{margin:0 0 10px}.msg span,.mute{color:var(--mute)}
 .box{background:var(--card);border-radius:10px;padding:13px 15px}.go{margin-top:28px;border-left:4px solid var(--accent);padding:10px 14px;background:var(--card);border-radius:6px}
 </style></head><body><main><h1>${esc(brief.title ?? L.title)}</h1><p class="lead">${L.lead}</p>
-${brand}${idea}${mo}${mm}${asks}${before}${music}
+${brand}${idea}${st}${mo}${mm}${asks}${before}${music}
 ${brief.plan?.length ? `<h2>${esc(L.plan)}</h2><ul>${brief.plan.map((l) => `<li>${rich(l)}</li>`).join("")}</ul>` : ""}
 ${frames ? `<h2>${esc(L.look)}</h2><div class="frames">${frames}</div>` : ""}
 ${motion ? `<h2>${esc(L.motion)}</h2><div class="frames motion">${motion}</div>` : ""}
