@@ -4,7 +4,7 @@ description: Use when making an organic social clip for Reels, TikTok, Shorts or
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.9.4 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: b37453bd5dfa -->
+<!-- Generated from remotion-video-master 0.9.5 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: d2eb1d7b449a -->
 
 # Remotion social clip video
 
@@ -23,6 +23,18 @@ fill the motif block if the project has none, then write the scene, register it,
 rect and a containment test ([architecture](references/architecture.md)). A new scene is the last
 resort; anything bigger starts with the intake.
 
+**A new film for a brand that already has films or ads is a new film.** What is already in the
+folder (earlier films made with this skill, the brand's own past ads and posts, a grid ad, a
+materials map) is a list of what was already done, never a template, a reference or a style to
+match. Before the brand read, write `docs/<film>/before.md`: for each earlier film or ad, its first
+shot and hook kind, its motif, its layout device (a split, a grid, a diptych, a packshot slideshow),
+its track and the clips and photos it used. The new film opens differently (another first shot and
+another kind of hook), carries another motif, uses another track and layout device, uses none of
+those clips or photos in its first 3 s and takes at most a third of its shots from them. The
+brand's quotes can be reused; the conclusions for the film are made again from this ask. A film the
+user rejected joins the list: the next try is a new concept, never a fall back to another earlier
+piece in the folder.
+
 ## 1. Intake: the brainstorm (hard gate)
 
 Nothing is built past the style frames before the user approves the **visual brief**. This is
@@ -31,7 +43,9 @@ the skill can make, and cannot judge a list of options: infer, decide as a recom
 Details and hands-off rules: [intake](references/intake.md).
 
 1. Read the ask, the product, its locales, its footage and any existing video project; take every
-   answer they already give. Read the brand's own words too: the site's hero line, its about page,
+   answer they already give. Earlier films and ads in the folder go on the do-not-repeat list
+   (section 0), and the whole catalog (the site's every product page, every packshot) is the
+   material, not the few clips an earlier film used. Read the brand's own words too: the site's hero line, its about page,
    its product and collection copy, the tag under the logo. The ask is raw material: a user who
    lists things ("the products, the workshops and more") is asking for a story, not a chapter each.
 2. The goal is set: this skill makes social clip videos. Ask only what is still open, in **one question
@@ -43,7 +57,11 @@ Details and hands-off rules: [intake](references/intake.md).
 4. **Read the brand and pick the concept** ([brand-read](references/brand-read.md)): four
    conclusions from the brand's own words (its difference, its look, its signature, its spine),
    three concepts built on them, and a fresh critic who scores the concepts before the user sees
-   anything. The winner holds every item the user asked for inside one story.
+   anything. The winner holds every item the user asked for inside one story, and **the ask leads**:
+   what the user named as the subject (the products, the sale, the feature) is on screen and
+   recognizable in the first 3 s and is what most of the film shows; the brand's story serves it in
+   a beat or two, never replaces it. "Products at 20% off" is a film of the products and the offer,
+   not a film about how they are made.
 5. Decide the source, the voice (only what is possible), the music (section 11), the motif and the
    reference (the user's, or one from the sources library: section 5) yourself, as recommendations, and write the script (section 3), each cutdown as its own.
 6. Show the **visual brief** (section 6, step 1) and ask one thing: go, or change any line or shot.
@@ -86,6 +104,9 @@ meets the real object, it does what the product does, it links the shots in betw
 it, the same object handed from shot to shot, a path the camera follows), and it carries the film's
 turns. A shape that fits every brand says nothing about this one; an object that does nothing (a
 divider line in the logo, a pretty prop) is decoration, not a motif.
+A brand has one signature but many films: when an earlier film already used it as the motif, this
+film's motif comes from this ask (the products themselves, the offer, the occasion), and the
+signature appears at most as an echo.
 
 | Slot | What goes in it | CV-builder example |
 | --- | --- | --- |
@@ -257,6 +278,8 @@ profile's critique starts with **story and copy**.
 | The cover is designed | The real product and the promise, settled. Never a transition frame or a field of flat color. |
 | No AI giveaways | Text in the corners, decorative readouts (a timecode, coordinates, a status line that tells the viewer nothing), decorative borders around the whole video, a centered title on a gradient, everything fading in, more than two things asking to be read at once, an em dash in the words on screen: write two lines, or a colon. |
 | Every gesture mirrors the product action | Transitions included. A reveal under a moving element reads as erasing; pasted things appear whole; a code molded into the product never arrives like a sticker. |
+| The ask leads | What the user named is on screen in the first 3 s and fills most of the film. A sale of products whose first products appear at second 8 is a brand film with a price on the end. |
+| Never repeat the brand's earlier films | Same first shot, hook kind, motif, track, layout device or the same handful of clips, and every film of the brand looks the same (section 0). Earlier ads in the folder are not a style reference unless the user names one. |
 | Fake company names next to invented metrics | A real employer beside an invented score fails ad review. |
 | Never loosen a containment or safe-zone test | Move the content. |
 | Interior chain entries start at `from: 0` | Windowing one mounts it early and overpaints the previous scene. |
@@ -376,5 +399,8 @@ node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cu
 | A finished picture that waits two seconds under its hook line | The picture is already happening on frame 0 and keeps going; the line stays for its reading time |
 | Browsing a reference site from its home page | `find-sources.mjs` gives the exact page, how to read it and what to take |
 | Pulling references before the concept | The brand read picks the idea; a reference only shapes how it moves |
+| Reusing the last film's brand read, motif and clips for the brand's next film | List what each earlier film did and do something else; the catalog is the material |
+| Matching the brand's earlier ad after the user rejects a film | A rejection asks for a new concept, not another old piece from the folder |
+| A sale film about how the products are made | The products and the offer are the subject; many of them, recognizable, from the first seconds |
 | One opening shape for every film | The hook is chosen per film and per kind of video: a tutorial opens on the result, a testimonial on its strongest sentence |
 | A sixth round of polish when the scores stall | The problem is structure: back to the storyboard, or hand the user the one choice |
