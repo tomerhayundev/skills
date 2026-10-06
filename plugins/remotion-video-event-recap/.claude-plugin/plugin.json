@@ -1,6 +1,6 @@
 {
   "name": "remotion-video-event-recap",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "Event recap and conference highlight videos with Remotion, cut from real footage and photos on the beat. Early single-purpose specialist of remotion-video-master, built on its promo module.",
   "author": {
     "name": "Tomer Hayun",
