@@ -30,7 +30,13 @@
  *              "links": "how it carries the shots between the turns" },   // each beat may add "motif": "its part here"
  *   "moments": [{ "thing": "the printed model", "becomes": "the mould it is cast in", "beat": 3 }],   // the three a viewer remembers: a thing, and what it turns into
  *   "facts": [{ "text": "24 cm pie dish", "source": "the product page" }],   // the only source of any number on screen
- *   "asks": [{ "item": "workshops", "where": "the turn: guests' hands" }],
+ *   "asks": [{ "item": "workshops", "where": "the turn: guests' hands" },
+ *            { "item": "the products, 20% off", "where": "...", "lead": true, "seenAt": 0.5 }],   // lead: the subject of the ask, on screen by seenAt s
+ *   "before": [{ "name": "brand film, September", "opening": "the pour from the pitcher", "hookKind": "in the middle of it",
+ *                "motif": "the pour", "layout": "split diptych", "tracks": ["the track it used", "the ones it offered"],
+ *                "uses": ["footage/pour.mp4", "footage/table.mp4"] }],
+ *                                      // every earlier film or ad of the brand in the folder ([] when none): what not to repeat
+ *   "layout": "the film's layout device, when it has one (a split, a grid, a single full frame)",
  *   "feed": true,                      // Reels, TikTok, Shorts, Stories: the first-seconds checks apply
  *   "music": { "id": "library id", "title": "...", "artist": "...", "bpm": 90, "why": "fits the brand's look because ...",
  *              "file": "public/music/track.mp3", "liftSeconds": 16, "startSeconds": 8.6,   // where the film starts the track
@@ -42,7 +48,8 @@
  *   "next": "After your go: ...",
  *   "cuts": [{ "name": "30 s", "message": "...", "turnAt": 13.5,
  *     "source": "footage/all.mp4", "crop": { "x": 0, "y": 0, "w": 1920, "h": 1080 },
- *     "beats": [{ "at": 0, "dur": 3.5, "src": 0, "len": 3.4, "picture": "...", "words": "...", "scale": "close", "in": "Opens mid-action" },
+ *     "beats": [{ "at": 0, "dur": 3.5, "src": 0, "len": 3.4, "picture": "...", "words": "...", "scale": "close", "in": "Opens mid-action",
+ *                 "uses": ["footage/cups.mp4"] },   // the clips and photos the shot is made of (checked against "before")
  *               { "at": 3.5, "dur": 3, "image": "out/still-2.png", "picture": "...", "scale": "wide", "in": "MATCH CUT on the code",
  *                 "carries": "the code, same place and size in the frame" }] }]   // what the eye follows over the cut into this shot
  * }
@@ -66,6 +73,10 @@
  * per 30 s, a composition over 3.5 s with no change marked inside it, a shot with no scale, the
  * same scale three shots running or too few scales in a cut, a boundary that carries nothing
  * into the next shot, or fewer moments than the film's length asks for (three from 20 s).
+ * No "before" list; a film that repeats an earlier one's motif, kind of hook, track or layout,
+ * uses an earlier film's clips in its first 3 s or in over a third of its shots, or a beat with no
+ * "uses" when earlier films exist; a promo whose asks mark no lead, or whose lead is first seen
+ * after 3 s.
  */
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -99,6 +110,11 @@ function longestWait(first) {
 const momentsFor = (seconds) => (seconds >= 20 ? 3 : seconds >= 10 ? 2 : 1);
 const RTL = new Set(["he", "ar", "fa", "ur"]);
 const has = (v) => typeof v === "string" && v.trim().length > 0;
+/** A clip or photo by its file name alone, so a copy in another folder is the same clip. */
+const clipKey = (f) => String(f).split(/[\\/]/).pop().replace(/\.[^.]+$/, "").trim().toLowerCase();
+const same = (a, b) => has(a) && has(b) && a.trim().toLowerCase() === b.trim().toLowerCase();
+/** The same clip or photo under another name: one name holds the other (a site's "821203_ab12cd34" is "ab12cd34"). */
+const sameClip = (a, b) => a === b || (Math.min(a.length, b.length) >= 6 && (a.includes(b) || b.includes(a)));
 /** Seconds per beat of the chosen track: the grid every beat sits on. */
 const beatSeconds = (brief) => (Number(brief.music?.bpm) > 0 ? 60 / Number(brief.music.bpm) : 0.5);
 
@@ -127,6 +143,34 @@ export function checkPlan(brief) {
   if (!mo || !has(mo.object) || !has(mo.verb)) problems.push("the motif: name the one object that carries the film and what it does, which is what the brand does (motif.object, motif.verb); it is what makes the film flow");
   if (!Array.isArray(brief.asks)) problems.push("asks: list every item the user asked for, with where it lands in the film (an empty list when the ask named none)");
   else for (const a of brief.asks) if (!has(a.where)) problems.push(`asks: "${a.item ?? "?"}" has no place in the film; put it inside the story, or say which film it gets`);
+  if (promo && Array.isArray(brief.asks) && brief.asks.length) {
+    const lead = brief.asks.find((a) => a?.lead);
+    if (!lead) problems.push("asks: mark the subject of the ask (lead: true), the thing the user asked a film of (the products, the offer, the feature), with when it is first on screen (seenAt)");
+    else if (!(Number(lead.seenAt) >= 0) || Number(lead.seenAt) > 3) problems.push(`asks: "${lead.item ?? "?"}" is what the user asked for, first on screen at ${Number(lead.seenAt) >= 0 ? `${fmt(lead.seenAt)} s` : "no time given (seenAt)"}; the ask leads: show it in the first 3 s and in most of the film, with the brand's story as a proof (SKILL.md, step 1)`);
+  }
+  if (!Array.isArray(brief.before)) problems.push("before: list every earlier film or ad of this brand in the folder, with its opening, hook kind, motif, layout, track and the clips it used (an empty list when there are none); the new film repeats none of them (SKILL.md, section 0)");
+  else if (brief.before.length) {
+    for (const e of brief.before) {
+      const name = e?.name ?? "an earlier film";
+      if (same(e?.motif, brief.motif?.object)) problems.push(`before: the motif "${brief.motif.object}" already carried ${name}; this film's motif comes from this ask (the products, the offer, the occasion)`);
+      if (same(e?.hookKind, brief.hook?.kind)) problems.push(`before: ${name} already opened with a "${e.hookKind}" hook; choose another kind (references/hooks.md)`);
+      for (const t of [e?.track, e?.tracks ?? []].flat().filter(has)) if (same(t, brief.music?.id) || same(t, brief.music?.title)) problems.push(`before: ${name} already used or offered the track "${t}"; pick another from the library`);
+      if (same(e?.layout, brief.layout)) problems.push(`before: ${name} already used the layout "${e.layout}"`);
+    }
+    const used = brief.before.flatMap((e) => [e?.uses ?? []].flat()).filter(has).map(clipKey);
+    for (const cut of brief.cuts ?? []) {
+      const beats = cut.beats ?? [];
+      let reused = 0;
+      beats.forEach((b, i) => {
+        const files = [b.uses ?? []].flat().filter(has);
+        if (!files.length) { problems.push(`${cut.name}, beat ${i + 1}: say which clips or photos it is made of (uses), so it can be checked against the earlier films`); return; }
+        const again = files.filter((f) => used.some((u) => sameClip(u, clipKey(f))));
+        if (again.length) reused++;
+        if (again.length && b.at < 3) problems.push(`${cut.name}, beat ${i + 1}: opens on ${again.join(", ")}, already used by an earlier film; the first 3 s are new material`);
+      });
+      if (beats.length && reused * 3 > beats.length) problems.push(`${cut.name}: ${reused} of ${beats.length} shots reuse earlier films' clips; at most a third. The whole catalog is the material (every product page, every packshot)`);
+    }
+  }
   if (!brief.music || typeof brief.music !== "object") problems.push("music: name the track from the library and why it fits the brand's look (music.id, music.why)");
   else {
     if (!has(brief.music.id) && !has(brief.music.title)) problems.push("music: name the track (music.id or music.title)");
@@ -255,6 +299,7 @@ const LABELS = {
     rows: { difference: "What sets you apart", look: "How you look", signature: "Your signature", spine: "Your story" },
     inferred: "Not said on your site; inferred from",
     partOnly: "Please confirm: this is said only about",
+    before: "Your earlier films, and how this one is different", beforeDid: "How it opened, what carried it", beforeNow: "This film",
     idea: "The idea", motif: "What carries the film", moments: "The moments you will remember", becomes: "becomes", carried: "Carried over the cut:", asks: "What you asked for, and where it is in the film", asked: "You asked for", where: "Where it is",
     music: "The music", alsoMusic: "Also possible, each from where the film would start it:", plan: "The plan", look: "The look (final quality, from your assets)", motion: "The motion: the turn, at final quality",
     storyboard: "Storyboard", oneSentence: "In one sentence:", noWords: "no words",
@@ -269,6 +314,7 @@ const LABELS = {
     rows: { difference: "מה מייחד אתכם", look: "איך אתם נראים", signature: "החתימה שלכם", spine: "הסיפור שלכם" },
     inferred: "לא כתוב אצלכם; הסקתי מ",
     partOnly: "לאישורכם: זה נאמר רק על",
+    before: "הסרטונים הקודמים שלכם, ובמה הסרטון הזה שונה", beforeDid: "איך נפתח, מה הוביל אותו", beforeNow: "הסרטון הזה",
     idea: "הרעיון", motif: "מה מוביל את הסרט", moments: "הרגעים שיזכרו", becomes: "הופך ל", carried: "עובר בחיתוך:", asks: "מה ביקשתם, ואיפה זה בסרט", asked: "ביקשתם", where: "איפה זה בסרט",
     music: "המוזיקה", alsoMusic: "אפשר גם, כל אחת מהמקום שבו הסרט יתחיל אותה:", plan: "התוכנית", look: "הלוק (באיכות סופית, מהחומרים שלכם)", motion: "התנועה: רגע המפנה, באיכות סופית",
     storyboard: "סטוריבורד", oneSentence: "במשפט אחד:", noWords: "בלי מילים",
@@ -353,6 +399,7 @@ export function buildHtml(brief) {
     const moments = (brief.moments ?? []).filter((x) => has(x?.thing) && has(x?.becomes));
     const mm = moments.length ? `<h2>${esc(L.moments)}</h2><ol class="moments">${moments.map((x) => `<li><b>${esc(x.thing)}</b> <span class="mute">${esc(L.becomes)}</span> <b>${esc(x.becomes)}</b></li>`).join("")}</ol>` : "";
     const asks = brief.asks?.length ? `<h2>${esc(L.asks)}</h2><table class="kv"><thead><tr><th>${esc(L.asked)}</th><th>${esc(L.where)}</th></tr></thead><tbody>${brief.asks.map((a) => `<tr><th>${esc(a.item)}</th><td>${rich(a.where ?? "")}</td></tr>`).join("")}</tbody></table>` : "";
+    const before = brief.before?.length ? `<h2>${esc(L.before)}</h2><table class="kv"><thead><tr><th></th><th>${esc(L.beforeDid)}</th></tr></thead><tbody>${brief.before.map((e) => `<tr><th>${esc(e.name ?? "")}</th><td>${esc([e.opening, e.motif, e.layout].filter(has).join(" · "))}</td></tr>`).join("")}<tr><th>${esc(L.beforeNow)}</th><td><b>${esc([brief.cuts?.[0]?.beats?.[0]?.picture, brief.motif?.object, brief.layout].filter(has).join(" · "))}</b></td></tr></tbody></table>` : "";
     const m = brief.music && typeof brief.music === "object" ? brief.music : null;
     const track = (t, key) => {
       const clip = musicExcerpt(t, tmp, key);
@@ -389,7 +436,7 @@ h2{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute
 q{display:block;margin-top:5px;font-weight:600}i{display:block;margin-top:5px;color:var(--mute)}.msg{margin:0 0 10px}.msg span,.mute{color:var(--mute)}
 .box{background:var(--card);border-radius:10px;padding:13px 15px}.go{margin-top:28px;border-left:4px solid var(--accent);padding:10px 14px;background:var(--card);border-radius:6px}
 </style></head><body><main><h1>${esc(brief.title ?? L.title)}</h1><p class="lead">${L.lead}</p>
-${brand}${idea}${mo}${mm}${asks}${music}
+${brand}${idea}${mo}${mm}${asks}${before}${music}
 ${brief.plan?.length ? `<h2>${esc(L.plan)}</h2><ul>${brief.plan.map((l) => `<li>${rich(l)}</li>`).join("")}</ul>` : ""}
 ${frames ? `<h2>${esc(L.look)}</h2><div class="frames">${frames}</div>` : ""}
 ${motion ? `<h2>${esc(L.motion)}</h2><div class="frames motion">${motion}</div>` : ""}

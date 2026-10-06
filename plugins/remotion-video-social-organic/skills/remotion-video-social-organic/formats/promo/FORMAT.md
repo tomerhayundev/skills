@@ -43,6 +43,15 @@ A promo sells, so it is built on a spine of jobs, and the jobs come before any v
 | Offer | 1 or 2 beats | Exactly what can be bought, booked or tried, concrete (not a list of everything the brand does) |
 | Close | 2-4 s | The brand, one action, where to do it |
 
+**When the ask is an offer** (a sale, a discount, a drop, a holiday collection), the products and
+the offer are the subject. Products are on screen from the first seconds, many and each
+recognizable, drawn from the whole catalog; the offer is readable by 2.5 s and stays honest (what,
+how much, until when, how it applies); the brand's difference is one proof beat, never the frame
+of the film. The idea and the motif come from the offer itself (what 20% off does to a table, a
+basket, a wish list, a gift), not from the brand's process. The category's default (a packshot
+slideshow, a grid under a percent badge, a countdown) and the brand's own earlier ads are what the
+film must not look like.
+
 Write this beat sheet first, one row per shot, with each shot's job (`job` in the visual brief, shown
 on the page). A shot whose job cannot be named is cut, however good it looks.
 

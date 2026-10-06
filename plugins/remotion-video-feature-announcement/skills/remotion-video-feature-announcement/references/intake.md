@@ -21,7 +21,10 @@ and product copy, the tag under its logo, its social bio when there is access, a
 line is about: the whole brand, or one collection, product or season. These feed the brand read
 ([brand-read](brand-read.md)), which comes before the motif and the script. Every
 answer the ask or the product already gives ("a 15 s Reels ad", clips of the product in use) is
-taken, not asked. A re-cut, a new locale or a new aspect of a film that is already rendered skips
+taken, not asked. Earlier films and ads of the brand in the folder are read for one thing: what not
+to repeat (`before.md`, SKILL.md §0). They are never the reference, and the material is the whole
+catalog (every product page on the site, every packshot and album), not the clips an earlier film
+picked. A re-cut, a new locale or a new aspect of a film that is already rendered skips
 the intake (SKILL.md §0); raw clips are assets, not a film, and go through it.
 
 ## One question call, at most

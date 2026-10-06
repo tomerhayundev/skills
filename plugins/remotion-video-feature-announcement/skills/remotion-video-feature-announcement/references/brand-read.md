@@ -52,9 +52,27 @@ List every item the user named. Find the spine that makes each item a step or a 
 story, and write down where each one lands in the film. A chapter per item is a montage: five items
 in 30 s is five fragments and no idea.
 
+**The ask leads.** The item the user named as the subject (the products, the sale, the new feature)
+is the film's subject, not one item among the brand's story: it is on screen and recognizable in the
+first 3 s and is what most of the film shows. The brand's difference serves it as a proof, in a beat
+or two. "Our products, 20% off in November" is a film of the products and the offer: many of them,
+each recognizable, from the whole catalog. A film about how they are made, with the products at
+second 8, answers another ask.
+
 When two items really cannot share one story (a service for companies and a toy for children), the
 film tells the one the brand leads with, and the brief says in one line which item gets a film of
 its own. The user is never asked to choose.
+
+## A brand's second film, and every one after it
+
+The brand's words do not change between films; the film does. When the folder holds earlier films
+or ads of the brand (SKILL.md, section 0), copy the quotes from the earlier read if they still hold,
+then make the four conclusions again for this ask and write `before.md`: each earlier piece's first
+shot, hook kind, motif, layout device, the track it used and the ones it offered, and its clips and
+photos (by any name they had: a site photo and its local copy are one picture). The Signature row is the trap: a brand owns
+one signature, so a read copied from the last film hands every film the same motif and the same
+opening. When an earlier film already carried the signature, this film's motif comes from this ask
+(the products, the offer, the occasion) and the signature is at most an echo.
 
 ## 4. Three concepts, and a critic before the brief
 
@@ -63,10 +81,13 @@ first: one line per job (for a promo: hook, promise, proofs, offer, close; the f
 otherwise), with where every asked item lands. Then its motif: the one object that carries those jobs from the hook to the close, what it does
 (its verb, which is what the brand does), and how it links the shots. A concept that starts from a
 gimmick device (before and after, a split frame) and fits a story to it is rewritten from the jobs. Then a fresh critic (a subagent with no part in the writing)
-gets the brand read, the ask, the material list and the three concepts, and scores each from 1 to 10:
+gets the brand read, the ask, the material list, `before.md` with a frame of each earlier piece's
+opening, and the three concepts, and scores each from 1 to 10:
 
 | Criterion | The question |
 | --- | --- |
+| The ask, first | Someone who read only the user's ask watches 0 to 3 s: do they see what was asked for (the products, the offer, the feature)? Does it fill most of the film, or does a brand story take its place? |
+| New for this brand | Set beside `before.md`: another first shot, another kind of hook, another motif, another layout device, none of the earlier pieces' clips in the first 3 s? A concept that matches the brand's earlier film or ad fails, however well it scores elsewhere. So does the category's default (a packshot slideshow, a grid of products under a percent badge). |
 | One idea | Can it be said in one sentence, or is it a list with a title? |
 | Structure | Can every beat's job be named? After one viewing, would a stranger know who this is, what they get, why this one, and what to do? |
 | A professional ad | Would the brand's own marketing lead post it as their ad, or is it a feed trend with a logo on the end? |

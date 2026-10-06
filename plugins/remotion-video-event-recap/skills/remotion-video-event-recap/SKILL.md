@@ -4,7 +4,7 @@ description: Use when making an event recap, conference highlight or launch-even
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.9.6 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: bb119bf66352 -->
+<!-- Generated from remotion-video-master 0.10.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 978949a811dd -->
 
 # Remotion event recap video
 
@@ -28,7 +28,7 @@ folder (earlier films made with this skill, the brand's own past ads and posts, 
 materials map) is a list of what was already done, never a template, a reference or a style to
 match. Before the brand read, write `docs/<film>/before.md`: for each earlier film or ad, its first
 shot and hook kind, its motif, its layout device (a split, a grid, a diptych, a packshot slideshow),
-its track and the clips and photos it used. The new film opens differently (another first shot and
+its track (and the tracks it offered) and the clips and photos it used. The new film opens differently (another first shot and
 another kind of hook), carries another motif, uses another track and layout device, uses none of
 those clips or photos in its first 3 s and takes at most a third of its shots from them. The
 brand's quotes can be reused; the conclusions for the film are made again from this ask. A film the
@@ -106,7 +106,8 @@ turns. A shape that fits every brand says nothing about this one; an object that
 divider line in the logo, a pretty prop) is decoration, not a motif.
 A brand has one signature but many films: when an earlier film already used it as the motif, this
 film's motif comes from this ask (the products themselves, the offer, the occasion), and the
-signature appears at most as an echo.
+signature appears at most as an echo. Such a motif passes the competitor test through what it acts
+on: this brand's own products, recognizable, doing what the offer does.
 
 | Slot | What goes in it | CV-builder example |
 | --- | --- | --- |

@@ -19,7 +19,13 @@ You are reviewing the plan of a <length> s <format> for <what the brand is, by c
 write it. Read <out/visual-brief.png>, watch <out/motion-1.mp4> (its frames: <out/motion-1-strip.png>).
 The one message: "<message>". The brand's look, in its own words: "<Look row>".
 
+The user's ask, word for word: "<the ask>". The brand's earlier films and ads, their openings and
+motifs: <before.md, with a frame of each opening>.
+
 In this order:
+0. The ask and the brand's earlier films. In the first 3 s, would someone who read only the ask see
+   what was asked for? Does it fill most of the film? Does anything repeat an earlier film or ad
+   (first shot, kind of hook, motif, layout, the same clips)? Either is a structural problem.
 1. The opening alone (in a feed, the first two seconds): the first picture, its line, where the
    music starts. Would this viewer stay? Is something already happening on frame 0, is it clear what
    the film is about, does it open something the film closes? A slogan, a logo, a still product, a

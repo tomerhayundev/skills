@@ -38,7 +38,8 @@ const brief = () => ({
   idea: "Every box answers when you scan it.",
   motif: { object: "the molded code", verb: "it answers when scanned, as the product does", links: "each shot finds the code on the next box" },
   moments: [{ thing: "the code on the box", becomes: "the list of what is inside", beat: 2 }],
-  asks: [{ item: "the app", where: "the scan at the turn" }],
+  asks: [{ item: "the app", where: "the scan at the turn", lead: true, seenAt: 0 }],
+  before: [],
   music: { id: "calm-90", title: "A calm track", artist: "Someone", bpm: 120, why: "calm, like the brand says it is", file: tone, liftSeconds: 4 },
   cuts: [
     {
@@ -334,4 +335,62 @@ test("a number on screen comes from the facts list, never from memory", () => {
   const left = checkPlan(b);
   assert.equal(left.length, 1, left.join("\n"));
   assert.match(left[0], /facts: "90% of boxes" needs its text and where it comes from/);
+});
+
+test("the ask leads: a promo marks what was asked for, on screen in the first 3 s", () => {
+  const none = brief();
+  delete none.asks[0].lead;
+  assert.match(checkPlan(none).join("\n"), /asks: mark the subject of the ask \(lead: true\)/);
+  const late = brief();
+  late.asks[0].seenAt = 8;
+  assert.match(checkPlan(late).join("\n"), /first on screen at 8\.0 s; the ask leads/);
+  assert.doesNotMatch(checkPlan(brief()).join("\n"), /lead|seenAt/);
+});
+
+test("a brand's next film repeats none of its earlier films: motif, hook, track, layout, opening clips", () => {
+  const missing = brief();
+  delete missing.before;
+  assert.match(checkPlan(missing).join("\n"), /before: list every earlier film or ad/);
+  const again = brief();
+  again.hook.kind = "in the middle of it";
+  again.layout = "split diptych";
+  again.before = [{ name: "the brand film", motif: "The Molded Code", hookKind: "In the middle of it", track: "calm-90", layout: "split diptych", uses: ["old/pour.mp4", "old/table.mp4"] }];
+  again.cuts[0].beats[0].uses = ["footage/pour.mov"];
+  again.cuts[0].beats[1].uses = ["footage/table.mp4"];
+  again.cuts[0].beats[2].uses = ["new/packshot-12.jpg"];
+  again.cuts[1].beats[0].uses = ["new/packshot-3.jpg"];
+  const out = checkPlan(again).join("\n");
+  assert.match(out, /the motif "the molded code" already carried the brand film/);
+  assert.match(out, /already opened with a "In the middle of it" hook/);
+  assert.match(out, /already used or offered the track "calm-90"/);
+  assert.match(out, /already used the layout "split diptych"/);
+  assert.match(out, /30 s, beat 1: opens on footage\/pour\.mov, already used by an earlier film/);
+  assert.match(out, /30 s: 2 of 3 shots reuse earlier films' clips; at most a third/);
+  const unnamed = brief();
+  unnamed.before = [{ name: "the brand film", motif: "a pour", uses: ["old/pour.mp4"] }];
+  assert.match(checkPlan(unnamed).join("\n"), /30 s, beat 1: say which clips or photos it is made of \(uses\)/);
+  const fresh = brief();
+  fresh.before = [{ name: "the brand film", motif: "a pour", hookKind: "the build", track: "other", uses: ["old/pour.mp4"] }];
+  fresh.cuts.forEach((c) => c.beats.forEach((b, i) => (b.uses = [`new/shot-${c.name}-${i}.mp4`])));
+  assert.doesNotMatch(checkPlan(fresh).join("\n"), /before|uses|reuse|already used/);
+});
+
+test("the page shows the brand's earlier films beside this one", () => {
+  const b = brief();
+  b.lang = "he";
+  b.before = [{ name: "סרט המותג", opening: "יציקה מהכד", motif: "היציקה" }];
+  b.cuts.forEach((c) => c.beats.forEach((x, i) => (x.uses = [`new/${c.name}-${i}.mp4`])));
+  const html = buildHtml(b);
+  assert.match(html, /הסרטונים הקודמים שלכם, ובמה הסרטון הזה שונה/);
+  assert.match(html, /יציקה מהכד · היציקה/);
+});
+
+test("a picture under another name, and a track only offered, still count as used", () => {
+  const b = brief();
+  b.before = [{ name: "the brand film", motif: "a pour", tracks: ["other", "calm-90"], uses: ["site/ab12cd34ef.jpg"] }];
+  b.cuts.forEach((c) => c.beats.forEach((x, i) => (x.uses = [`new/shot-${c.name}-${i}.mp4`])));
+  b.cuts[0].beats[0].uses = ["public/821203_ab12cd34ef.webp"];
+  const out = checkPlan(b).join("\n");
+  assert.match(out, /already used or offered the track "calm-90"/);
+  assert.match(out, /30 s, beat 1: opens on public\/821203_ab12cd34ef\.webp, already used by an earlier film/);
 });
