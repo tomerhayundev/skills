@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { render, injectProbe } from './render.mjs';
+import crypto from 'node:crypto';
+import { render, injectProbe, measure } from './render.mjs';
 import { findChrome } from './lib/chrome.mjs';
-import { pngSize } from './lib/png.mjs';
+import { pngSize, encodePng } from './lib/png.mjs';
 import { readJson } from './lib/cli.mjs';
 
 const skip = !findChrome() && 'no Chrome or Edge on this machine';
@@ -29,6 +30,20 @@ test('render measures the page, keeps every version and writes metrics', { skip 
   const m = readJson(path.join(dir, 'board.metrics.json'));
   assert.equal(m.texts[0].text, 'Palette');
   assert.equal(m.blocks[0].id, 'a');
+});
+
+test('measure reports a board after its raster images load, even one slow to decode', { skip }, () => {
+  const dir = tmp();
+  const n = 1200;
+  const data = new Uint8Array(crypto.randomBytes(n * n * 4));
+  for (let i = 3; i < data.length; i += 4) data[i] = 255;
+  fs.writeFileSync(path.join(dir, 'noise.png'), encodePng(n, n, data));
+  const f = path.join(dir, 'board.html');
+  fs.writeFileSync(f, '<!doctype html><html><body style="margin:0"><img src="noise.png" alt="" style="display:block"><p style="margin:0">Palette</p></body></html>');
+  const m = measure(f, n);
+  assert.equal(m.ok, true);
+  assert.equal(m.texts[0].rect.y, n);
+  assert.equal(m.doc.height, n + m.texts[0].rect.h);
 });
 
 test('render refuses a page whose height follows the window', { skip }, () => {

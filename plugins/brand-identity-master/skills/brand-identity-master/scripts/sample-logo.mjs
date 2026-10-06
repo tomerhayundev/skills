@@ -47,15 +47,17 @@ export function snapToDeclared(inks, declared) {
   return out;
 }
 
+// The image sits in the markup and is read in the window's load event, which waits for it; drawImage then
+// decodes it on the page's own thread. Never await img.decode(): that decode runs off the page's thread, virtual
+// time does not wait for it, and Chrome can dump the page before it reports (seen on CI runners).
 function decodePage(dataUri, { maxSide, vector, hint }) {
   const nw = vector && hint ? String(hint.width) : 'img.naturalWidth || 512';
   const nh = vector && hint ? String(hint.height) : 'img.naturalHeight || 512';
-  return `<!doctype html><meta charset="utf-8"><body><script>${EMIT_JS}
-(async () => {
+  return `<!doctype html><meta charset="utf-8"><body><img id="logo" alt="" style="display:none" src="${dataUri}"><script>${EMIT_JS}
+window.addEventListener('load', () => {
   try {
-    const img = new Image();
-    img.src = ${JSON.stringify(dataUri)};
-    await img.decode();
+    const img = document.getElementById('logo');
+    if (!img.complete || (!img.naturalWidth && !${vector})) throw new Error('the browser could not read this image');
     const nw = ${nw}, nh = ${nh};
     const k = ${vector} ? ${maxSide} / Math.max(nw, nh) : Math.min(1, ${maxSide} / Math.max(nw, nh));
     const w = Math.max(1, Math.round(nw * k)), h = Math.max(1, Math.round(nh * k));
@@ -68,7 +70,7 @@ function decodePage(dataUri, { maxSide, vector, hint }) {
     for (let i = 0; i < d.length; i += 8192) s += String.fromCharCode.apply(null, d.subarray(i, i + 8192));
     __emit({ ok: true, naturalWidth: nw, naturalHeight: nh, width: w, height: h, rgba: btoa(s) });
   } catch (e) { __emit({ ok: false, error: String(e) }); }
-})();
+});
 </script>`;
 }
 

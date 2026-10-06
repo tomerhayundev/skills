@@ -8,7 +8,7 @@ compatibility: Node 18+, and Chrome or Edge (any Chromium browser) for reading t
 
 Turns a logo into a visual identity: a brand file other skills read (`brand/brand.json`), and a brand identity board ready to show a client. Everything comes from the logo and the brand's own words. The board is HTML rendered to PNG by a headless browser, and the logo file is placed as it is, never redrawn.
 
-This is version 0.4.0 of the skill. Asked which version is loaded, answer with this line: an installed copy changes only when it is updated, and a running session keeps the copy it started with.
+This is version 0.4.1 of the skill. Asked which version is loaded, answer with this line: an installed copy changes only when it is updated, and a running session keeps the copy it started with.
 
 Scripts live in this skill's `scripts/` folder: run them as `node <this skill>/scripts/<name>.mjs`. Output goes to `brand/` in the working folder. Answer the user in their language; the board is in the brand's language.
 

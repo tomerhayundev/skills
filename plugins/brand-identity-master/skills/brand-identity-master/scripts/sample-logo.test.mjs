@@ -5,7 +5,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { svgColors, svgSize, snapToDeclared, readLogo } from './sample-logo.mjs';
+import crypto from 'node:crypto';
+import { svgColors, svgSize, snapToDeclared, readLogo, decodeImage } from './sample-logo.mjs';
 import { findChrome } from './lib/chrome.mjs';
 import { encodePng } from './lib/png.mjs';
 import { deltaOk } from './lib/color.mjs';
@@ -53,6 +54,19 @@ test('readLogo on a PNG with a white ground does not take white as a colour', { 
   assert.equal(r.background.kind, 'solid');
   assert.equal(r.inks.length, 1);
   assert.ok(deltaOk(r.inks[0].hex, '#E6781E') < 0.02);
+});
+
+// A raster that is slow to decode: the browser decodes it off the page's thread, which virtual time does not
+// wait for, so a page that awaited img.decode() was dumped before it reported (CI failed this way).
+test('decodeImage reads a raster that is slow to decode, pixel for pixel', { skip }, () => {
+  const n = 1200;
+  const data = new Uint8Array(crypto.randomBytes(n * n * 4));
+  for (let i = 3; i < data.length; i += 4) data[i] = 255;
+  const f = path.join(tmp(), 'noise.png');
+  fs.writeFileSync(f, encodePng(n, n, data));
+  const d = decodeImage(f, { maxSide: n });
+  assert.deepEqual([d.img.width, d.img.height], [n, n]);
+  for (const p of [0, 1, n * n >> 1, n * n - 1]) assert.deepEqual([...d.img.data.subarray(p * 4, p * 4 + 4)], [...data.subarray(p * 4, p * 4 + 4)]);
 });
 
 test('the CLI copies the logo unchanged and writes logo-read.json', { skip }, () => {
