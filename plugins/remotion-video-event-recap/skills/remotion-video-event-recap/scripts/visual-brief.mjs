@@ -34,7 +34,7 @@
  *            { "item": "the products, 20% off", "where": "...", "lead": true, "seenAt": 0.5 }],   // lead: the subject of the ask, on screen by seenAt s
  *   "before": [{ "name": "brand film, September", "opening": "the pour from the pitcher", "hookKind": "in the middle of it",
  *                "motif": "the pour", "layout": "split diptych", "tracks": ["the track it used", "the ones it offered"],
- *                "uses": ["footage/pour.mp4", "footage/table.mp4"] }],
+ *                "opensWith": "footage/pour.mp4", "uses": ["footage/pour.mp4", "footage/table.mp4"] }],
  *                                      // every earlier film or ad of the brand in the folder ([] when none): what not to repeat
  *   "layout": "the film's layout device, when it has one (a split, a grid, a single full frame)",
  *   "feed": true,                      // Reels, TikTok, Shorts, Stories: the first-seconds checks apply
@@ -74,8 +74,9 @@
  * same scale three shots running or too few scales in a cut, a boundary that carries nothing
  * into the next shot, or fewer moments than the film's length asks for (three from 20 s).
  * No "before" list; a film that repeats an earlier one's motif, kind of hook, track or layout,
- * uses an earlier film's clips in its first 3 s or in over a third of its shots, or a beat with no
- * "uses" when earlier films exist; a promo whose asks mark no lead, or whose lead is first seen
+ * opens (first 3 s) on a clip an earlier film opened with or on a worn-out clip (in two or more
+ * earlier films), uses a worn-out clip more than once, or a beat with no "uses" when earlier films
+ * exist; an earlier clip that fits may otherwise return; a promo whose asks mark no lead, or whose lead is first seen
  * after 3 s.
  */
 import { spawnSync } from "node:child_process";
@@ -157,18 +158,28 @@ export function checkPlan(brief) {
       for (const t of [e?.track, e?.tracks ?? []].flat().filter(has)) if (same(t, brief.music?.id) || same(t, brief.music?.title)) problems.push(`before: ${name} already used or offered the track "${t}"; pick another from the library`);
       if (same(e?.layout, brief.layout)) problems.push(`before: ${name} already used the layout "${e.layout}"`);
     }
-    const used = brief.before.flatMap((e) => [e?.uses ?? []].flat()).filter(has).map(clipKey);
+    const keys = (list) => [list ?? []].flat().filter(has).map(clipKey);
+    const openers = brief.before.flatMap((e) => keys(e?.opensWith));
+    const films = brief.before.map((e) => [...new Set([...keys(e?.uses), ...keys(e?.opensWith)])]);
+    const worn = [...new Set(films.flat())].filter((k) => films.filter((f) => f.some((u) => sameClip(u, k))).length >= 2);
+    const isIn = (list, f) => list.some((u) => sameClip(u, clipKey(f)));
     for (const cut of brief.cuts ?? []) {
       const beats = cut.beats ?? [];
-      let reused = 0;
+      const wornSeen = new Map();
       beats.forEach((b, i) => {
         const files = [b.uses ?? []].flat().filter(has);
         if (!files.length) { problems.push(`${cut.name}, beat ${i + 1}: say which clips or photos it is made of (uses), so it can be checked against the earlier films`); return; }
-        const again = files.filter((f) => used.some((u) => sameClip(u, clipKey(f))));
-        if (again.length) reused++;
-        if (again.length && b.at < 3) problems.push(`${cut.name}, beat ${i + 1}: opens on ${again.join(", ")}, already used by an earlier film; the first 3 s are new material`);
+        for (const f of files) {
+          const opened = isIn(openers, f), tired = isIn(worn, f);
+          if (b.at < 3 && opened) problems.push(`${cut.name}, beat ${i + 1}: opens on ${f}, which already opened an earlier film; open on something the brand's films have not opened with`);
+          else if (b.at < 3 && tired) problems.push(`${cut.name}, beat ${i + 1}: opens on ${f}, already in two or more earlier films; the opening is new material`);
+          if (tired) {
+            const k = worn.find((u) => sameClip(u, clipKey(f)));
+            wornSeen.set(k, (wornSeen.get(k) ?? 0) + 1);
+            if (wornSeen.get(k) === 2) problems.push(`${cut.name}: ${f} is already in two or more earlier films and comes back more than once here; once at most, and the rest from the whole catalog`);
+          }
+        }
       });
-      if (beats.length && reused * 3 > beats.length) problems.push(`${cut.name}: ${reused} of ${beats.length} shots reuse earlier films' clips; at most a third. The whole catalog is the material (every product page, every packshot)`);
     }
   }
   if (!brief.music || typeof brief.music !== "object") problems.push("music: name the track from the library and why it fits the brand's look (music.id, music.why)");

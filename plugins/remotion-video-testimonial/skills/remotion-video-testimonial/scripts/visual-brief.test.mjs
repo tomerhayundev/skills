@@ -354,18 +354,27 @@ test("a brand's next film repeats none of its earlier films: motif, hook, track,
   const again = brief();
   again.hook.kind = "in the middle of it";
   again.layout = "split diptych";
-  again.before = [{ name: "the brand film", motif: "The Molded Code", hookKind: "In the middle of it", track: "calm-90", layout: "split diptych", uses: ["old/pour.mp4", "old/table.mp4"] }];
+  again.before = [
+    { name: "the brand film", motif: "The Molded Code", hookKind: "In the middle of it", track: "calm-90", layout: "split diptych", opensWith: "old/pour.mp4", uses: ["old/pour.mp4", "old/table.mp4"] },
+    { name: "the second film", opensWith: "old/printer.mp4", uses: ["old/printer.mp4", "old/table.mp4"] },
+  ];
   again.cuts[0].beats[0].uses = ["footage/pour.mov"];
   again.cuts[0].beats[1].uses = ["footage/table.mp4"];
-  again.cuts[0].beats[2].uses = ["new/packshot-12.jpg"];
+  again.cuts[0].beats[2].uses = ["footage/table.mp4"];
   again.cuts[1].beats[0].uses = ["new/packshot-3.jpg"];
   const out = checkPlan(again).join("\n");
   assert.match(out, /the motif "the molded code" already carried the brand film/);
   assert.match(out, /already opened with a "In the middle of it" hook/);
   assert.match(out, /already used or offered the track "calm-90"/);
   assert.match(out, /already used the layout "split diptych"/);
-  assert.match(out, /30 s, beat 1: opens on footage\/pour\.mov, already used by an earlier film/);
-  assert.match(out, /30 s: 2 of 3 shots reuse earlier films' clips; at most a third/);
+  assert.match(out, /30 s, beat 1: opens on footage\/pour\.mov, which already opened an earlier film/);
+  assert.match(out, /30 s: footage\/table\.mp4 is already in two or more earlier films and comes back more than once/);
+  const fits = brief();
+  fits.before = [{ name: "the brand film", motif: "a pour", opensWith: "old/pour.mp4", uses: ["old/pour.mp4", "old/table.mp4", "old/cups.mp4"] }];
+  fits.cuts.forEach((c) => c.beats.forEach((x, i) => (x.uses = [`new/shot-${c.name}-${i}.mp4`])));
+  fits.cuts[0].beats[1].uses = ["footage/table.mp4"];
+  fits.cuts[0].beats[2].uses = ["footage/cups.mp4"];
+  assert.doesNotMatch(checkPlan(fits).join("\n"), /earlier film|worn|uses/, "an earlier clip that fits may return");
   const unnamed = brief();
   unnamed.before = [{ name: "the brand film", motif: "a pour", uses: ["old/pour.mp4"] }];
   assert.match(checkPlan(unnamed).join("\n"), /30 s, beat 1: say which clips or photos it is made of \(uses\)/);
@@ -387,10 +396,10 @@ test("the page shows the brand's earlier films beside this one", () => {
 
 test("a picture under another name, and a track only offered, still count as used", () => {
   const b = brief();
-  b.before = [{ name: "the brand film", motif: "a pour", tracks: ["other", "calm-90"], uses: ["site/ab12cd34ef.jpg"] }];
+  b.before = [{ name: "the brand film", motif: "a pour", tracks: ["other", "calm-90"], opensWith: "site/ab12cd34ef.jpg", uses: ["site/ab12cd34ef.jpg"] }];
   b.cuts.forEach((c) => c.beats.forEach((x, i) => (x.uses = [`new/shot-${c.name}-${i}.mp4`])));
   b.cuts[0].beats[0].uses = ["public/821203_ab12cd34ef.webp"];
   const out = checkPlan(b).join("\n");
   assert.match(out, /already used or offered the track "calm-90"/);
-  assert.match(out, /30 s, beat 1: opens on public\/821203_ab12cd34ef\.webp, already used by an earlier film/);
+  assert.match(out, /30 s, beat 1: opens on public\/821203_ab12cd34ef\.webp, which already opened an earlier film/);
 });

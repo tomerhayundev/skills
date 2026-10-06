@@ -25,7 +25,8 @@ motifs: <before.md, with a frame of each opening>.
 In this order:
 0. The ask and the brand's earlier films. In the first 3 s, would someone who read only the ask see
    what was asked for? Does it fill most of the film? Does anything repeat an earlier film or ad
-   (first shot, kind of hook, motif, layout, the same clips)? Either is a structural problem.
+   (first shot, kind of hook, motif, layout, the same few clips again)? Either is a structural
+   problem. An earlier clip that fits is fine; the same handful in every film is not.
 1. The opening alone (in a feed, the first two seconds): the first picture, its line, where the
    music starts. Would this viewer stay? Is something already happening on frame 0, is it clear what
    the film is about, does it open something the film closes? A slogan, a logo, a still product, a

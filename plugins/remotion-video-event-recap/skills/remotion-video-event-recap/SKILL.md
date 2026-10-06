@@ -4,7 +4,7 @@ description: Use when making an event recap, conference highlight or launch-even
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.10.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 978949a811dd -->
+<!-- Generated from remotion-video-master 0.10.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 11071ab4d20d -->
 
 # Remotion event recap video
 
@@ -28,9 +28,12 @@ folder (earlier films made with this skill, the brand's own past ads and posts, 
 materials map) is a list of what was already done, never a template, a reference or a style to
 match. Before the brand read, write `docs/<film>/before.md`: for each earlier film or ad, its first
 shot and hook kind, its motif, its layout device (a split, a grid, a diptych, a packshot slideshow),
-its track (and the tracks it offered) and the clips and photos it used. The new film opens differently (another first shot and
-another kind of hook), carries another motif, uses another track and layout device, uses none of
-those clips or photos in its first 3 s and takes at most a third of its shots from them. The
+its track (and the tracks it offered), the clip it opened on and the clips and photos it used. The
+new film opens differently (another first shot and another kind of hook), carries another motif,
+uses another track and layout device, and draws on the whole catalog. An earlier clip may come back
+where it truly fits this film; what may not come back is the same few every time: no clip that
+opened an earlier film opens this one, and a clip already in two or more earlier films (worn out)
+appears at most once, never in the first 3 s. The
 brand's quotes can be reused; the conclusions for the film are made again from this ask. A film the
 user rejected joins the list: the next try is a new concept, never a fall back to another earlier
 piece in the folder.
@@ -280,7 +283,7 @@ profile's critique starts with **story and copy**.
 | No AI giveaways | Text in the corners, decorative readouts (a timecode, coordinates, a status line that tells the viewer nothing), decorative borders around the whole video, a centered title on a gradient, everything fading in, more than two things asking to be read at once, an em dash in the words on screen: write two lines, or a colon. |
 | Every gesture mirrors the product action | Transitions included. A reveal under a moving element reads as erasing; pasted things appear whole; a code molded into the product never arrives like a sticker. |
 | The ask leads | What the user named is on screen in the first 3 s and fills most of the film. A sale of products whose first products appear at second 8 is a brand film with a price on the end. |
-| Never repeat the brand's earlier films | Same first shot, hook kind, motif, track, layout device or the same handful of clips, and every film of the brand looks the same (section 0). Earlier ads in the folder are not a style reference unless the user names one. |
+| Never repeat the brand's earlier films | Same first shot, hook kind, motif, track, layout device or the same handful of clips, and every film of the brand looks the same (section 0). An earlier clip that fits may return; an earlier opening may not, and a worn-out clip (in two or more earlier films) returns once at most. Earlier ads in the folder are not a style reference unless the user names one. |
 | Fake company names next to invented metrics | A real employer beside an invented score fails ad review. |
 | Never loosen a containment or safe-zone test | Move the content. |
 | Interior chain entries start at `from: 0` | Windowing one mounts it early and overpaints the previous scene. |

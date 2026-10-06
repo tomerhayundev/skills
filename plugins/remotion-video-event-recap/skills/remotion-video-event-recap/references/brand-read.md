@@ -87,7 +87,7 @@ opening, and the three concepts, and scores each from 1 to 10:
 | Criterion | The question |
 | --- | --- |
 | The ask, first | Someone who read only the user's ask watches 0 to 3 s: do they see what was asked for (the products, the offer, the feature)? Does it fill most of the film, or does a brand story take its place? |
-| New for this brand | Set beside `before.md`: another first shot, another kind of hook, another motif, another layout device, none of the earlier pieces' clips in the first 3 s? A concept that matches the brand's earlier film or ad fails, however well it scores elsewhere. So does the category's default (a packshot slideshow, a grid of products under a percent badge). |
+| New for this brand | Set beside `before.md`: another first shot, another kind of hook, another motif, another layout device, drawn from the whole catalog rather than the same few clips (an earlier clip that fits may return; an earlier opening may not)? A concept that matches the brand's earlier film or ad fails, however well it scores elsewhere. So does the category's default (a packshot slideshow, a grid of products under a percent badge). |
 | One idea | Can it be said in one sentence, or is it a list with a title? |
 | Structure | Can every beat's job be named? After one viewing, would a stranger know who this is, what they get, why this one, and what to do? |
 | A professional ad | Would the brand's own marketing lead post it as their ad, or is it a feed trend with a logo on the end? |
