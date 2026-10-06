@@ -1964,6 +1964,155 @@
       "seen": 2
     },
     {
+      "id": "diagram-design",
+      "name": "Diagram Design",
+      "home": "https://cathrynlavery.github.io/diagram-design/",
+      "kind": "code",
+      "areas": [
+        "illustration",
+        "motion",
+        "animation-code"
+      ],
+      "summary": "An open agent skill that draws editorial diagrams as self-contained HTML and SVG: 44 types in light, dark and full skins, a written reference per type, a style guide of roles, and an ordered reveal mode. Static by default.",
+      "quality": {
+        "score": 4,
+        "why": "a precise written grammar per type, checked geometry, one clear accent rule; but skin, print-size text and motion limits suit static pages, older examples are dense, one author, and its project site still says 29 types"
+      },
+      "fit": {
+        "explainer": "high",
+        "product-demo": "medium",
+        "tutorial": "medium",
+        "website": "medium",
+        "feature-announcement": "low"
+      },
+      "routes": [
+        {
+          "need": [
+            "illustration"
+          ],
+          "url": "https://cathrynlavery.github.io/diagram-design/example-{type}.html",
+          "example": "https://cathrynlavery.github.io/diagram-design/example-loop.html",
+          "values": "loop, layers, pyramid, quadrant, timeline, sankey, architecture-delta, exploded, flowchart, waterfall, process, architecture (all loaded); add -dark or -full for the other two skins; the gallery home lists every type as a tab",
+          "read": "look",
+          "access": "free",
+          "note": "one static page per diagram, inline SVG, no script. Loop, layers, pyramid and quadrant are sparse enough to film; process is dense with tiny type, so take its structure only."
+        },
+        {
+          "need": [
+            "svg-animation",
+            "illustration",
+            "launch-film"
+          ],
+          "url": "https://cathrynlavery.github.io/diagram-design/example-{name}-animated.html",
+          "example": "https://cathrynlavery.github.io/diagram-design/example-exploded-phone-animated.html",
+          "values": "exploded-phone, exploded-unboxing, exploded-ai-stack, exploded-keyboard, axonometric-plan-campus, axonometric-plan-coffee-shop, axonometric-plan-warehouse, policy-trace, queue, paved-road (all loaded)",
+          "read": "browser",
+          "access": "free",
+          "note": "the figure assembled, then its parts lift apart once, or its steps appear in order. Runs on a timer in the page, so watch the move and rebuild it on the frame clock."
+        },
+        {
+          "need": [
+            "illustration"
+          ],
+          "url": "https://raw.githubusercontent.com/cathrynlavery/diagram-design/main/docs/screenshots/{type}.png",
+          "example": "https://raw.githubusercontent.com/cathrynlavery/diagram-design/main/docs/screenshots/loop.png",
+          "values": "loop, process, layers, pyramid, quadrant, timeline, sankey, architecture-delta, exploded, flowchart, waterfall, architecture (all loaded)",
+          "read": "look",
+          "access": "free",
+          "note": "a 2400 pixel wide PNG of the light skin: the quickest way to judge the look before opening the page."
+        },
+        {
+          "need": [
+            "style-tokens"
+          ],
+          "url": "https://raw.githubusercontent.com/cathrynlavery/diagram-design/main/skills/diagram-design/references/style-guide.md",
+          "read": "md",
+          "access": "free",
+          "note": "tokens named by role (paper, ink, muted, rule, accent), a 4px grid and three type families; read the roles, not the default tangerine and slate values or the 7 to 9px print sizes."
+        },
+        {
+          "need": [
+            "svg-animation"
+          ],
+          "url": "https://raw.githubusercontent.com/cathrynlavery/diagram-design/main/skills/diagram-design/references/animation.md",
+          "read": "md",
+          "access": "free",
+          "note": "motion as integer steps in narrative order, at most two items entering per step, a path drawn with its length set to 1 and a dash offset, one clock. Its limits (24px travel, no zoom, 8 seconds) are for a static page, not a film."
+        },
+        {
+          "need": [
+            "illustration",
+            "svg-animation"
+          ],
+          "url": "https://raw.githubusercontent.com/cathrynlavery/diagram-design/main/skills/diagram-design/references/type-{type}.md",
+          "example": "https://raw.githubusercontent.com/cathrynlavery/diagram-design/main/skills/diagram-design/references/type-loop.md",
+          "values": "loop, layers, pyramid, quadrant, timeline, sankey, architecture-delta, exploded, flowchart, waterfall, process, architecture (all loaded)",
+          "read": "md",
+          "access": "free",
+          "note": "when to use the type and when not, its parameters, layout maths and draw order. Depth varies: loop and exploded are long and exact, timeline is a short page."
+        },
+        {
+          "need": [
+            "svg-animation",
+            "illustration",
+            "launch-film"
+          ],
+          "url": "https://raw.githubusercontent.com/cathrynlavery/diagram-design/main/skills/diagram-design/references/type-exploded.md",
+          "read": "md",
+          "access": "free",
+          "note": "the exploded axonometric: 2 to 5 parts pulled apart on one axis, one projection function, one gap between levels, and how it opens assembled then lifts once. The teardown and launch-beat figure."
+        }
+      ],
+      "item": {
+        "url": "https://cathrynlavery.github.io/diagram-design/example-{type}.html",
+        "media": "one HTML file per diagram with inline SVG and no script; PNG screenshots of the light skin in the repository"
+      },
+      "search": "none",
+      "machine": {
+        "md": "https://raw.githubusercontent.com/cathrynlavery/diagram-design/main/skills/diagram-design/SKILL.md",
+        "repo": "https://github.com/cathrynlavery/diagram-design"
+      },
+      "code": {
+        "license": {
+          "id": "MIT",
+          "source": "the LICENSE file in the repository; bundled icons carry their own licenses, listed in THIRD_PARTY_LICENSES.md",
+          "commercial": true
+        },
+        "install": "/plugin marketplace add cathrynlavery/diagram-design, then /plugin install diagram-design@diagram-design (Claude Code); other agents are in the README",
+        "stack": [
+          "html",
+          "inline svg",
+          "css custom properties",
+          "python 3 scripts to verify, lint and export",
+          "no build step"
+        ],
+        "remotion": {
+          "default": "static",
+          "real-time": [
+            "every example whose name ends in -animated: a small inline script steps CSS transitions on a timer"
+          ]
+        }
+      },
+      "rights": {
+        "media": "use",
+        "ai": "no stated AI terms: the gallery host has no robots file; the project site answers every missing file with a page, and its copy button holds a prompt for the user's own agent",
+        "credit": true
+      },
+      "take": "The grammar of a clear drawn explainer: one accent on the one or two things to look at first, low density, roles not hex, steps of at most two items in the order the voice explains, dashed for write-backs, an exploded view for a teardown.",
+      "never": "Use its default tangerine and slate skin or fonts, its 7 to 9px print text, its static-page motion limits, its dense types (schema, UML, matrix, Wardley map), or its controller script; the brand's tokens and the film's reading sizes win.",
+      "flags": [
+        "agent-prompt",
+        "soft-404"
+      ],
+      "fresh": {
+        "newest": "2026-10-06",
+        "from": "the date of the latest commit to the repository"
+      },
+      "verified": "2026-10-06",
+      "status": "ok",
+      "seen": 1
+    },
+    {
       "id": "dots-ui",
       "name": "Dots",
       "home": "https://dotsui.dev",

@@ -4,7 +4,7 @@ description: Use when making onboarding, welcome or first-run videos with Remoti
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.10.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 3135cef6f7c5 -->
+<!-- Generated from remotion-video-master 0.10.2 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 1a65289441bf -->
 
 # Remotion onboarding video
 
