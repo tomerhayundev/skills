@@ -4,7 +4,7 @@ description: Use when making an organic social clip for Reels, TikTok, Shorts or
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.11.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 2546e224fcbd -->
+<!-- Generated from remotion-video-master 0.11.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 07ee2fa54797 -->
 
 # Remotion social clip video
 
