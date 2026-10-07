@@ -855,6 +855,89 @@
           "bytes": 905929
         }
       }
+    },
+    {
+      "id": "isometric-glow",
+      "name": "Glowing isometric",
+      "line": "Fine isometric lines on a dark ground, where only what is working lights up.",
+      "fits": [
+        "explainer",
+        "product-demo",
+        "feature-announcement",
+        "landing-loop",
+        "teaser",
+        "launch-film"
+      ],
+      "poster": "isometric-glow.webp",
+      "loop": {
+        "file": "isometric-glow.mp4",
+        "seconds": 8,
+        "sha256": "72ec7ec65286af7a29a1f7c726861c08c1b5a125a070fbe850bc05dcad8d1157",
+        "bytes": 495067
+      },
+      "i18n": {
+        "he": {
+          "name": "איזומטרי זוהר",
+          "line": "קווים איזומטריים דקים על רקע כהה, ורק מה שעובד נדלק.",
+          "feel": [
+            "זוהר",
+            "טכני",
+            "לילי"
+          ],
+          "poster": "isometric-glow-he.webp",
+          "loop": {
+            "file": "isometric-glow-he.mp4",
+            "seconds": 8,
+            "sha256": "d73f9a7886d2894261314b3ea74f161c8060bd15562a36913c3d2b76f9624ba3",
+            "bytes": 483604
+          },
+          "loops": {
+            "tall": {
+              "file": "isometric-glow-he-tall.mp4",
+              "seconds": 8,
+              "sha256": "b419b57ef3ad1c6a3934c87c0b20abd243b63ab1a50ba5d248ddbf46534ca2c7",
+              "bytes": 566126
+            },
+            "square": {
+              "file": "isometric-glow-he-square.mp4",
+              "seconds": 8,
+              "sha256": "842a06de55a098f87dfcaac09bbf1c01362b1e2977fcd5e83734409e9d94e87f",
+              "bytes": 326877
+            },
+            "portrait": {
+              "file": "isometric-glow-he-portrait.mp4",
+              "seconds": 8,
+              "sha256": "6ce4997792f2e703d475223746353988285ff703fe8b80175c0d542fdf8eb3ae",
+              "bytes": 457111
+            }
+          }
+        }
+      },
+      "feel": [
+        "luminous",
+        "technical",
+        "nocturnal"
+      ],
+      "loops": {
+        "tall": {
+          "file": "isometric-glow-tall.mp4",
+          "seconds": 8,
+          "sha256": "8964d8421598bd86a104962db8d5d6cd35513a2daf17dcf8d7f19cba6519c6c5",
+          "bytes": 582595
+        },
+        "square": {
+          "file": "isometric-glow-square.mp4",
+          "seconds": 8,
+          "sha256": "81428c7b50900a182d238208a236959f736591ad6f28e3f7d55e7c76498b4546",
+          "bytes": 341047
+        },
+        "portrait": {
+          "file": "isometric-glow-portrait.mp4",
+          "seconds": 8,
+          "sha256": "6bc462be0742fba48d36a01852053137536b325316dc625a34e8f4b1968fff73",
+          "bytes": 491222
+        }
+      }
     }
   ],
   "tools": [

@@ -884,7 +884,7 @@ function client() {
     return el;
   }
   const sheet = h("div", { class: "sheet" }, ...V.styles.map(card));
-  // All ten looks fit on one screen, so none is missed below the fold; the strip says more about the one in hand.
+  // All the looks fit on one screen, so none is missed below the fold; the strip says more about the one in hand.
   const strip = h("p", { class: "strip" });
   function describe() {
     const s = byId(hovered) ?? (isAI("look") ? null : byId(V.choices.style.primary));

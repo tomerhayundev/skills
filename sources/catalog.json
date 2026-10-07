@@ -3094,7 +3094,7 @@
       "code": {
         "license": {
           "id": "MIT",
-          "source": "the questions section of the home page, which says MIT and to keep the licence file; the LICENSE file inside the download was not opened",
+          "source": "the LICENSE file inside iso-glow.zip (MIT, copyright 2026 for iso-glow and for iso-figure, on which it is based); the home page's questions section says the same",
           "commercial": true
         },
         "install": "the home page's one-line install copies a tar.gz into the user skills folder; a zip and a .skill file are offered too",
@@ -3124,8 +3124,7 @@
       "take": "For an explainer or demo scene: isometric hairlines on near-black, one accent that blooms only on what is live, a terse status line. Same genre as hairline; pick this when the scene needs light. Rebuild each lit state per frame.",
       "never": "Embed a gallery page in a scene as it is (real-time clocks), ship a finished figure in a client's film, or draw a brand's logo or words on a part.",
       "flags": [
-        "ai-generated",
-        "unverified-license"
+        "ai-generated"
       ],
       "fresh": {
         "newest": "2026-10-07",

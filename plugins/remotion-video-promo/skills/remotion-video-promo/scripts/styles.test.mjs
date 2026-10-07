@@ -11,9 +11,9 @@ const specs = loadSpecs();
 const lib = loadStyles();
 const MATERIALS = [[], ["footage"], ["photos"], ["ui"], ["footage", "photos"], ["footage", "photos", "ui"]];
 
-test("the library holds together: ten looks, known formats, three feel words each", () => {
+test("the library holds together: eleven looks, known formats, three feel words each", () => {
   assert.deepEqual(validateStyles(lib, specs), []);
-  assert.equal(lib.styles.length, 10);
+  assert.equal(lib.styles.length, 11);
 });
 
 test("every format and every mix of material shows every style once, one recommended first, the dimmed ones last", () => {

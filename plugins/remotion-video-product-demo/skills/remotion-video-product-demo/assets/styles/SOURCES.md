@@ -5,7 +5,7 @@ four shapes: wide 960 x 600 (`<id>.mp4`), tall 648 x 1152 (`-tall`), square 648 
 648 x 810 (`-portrait`). The preview plays the shape of the platform the user picked. The poster beside it is the film's first frame. Every film is a short ad for the same fictional product, a
 self-watering terracotta pot with no brand name, made in that look: the promise ("Water once. Forget for weeks."),
 the problem, the turn where the clay drinks for the plant, the payoff, and the promise again, so the loop has no seam.
-The motif in all ten is the water line. The Remotion project that renders them is `J:\Skills\examples\style-gallery`.
+The motif in every one is the water line. The Remotion project that renders them is `J:\Skills\examples\style-gallery`.
 None of them uses a client's or user's material.
 
 | Look | What the film does | Outside material |
@@ -19,10 +19,11 @@ None of them uses a client's or user's material.
 | collage | A magazine collage on twos: prints slap down, a dry seedling crossed out, a torn strip of water-blue paper, a stamp | The pot photo above, a still of the sagebrush clip, and "Plants on wooden shelf" by Anete Lūsiņa, "Replanting small plants" by Daniel Hjalmarsson, "Overgrown Houseplant" by Greg Weaver, all CC0, Wikimedia Commons |
 | 3d | three.js inside Remotion: the leaves droop and spring back with weight, the clay turns clear and the reservoir fills | none |
 | sketch | Marker on dotted paper, the camera panning one sheet; lines boil every four frames | none |
+| isometric-glow | A fine-line isometric cutaway on a dark plate: the light goes out and the pot closes into an ordinary one, then it opens, water runs in through the fill tube and the light climbs the wick to the roots and the leaves | none |
 | realistic | Real places carry a trip ("Away for three weeks?") while the product stays a real photo. The places could equally be the user's own photos, stock or an image tool's; this sample uses public-domain photographs | "Peaceful mountain lake" by Héctor J. Rivas, "Road along Alaska mountains" by alejandro gonzalez, "Cottage in the Mountains (Seceda, Italy)" by Jaromír Kavan, all CC0, Wikimedia Commons; and the pot photo above |
 
 Fonts, all SIL Open Font License: Anton, Karantina, Fredoka, IBM Plex Mono, IBM Plex Sans Hebrew, Instrument Serif,
-Frank Ruhl Libre, Geist, Heebo, Rubik, Caveat, Amatic SC.
+Frank Ruhl Libre, Geist, Heebo, Rubik, Caveat, Amatic SC, Space Grotesk, JetBrains Mono.
 
 The films are published as release assets (`loopBase` in styles.json) and checked against the sha256 and size recorded
 there before the page serves them.
