@@ -68,12 +68,15 @@
  * track's beat grid (60 / bpm s, 0.5 s when no bpm is given); a caption that cannot
  * be read in its beat (about 0.3 s a word, at least 1.5 s); a long dash in the words; a number
  * on screen that is in no fact. With "feed":
- * no music.startSeconds, a wait of over 2 s in the first shot (to its cut, or between the times in its changesAt, one or a list), or a cut over
+ * no music.startSeconds, a wait of over 2 s in the first shot (to its cut, or between the times in its changesAt: one time, a list, or
+ * a list of { "t": 2.5, "what": "the block lands on Tuesday" }), or a cut over
  * 30 s without a longWhy. For a promo (and the modules built on it): a first shot with nothing
  * changing in its first 3 s (2 s in a feed); fewer than about 10 compositions
  * per 30 s, a composition over 3.5 s with no change marked inside it, a shot with no scale, the
  * same scale three shots running or too few scales in a cut, a boundary that carries nothing
- * into the next shot, or fewer moments than the film's length asks for (three from 20 s).
+ * into the next shot, or fewer moments than the film's length asks for (three from 20 s). For an
+ * explainer: a shot over 3 s whose changesAt does not say what happens ({ t, what }) at least every
+ * 3 s, from its start to its end; a push, zoom, pan or drift of the camera alone is no event.
  * No "before" list; a film that repeats an earlier one's motif, kind of hook, track or layout,
  * opens (first 3 s) on a clip an earlier film opened with or on a worn-out clip (in two or more
  * earlier films), uses a worn-out clip more than once, or a beat with no "uses" when earlier films
@@ -100,10 +103,28 @@ const FAMILY = {
   explainer: "explainer", testimonial: "explainer",
 };
 const SCALES = ["macro", "close", "medium", "wide", "overhead", "type"];
+/**
+ * A shot's marked changes as { t, what }, t in seconds into the shot: changesAt is one time, a list,
+ * or a list of { t, what }. Times written on the film's clock (every one inside the shot's span, at
+ * least one past its length) are moved onto the shot's own.
+ */
+function marksOf(b) {
+  const marks = [b?.changesAt ?? []].flat().filter((c) => c !== null && c !== undefined)
+    .map((c) => (typeof c === "object" ? { t: Number(c.t), what: c.what } : { t: Number(c), what: undefined }));
+  const at = Number(b?.at) || 0;
+  const filmClock = at > 0 && marks.length > 0 && marks.every((m) => m.t >= at - 0.01 && m.t <= at + b.dur + 0.01) && marks.some((m) => m.t >= b.dur);
+  return filmClock ? marks.map((m) => ({ ...m, t: m.t - at })) : marks;
+}
+const changeTimes = (b) => marksOf(b).map((m) => m.t).filter((t) => t > 0 && t < b.dur).sort((x, y) => x - y);
+/** The camera moving with nothing in the picture changing: a push, a zoom, a pan, a drift. */
+const CAMERA = /\b(camera|push(es|ing)?(\s|-)?in|slow push|push toward|zoom(s|ing)?|pan(s|ning)?|drift(s|ing)?|dolly|tilt(s|ing)?|orbit(s|ing)?|ken burns)\b/i;
+/** Something in the picture happening. */
+const EVENT = /\b(lands?|falls?|drops?|fills?|lights?|appears?|enters?|arrives?|slides?|shoved?|shoves|snaps?|splits?|lifts?|press(es)?|opens?|closes?|draws?|writes?|counts?|grows?|shrinks?|rises?|breaks?|joins?|connects?|stacks?|pops?|flips?|turns?|becomes?|moves on|swaps?|clicks?|types?|empties|ticks?|rolls?|bounces?|settles?|locks?|unlocks?|fades?|comes? in|leaves?|crosses?|stamps?|tears?|folds?|unfolds?)\b/i;
+const cameraOnly = (what) => CAMERA.test(what) && !EVENT.test(what);
 /** The longest stretch of the first shot's first 3 s in which nothing changes: changesAt is one time or a list. */
 function longestWait(first) {
   if (!first) return 0;
-  const times = [first.changesAt].flat().map(Number).filter((t) => t > 0 && t < first.dur).sort((a, b) => a - b);
+  const times = changeTimes(first);
   const marks = [0, ...times, first.dur];
   let longest = 0;
   for (let i = 1; i < marks.length; i++) if (marks[i - 1] < 3) longest = Math.max(longest, marks[i] - marks[i - 1]);
@@ -263,7 +284,22 @@ export function checkPlan(brief) {
         if (!SCALES.includes(b.scale)) problems.push(`${where}: say how much of the world the frame shows (scale: ${SCALES.join(", ")})`);
         else if (i >= 2 && cut.beats[i - 1].scale === b.scale && cut.beats[i - 2].scale === b.scale) problems.push(`${where}: the third ${b.scale} shot running; change the scale, or the eye stops seeing the cuts`);
         if (i > 0 && !has(b.carries)) problems.push(`${where}: say what the eye follows over the cut into this shot (carries): the motif, or a real object, shape or movement that sits in the same place on both sides; a cut that carries nothing restarts the film`);
-        if (b.dur > 3.5 + 0.01 && !(Number(b.changesAt) > 0)) problems.push(`${where}: ${fmt(b.dur)} s with no change marked inside it; past 3.5 s a composition needs one (changesAt), or it is two shots`);
+        if (b.dur > 3.5 + 0.01 && !changeTimes(b).length) problems.push(`${where}: ${fmt(b.dur)} s with no change marked inside it; past 3.5 s a composition needs one (changesAt), or it is two shots`);
+      }
+      if (brief.format === "explainer" && b.dur > 3 + 0.01) {
+        // A diagram hold needs an event every 2 to 3 s; a slow push alone passes frozen-time and still reads as nothing happening.
+        const marks = marksOf(b);
+        if (!marks.length) problems.push(`${where}: ${fmt(b.dur)} s with nothing marked to happen in it; an explainer needs an event every 2 to 3 s (something lands, lights, fills or moves on): list them in changesAt as { t, what }, t in seconds into the shot, or cut the beat (formats/explainer/FORMAT.md)`);
+        else {
+          const bare = marks.filter((c) => !has(c.what)).map((c) => `${fmt(c.t)} s`);
+          if (bare.length) problems.push(`${where}: say what happens at ${bare.join(" and ")} (changesAt: { t, what })`);
+          for (const c of marks) if (has(c.what) && cameraOnly(c.what)) problems.push(`${where}: "${c.what}" at ${fmt(c.t)} s is the camera, not an event; a push or zoom alone reads as nothing happening: make something in the picture land, light, fill or move on`);
+          const events = marks.filter((c) => has(c.what) && !cameraOnly(c.what)).map((c) => c.t).filter((t) => t > 0 && t < b.dur).sort((x, y) => x - y);
+          if (!bare.length) {
+            const edges = [0, ...events, b.dur];
+            for (let k = 1; k < edges.length; k++) if (edges[k] - edges[k - 1] > 3 + 0.01) problems.push(`${where}: nothing happens from ${fmt(edges[k - 1])} s to ${fmt(edges[k])} s (${fmt(edges[k] - edges[k - 1])} s); an explainer needs an event every 2 to 3 s, or the stretch is cut`);
+          }
+        }
       }
       if (family && family !== "tutorial") for (const n of unsourced(b.words)) problems.push(`${where}: "${n}" is on screen but in no fact; every number shown comes from the facts list (facts: text, source), never from memory`);
       if (Math.abs(b.at - t) > 0.01) problems.push(`${where}: starts at ${fmt(b.at)} s, but the beat before it ends at ${fmt(t)} s`);

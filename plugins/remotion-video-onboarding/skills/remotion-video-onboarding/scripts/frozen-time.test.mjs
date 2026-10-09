@@ -64,3 +64,19 @@ test("hard cuts are found at their frames", async () => {
   ff("-f", "lavfi", "-i", "color=c=red:s=160x90:r=30:d=1.5", "-f", "lavfi", "-i", "color=c=blue:s=160x90:r=30:d=1.5", "-filter_complex", "[0][1]concat=n=2:v=1", "-pix_fmt", "yuv420p", out);
   assert.deepEqual(findCuts(await scan(out)), [45]);
 });
+
+/** A scan made of frame changes only, as findCuts reads it. */
+const changes = (values) => ({ frames: values.map((change) => ({ change })) });
+/** A drawing every `step` frames that moves by `size`, for `n` frames. */
+const stepped = (step, size, n = 90) => Array.from({ length: n }, (_, i) => (i > 0 && i % step === 0 ? size : 0));
+
+test("animation on twos or threes is not a run of cuts; a real cut inside it still is", () => {
+  assert.deepEqual(findCuts(changes(stepped(2, 12))), [], "a new drawing every second frame");
+  assert.deepEqual(findCuts(changes(stepped(3, 12))), [], "a new drawing every third frame");
+  const cut = stepped(2, 12);
+  cut[45] = 70;
+  assert.deepEqual(findCuts(changes(cut)), [45]);
+  const still = Array(60).fill(0);
+  still[30] = 40;
+  assert.deepEqual(findCuts(changes(still)), [30], "a cut between still shots");
+});

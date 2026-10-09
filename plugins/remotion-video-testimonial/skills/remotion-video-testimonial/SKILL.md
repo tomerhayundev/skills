@@ -4,7 +4,7 @@ description: Use when making a customer testimonial or case study video with Rem
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.12.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: da869e339f50 -->
+<!-- Generated from remotion-video-master 0.13.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: d8300df94a52 -->
 
 # Remotion testimonial video
 
@@ -224,9 +224,27 @@ and the pace they keep: [handoffs](references/handoffs.md).
 5. The film critique: at most three rounds, a new critic each round, polish fixed in place and
    structure sent back to the storyboard (section 10).
 6. Then the other aspects, cuts and locales.
-7. The hand-off: the film, the music-only twin when it has sound effects, a contact sheet, the
-   ledger of every critique round, and two short lists: what was measured, and what a person still
-   has to watch or listen to.
+7. The hand-off: the film (copied to `out/delivered/<id>-v<n>.mp4`, never overwritten), the
+   music-only twin when it has sound effects, a contact sheet, the ledger of every critique round,
+   and two short lists: what was measured, and what a person still has to watch or listen to.
+
+**When the user answers the film with a note.** A note names a symptom, not its fix. In order:
+
+1. Find the frames it points at in the film's pack (`critic-pack.mjs`, the dense sheets) before
+   changing anything. Ask only when two readings of the note would cost different work.
+2. Find everything that reads as the thing named: "I don't like the thing behind the logo" is every
+   element that reads as it (a ring and a burst both), not the one layer it was built as.
+3. Turn the note into a mechanism. "Faster" is tighter clauses and shorter waits between them, never
+   a global speed-up: captions keep their reading time. "It looks basic" is a beat carried by too
+   little: rebuild that beat, add no effect. "Add a sound" is measured first (`audio-check.mjs`): it
+   may be there and masked. "Too small" is answered with its measured share of the frame on a
+   full-size still.
+4. Tag each change polish (fixed in place) or structure (back to the storyboard and the visual brief
+   page, with a motion frame of the new part, before any rebuild). A rejection of the whole film is a
+   new concept (section 0), never a patch.
+5. Render the next version beside the last (`v<n+1>`), run the checks again on it (pops, frozen time,
+   `delivery-check.mjs`, a fresh critic on what changed), and answer in the user's words: one line per
+   note, what changed and at what time.
 
 The user sees only what looks finished: the visual brief, then the film. When the build runs long,
 send a few seconds of the turn as a clip at final quality as soon as it exists, without asking
@@ -281,6 +299,7 @@ profile's critique starts with **story and copy**.
 | Every cut carries something | The motif, or a real object, shape or movement in the same place on both sides. A film that cuts "on the beat" with nothing carried restarts at every cut ([handoffs](references/handoffs.md)). |
 | Nothing stands still | A hold where only a breath moves looks finished in every frame and dead in motion: one film measured over a third of its runtime still. No stretch past the profile's limit; a hold keeps a slow push (`frozen-time.mjs`). |
 | Every number on screen is in the facts list | A price, a count or a percentage written from memory is an invented one. Each has its source in the brief (`facts`); no invented testimonial, rating or result. |
+| A picture says what it shows | The facts check reads words, never pictures. Open every photo and screenshot at full size before it goes in: a price, badge, rating, date or another brand's mark printed in it is a claim like any number on screen (a "-30%" badge in a 20%-off film); crop it out or leave the picture out. A chart or curve is a number: with no real data behind it, cut it, or draw a plain shape with no axis, ticks or numerals, or keep it labelled "Example data" in the film's language, readable (4.5:1, on the phone sheet), under the data for as long as it shows. A real person's photo never carries a name that is not theirs. A step that takes minutes is shown working, never instant. A real number is rounded toward the less impressive side. |
 | The motif is met before it is abstracted | A shape that appears from nothing and floods the screen reads as a sticker. Show the real object and hold on it first. |
 | Graphics belong to a layer the viewer knows | In the world (on a surface, in its perspective), in an interface (a device's screen, a viewfinder), or in the brand's layer (captions, the close): anchored, proportionate, matched in light and grain. A full frame of flat color only at a declared turn or the close (`motif-coverage.mjs`). |
 | No competitor, ever | No name, logo, product, packaging or recognizable design, not even blurred or in the background. Contrast with the category's generic problem, and state the brand's advantage positively. |
@@ -310,6 +329,7 @@ node ${CLAUDE_SKILL_DIR}/scripts/audio-check.mjs out/<id>.mp4 [--music-only=out/
 node ${CLAUDE_SKILL_DIR}/scripts/motif-coverage.mjs out/<id>.mp4 --accent=<hex> [--allow=<turn frames>]
 node ${CLAUDE_SKILL_DIR}/scripts/motif-coverage.mjs out/<id>.webp --accent=<hex> --max-share=0
 node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cuts.json --moments=<turn frames>
+node ${CLAUDE_SKILL_DIR}/scripts/delivery-check.mjs out/delivered/*.mp4
 ```
 
 - Stills per aspect: nothing clipped, text in the safe zones, legible, RTL mirrored; frame 0 a full
@@ -360,9 +380,11 @@ node ${CLAUDE_SKILL_DIR}/scripts/critic-pack.mjs out/<id>.mp4 --cuts=out/<id>.cu
   subtitles timed by reading speed, an SRT). Never ask for a key in chat. Ladder and mechanics:
   [media](references/media.md). Music sits 18 to 22 dB under a voice.
 - Render: bundle once, `renderMedia` per composition, in batches of one aspect at a time (a full
-  unattended run has crashed Chromium; skip outputs newer than their sources). Remotion's H.264 may
-  be tagged full-range yuvj420p: platforms take it; re-encode with `-pix_fmt yuv420p` if one refuses.
-  30 fps by default; 60 for a wide master of fast drawn motion, where no placement caps it
+  unattended run has crashed Chromium; skip outputs newer than their sources). Pass
+  `colorSpace: "bt709"` and `imageFormat: "png"` to `renderMedia`: without them Remotion's H.264 is
+  full-range yuvj420p with the BT.601 matrix, and a player that ignores the tags shows the brand
+  colours off (a red #E65238 came out #F25E35). Every file handed over passes
+  `scripts/delivery-check.mjs` (colour tags, index first, even size, AAC). 30 fps by default; 60 for a wide master of fast drawn motion, where no placement caps it
   ([architecture](references/architecture.md#tokens)).
   H.264 CRF 18 masters (ad platforms re-encode), CRF 30 + VP9 WebM for in-page loops, a designed
   WebP cover (the poster frame, or a still of its own); SRT alongside when the brief lists it. Publish to a public media bucket separate from

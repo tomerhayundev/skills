@@ -49,7 +49,11 @@ the modules built on it, it also refuses: fewer than about 10 compositions per 3
 scale three shots running, or fewer than three scales in a cut of 15 s or more; a shot after the first
 with no `carries` (what the eye follows over the cut into it: [handoffs](handoffs.md)); and fewer
 `moments` than the film's length asks for (three from 20 s, two from 10 s, one under), each a thing, what
-it becomes and its beat. A brief with any of Reels, TikTok, Shorts or
+it becomes and its beat. For an explainer it refuses a shot over 3 s that does not say what happens in it at
+least every 3 s, from its start to its end: `"changesAt": [{ "t": 2, "what": "the block lands on Tuesday" },
+{ "t": 4.5, "what": "Thursday lights up" }]`, `t` in seconds into the shot. A push, zoom, pan or drift of the
+camera alone is no event. `changesAt` is otherwise one time or a list of times, also in seconds into the shot.
+A brief with any of Reels, TikTok, Shorts or
 Stories among its platforms sets `"feed": true` ([feed](feed.md)); then it also refuses a track with no `startSeconds` (its feed start), a first shot with no visible
 change within 2 s (a cut, or `changesAt` for a push-in or an action inside the shot),
 and a cut over 30 s without a `longWhy`. Beat times sit on the track's beat grid

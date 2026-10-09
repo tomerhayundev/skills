@@ -334,13 +334,22 @@ for (const spec of specs) {
   if (upToDate(spec)) continue;                 // outputs newer than every source
   const composition = await selectComposition({ serveUrl, id: spec.id, inputProps: { spec } });
   await renderMedia({ composition, serveUrl, codec: "h264", crf: spec.loop ? 30 : 18,
-    pixelFormat: "yuv420p", outputLocation: mp4, inputProps: { spec } });
+    pixelFormat: "yuv420p", colorSpace: "bt709", imageFormat: "png", audioCodec: "aac",
+    outputLocation: mp4, inputProps: { spec } });
   if (spec.loop) await renderMedia({ /* ... */ codec: "vp9", crf: 32, outputLocation: webm });
   await renderStill({ composition, serveUrl, frame: spec.posterFrame, imageFormat: "webp", output: webp, inputProps: { spec } });
 }
 ```
 
 - Flags: `--filter --aspect --locale --dry-run --force`. Batch by aspect.
+- `colorSpace: "bt709"` writes limited range with the BT.709 matrix, primaries and transfer
+  tagged; the default is full-range yuvj420p with the BT.601 matrix, which a player that ignores
+  the tags shows up to 20 levels off on a brand colour. PNG frames skip the default JPEG step
+  (quality 80) between the page and the encoder; on a 2 s test they rendered in 3.6 s against 3.4 s.
+  A `remotion.config.ts` setting does not reach `renderMedia`: pass both here.
+- What is handed to the user is copied to `out/delivered/<id>-v<n>.mp4` (v1, v2...) and never
+  overwritten: the render script may replace `out/<id>.mp4`, but the version the user saw stays, so
+  a note can be answered against it and a step back is a copy. `delivery-check.mjs` runs on each.
 - A film with sound effects takes an `sfx` input prop (on by default), and the script also
   renders its twin with `sfx: false`, `<id>.music-only.mp4`, for the primary aspect.
   `audio-check.mjs --music-only` compares the two, and the twin ships with the film. While

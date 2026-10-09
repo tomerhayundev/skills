@@ -56,3 +56,38 @@ test("a clip with no cut passes either way", () => {
   assert.equal(pops(out).status, 0);
   assert.equal(pops(out, "--cuts=15").status, 0);
 });
+
+/** A 12 px box sliding 4 px a frame across 2 s at 30 fps; `x` is an ffmpeg expression of n, which counts from 1 (n = 30 is frame 29). */
+function slide(name, x) {
+  const out = join(dir, name);
+  const r = spawnSync("ffmpeg", ["-v", "error", "-y",
+    "-f", "lavfi", "-i", "color=c=white:s=320x90:r=30:d=2",
+    "-f", "lavfi", "-i", "color=c=black:s=12x12:r=30:d=2",
+    "-filter_complex", `[0][1]overlay=x='${x}':y=40:eval=frame`, "-pix_fmt", "yuv420p", out]);
+  assert.equal(r.status, 0, String(r.stderr));
+  return out;
+}
+
+test("a loop that stops dead for a frame and jumps on fails with --loop; it is no pop", () => {
+  const hitch = slide("hitch.mp4", "if(eq(n,30),116,n*4)");
+  const r = pops(hitch, "--loop");
+  assert.equal(r.status, 1, r.stdout);
+  assert.match(r.stdout, /stall at frame\s+29 \(0\.97s\): 1 frame with no motion between moving frames/);
+  assert.match(r.stdout, /no pops/, "a stall is a dip, not a spike");
+  const two = pops(slide("hitch2.mp4", "if(between(n,30,31),116,n*4)"), "--loop");
+  assert.equal(two.status, 1, two.stdout);
+  assert.match(two.stdout, /stall at frame\s+29 \(0\.97s\): 2 frames with no motion/);
+});
+
+test("a stall is only noted without --loop: footage at 24 fps in a 30 fps film repeats a frame by design", () => {
+  const r = pops(slide("hitch3.mp4", "if(eq(n,30),116,n*4)"));
+  assert.equal(r.status, 0, r.stdout);
+  assert.match(r.stdout, /note: stall at frame\s+29/);
+});
+
+test("steady motion, and a hold of its own, pass with --loop", () => {
+  assert.equal(pops(slide("steady.mp4", "n*4"), "--loop").status, 0);
+  const held = pops(slide("held.mp4", "if(lt(n,20),n*4,if(lt(n,40),80,80+(n-40)*4))"), "--loop");
+  assert.equal(held.status, 0, held.stdout);
+  assert.doesNotMatch(held.stdout, /stall/);
+});

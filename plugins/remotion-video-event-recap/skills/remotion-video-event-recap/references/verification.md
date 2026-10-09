@@ -133,7 +133,10 @@ of a second falls between them. The pack finds the cuts itself (`--cuts=auto`) a
 overview (`contact.png`), a frame every 0.2 s (`dense-<n>.png`), both sides of every cut
 (`cuts.png`), 16 frames across the second around each cut (`cut-<frame>.png`) and the drift timeline
 with the fast moments marked (`motion.txt`). Its `index.md` lists every cut's time, which gives the
-shot lengths.
+shot lengths. Hand-drawn work moving on twos or threes is not read as a run of cuts (on a sample
+drawn on twos the finder went from 32 false cuts to the 2 real ones), but a dissolve of 6 to 8
+frames is one soft change the finder does not list: check `cuts.png` against the film before
+taking its shot lengths.
 
 Read the sheets, then write `docs/style_guide.md`: palette (hex), type (family, weight, tracking),
 shot lengths, camera moves, texture and grain, how text enters and exits; and, per reference, a
@@ -193,11 +196,15 @@ A loop plays its last frame straight into its first. Play it twice and scan the 
 
 ```bash
 ffmpeg -y -stream_loop 1 -i loop.mp4 -c copy _loop2.mp4
-node ${CLAUDE_SKILL_DIR}/scripts/frame-pops.mjs _loop2.mp4
+node ${CLAUDE_SKILL_DIR}/scripts/frame-pops.mjs _loop2.mp4 --loop
 ```
 
-A pop at the seam means the last frame is not the first, or matches it in position but
-not in velocity (a cursor that stops dead and restarts).
+A pop at the seam means the last frame is not the first. A stall means one to three repeated
+frames inside steady motion: the last frame equals the first (the seam shows the same picture
+twice), or a cursor stops dead and restarts. A stall is a dip, not a spike, so only `--loop`
+fails on it; tested on 88 clean sample loops with none flagged, and on 21 planted repeats in
+smooth looks with 19 caught. A look drawn on twos (a new drawing every other frame) hides a
+repeated frame from it: scrub that seam by eye.
 
 ## Motif coverage
 
@@ -461,3 +468,5 @@ music or peaks more than 6 dB over it.
   and any effect by ear, anything the critics disagreed on). A number is not a listen.
 - The rendered file you are about to publish is the one you checked (the render
   script's skip logic can hand you a stale file; use `--force` when in doubt).
+- Every file handed over passes `delivery-check.mjs` (limited range with BT.709 tagged, its index
+  first, even size, AAC) and is a numbered copy in `out/delivered/`, so the version the user saw stays.

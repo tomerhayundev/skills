@@ -433,3 +433,49 @@ test("the page shows the chosen style by its name in the page's language, and sa
   assert.match(html, /טיפוגרפיה בתנועה/);
   assert.match(html, /בחרתי בשבילכם/);
 });
+
+test("an explainer marks what happens every 3 s at most; the camera alone is no event", () => {
+  const b = brief();
+  b.format = "explainer";
+  const shot = (at, dur, more = {}) => ({ at, dur, src: 0, len: 1, picture: "p", job: "proof", ...more });
+  b.cuts = [{ name: "60 s", source: footage, beats: [
+    shot(0, 3),
+    shot(3, 9, { changesAt: [{ t: 2.5, what: "the block lands on Tuesday" }, { t: 5.5, what: "a slow push toward the gap" }] }),
+    shot(12, 6, { changesAt: [2, 4] }),
+    shot(18, 6),
+    shot(24, 6, { changesAt: [{ t: 2, what: "the slot is shoved along the rail" }, { t: 4, what: "Thursday lights up" }] }),
+  ] }];
+  const problems = checkPlan(b).join("\n");
+  assert.doesNotMatch(problems, /60 s, beat 1:.*happens/, "a beat of 3 s or less needs no event inside");
+  assert.match(problems, /60 s, beat 2: "a slow push toward the gap" at 5\.5 s is the camera, not an event/);
+  assert.match(problems, /60 s, beat 2: nothing happens from 2\.5 s to 9\.0 s \(6\.5 s\)/, "the push does not count");
+  assert.match(problems, /60 s, beat 3: say what happens at 2\.0 s and 4\.0 s \(changesAt: \{ t, what \}\)/);
+  assert.match(problems, /60 s, beat 4: 6\.0 s with nothing marked to happen in it/);
+  assert.doesNotMatch(problems, /60 s, beat 5/, "events every 2 s, each something that moves");
+  b.format = "testimonial";
+  assert.doesNotMatch(checkPlan(b).join("\n"), /happens|the camera, not an event/, "a testimonial holds on the person speaking");
+});
+
+test("a promo shot past 3.5 s may mark its changes as a list or with what happens", () => {
+  const b = brief();
+  b.cuts[0].beats[0] = { ...b.cuts[0].beats[0], dur: 4, changesAt: [1, 2.5] };
+  b.cuts[0].beats[1].at = 4;
+  b.cuts[0].beats[2].at = 7;
+  assert.doesNotMatch(checkPlan(b).join("\n"), /no change marked inside it/);
+  b.cuts[0].beats[0].changesAt = [{ t: 1.5, what: "the lid opens" }];
+  assert.doesNotMatch(checkPlan(b).join("\n"), /no change marked inside it|nothing changes/);
+});
+
+test("an explainer's change times may be on the film's clock; they are read as the shot's own", () => {
+  const b = brief();
+  b.format = "explainer";
+  const shot = (at, dur, more = {}) => ({ at, dur, src: 0, len: 1, picture: "p", job: "proof", ...more });
+  b.cuts = [{ name: "30 s", source: footage, beats: [
+    shot(0, 3),
+    shot(3, 9, { changesAt: [{ t: 4, what: "the block lands" }, { t: 6.5, what: "Tuesday fills" }, { t: 9, what: "the slot slides on" }] }),
+    shot(12, 9, { changesAt: [{ t: 13, what: "the block lands" }, { t: 15, what: "Tuesday fills" }, { t: 16.5, what: "the slot slides on" }] }),
+  ] }];
+  const problems = checkPlan(b).join("\n");
+  assert.doesNotMatch(problems, /30 s, beat 2/, "events at 1, 3.5 and 6 s into the shot, the last 3 s to its end");
+  assert.match(problems, /30 s, beat 3: nothing happens from 4\.5 s to 9\.0 s \(4\.5 s\)/);
+});

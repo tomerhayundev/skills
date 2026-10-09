@@ -97,7 +97,10 @@ The pack is a starting point: pull any other frames you need from the film with 
 5. Every cut (cuts.png, cut-<frame>.png): what is carried over it, and whether it lands in the same
    place at the same size. Name the cuts that carry nothing.
 6. Defects, with times: text over text, anything clipped, a blank or half-drawn frame, a pop, a
-   label on the wrong thing, unequal spacing, text too small on the phone sheet.
+   label on the wrong thing, unequal spacing, text too small on the phone sheet. And what a picture
+   claims: a price, badge, rating or date printed inside a photo or screenshot, a chart or curve
+   with no real numbers behind it and no readable "Example data", a step that takes minutes shown
+   as instant.
 7. Sound, from audio.txt: where the lift lands against the picture, the level, any effect louder
    than the music.
 8. Five positive tests. A film can be free of defects and still not worth posting; these ask what

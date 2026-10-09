@@ -137,14 +137,21 @@ export function stillStretches(scanned, { drift = 0.2, local = 3 } = {}) {
   return out;
 }
 
-/** Hard cuts: frames that change far more than the frames around them (the frame-pops rule, at 320 px). */
+/**
+ * Hard cuts: frames that change far more than the frames around them (the frame-pops rule, at 320 px).
+ * Hand-drawn work often moves on twos or threes (a new drawing every second or third frame, still
+ * frames between): the frames around a drawing are mostly still, so each drawing would look like a
+ * cut. A cut must also stand out from the other drawings within 6 frames.
+ */
 export function findCuts(scanned, { factor = 3, floor = 5 } = {}) {
   const values = scanned.frames.map((f) => f.change);
   const median = (xs) => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)] ?? 0;
   const cuts = [];
   for (let i = 1; i < values.length; i++) {
     const around = [...values.slice(Math.max(1, i - 3), i), ...values.slice(i + 1, i + 4)];
-    if (values[i] >= floor && values[i] > factor * Math.max(median(around), floor / factor)) cuts.push(i);
+    const drawings = [...values.slice(Math.max(1, i - 6), i), ...values.slice(i + 1, i + 7)].filter((v) => v >= 1);
+    const base = Math.max(median(around), drawings.length >= 2 ? median(drawings) : 0, floor / factor);
+    if (values[i] >= floor && values[i] > factor * base) cuts.push(i);
   }
   return cuts;
 }

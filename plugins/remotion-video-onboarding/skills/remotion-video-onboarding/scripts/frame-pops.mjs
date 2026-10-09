@@ -6,7 +6,7 @@
  * frame-to-frame difference. Motion that belongs to the edit spreads its
  * change over frames. Needs Node 18+ and ffmpeg.
  *
- *   node frame-pops.mjs <video.mp4> [--factor=3] [--floor=1.5] [--grid=15] [--cuts=<file.json|45,210>]
+ *   node frame-pops.mjs <video.mp4> [--factor=3] [--floor=1.5] [--grid=15] [--cuts=<file.json|45,210>] [--loop]
  *
  * Prints every spike (frame, time, difference, its neighbours' median, and
  * whether it sits on the beat grid) and exits 1 if there are any, so it can
@@ -16,6 +16,16 @@
  * a screen recording). A pop within one frame of a declared cut passes; any
  * other pop still fails. Pass the chain layout's out/<id>.cuts.json (an array of
  * frames, or { "cuts": [...] }) so what was declared is what rendered.
+ *
+ * Stalls: one to three frames in which nothing moves, between frames that move (a
+ * cursor that stops dead and restarts, a repeated frame at a loop's seam). That is a
+ * dip in motion, not a spike, so it is no pop. Motion is counted as pixels that
+ * changed by more than 12 levels, so encoder noise is not motion; a still frame is one
+ * where almost none did (a repeated frame), with two steadily moving frames on each
+ * side, so animation on twos (still, moving, still) is not a stall. With --loop (the
+ * loop played twice, as verification.md shows) a stall fails; without it a stall is
+ * only noted, since footage at 24 fps in a 30 fps film repeats a frame by design. A
+ * hold of four frames or more is a hold, judged by frozen-time.mjs.
  *
  * ffmpeg only decodes; the difference is computed here, byte by byte. ffmpeg's
  * own difference filters (tblend, blend) reported large, uniform changes
@@ -30,7 +40,7 @@ const file = args.find((a) => !a.startsWith("--"));
 const raw = (k) => args.find((a) => a.startsWith(`--${k}=`))?.slice(k.length + 3);
 const opt = (k, d) => Number(raw(k) ?? d);
 if (!file) {
-  console.error("usage: node frame-pops.mjs <video> [--factor=3] [--floor=1.5] [--grid=15] [--cuts=<file.json|45,210>]");
+  console.error("usage: node frame-pops.mjs <video> [--factor=3] [--floor=1.5] [--grid=15] [--cuts=<file.json|45,210>] [--loop]");
   process.exit(2);
 }
 
@@ -52,6 +62,19 @@ const FACTOR = opt("factor", 3);
 const FLOOR = opt("floor", 1.5);
 const GRID = opt("grid", 15);
 const WINDOW = 3;
+const LOOP = args.includes("--loop");
+/** A pixel moved when it changed by more than this many levels (0-255). */
+const MOVED_LEVELS = 12;
+/** A step moves when at least this many sampled pixels moved. */
+const MOVING = 8;
+/** A step is still when at most this many sampled pixels moved (or 1% of the moving step before
+ * it), and its faint changes (over FAINT_LEVELS) are at most 10% of the moving steps' around it: a
+ * repeated frame decodes to encoder noise only, while elements easing at different speeds, or
+ * settling after a cut, still move some. */
+const STILL = 2;
+const FAINT_LEVELS = 4;
+/** The longest run of still steps that counts as a stall; longer is a hold. */
+const MAX_STALL = 3;
 /** Compare every STRIDE-th pixel: plenty for a whole-frame mean, and fast. */
 const STRIDE = 3;
 
@@ -66,6 +89,8 @@ const [num, den] = String(stream.r_frame_rate).split("/").map(Number);
 const fps = num / (den || 1);
 const size = width * height;
 
+const moved = [];
+const faint = [];
 const values = await new Promise((resolve, reject) => {
   const ff = spawn("ffmpeg", ["-v", "error", "-i", file, "-an", "-f", "rawvideo", "-pix_fmt", "gray", "-"]);
   const out = [];
@@ -78,11 +103,18 @@ const values = await new Promise((resolve, reject) => {
       if (prev) {
         let sum = 0;
         let n = 0;
+        let m = 0;
+        let f = 0;
         for (let i = 0; i < size; i += STRIDE) {
-          sum += Math.abs(frame[i] - prev[i]);
+          const d = Math.abs(frame[i] - prev[i]);
+          sum += d;
+          if (d > MOVED_LEVELS) m++;
+          if (d > FAINT_LEVELS) f++;
           n++;
         }
         out.push(sum / n);
+        moved.push(m);
+        faint.push(f);
       }
       prev = Buffer.from(frame);
       pending = pending.subarray(size);
@@ -106,6 +138,26 @@ values.forEach((d, i) => {
   if (d >= FLOOR && d > FACTOR * Math.max(base, FLOOR / FACTOR)) pops.push({ frame, t: frame / fps, d, base });
 });
 
+/** Runs of one to MAX_STALL still steps with two steadily moving steps on each side. */
+const isStill = (k, ref) => moved[k] <= Math.max(STILL, 0.01 * ref);
+const isMoving = (k) => k >= 0 && k < moved.length && moved[k] >= MOVING;
+const stalls = [];
+for (let i = 2; i < moved.length; i++) {
+  if (!isMoving(i - 1) || !isMoving(i - 2) || !isStill(i, moved[i - 1])) continue;
+  let j = i;
+  while (j < moved.length && isStill(j, moved[i - 1])) j++;
+  // The motion around it is steady: each of the four moving steps at least a twentieth of the largest
+  // (on twos, the steps between drawings flicker a little and break this).
+  const around = [i - 2, i - 1, j, j + 1];
+  const steady = around.every(isMoving) && Math.min(...around.map((k) => moved[k])) >= 0.05 * Math.max(...around.map((k) => moved[k]));
+  // A repeated frame also has almost no faint change (encoder noise only), where a small element
+  // moving slowly keeps a good share of the faint change around it.
+  const ref = Math.min(faint[i - 1], faint[j] ?? 0);
+  const repeated = faint.slice(i, j).every((x) => x <= Math.max(2, 0.1 * ref));
+  if (j - i <= MAX_STALL && steady && repeated) stalls.push({ frame: i + 1, t: (i + 1) / fps, frames: j - i });
+  i = j;
+}
+
 const isDeclared = (frame) => CUTS?.some((c) => Math.abs(c - frame) <= 1) ?? false;
 
 console.log(`${file}: ${values.length + 1} frames at ${fps}fps, median change ${median(values).toFixed(2)}`);
@@ -113,6 +165,9 @@ for (const p of pops) {
   const onGrid = p.frame % GRID === 0 ? `on the ${GRID}-frame grid` : `${p.frame % GRID} frames off the grid`;
   const tag = isDeclared(p.frame) ? " [declared cut]" : "";
   console.log(`  pop at frame ${String(p.frame).padStart(4)} (${p.t.toFixed(2)}s): change ${p.d.toFixed(2)} vs ~${p.base.toFixed(2)} around it, ${onGrid}${tag}`);
+}
+for (const s of stalls) {
+  console.log(`  ${LOOP ? "" : "note: "}stall at frame ${String(s.frame).padStart(4)} (${s.t.toFixed(2)}s): ${s.frames} frame${s.frames > 1 ? "s" : ""} with no motion between moving frames`);
 }
 const undeclared = pops.filter((p) => !isDeclared(p.frame));
 if (CUTS) {
@@ -122,4 +177,5 @@ if (CUTS) {
 } else {
   console.log(pops.length ? `\n${pops.length} pop(s). A hard cut is one; a morph or flood spreads its change across frames.` : "\nno pops");
 }
-process.exit(undeclared.length ? 1 : 0);
+if (LOOP && stalls.length) console.log(`${stalls.length} stall(s): the motion stops dead and restarts. A loop's last frame must lead into its first in position and in speed.`);
+process.exit(undeclared.length || (LOOP && stalls.length) ? 1 : 0);

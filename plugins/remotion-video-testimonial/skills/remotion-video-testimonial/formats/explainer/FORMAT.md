@@ -64,6 +64,9 @@ Drawn diagrams are judged on craft. Thin node-and-arrow loops, a dot running rou
 
 ## Verification
 
+The brief marks what happens in every shot over 3 s (`changesAt` as `{ t, what }`), and the page refuses a
+gap of more than 3 s or an event that is only the camera ([brief-template](../../references/brief-template.md)).
+On an earlier explainer's brief it named the two long gaps in the second half that viewers called dead.
 Pops with `--cuts`. Loudness about -16 LUFS. Critique: the base criteria plus one-sentence recall: someone who
 watched it once says the idea back. The critic also judges craft: would a motion designer sign this drawing, or does it look made in a drawing app? A film can score 8 on every line and still fail this.
 
