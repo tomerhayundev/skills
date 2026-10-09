@@ -4,7 +4,7 @@ description: Use when making an Apple App Store app preview or a Google Play pro
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.12.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: d429788db27d -->
+<!-- Generated from remotion-video-master 0.12.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 3d2491aa1abc -->
 
 # Remotion app store preview video
 
