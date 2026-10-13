@@ -4,7 +4,7 @@ description: Use when making a product demo, product tour, feature walkthrough o
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.14.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 972e42a8d4ae -->
+<!-- Generated from remotion-video-master 0.14.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 2556a2ed8a3d -->
 
 # Remotion product demo video
 

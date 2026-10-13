@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
-import { createServer } from "node:http";
+import { createServer, request } from "node:http";
 import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -25,7 +25,13 @@ const setup = () => {
   const tools = [{ id: "voice", name: "AI voice", adds: "A voiceover", providers: [{ name: "ElevenLabs", uses: "Text to speech", source: "key ELEVENLABS_API_KEY" }] }];
   return { root: tmp(), lib, specs, choices, shown, tools, questions, cacheDir: tmp() };
 };
-const post = (url, path, body) => fetch(new URL(path, url), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body ?? {}) });
+const post = (c, path, body, headers = {}) =>
+  fetch(new URL(path, c.url), { method: "POST", headers: { "content-type": "application/json", "x-chooser-key": c.key, ...headers }, body: JSON.stringify(body ?? {}) });
+const getWithHost = (url, host) =>
+  new Promise((ok, no) => {
+    const u = new URL(url);
+    request({ host: u.hostname, port: u.port, path: "/state", headers: { host } }, (res) => (res.resume(), ok(res.statusCode))).on("error", no).end();
+  });
 
 test("the first choices are the recommendation: the recommended style, length and answers, the look left to Claude", () => {
   const s = setup();
@@ -59,11 +65,11 @@ test("lengths: a real range around the recommended one; a long one says which cu
 test("a typed length is kept when every platform accepts it, and refused with the reason when one does not", async () => {
   const s = setup();
   const c = await startChooser(s);
-  let r = await post(c.url, "/tap", { field: "seconds", value: 22 });
+  let r = await post(c, "/tap", { field: "seconds", value: 22 });
   assert.equal((await r.json()).choices.seconds, 22);
-  r = await post(c.url, "/tap", { field: "platforms", value: ["x"] });
+  r = await post(c, "/tap", { field: "platforms", value: ["x"] });
   assert.equal((await r.json()).choices.seconds, 22, "X takes up to 140 s");
-  r = await post(c.url, "/tap", { field: "seconds", value: 200 });
+  r = await post(c, "/tap", { field: "seconds", value: 200 });
   assert.equal(r.status, 400);
   assert.match((await r.json()).error, /allows up to 140 s/);
   c.close();
@@ -98,22 +104,22 @@ test("every tap is saved; sending writes the choices and the preferences and end
   const s = setup();
   const c = await startChooser({ ...s, film: "spring" });
   const saved = () => JSON.parse(readFileSync(join(s.root, "docs", "choices.json"), "utf8"));
-  let r = await post(c.url, "/tap", { field: "style", value: "3d" });
+  let r = await post(c, "/tap", { field: "style", value: "3d" });
   assert.equal(r.status, 200);
   assert.deepEqual(saved().style, { primary: "3d", secondary: null }, "the first tap takes the look from Claude and starts the user's own pick");
   assert.deepEqual(saved().decided, {});
-  r = await post(c.url, "/tap", { field: "style", value: "footage" });
+  r = await post(c, "/tap", { field: "style", value: "footage" });
   assert.deepEqual(saved().style, { primary: "3d", secondary: "footage" }, "any two looks mix");
   assert.equal(saved().done, false);
-  r = await post(c.url, "/tap", { field: "style", value: "line-art" });
+  r = await post(c, "/tap", { field: "style", value: "line-art" });
   assert.equal(r.status, 400);
   assert.match((await r.json()).error, /two looks at most/);
-  r = await post(c.url, "/tap", { field: "swap" });
+  r = await post(c, "/tap", { field: "swap" });
   assert.deepEqual((await r.json()).choices.style, { primary: "footage", secondary: "3d" });
-  r = await post(c.url, "/tap", { field: "platforms", value: ["reels", "youtube"] });
+  r = await post(c, "/tap", { field: "platforms", value: ["reels", "youtube"] });
   assert.equal((await r.json()).choices.seconds, 15);
-  await post(c.url, "/tap", { field: "tools", value: ["voice"] });
-  await post(c.url, "/done");
+  await post(c, "/tap", { field: "tools", value: ["voice"] });
+  await post(c, "/done");
   const rec = await c.finished;
   assert.equal(rec.done, true);
   assert.equal(rec.chosenBy, "user");
@@ -126,9 +132,9 @@ test("every tap is saved; sending writes the choices and the preferences and end
 test("sending needs a look", async () => {
   const s = setup();
   const c = await startChooser(s);
-  await post(c.url, "/tap", { field: "style", value: "footage" }); // picked
-  await post(c.url, "/tap", { field: "style", value: "footage" }); // and taken off again
-  const r = await post(c.url, "/done");
+  await post(c, "/tap", { field: "style", value: "footage" }); // picked
+  await post(c, "/tap", { field: "style", value: "footage" }); // and taken off again
+  const r = await post(c, "/done");
   assert.equal(r.status, 400);
   assert.match((await r.json()).error, /pick a look/);
   c.close();
@@ -237,10 +243,10 @@ test("a bad flag stops with the reason", () => {
 test("the length follows the recommendation until the user picks one", async () => {
   const s = setup();
   const c = await startChooser(s);
-  let v = await (await post(c.url, "/tap", { field: "format", value: "standard-ad" })).json();
+  let v = await (await post(c, "/tap", { field: "format", value: "standard-ad" })).json();
   assert.equal(v.choices.seconds, 30, "a standard ad starts at its own recommended length");
-  v = await (await post(c.url, "/tap", { field: "seconds", value: 20 })).json();
-  v = await (await post(c.url, "/tap", { field: "platforms", value: ["reels", "youtube"] })).json();
+  v = await (await post(c, "/tap", { field: "seconds", value: 20 })).json();
+  v = await (await post(c, "/tap", { field: "platforms", value: ["reels", "youtube"] })).json();
   assert.equal(v.choices.seconds, 20, "a length the user picked stays");
   c.close();
   await c.finished;
@@ -287,5 +293,24 @@ test("a look's film comes in the frame's shape: the page asks for tall, square o
   } finally {
     c.close();
     await c.finished;
+  }
+});
+
+test("only the chooser's own page can change the picks or end it: no key, another site or a rebound host name are refused", async () => {
+  const s = setup();
+  const c = await startChooser(s);
+  try {
+    const page = await (await fetch(c.url)).text();
+    assert.match(page, new RegExp(`const KEY="${c.key}"`), "the page carries its key");
+    assert.equal((await post(c, "/tap", { field: "seconds", value: 22 }, { "x-chooser-key": "guess" })).status, 403);
+    assert.equal((await fetch(new URL("/done", c.url), { method: "POST" })).status, 403, "a plain form post from another page");
+    assert.equal((await fetch(new URL("/tap", c.url), { method: "POST", headers: { "content-type": "text/plain", "x-chooser-key": c.key }, body: "{}" })).status, 403);
+    assert.equal((await post(c, "/tap", { field: "seconds", value: 22 }, { origin: "https://evil.example" })).status, 403);
+    assert.equal(await getWithHost(c.url, "evil.example:80"), 403);
+    assert.equal(await getWithHost(c.url, new URL(c.url).host), 200);
+    assert.equal((await post(c, "/tap", { field: "seconds", value: 22 })).status, 200, "the page itself still works");
+    assert.ok(!existsSync(join(s.root, "docs", "preferences.json")), "nothing ended the chooser");
+  } finally {
+    c.close();
   }
 });

@@ -28,10 +28,12 @@
  *
  * Prints "chooser <url>" when the page is up, then "choices <json>" when the user sends, or after
  * 30 minutes with "done": false. Loops are fetched from the library's loopBase once, checked against
- * their sha256 and kept in --cache; offline, the page shows the posters.
+ * their sha256 and kept in --cache; offline, the page shows the posters. The server answers only
+ * requests addressed to itself (no other site, no rebound host name), and every tap and Send carries
+ * a key only the page holds, so a page open in another tab cannot change the picks or end the chooser.
  */
 import { spawn, spawnSync } from "node:child_process";
-import { createHash } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { createServer } from "node:http";
 import { homedir } from "node:os";
@@ -652,7 +654,7 @@ function client() {
       return true;
     }
     try {
-      const r = await fetch("/tap", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(t) });
+      const r = await fetch("/tap", { method: "POST", headers: { "content-type": "application/json", "x-chooser-key": KEY }, body: JSON.stringify(t) });
       const v = await r.json();
       if (!r.ok) return toast(v.error ?? L.offline), false;
       V = v;
@@ -1036,7 +1038,7 @@ function client() {
   async function send() {
     if (!V.choices.style.primary) return toast(L.pickFirst);
     try {
-      const r = await fetch("/done", { method: "POST" });
+      const r = await fetch("/done", { method: "POST", headers: { "content-type": "application/json", "x-chooser-key": KEY }, body: "{}" });
       if (!r.ok) throw new Error(String(r.status));
     } catch {
       toast(L.offline);
@@ -1192,9 +1194,9 @@ function client() {
 const FONTS = "https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&display=swap";
 
 /** The page: one HTML file holding the view as data and the client script. Fonts load when online; offline, the fallbacks hold. */
-export function buildPage(view, { staticMode = false } = {}) {
+export function buildPage(view, { staticMode = false, key = "" } = {}) {
   const data = JSON.stringify(view).replace(/</g, "\\u003c");
-  return `<!doctype html><html lang="${esc(view.lang)}" dir="${view.dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(view.labels.title)}</title><link rel="icon" href="data:,"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="${FONTS}"><style>${CSS}</style></head><body><main id="app" class="wrap"></main><script>const STATIC=${staticMode ? "true" : "false"};let V=${data};(${client.toString()})();</script></body></html>`;
+  return `<!doctype html><html lang="${esc(view.lang)}" dir="${view.dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(view.labels.title)}</title><link rel="icon" href="data:,"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="${FONTS}"><style>${CSS}</style></head><body><main id="app" class="wrap"></main><script>const STATIC=${staticMode ? "true" : "false"};const KEY=${JSON.stringify(String(key))};let V=${data};(${client.toString()})();</script></body></html>`;
 }
 
 /** A style's loop, from the cache or fetched once from loopBase and checked; null when it cannot be had. */
@@ -1261,7 +1263,7 @@ const readBody = (req) =>
     });
   });
 
-/** Serves the page on 127.0.0.1. Resolves to { url, finished, close }; finished resolves to the saved record. */
+/** Serves the page on 127.0.0.1. Resolves to { url, key, finished, close }; finished resolves to the saved record. */
 export function startChooser(o) {
   const { root, lib, specs, shown, tools = [], questions = [], media = { stills: [], clips: [], clipPosters: [] }, lang = "en", lockFormat = false, film = "film", cacheDir = DEFAULT_CACHE, fetchImpl = fetch, port = 0, timeoutMs = 30 * 60 * 1000 } = o;
   let choices = o.choices;
@@ -1276,12 +1278,25 @@ export function startChooser(o) {
     writeJson(join(root, "docs", "choices.json"), rec);
     return rec;
   };
+  const key = randomBytes(18).toString("hex");
+  // Only the chooser's own page reaches it: its own host name (a rebound name fails), its own origin,
+  // and on every tap and Send its key in a header, which no other site can send without asking first.
+  const refuse = (req) => {
+    const own = [`127.0.0.1:${server.address().port}`, `localhost:${server.address().port}`];
+    if (!own.includes(req.headers.host)) return "wrong host";
+    if (req.headers.origin && !own.some((h) => req.headers.origin === `http://${h}`)) return "wrong origin";
+    if (req.method === "GET") return null;
+    if (req.headers["x-chooser-key"] !== key || !String(req.headers["content-type"] ?? "").startsWith("application/json")) return "no key";
+    return null;
+  };
   let timer;
   let over = false;
   const server = createServer(async (req, res) => {
     try {
+      const why = refuse(req);
+      if (why) return send(res, 403, { error: why });
       const url = new URL(req.url, "http://127.0.0.1");
-      if (req.method === "GET" && url.pathname === "/") return send(res, 200, buildPage(view()), "text/html; charset=utf-8");
+      if (req.method === "GET" && url.pathname === "/") return send(res, 200, buildPage(view(), { key }), "text/html; charset=utf-8");
       if (req.method === "GET" && url.pathname === "/state") return send(res, 200, view());
       if (req.method === "POST" && url.pathname === "/tap") {
         const tap = await readBody(req);
@@ -1344,7 +1359,7 @@ export function startChooser(o) {
   return new Promise((ok) =>
     server.listen(port, "127.0.0.1", () => {
       timer = setTimeout(() => finish(persist(false)), timeoutMs);
-      ok({ url: `http://127.0.0.1:${server.address().port}/`, finished, close: () => finish(persist(false)) });
+      ok({ url: `http://127.0.0.1:${server.address().port}/`, key, finished, close: () => finish(persist(false)) });
     }),
   );
 }
