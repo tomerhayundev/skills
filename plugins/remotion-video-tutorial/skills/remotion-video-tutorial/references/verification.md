@@ -261,7 +261,12 @@ nothing later makes up for it. Then it judges structure:
 - what a first-time viewer understands at each beat; whether every beat carries the message forward
   (a beat that only shows a logo or a pretty frame is a gap); tension, one turn, the payoff; whether
   every asked item lands inside the story; reading time; whether every number on screen is in the
-  facts list; whether the chosen track fits the brand read's look.
+  facts list; whether the chosen track fits the brand read's look;
+- the beats read in order for agreement alone: every state (a status, a count, a name, a price, a
+  day, who has what) agrees with every other beat, nothing is there before a beat shows it arrive,
+  the voice and the words on screen say the same thing, two different things look different; and
+  the holds: the turn and each moment stay 1.2 s after they land, and the call to action is never
+  the shortest hold ([story](story.md#4-the-copy)).
 
 What it finds is fixed on the page before the user sees it. The rough cut is never shown to the
 user. The critic, like the film, works with the material that exists: "film the warehouse" or "get a
@@ -367,7 +372,11 @@ What it hunts for: text overlapping during a swap, text flying through other tex
 slides instead of easing, more than two things asking to be read at once, text in the corners,
 decorative readouts (a timecode, coordinates, a status line), frame borders, a centered title on a gradient,
 everything fading in, soft text the camera scaled, a hold where nothing moves, a blank frame between
-two states, a label on the wrong thing, rows unequally spaced, a stutter at the loop seam.
+two states, a label on the wrong thing, rows unequally spaced, a stutter at the loop seam, a state
+that disagrees with another frame, something on screen before the film shows it arrive, a payoff
+that lands under 1.2 s before its cut, a call to action that is the shortest hold, something that
+travels across the frame and overshoots into its neighbours (a bounce belongs to things that pop in
+place), an effect that peaks when its move starts instead of when it lands.
 
 After each round: fix the polish in place and re-render only the affected frames
 (`--frames=<from>-<to>` for a look, then the full file); send structure back to the storyboard. Keep
@@ -466,6 +475,8 @@ music or peaks more than 6 dB over it.
 - The hand-off says, in two short lists, what was **measured** (pops, frozen time, loudness,
   contrast, safe zones) and what **still needs a person** (watching it once with sound, the music
   and any effect by ear, anything the critics disagreed on). A number is not a listen.
+- A film that will be posted has its posts, one per place it runs, in `docs/posts.md` and in the
+  message; every screen designed rather than captured is named.
 - The rendered file you are about to publish is the one you checked (the render
   script's skip logic can hand you a stale file; use `--force` when in doubt).
 - Every file handed over passes `delivery-check.mjs` (limited range with BT.709 tagged, its index

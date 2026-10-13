@@ -95,6 +95,9 @@ text off first.
   a serious one not made cute.
 
 **The call to action**: one verb and one destination ("Book your first call at <your domain>"). Not two.
+It is never the film's shortest hold: once its last word lands it stays for its reading time and a
+second more, and at least 3 s in a film of 20 s or longer. The one thing to do is the one thing
+the viewer must not miss.
 
 **Other languages**: localize, do not translate word for word; re-time every line (Hebrew and German
 run longer), and re-check the hook still lands in a second.
@@ -109,3 +112,28 @@ run longer), and re-check the hook still lands in a second.
   to do); the rival test, as a question in the plan (would these words still work for the closest
   competitor? then they are not specific enough). No competitor is ever named or shown in the video;
   the contrast is with the category's generic problem, and the advantage is stated positively.
+
+## 6. The posts that carry it
+
+A film that is posted (to a feed, a channel or a profile) is handed over with the words that go out
+with it. Without them the user writes the post alone, and the post is the first thing a viewer reads.
+An app store preview, a loop on a page or a video inside a product needs none.
+
+- **One post for each place the film runs** (the chooser's platforms), written for that place: on X,
+  short; on LinkedIn, a sentence or two in the brand's first person; on Instagram, TikTok and
+  Facebook, a line and at most a few of the brand's own tags; on YouTube, a title and the first line
+  of the description.
+- **The first line carries it.** It is the only line every feed shows before "more": open with the
+  film's line or a question the viewer can answer in a word, never the brand's name alone.
+- **The film's words, not new ones.** The same message, the same voice and the same banned filler
+  as the script (section 4): a line any brand could post ("order yours today") is rewritten.
+- **One action, the film's call to action**, with the link the user gave. No link, price, date or
+  number outside the facts list; with no link yet, a marked `[link]` slot, named in the hand-off.
+- **No wall of hashtags, no hype word or emoji the brand does not use itself.**
+- **In the film's language**, one set per locale; Hebrew and Arabic are written right to left, not
+  translated from an English draft.
+- **Two or three options for the first line**, the recommended one first, marked as yours.
+- **A film with an AI voice or a realistic generated person or place**: the hand-off names the
+  platform's AI-content label to switch on when posting.
+
+Write them to `docs/posts.md` and also into the hand-off message itself, ready to copy.

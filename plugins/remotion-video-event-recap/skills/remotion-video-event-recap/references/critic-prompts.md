@@ -41,6 +41,11 @@ In this order:
    repeats, where the subject is small in an empty frame.
 6. What a first-time viewer understands at each beat; whether every asked item lands inside the
    story; reading time; whether every number on screen is in the facts list.
+7. Read the beats in order for this alone: does every state (a status, a count, a name, a price, a
+   day, who has what) agree with every other beat? Is anything there before a beat shows it arrive?
+   Do the voice and the words on screen say the same thing? Do two different things look different?
+   Does the turn stay at least 1.2 s after it lands before its cut? Is the call to action the
+   film's shortest hold?
 
 Return a ranked list of problems, each with its beat and one fix that uses only the material that
 exists. Under 500 words.
@@ -59,7 +64,8 @@ look at them, cropped in where needed; write them only under <out/scenes/<Scene>
 the subject fill the frame or float in it; more than two things asking to be read at once; one-frame
 pops; anything blank or half-drawn between states; text over text, text leaving through other text,
 labels on the wrong thing; unequal spacing in rows and lists; edges that do not line up; holds where
-nothing moves; whether it adds what it should.
+nothing moves; something that travels across the frame and overshoots into its neighbours (a bounce
+belongs to things that pop in place); whether it adds what it should.
 
 Then three positive tests on its settled frame, each PASS or FAIL with the frame's time. Poster:
 would the brand post this frame alone as a still, or does it need the motion to excuse it? Timid: is
@@ -100,9 +106,12 @@ The pack is a starting point: pull any other frames you need from the film with 
    label on the wrong thing, unequal spacing, text too small on the phone sheet. And what a picture
    claims: a price, badge, rating or date printed inside a photo or screenshot, a chart or curve
    with no real numbers behind it and no readable "Example data", a step that takes minutes shown
-   as instant.
+   as instant. Then read the dense sheets in order for agreement alone: a state (a status, a count,
+   a name, a price, a day, who has what) that disagrees with another frame, something on screen
+   before the film shows it arrive, two different things drawn alike. And the holds: a payoff that
+   lands under 1.2 s before its cut, a call to action that is the film's shortest hold.
 7. Sound, from audio.txt: where the lift lands against the picture, the level, any effect louder
-   than the music.
+   than the music, any effect that peaks when its move starts instead of when it lands.
 8. Five positive tests. A film can be free of defects and still not worth posting; these ask what
    it does well. For each: PASS or FAIL, with the time of the frame that proves it.
    a. Poster: the turn's frame and the close's frame, each alone. Would the brand post it as a

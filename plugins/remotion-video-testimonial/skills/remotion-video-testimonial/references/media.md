@@ -13,10 +13,22 @@ Check before writing the chooser's voice question, and offer only what works:
 2. **An AI voice** only when a key is already in the environment (`ELEVENLABS_API_KEY`, or the
    provider the user names). Never ask for a key in chat; if the user wants one, tell them where to
    put it (their shell profile or the project's `.env`, git-ignored) and continue without it meanwhile.
-3. **The machine's own speech engine** (Windows System.Speech, macOS `say`, Linux espeak or piper):
+3. **A voice model already on the user's machine**: a local voice app or model the user installed
+   (connected as a tool, or answering on a local port). Free, offline and often natural, but offer
+   it only after three checks, and never install one for the user:
+   - **The model's licence, not the app's.** Name the model it would use and read its licence on
+     its model card. A film for a business is commercial use, and many local voice models are
+     non-commercial (CC BY-NC and the like), sometimes the app's default: such a model never voices
+     a business's film, and for a personal film say the limit. When the card is silent or unclear,
+     treat it as non-commercial.
+   - **The film's language.** Hebrew and Arabic are often missing or weak: the user hears one line
+     before it carries the film.
+   - **Whose voice.** A cloned voice only from the user's own recording, or with written permission
+     from the voice's owner; never a public figure's or an actor's.
+4. **The machine's own speech engine** (Windows System.Speech, macOS `say`, Linux espeak):
    free and offline, but it sounds robotic. Use it for the animatic and for timing drafts, label it as a
    draft voice, and ship it only if the user hears it and approves.
-4. **No voice: caption-led.** The default whenever 1 and 2 are unavailable, and the recommended
+5. **No voice: caption-led.** The default whenever 1 to 3 are unavailable, and the recommended
    choice for anything that autoplays muted. It is a design, not a gap. The music then leads at about
    -16 LUFS, except in a tutorial or onboarding video, whose bed sits lower (about -24 to -20 LUFS)
    or is left out, so it never competes with reading the steps:
@@ -28,9 +40,12 @@ Check before writing the chooser's voice question, and offer only what works:
      burned in, and an SRT is optional (useful for search and translation);
    - music can sit higher (no voice to duck under), but it is still a bed.
 
-Say which rung was taken in the brief and why. A voice key or a connected voice tool appears on
-the chooser under its tools, off until the user turns it on; an AI voice is used only when it is on
-(`choices.tools`).
+Say which rung was taken in the brief and why; for 2 and 3, also the model and whether its terms
+allow this film's use (a service's free plan may not). A voice
+key or a connected voice tool appears on the chooser under its tools (`--connected="voice=<the app
+and its model>"`), off until the user turns it on; an AI voice is used only when it is on
+(`choices.tools`). A film with an AI voice gets the platform's AI-content label when it is posted
+([story](story.md#6-the-posts-that-carry-it)).
 
 ## Voiceover mechanics
 

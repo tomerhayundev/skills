@@ -4,7 +4,7 @@ description: Use when making an organic social clip for Reels, TikTok, Shorts or
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.13.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 56555affeda4 -->
+<!-- Generated from remotion-video-master 0.13.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 46a7ad421a4a -->
 
 # Remotion social clip video
 
@@ -227,6 +227,10 @@ and the pace they keep: [handoffs](references/handoffs.md).
 7. The hand-off: the film (copied to `out/delivered/<id>-v<n>.mp4`, never overwritten), the
    music-only twin when it has sound effects, a contact sheet, the ledger of every critique round,
    and two short lists: what was measured, and what a person still has to watch or listen to.
+   A film that will be posted goes with its posts, one for each place it runs, written out in the
+   message and saved as `docs/posts.md` ([story](references/story.md#6-the-posts-that-carry-it)).
+   Every screen designed rather than captured from the real product is named, so nobody posts it
+   as the product working.
 
 **When the user answers the film with a note.** A note names a symptom, not its fix. In order:
 
@@ -260,7 +264,7 @@ anything.
 | Manifest | `{ id, format, scenes: [{ scene, from?, to?, transition?, captionOverride?, captionTiming?, musicLift? }], aspects?, locales?, loop?, posterFrame }` |
 | `expand()` | Rows x aspects x locales into compositions. Validates windows, the grid, the transitions and the poster frame (`assets/templates/transitions.ts`), the music and the format's profile. Throws rather than renders something wrong. |
 | Chain | Every boundary is a cut on the beat unless its entry says otherwise: a match cut on the motif, a shared element or morph, or a motif turn (a flood, or a push through the real object) with its reason. Whatever its kind, it carries what the storyboard says it carries, on the same pixels on both sides. Every cut is written to `out/<id>.cuts.json` for the pops gate. |
-| Holds | A hold is cut to what its words need; the reading time that remains (a caption's rest, the end card) keeps a slow push, about 2% of scale a second, toward what the eye is on. A breath of 1% reads as frozen. |
+| Holds | A hold is cut to what its words need; the reading time that remains (a caption's rest, the end card) keeps a slow push, about 2% of scale a second, toward what the eye is on. A breath of 1% reads as frozen. The turn and each moment stay at least 1.2 s after they land, before the cut: a payoff that lands 0.4 s before a cut was not seen. The call to action is never the shortest hold ([story](references/story.md#4-the-copy)). |
 | Durations | On the beat grid of the chosen track: one beat is `FPS * 60 / BPM` frames (15 at 120 BPM, 18 at 100, 20 at 90, 25 at 72), set once in the tokens from its `track.json`. Voice-led formats size scenes from the audio with `calculateMetadata`, rounded up to the grid. |
 | Tokens | One source for every color, size and duration. One accent color. |
 | Safe zones | Every text rect inside each shipped platform's safe zone (`assets/templates/safe-zones.ts`), per aspect: Reels and Stories hide the bottom 35%. |
@@ -299,6 +303,7 @@ profile's critique starts with **story and copy**.
 | Every cut carries something | The motif, or a real object, shape or movement in the same place on both sides. A film that cuts "on the beat" with nothing carried restarts at every cut ([handoffs](references/handoffs.md)). |
 | Nothing stands still | A hold where only a breath moves looks finished in every frame and dead in motion: one film measured over a third of its runtime still. No stretch past the profile's limit; a hold keeps a slow push (`frozen-time.mjs`). |
 | Every number on screen is in the facts list | A price, a count or a percentage written from memory is an invented one. Each has its source in the brief (`facts`); no invented testimonial, rating or result. |
+| What is on screen agrees with itself | A status, a count, a name, a price, a day or who has what agrees with every other frame: "ordered" two shots after "delivered" breaks the film. Nothing is there before the film shows it arrive; the voice and the words on screen say the same thing, a line shown whole is spoken whole; two different things (two plans, two people) never look alike. Read the storyboard and the stills in order for this alone: in another studio's films, fresh reviewers kept finding these only after the export. |
 | A picture says what it shows | The facts check reads words, never pictures. Open every photo and screenshot at full size before it goes in: a price, badge, rating, date or another brand's mark printed in it is a claim like any number on screen (a "-30%" badge in a 20%-off film); crop it out or leave the picture out. A chart or curve is a number: with no real data behind it, cut it, or draw a plain shape with no axis, ticks or numerals, or keep it labelled "Example data" in the film's language, readable (4.5:1, on the phone sheet), under the data for as long as it shows. A real person's photo never carries a name that is not theirs. A step that takes minutes is shown working, never instant. A real number is rounded toward the less impressive side. |
 | The motif is met before it is abstracted | A shape that appears from nothing and floods the screen reads as a sticker. Show the real object and hold on it first. |
 | Graphics belong to a layer the viewer knows | In the world (on a surface, in its perspective), in an interface (a device's screen, a viewfinder), or in the brand's layer (captions, the close): anchored, proportionate, matched in light and grain. A full frame of flat color only at a declared turn or the close (`motif-coverage.mjs`). |
@@ -375,7 +380,9 @@ node ${CLAUDE_SKILL_DIR}/scripts/delivery-check.mjs out/delivered/*.mp4
   on a real action, each screened first (`sfx-check.mjs`), none louder than the music, and the film
   rendered once more with them off as its music-only twin.
   Remotion 4.0.3xx renamed `Audio` to `Html5Audio` and `startFrom` to `trimBefore`; the old names break.
-- Voice: the user's recording, an AI voice only when its key is already in the environment, a
+- Voice: the user's recording, an AI voice only when its key is already in the environment, a voice
+  model already on the user's machine only when its licence allows the film's use (many local
+  models are non-commercial: never for a business's film), a
   machine voice for drafts; with none of those the video is caption-led by design (step titles,
   subtitles timed by reading speed, an SRT). Never ask for a key in chat. Ladder and mechanics:
   [media](references/media.md). Music sits 18 to 22 dB under a voice.
@@ -434,4 +441,6 @@ node ${CLAUDE_SKILL_DIR}/scripts/delivery-check.mjs out/delivered/*.mp4
 | Matching the brand's earlier ad after the user rejects a film | A rejection asks for a new concept, not another old piece from the folder |
 | A sale film about how the products are made | The products and the offer are the subject; many of them, recognizable, from the first seconds |
 | One opening shape for every film | The hook is chosen per film and per kind of video: a tutorial opens on the result, a testimonial on its strongest sentence |
+| Handing over a film for a feed with no words to post it | One post per place it runs, in the film's words and language, one action with the real link ([story](references/story.md#6-the-posts-that-carry-it)) |
+| A status or a count that changes between shots with no event | Read the stills in order for that alone: every state agrees with every other frame |
 | A sixth round of polish when the scores stall | The problem is structure: back to the storyboard, or hand the user the one choice |

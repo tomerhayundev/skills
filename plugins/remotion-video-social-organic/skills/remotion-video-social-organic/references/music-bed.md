@@ -198,7 +198,8 @@ listen before anything ships.
 
 - **One short, soft whoosh on each real scene change,** and nothing on a cut that is only a cut.
   Small clicks, pops and ticks only on real actions on screen: a cursor click, a pin landing, a
-  check, a part seating. Never on every beat, and never a sound with no move under it.
+  check, a part seating. Never on every beat, and never a sound with no move under it. A sound's
+  peak lands where its move lands (the arrival, the contact, the cut), not where the move starts.
 - **Clean sources.** A library recording (Kenney.nl is CC0) beats a generated or synthesized one:
   loosely prompted effects and sine sweeps were the ones rejected as unprofessional. Never name a
   brand or an artist in a prompt for generated audio.
