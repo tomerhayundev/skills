@@ -24,6 +24,9 @@ is built past the style frames before that approval.
   "moments": [{ "thing": "<a thing in the film>", "becomes": "<what it turns into>", "beat": 4 }],
   "facts": [{ "text": "<each number, price or claim that appears on screen, as written>", "source": "<where it is written>" }],
   "asks": [{ "item": "<each thing the user asked for, in their words>", "where": "<where it lands in the film>" }],
+  "category": { "films": [{ "what": "<a film of this kind, by category>", "opens": "...", "shows": "...", "ends": "..." }],
+    "always": "<what films of this kind always do>", "differs": "<where this film differs, and why>" },
+  "explains": { "way": "<explainer, demo, feature: real-thing-close | one-object-changes | product-working | ... (explaining.md)>", "why": "..." },
   "feed": true,
   "music": { "id": "<library id>", "title": "...", "artist": "...", "bpm": 90, "why": "<why it fits the brand's look>", "file": "public/music/track.mp3", "liftSeconds": 16, "startSeconds": 8.6,
     "alternatives": [{ "id": "<another library id>", "title": "...", "why": "<a different energy, and why>", "file": "public/music/alt-1.mp3", "startSeconds": 0 }] },
@@ -43,7 +46,11 @@ the whole brand, or the one part it is about), a difference, look or spine taken
 brand (a signature taken from one part is shown marked for the owner to confirm), a row with neither
 a quote nor what it was inferred from, no idea, no motif with its verb, no motion frame of the turn (3 to 6 s), no `asks` list (an empty list when the ask named nothing), an asked item
 with no place in the film, a shot with no `job`, music without a reason, no `format` (the module's id),
-or a number in the words on screen that is in no `facts` entry (each with its `source`). For a promo and
+or a number in the words on screen that is in no `facts` entry (each with its `source`). Every film but a tutorial or
+onboarding video needs its `category` (the films of this kind looked at before the concept, what they
+always do and where this one differs: [brand-read](brand-read.md#what-films-of-this-kind-always-do)), or
+`category.skipped` with why none could be seen; an explainer, a product demo or a feature announcement
+needs `explains`, the way it shows how it works, with why ([explaining](explaining.md)). For a promo and
 the modules built on it, it also refuses: fewer than about 10 compositions per 30 s; a composition over
 3.5 s with no `changesAt`; a shot with no `scale` (macro, close, medium, wide, overhead, type), the same
 scale three shots running, or fewer than three scales in a cut of 15 s or more; a shot after the first

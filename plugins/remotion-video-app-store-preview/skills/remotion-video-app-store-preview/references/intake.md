@@ -54,7 +54,10 @@ only presses Done gets the recommended film, and a user who looks sees every sty
      found). Never ask for a key in chat. With no voice, the video is caption-led by design, not a
      lesser version.
    - **What we show**, only when the project has no product code, footage or captures: capture the
-     live site / your screen recording / design the UI once (a product that doesn't exist yet).
+     live site / **sign in once and Claude uses the real product** (it makes this film's example in
+     the product and captures it; recommended for a product that works on a screen and needs a
+     sign-in: [explaining](explaining.md#4-the-real-product-made-to-do-the-example)) / your screen
+     recording / design the UI once (a product that doesn't exist yet).
    - **More material**, only when something the ask names has no footage, photo or capture at all
      (a delivery service with no footage of a delivery): **build it from what there is**
      (recommended) / **I have it, or can make it**. This is the one moment material is asked for

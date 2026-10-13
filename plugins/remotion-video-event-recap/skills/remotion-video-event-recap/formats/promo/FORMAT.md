@@ -142,6 +142,11 @@ default, shared elements where scenes share one, and the motif's full treatment 
 real object, or a flood in its shape, `assets/templates/flood.ts`) only at the turn and the close:
 at most one per 15 s, plus the close. A cutdown is re-scripted, not trimmed ([story](../../references/story.md)).
 
+**An app, a tool or a service shown working**: one example runs from the first shot to the last, and
+the stretch that shows how it works picks one way of showing it, never one layout per item
+([explaining](../../references/explaining.md)). The real product making this film's example beats a
+redrawn interface.
+
 **A physical product, a place or a service** (a studio, a shop, a maker, food) is shot, not captured,
 and the brand read's Look row sets the grammar:
 - The brand's own photos are assets: products photographed on seamless white, or in homes, are how

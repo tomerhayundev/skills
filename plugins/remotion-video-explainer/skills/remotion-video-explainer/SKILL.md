@@ -4,7 +4,7 @@ description: Use when making an explainer, concept video, "how it works" or anim
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.13.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: d443678aafa8 -->
+<!-- Generated from remotion-video-master 0.14.0 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: eba8640daddf -->
 
 # Remotion explainer video
 
@@ -61,8 +61,9 @@ Details and hands-off rules: [intake](references/intake.md).
    zones, captions and warnings go in the brief. The length is the one chosen on the page.
 4. **Read the brand and pick the concept** ([brand-read](references/brand-read.md)): four
    conclusions from the brand's own words (its difference, its look, its signature, its spine),
-   three concepts built on them, and a fresh critic who scores the concepts before the user sees
-   anything. The winner holds every item the user asked for inside one story, and **the ask leads**:
+   a look at two or three real films of the same kind (what they always do, and where this film
+   will differ), three concepts built on them, and a fresh critic who scores the concepts on a
+   fixed scale before the user sees anything. The winner holds every item the user asked for inside one story, and **the ask leads**:
    what the user named as the subject (the products, the sale, the feature) is on screen and
    recognizable in the first 3 s and is what most of the film shows; the brand's story serves it in
    a beat or two, never replaces it. "Products at 20% off" is a film of the products and the offer,
@@ -86,6 +87,9 @@ The user's ask names things, not a story: every item they listed becomes a step 
 story (the brand read's spine), never a chapter of its own. Every shot has a job in that story (in a
 promo: hook, promise, proof, offer, close), written before any visual device is chosen; a shot
 whose job cannot be named is cut.
+A film that shows what a product does carries one example from the first shot to the last (the
+same customer, the same order), every feature shown happening to it; the stretch that explains
+picks one way of showing and never repeats one layout per item ([explaining](references/explaining.md)).
 Before any beat map: the one message in one sentence, the format's arc (tension first, one turn,
 show then say), and every word written in a script table (beat, time, picture, words, motif), read
 aloud, timed (about 2.5 spoken words a second; about 0.3 s a word on screen, at least 1.5 s a line)
@@ -165,7 +169,11 @@ and the pace they keep: [handoffs](references/handoffs.md).
   product's own look; never ask the user for a reference.
 - **Real assets**: the product's own components when its code is in the repo. No code access:
   capture the live site with Playwright into `./assets` (each screen state, the logo, colors,
-  fonts) and list what you found before animating. A product with no UI yet gets its UI designed
+  fonts) and list what you found before animating. A product behind a sign-in: when the user chose
+  it on the chooser, they sign in themselves in a browser window they can see, and you drive the
+  real product to make the film's example and capture it; never a password typed, asked for or
+  stored, never a real customer's data, nothing sent, published or bought
+  ([explaining](references/explaining.md#4-the-real-product-made-to-do-the-example)). A product with no UI yet gets its UI designed
   once, as components, treated as the real ones. A native app (iOS, Android, React Native) has no
   web components to import: record the device or simulator from a shot list (when this machine
   cannot run the simulator, make it one of the chooser's questions whether the user can record it), or use
@@ -230,12 +238,21 @@ and the pace they keep: [handoffs](references/handoffs.md).
    A film that will be posted goes with its posts, one for each place it runs, written out in the
    message and saved as `docs/posts.md` ([story](references/story.md#6-the-posts-that-carry-it)).
    Every screen designed rather than captured from the real product is named, so nobody posts it
-   as the product working.
+   as the product working. Then open the **review room** on it, in the background:
+   `node ${CLAUDE_SKILL_DIR}/scripts/review-room.mjs --film=<id> [--lang=he]` (it prints `review <url>`
+   and opens the page). The user watches the version, steps frame by frame, clicks on the picture to
+   pin a note on that exact frame, can play an earlier version beside it, and presses Send, which
+   ends the script and wakes you. Say in one line that the room is open and that notes typed in the
+   chat work the same.
 
 **When the user answers the film with a note.** A note names a symptom, not its fix. In order:
 
-1. Find the frames it points at in the film's pack (`critic-pack.mjs`, the dense sheets) before
-   changing anything. Ask only when two readings of the note would cost different work.
+1. Find the frames it points at before changing anything. A note from the review room carries its
+   version, time, frame and pin, and a snapshot of that frame with the pin drawn in
+   (`docs/review/<film>/shots/<id>.jpg`): open the snapshot. A note typed in the chat: find its
+   frames in the film's pack (`critic-pack.mjs`, the dense sheets). Ask only when two readings of
+   the note would cost different work; a note about taste or direction is the user's call, asked,
+   never guessed.
 2. Find everything that reads as the thing named: "I don't like the thing behind the logo" is every
    element that reads as it (a ring and a burst both), not the one layer it was built as.
 3. Turn the note into a mechanism. "Faster" is tighter clauses and shorter waits between them, never
@@ -248,7 +265,10 @@ and the pace they keep: [handoffs](references/handoffs.md).
    new concept (section 0), never a patch.
 5. Render the next version beside the last (`v<n+1>`), run the checks again on it (pops, frozen time,
    `delivery-check.mjs`, a fresh critic on what changed), and answer in the user's words: one line per
-   note, what changed and at what time.
+   note, what changed and at what time. Record each answer on its note
+   (`review-room.mjs --film=<id> --answer=<note id> --in=<id>-v<n+1> --text="<what changed, at what time>"`)
+   and open the room on the new version: the user marks each answered note fixed or not yet, and a
+   not yet comes back open. A note no version has answered is reported again on every Send.
 
 The user sees only what looks finished: the visual brief, then the film. When the build runs long,
 send a few seconds of the turn as a clip at final quality as soon as it exists, without asking
@@ -350,7 +370,9 @@ node ${CLAUDE_SKILL_DIR}/scripts/delivery-check.mjs out/delivered/*.mp4
 - Critique at three points, each by a fresh critic, logged in `docs/review_log.md`
   ([verification](references/verification.md#critique-at-three-points)):
   1. **The concept**, before the brief ([brand-read](references/brand-read.md)): one idea, only this
-     brand, the brand's look, surprise, the first two seconds (in a feed), every asked item inside.
+     brand, not the usual film of its kind (looked at, not guessed), the one image, the brand's look,
+     surprise, the first two seconds (in a feed), every asked item inside, on a fixed scale; a page
+     tops out near 8, so wow is judged again on the motion frame.
   2. **The storyboard**, before the build: the first two seconds judged alone, picture and sound,
      then every beat carries the message, every cut carries something, one turn, the moments, the
      density, reading time. Structure is fixed here.
@@ -443,4 +465,9 @@ node ${CLAUDE_SKILL_DIR}/scripts/delivery-check.mjs out/delivered/*.mp4
 | One opening shape for every film | The hook is chosen per film and per kind of video: a tutorial opens on the result, a testimonial on its strongest sentence |
 | Handing over a film for a feed with no words to post it | One post per place it runs, in the film's words and language, one action with the real link ([story](references/story.md#6-the-posts-that-carry-it)) |
 | A status or a count that changes between shots with no event | Read the stills in order for that alone: every state agrees with every other frame |
+| A concept made without looking at films of its kind | Two or three real ones first; write what they always do and where this one differs (`category.md`) |
+| One layout repeated for every item of a list | One picture that changes, or one camera move past different stations ([explaining](references/explaining.md)) |
+| A new example for each feature | One example from the first shot to the last, every feature shown on it |
+| Restyling a weak explaining stretch | Change what is shown (the real thing each step made), then the style |
+| Reading 6 or 7 on paper as a weak concept | A written page tops out near 8; judge wow on the motion frame |
 | A sixth round of polish when the scores stall | The problem is structure: back to the storyboard, or hand the user the one choice |

@@ -31,6 +31,9 @@ In this order:
    music starts. Would this viewer stay? Is something already happening on frame 0, is it clear what
    the film is about, does it open something the film closes? A slogan, a logo, a still product, a
    quiet intro, or a finished picture that waits under its line fails.
+   Then the motion frame alone, as a picture, not a plan: score it from 1 to 10 on a fixed scale
+   (10, I would send this to someone; 7, good, I would watch it; 5, fine and forgettable). Written
+   pages top out near 8; a picture can go higher, so this is where wow is judged.
 2. Each shot's job (hook, promise, proof, offer, close). Which shots have none?
 3. Every cut: what does the eye follow over it into the next shot? Name it per cut from the page's
    "carried over the cut" lines, and say where it would not hold on screen (a different place, size
@@ -46,9 +49,19 @@ In this order:
    Do the voice and the words on screen say the same thing? Do two different things look different?
    Does the turn stay at least 1.2 s after it lands before its cut? Is the call to action the
    film's shortest hold?
+8. Words off: describe each shot with its words removed. Where only a plain ground or a card is
+   left, the idea in that shot is a caption, not a picture; more than a third of the runtime like
+   that is a slideshow. (A film in the moving-type look is exempt: its words are the picture.) Is
+   each shot an event (someone or something does something) or a state (something is shown)? A film
+   of states is a slideshow however well each one moves in.
+9. The explaining stretch, when there is one: is it one way of showing chosen for this film
+   (references/explaining.md), or one layout repeated for every item of a list? Does one example run
+   through it, every feature shown on that same example?
+10. The one image: which single frame would a viewer describe to a friend? If it is a line of text,
+   a logo or a grid, say so.
 
 Return a ranked list of problems, each with its beat and one fix that uses only the material that
-exists. Under 500 words.
+exists. Under 650 words.
 ```
 
 ## Scene critic (each new scene, before it joins the film)
@@ -103,7 +116,8 @@ The pack is a starting point: pull any other frames you need from the film with 
 5. Every cut (cuts.png, cut-<frame>.png): what is carried over it, and whether it lands in the same
    place at the same size. Name the cuts that carry nothing.
 6. Defects, with times: text over text, anything clipped, a blank or half-drawn frame, a pop, a
-   label on the wrong thing, unequal spacing, text too small on the phone sheet. And what a picture
+   label on the wrong thing, unequal spacing, text too small on the phone sheet, the same frame
+   repeated for every item of a list. And what a picture
    claims: a price, badge, rating or date printed inside a photo or screenshot, a chart or curve
    with no real numbers behind it and no readable "Example data", a step that takes minutes shown
    as instant. Then read the dense sheets in order for agreement alone: a state (a status, a count,
@@ -127,7 +141,8 @@ The pack is a starting point: pull any other frames you need from the film with 
       sticker on the film, not part of it.
    e. Rests: each stretch with no line on screen. A composed rest (the subject carries the frame) or
       a gap (the design just stopped)?
-9. Score each from 1 to 10: <the profile's critique list, each with its one-line meaning from
+9. Score each from 1 to 10 on a fixed scale (10, I would send this to someone; 7, good, I would
+   watch it; 5, fine and forgettable): <the profile's critique list, each with its one-line meaning from
    verification.md>.
 
 Then the problems, ranked by how much each costs the film (a failed positive test is a problem

@@ -234,9 +234,13 @@ problem the storyboard already showed. A brand film went through six rounds to 7
 
 ### 1. The concept, before the brief
 
-In the brand read ([brand-read](brand-read.md), step 4): three concepts, scored on one idea, only
-this brand, the brand's look, surprise, every asked item inside, and whether the material can make
-it. The winner is rewritten once when any score is under 8. This is where "banal" is caught.
+In the brand read ([brand-read](brand-read.md), step 4): first two or three real films of the same
+kind are looked at and their skeleton written down (`category.md`); then three concepts, scored on a
+fixed scale on one idea, only this brand, not the usual film of this kind (nor a shape that already
+failed), the one image, the brand's look, surprise, every asked item inside, and whether the
+material can make it. The lines a page can prove need 8; the taste lines are rewritten under 7,
+because a written page tops out near 8 even for an acclaimed film, and wow is judged again on the
+motion frame. This is where "banal" is caught.
 
 ### 2. The storyboard, before the build (required)
 
@@ -266,7 +270,14 @@ nothing later makes up for it. Then it judges structure:
   day, who has what) agrees with every other beat, nothing is there before a beat shows it arrive,
   the voice and the words on screen say the same thing, two different things look different; and
   the holds: the turn and each moment stay 1.2 s after they land, and the call to action is never
-  the shortest hold ([story](story.md#4-the-copy)).
+  the shortest hold ([story](story.md#4-the-copy));
+- words off: each shot described with its words removed; a plain ground or a card left over is a
+  caption, not a picture, and more than a third of the runtime like that is a slideshow (the
+  moving-type look excepted); each shot an event, not a state;
+- the explaining stretch: one way of showing chosen for this film, one example running through it,
+  never one layout per item of a list ([explaining](explaining.md));
+- the motion frame scored as a picture on the fixed scale (10, send it to someone; 7, good, would
+  watch; 5, forgettable): a written page tops out near 8, so wow is judged here, not on paper.
 
 What it finds is fixed on the page before the user sees it. The rough cut is never shown to the
 user. The critic, like the film, works with the material that exists: "film the warehouse" or "get a

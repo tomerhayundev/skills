@@ -37,6 +37,11 @@
  *                "motif": "the pour", "layout": "split diptych", "tracks": ["the track it used", "the ones it offered"],
  *                "opensWith": "footage/pour.mp4", "uses": ["footage/pour.mp4", "footage/table.mp4"] }],
  *                                      // every earlier film or ad of the brand in the folder ([] when none): what not to repeat
+ *   "category": { "films": [{ "what": "a rival studio's class film", "opens": "hands at the wheel", "shows": "the process", "ends": "the logo" }],
+ *                 "always": "what films of this kind always do", "differs": "where this film differs, and why" },
+ *                                      // looked at before the concept (references/brand-read.md); { "skipped": "why" } when none could be seen
+ *   "explains": { "way": "real-thing-close", "why": "one feature, a screen" },   // explainer, product demo, feature announcement:
+ *                                      // how the film shows how it works (references/explaining.md)
  *   "layout": "the film's layout device, when it has one (a split, a grid, a single full frame)",
  *   "feed": true,                      // Reels, TikTok, Shorts, Stories: the first-seconds checks apply
  *   "music": { "id": "library id", "title": "...", "artist": "...", "bpm": 90, "why": "fits the brand's look because ...",
@@ -81,7 +86,9 @@
  * opens (first 3 s) on a clip an earlier film opened with or on a worn-out clip (in two or more
  * earlier films), uses a worn-out clip more than once, or a beat with no "uses" when earlier films
  * exist; an earlier clip that fits may otherwise return; a promo whose asks mark no lead, or whose lead is first seen
- * after 3 s.
+ * after 3 s. Every film but a tutorial or onboarding video: no category (the films of this kind looked
+ * at, what they always do and where this one differs, or why none could be seen). An explainer, a
+ * product demo or a feature announcement: no way of showing how it works (explains.way, with why).
  */
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -103,6 +110,8 @@ const FAMILY = {
   explainer: "explainer", testimonial: "explainer",
 };
 const SCALES = ["macro", "close", "medium", "wide", "overhead", "type"];
+/** Ways a film shows how something works (references/explaining.md). */
+export const WAYS = ["real-thing-close", "one-object-changes", "product-working", "output-as-film", "person-and-shapes", "life-product-small", "mixed-media", "type-alone", "steps-own-pictures", "drawn-diagram"];
 /**
  * A shot's marked changes as { t, what }, t in seconds into the shot: changesAt is one time, a list,
  * or a list of { t, what }. Times written on the film's clock (every one inside the shot's span, at
@@ -215,6 +224,20 @@ export function checkPlan(brief) {
         }
       });
     }
+  }
+  if (family && family !== "tutorial") {
+    const cat = brief.category;
+    if (!cat || typeof cat !== "object") problems.push("category: look at two or three real films of this kind before the concept and write what they always do and where this film differs (category: films, always, differs), or why none could be seen (category.skipped) (references/brand-read.md)");
+    else if (!has(cat.skipped)) {
+      if (!Array.isArray(cat.films) || !cat.films.some((f) => has(f?.what))) problems.push("category: list the films of this kind you looked at, each by category, with how it opens, shows the product and ends (category.films: what, opens, shows, ends)");
+      if (!has(cat.always)) problems.push("category: say what films of this kind always do (category.always): the skeleton this film must not fall into");
+      if (!has(cat.differs)) problems.push("category: say where this film differs from what they always do, and why (category.differs)");
+    }
+  }
+  if (["explainer", "product-demo", "feature-announcement"].includes(brief.format)) {
+    const ex = brief.explains;
+    if (!ex || !WAYS.includes(ex.way)) problems.push(`explains: choose the way this film shows how it works (explains.way: ${WAYS.join(", ")}) and say why it fits (explains.why); one layout repeated for every item of a list is not a way (references/explaining.md)`);
+    else if (!has(ex.why)) problems.push(`explains: say why "${ex.way}" fits this film (explains.why)`);
   }
   if (!brief.music || typeof brief.music !== "object") problems.push("music: name the track from the library and why it fits the brand's look (music.id, music.why)");
   else {
@@ -360,6 +383,7 @@ const LABELS = {
     inferred: "Not said on your site; inferred from",
     partOnly: "Please confirm: this is said only about",
     before: "Your earlier films, and how this one is different", beforeDid: "How it opened, what carried it", beforeNow: "This film",
+    category: "What films like this usually do, and what yours does instead", catAlways: "Films like this usually", catYours: "Yours instead",
     idea: "The idea", motif: "What carries the film", moments: "The moments you will remember", becomes: "becomes", carried: "Carried over the cut:", asks: "What you asked for, and where it is in the film", asked: "You asked for", where: "Where it is",
     music: "The music", alsoMusic: "Also possible, each from where the film would start it:", plan: "The plan", look: "The look (final quality, from your assets)", motion: "The motion: the turn, at final quality",
     storyboard: "Storyboard", oneSentence: "In one sentence:", noWords: "no words",
@@ -376,6 +400,7 @@ const LABELS = {
     inferred: "לא כתוב אצלכם; הסקתי מ",
     partOnly: "לאישורכם: זה נאמר רק על",
     before: "הסרטונים הקודמים שלכם, ובמה הסרטון הזה שונה", beforeDid: "איך נפתח, מה הוביל אותו", beforeNow: "הסרטון הזה",
+    category: "מה סרטונים כאלה עושים בדרך כלל, ומה שלכם עושה אחרת", catAlways: "סרטונים כאלה בדרך כלל", catYours: "שלכם במקום זה",
     idea: "הרעיון", motif: "מה מוביל את הסרט", moments: "הרגעים שיזכרו", becomes: "הופך ל", carried: "עובר בחיתוך:", asks: "מה ביקשתם, ואיפה זה בסרט", asked: "ביקשתם", where: "איפה זה בסרט",
     music: "המוזיקה", alsoMusic: "אפשר גם, כל אחת מהמקום שבו הסרט יתחיל אותה:", plan: "התוכנית", look: "הלוק (באיכות סופית, מהחומרים שלכם)", motion: "התנועה: רגע המפנה, באיכות סופית",
     storyboard: "סטוריבורד", oneSentence: "במשפט אחד:", noWords: "בלי מילים",
@@ -470,6 +495,8 @@ export function buildHtml(brief) {
     const mm = moments.length ? `<h2>${esc(L.moments)}</h2><ol class="moments">${moments.map((x) => `<li><b>${esc(x.thing)}</b> <span class="mute">${esc(L.becomes)}</span> <b>${esc(x.becomes)}</b></li>`).join("")}</ol>` : "";
     const asks = brief.asks?.length ? `<h2>${esc(L.asks)}</h2><table class="kv"><thead><tr><th>${esc(L.asked)}</th><th>${esc(L.where)}</th></tr></thead><tbody>${brief.asks.map((a) => `<tr><th>${esc(a.item)}</th><td>${rich(a.where ?? "")}</td></tr>`).join("")}</tbody></table>` : "";
     const before = brief.before?.length ? `<h2>${esc(L.before)}</h2><table class="kv"><thead><tr><th></th><th>${esc(L.beforeDid)}</th></tr></thead><tbody>${brief.before.map((e) => `<tr><th>${esc(e.name ?? "")}</th><td>${esc([e.opening, e.motif, e.layout].filter(has).join(" · "))}</td></tr>`).join("")}<tr><th>${esc(L.beforeNow)}</th><td><b>${esc([brief.cuts?.[0]?.beats?.[0]?.picture, brief.motif?.object, brief.layout].filter(has).join(" · "))}</b></td></tr></tbody></table>` : "";
+    const cat = brief.category && has(brief.category.always) && has(brief.category.differs) ? brief.category : null;
+    const category = cat ? `<h2>${esc(L.category)}</h2><table class="kv"><tbody><tr><th>${esc(L.catAlways)}</th><td>${rich(cat.always)}</td></tr><tr><th>${esc(L.catYours)}</th><td>${rich(cat.differs)}</td></tr></tbody></table>` : "";
     const m = brief.music && typeof brief.music === "object" ? brief.music : null;
     const track = (t, key) => {
       const clip = musicExcerpt(t, tmp, key);
@@ -506,7 +533,7 @@ h2{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute
 q{display:block;margin-top:5px;font-weight:600}i{display:block;margin-top:5px;color:var(--mute)}.msg{margin:0 0 10px}.msg span,.mute{color:var(--mute)}
 .box{background:var(--card);border-radius:10px;padding:13px 15px}.go{margin-top:28px;border-left:4px solid var(--accent);padding:10px 14px;background:var(--card);border-radius:6px}
 </style></head><body><main><h1>${esc(brief.title ?? L.title)}</h1><p class="lead">${L.lead}</p>
-${brand}${idea}${st}${mo}${mm}${asks}${before}${music}
+${brand}${idea}${st}${mo}${mm}${asks}${category}${before}${music}
 ${brief.plan?.length ? `<h2>${esc(L.plan)}</h2><ul>${brief.plan.map((l) => `<li>${rich(l)}</li>`).join("")}</ul>` : ""}
 ${frames ? `<h2>${esc(L.look)}</h2><div class="frames">${frames}</div>` : ""}
 ${motion ? `<h2>${esc(L.motion)}</h2><div class="frames motion">${motion}</div>` : ""}

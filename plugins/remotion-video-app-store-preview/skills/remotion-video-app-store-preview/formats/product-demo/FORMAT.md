@@ -56,6 +56,10 @@ under the voice, or a bed with a lift on the strongest feature when caption-led.
 
 ## Build notes
 
+One example runs through the whole demo (the same customer, the same project), and every feature is
+shown happening to it; the outcome at 0-3 s and the close show that example done. The way of showing
+each feature is chosen ([explaining](../../references/explaining.md)): usually the real thing very
+close, or the product working; the real product made to do the example when the user signs in for it.
 Each feature is a scene. Features change on cuts on the beat, or a morph of one UI element when the
 features share it; the motif's full treatment is kept for the turn and the close. Cursor zoom for small controls. A feature clip for social is the same scene
 rendered alone, reframed for 9:16, with a caption instead of the voice.

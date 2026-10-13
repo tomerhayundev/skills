@@ -74,15 +74,53 @@ one signature, so a read copied from the last film hands every film the same mot
 opening. When an earlier film already carried the signature, this film's motif comes from this ask
 (the products, the offer, the occasion) and the signature is at most an echo.
 
+## What films of this kind always do
+
+The competitor test asked blind ("would this work for the closest rival?") does not show the
+category's skeleton, and a concept made without looking falls into it: every concept for one
+ceramics studio came out as the process, then the guests, then the logo. So before the concepts,
+look at two or three real films of the same kind, the way `before.md` looks at the brand's own:
+
+1. **Find them.** The closest rivals' own videos (their site, their channels), or, when they have
+   none, films of this kind from the sources library
+   (`find-sources.mjs --need=launch-film --kind=work,gallery`, or the need that fits the format).
+2. **Look, never guess**: a contact sheet of each (a frame a second; a page-only video is read by
+   seeking in the page) and its first three seconds frame by frame. Ten minutes at most.
+3. **Write `docs/<film>/category.md`**: per film, its length, how fast it cuts, what the first three
+   seconds show, who is on screen, how the product is shown and how it ends; then two lines: **what
+   films of this kind always do** (their skeleton), and **where this film will differ, and why**.
+4. Both lines go in the brief (`category`), where the user reads them, and to the concept critic.
+
+This names what to break, never what to copy: a reference for how the film moves is chosen after
+the concept (SKILL.md, section 5). The film never shows a rival, in any form, and the brief names
+rivals by category only. No network, or no film of this kind to be found: say so in
+`category.skipped` and go on.
+
 ## 4. Three concepts, and a critic before the brief
 
 Write three concepts that differ in idea, not in wording. Each is one sentence and its beat sheet
 first: one line per job (for a promo: hook, promise, proofs, offer, close; the format's own jobs
 otherwise), with where every asked item lands. Then its motif: the one object that carries those jobs from the hook to the close, what it does
 (its verb, which is what the brand does), and how it links the shots. A concept that starts from a
-gimmick device (before and after, a split frame) and fits a story to it is rewritten from the jobs. Then a fresh critic (a subagent with no part in the writing)
+gimmick device (before and after, a split frame) and fits a story to it is rewritten from the jobs.
+
+**Shapes that already failed.** Each of these was built, finished cleanly and rejected, by us or by
+another studio. A concept that rests on one is chosen again, unless the user asked for it by name:
+
+| Shape | What it looks like | Why it fails |
+| --- | --- | --- |
+| The process tour | The steps of making it as the beats, one after another, with nothing at stake | It shows how the maker works; the viewer wants what they get. A process carries a film only when it is the brand's stated difference and it turns (the bakery's 48 hours that become the Friday market) |
+| A chapter per item | One beat for each thing the ask listed | A montage with no idea (section 3) |
+| Samples doing the work | Existing portfolio pieces or earlier footage as most of the proof | A showreel assembled, not the product working |
+| The film about itself | Its own making, timeline or storyboard on screen as the payoff | A wink at the maker; the viewer learns nothing they can use |
+| The genre joke | Mocking other ads of the category instead of showing this product | It spends the film on other people's work |
+| A line typed on an empty ground | The opening is a sentence being typed on a plain background | Every tool opens this way, and it is a caption, not a picture |
+| The category's skeleton | The order of beats `category.md` says films of this kind always use | The viewer has seen it; nobody chose it |
+
+Then a fresh critic (a subagent with no part in the writing)
 gets the brand read, the ask, the material list, `before.md` with a frame of each earlier piece's
-opening, and the three concepts, and scores each from 1 to 10:
+opening, `category.md` and the three concepts, and scores each from 1 to 10 on a fixed scale:
+**10**, I would send this to someone; **7**, good, I would watch it; **5**, fine and forgettable:
 
 | Criterion | The question |
 | --- | --- |
@@ -95,11 +133,22 @@ opening, and the three concepts, and scores each from 1 to 10:
 | The motif carries the flow | Is there one object, from the brand's difference, whose verb is what the brand does, met early, linking the shots, doing the turn and back in the close? A divider line, a shape or a pretty object that does nothing fails, and so does a film with no motif at all. |
 | The look | Would the film look like the Look row: the brand's own adjectives? |
 | Surprise | Is there a moment a stranger would not expect, one that stops the scroll? |
+| Not the usual film | Set beside `category.md`: does its order of beats follow what films of this kind always do, or does it rest on a shape that already failed (the table above)? Either fails, unless the user asked for it by name. |
+| The one image | Name the single frame a viewer would describe to a friend. A line of text, a logo or a grid of thumbnails is not one: keep looking. It usually belongs in the first seconds. |
 | The first two seconds | For a feed (Reels, TikTok, Shorts, Stories): picture only frame 0 to 2 s, picture and sound. Does something move, does the beat already play, does the line open a question? A slogan, a logo, a still product or a quiet intro fails, whatever comes after. |
 | Every ask inside | Does each item the user named sit inside the story, not beside it? |
 | Makes it | Can it be built entirely from the material that exists? A concept that needs footage, photos or a recording nobody has offered fails this line ([intake](intake.md#build-from-what-exists)). |
 
-The best concept goes forward. When it scores under 8 on any line, rewrite it once against the
+**A score on paper has a ceiling.** Another studio gave readers like this critic three acclaimed
+launch films, written up the same way with the names removed: the best scored 8 overall, and about
+7 when the reader did not know the film. So 9 on paper is not reachable, and a 7 on a taste line is
+not a failure. The lines a page can prove (the ask first, structure, every ask inside, makes it,
+not the usual film) need 8. The taste lines (one idea, a professional ad, only this brand, the
+motif, the look, surprise, the first two seconds, the one image) are rewritten under 7; at 7 or 8
+they go forward and are judged again on the motion frame, the first picture of the film, where wow
+can be seen (the storyboard critique).
+
+The best concept goes forward. When a line scores under its bar, rewrite it once against the
 critic's notes and score it again. Log the scores in `docs/review_log.md`. The brief shows the winner
 and names the runner-up in one line; it never shows the user a menu of concepts.
 
@@ -108,7 +157,8 @@ and names the runner-up in one line; it never shows the user a menu of concepts.
 The page opens with **what I understood about your brand** (the four rows: the quote, its source,
 and what it means for the film; a row taken from one part of the brand is marked for the owner to
 confirm), then **the idea** in one sentence, then **what you asked for and where it is in
-the film**, then the music. `visual-brief.mjs` refuses a brief without them. The user reads the read
+the film**, then **what films like this usually do, and what yours does instead** (the two lines of
+`category.md`), then the music. `visual-brief.mjs` refuses a brief without them. The user reads the read
 first: a wrong conclusion is corrected there, before any frame depends on it.
 
 ## Worked example: a family bakery

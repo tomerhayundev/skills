@@ -6,7 +6,7 @@ import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildAnimatic, buildHtml, checkPlan, writeMotionFiles } from "./visual-brief.mjs";
+import { buildAnimatic, buildHtml, checkPlan, WAYS, writeMotionFiles } from "./visual-brief.mjs";
 
 const script = join(dirname(fileURLToPath(import.meta.url)), "visual-brief.mjs");
 const dir = mkdtempSync(join(tmpdir(), "brief-"));
@@ -38,6 +38,11 @@ const brief = () => ({
   ],
   idea: "Every box answers when you scan it.",
   motif: { object: "the molded code", verb: "it answers when scanned, as the product does", links: "each shot finds the code on the next box" },
+  category: {
+    films: [{ what: "a rival storage brand's launch film", opens: "a messy garage", shows: "boxes stacked by a family", ends: "the logo on white" }],
+    always: "a messy garage, then a tidy one, then the logo",
+    differs: "the code answers: the film is the search, not the tidying",
+  },
   moments: [{ thing: "the code on the box", becomes: "the list of what is inside", beat: 2 }],
   asks: [{ item: "the app", where: "the scan at the turn", lead: true, seenAt: 0 }],
   before: [],
@@ -478,4 +483,49 @@ test("an explainer's change times may be on the film's clock; they are read as t
   const problems = checkPlan(b).join("\n");
   assert.doesNotMatch(problems, /30 s, beat 2/, "events at 1, 3.5 and 6 s into the shot, the last 3 s to its end");
   assert.match(problems, /30 s, beat 3: nothing happens from 4\.5 s to 9\.0 s \(4\.5 s\)/);
+});
+
+test("the concept is made after looking at films of its kind: what they always do and where this one differs", () => {
+  const b = brief();
+  assert.doesNotMatch(checkPlan(b).join("\n"), /category/);
+  delete b.category;
+  assert.match(checkPlan(b).join("\n"), /category: look at two or three real films of this kind/);
+  b.category = { films: [], always: "", differs: "x" };
+  const p = checkPlan(b).join("\n");
+  assert.match(p, /category: list the films of this kind you looked at/);
+  assert.match(p, /category: say what films of this kind always do/);
+  b.category = { skipped: "no network on this machine" };
+  assert.doesNotMatch(checkPlan(b).join("\n"), /category/, "a study that could not be done says why and goes on");
+  delete b.category;
+  b.format = "tutorial";
+  assert.doesNotMatch(checkPlan(b).join("\n"), /category/, "a tutorial needs no category study");
+});
+
+test("an explainer, a demo and a feature announcement choose how they show how it works", () => {
+  for (const format of ["explainer", "product-demo", "feature-announcement"]) {
+    const b = brief();
+    b.format = format;
+    assert.match(checkPlan(b).join("\n"), /explains: choose the way this film shows how it works/, format);
+    b.explains = { way: "a grid of cards" };
+    assert.match(checkPlan(b).join("\n"), /explains: choose the way/, `${format}: not a way`);
+    b.explains = { way: "real-thing-close" };
+    assert.match(checkPlan(b).join("\n"), /explains: say why "real-thing-close" fits/);
+    b.explains = { way: "product-working", why: "the board fills up as the team works" };
+    assert.doesNotMatch(checkPlan(b).join("\n"), /explains/);
+  }
+  const promo = brief();
+  assert.doesNotMatch(checkPlan(promo).join("\n"), /explains/, "a promo is not asked");
+  assert.ok(WAYS.includes("drawn-diagram") && WAYS.length === 10);
+});
+
+test("the page shows what films of this kind usually do and what this one does instead, in the page's language", () => {
+  const b = brief();
+  const html = buildHtml(b);
+  assert.match(html, /What films like this usually do, and what yours does instead/);
+  assert.match(html, /a messy garage, then a tidy one, then the logo/);
+  assert.match(html, /the code answers: the film is the search, not the tidying/);
+  b.lang = "he";
+  assert.match(buildHtml(b), /מה סרטונים כאלה עושים בדרך כלל/);
+  b.category = { skipped: "no network" };
+  assert.doesNotMatch(buildHtml(b), /usually do|בדרך כלל/);
 });

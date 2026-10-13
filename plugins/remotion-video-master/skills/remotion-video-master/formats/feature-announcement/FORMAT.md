@@ -31,7 +31,7 @@ The promo profile unchanged.
 
 ## Build notes
 
-Before and after share one element (a shared element or a morph), so the change reads as the same screen improving.
+Before and after share one element (a shared element or a morph), so the change reads as the same screen improving. One example carries both: the same document, the same order, done the old way and then with the feature. The way of showing it is chosen ([explaining](../../references/explaining.md)), usually the real thing very close.
 
 ## Verification
 

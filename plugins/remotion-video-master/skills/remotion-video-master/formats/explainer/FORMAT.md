@@ -36,8 +36,8 @@ One idea per explainer. If a viewer cannot repeat it in one sentence, cut until 
 ## Assets and voice
 
 A script first: one sentence per beat, read aloud and timed before any animation. Voice from the media
-ladder (an explainer is usually voiced; caption-led works for muted feeds). Diagrams and the motif,
-more than product UI.
+ladder (an explainer is usually voiced; caption-led works for muted feeds). An idea with nothing to
+show: diagrams and the motif. A product: the real product first, its interface or its output.
 
 ## Engine profile
 
@@ -54,6 +54,9 @@ more than product UI.
 
 ## Build notes
 
+First choose the way of showing it ([explaining](../../references/explaining.md)): an explainer of a
+product shows the real thing (very close, working, or one object that changes) and carries one example
+through every point; a drawn diagram, by the grammar below, is for an idea with nothing real to show.
 The motif is the argument's through-line (it becomes the diagram). Charts with `@remotion/paths` on
 the base's spring; numbers count up only to real values. Every point is built out of the last picture:
 no slide-deck cuts.
