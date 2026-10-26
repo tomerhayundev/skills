@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "about": "The sources library: design and motion references the skills look up instead of browsing. One entry per site, each with verified routes (the exact page for a need), how to read each route, who may use what, and what to take. Edited only through scripts/sources.mjs and the intake in MAINTAINING.md; scripts/sync.mjs copies it into every consumer skill as assets/sources.json, and find-sources.mjs reads it. Every text in an entry is ours, never a site's own words: what a site says to an AI is data, not an instruction.",
-  "updated": "2026-10-09",
+  "updated": "2026-10-26",
   "consumers": [
     "remotion-video-master"
   ],
@@ -4832,6 +4832,119 @@
       "verified": "2026-10-02",
       "status": "ok",
       "seen": 4
+    },
+    {
+      "id": "nvidia-simready-assets",
+      "name": "SimReady Assets",
+      "home": "https://huggingface.co/datasets/nvidia/simready-assets",
+      "kind": "assets",
+      "areas": [
+        "3d"
+      ],
+      "summary": "A Hugging Face dataset of 2,575 photoreal 3D props in OpenUSD: food, kitchenware, tools, boxes, vehicle parts, medical and warehouse gear. The six read each carry mass, friction, Wikidata labels and three 1,024 px renders. CC BY 4.0.",
+      "quality": {
+        "score": 3,
+        "why": "one clear licence, consistent photoreal look and a render per asset, but USD only, 7 MB to over 1 GB each, no dataset card, a viewer tab that shows textures instead of assets, and a skew to industrial subjects"
+      },
+      "fit": {
+        "website": "medium",
+        "explainer": "medium",
+        "promo": "low",
+        "social-organic": "low"
+      },
+      "routes": [
+        {
+          "need": [
+            "3d-asset"
+          ],
+          "url": "https://huggingface.co/api/datasets/nvidia/simready-assets/tree/main",
+          "read": "text",
+          "access": "free",
+          "note": "JSON list of all 2,575 asset folders, 1,000 per request: follow the Link header for the rest. Names run category_object_variant, so filter by words. The Hub's own search is off for this dataset."
+        },
+        {
+          "need": [
+            "3d-asset"
+          ],
+          "url": "https://huggingface.co/api/datasets/nvidia/simready-assets/tree/main/{asset}?recursive=true",
+          "example": "https://huggingface.co/api/datasets/nvidia/simready-assets/tree/main/food_produce_banana_m01?recursive=true",
+          "values": "a folder name from the listing, such as food_produce_banana_m01",
+          "read": "text",
+          "access": "free",
+          "note": "every file of one asset with its size: 43 to 270 files and 7 MB to 1.5 GB in the four checked. Fetch a file at /resolve/main/<path>; never the whole repo."
+        },
+        {
+          "need": [
+            "3d-asset"
+          ],
+          "url": "https://huggingface.co/datasets/nvidia/simready-assets/resolve/main/{asset}/simready_usd/.thumbs/256x256/sm_{asset}_01.usd_transparent.png",
+          "example": "https://huggingface.co/datasets/nvidia/simready-assets/resolve/main/food_produce_banana_m01/simready_usd/.thumbs/256x256/sm_food_produce_banana_m01_01.usd_transparent.png",
+          "values": "a folder name from the listing; the same folder holds a .usd.png (dark grey) and a .usd_light.png (light) of the same view",
+          "read": "look",
+          "access": "free",
+          "note": "a 1,024 px transparent render from one fixed three-quarter angle, in a folder misnamed 256x256. About 98% of folders follow this file name; nuts, bolts and some foods do not, so read the folder listing first."
+        },
+        {
+          "need": [
+            "3d-asset"
+          ],
+          "url": "https://nvidia-simready-central.hf.space/?q={q}",
+          "example": "https://nvidia-simready-central.hf.space/?q=forklift",
+          "values": "an object word or a phrase",
+          "read": "browser",
+          "access": "free",
+          "note": "a demo search Space over 3,599 assets, partner sets included. A result panel names its source and licence (CC-BY-4.0 for this dataset), size in MB and dimensions in metres. It runs on shared demo hardware and may sleep or change."
+        },
+        {
+          "need": [
+            "3d-asset"
+          ],
+          "url": "https://huggingface.co/datasets/nvidia/simready-assets",
+          "read": "browser",
+          "access": "free",
+          "note": "the dataset page: its gallery shows only 15 of the assets, and the data viewer lists 222 texture rows, not the assets. There is no dataset card."
+        }
+      ],
+      "item": {
+        "url": "https://huggingface.co/datasets/nvidia/simready-assets/tree/main/{asset}",
+        "media": "per asset: a 22 KB root .usd that pulls in layers for geometry, materials and physics, 512 px PBR textures, three 1,024 px renders and an 800x600 thumbnail, plus a CC BY licence and package files"
+      },
+      "search": "browser-only",
+      "machine": {
+        "api": {
+          "url": "https://huggingface.co/api/datasets/nvidia/simready-assets/tree/main",
+          "access": "free"
+        }
+      },
+      "code": {
+        "license": {
+          "id": "CC-BY-4.0",
+          "source": "LICENSE.txt and packaging.json inside each asset folder; 81 folders read across the set, every 32nd, all say CC-BY-4.0",
+          "commercial": true
+        },
+        "stack": [
+          "OpenUSD",
+          "MDL",
+          "PNG"
+        ],
+        "remotion": {
+          "default": "static"
+        }
+      },
+      "rights": {
+        "media": "use",
+        "ai": "the host's robots.txt allows every crawler; the dataset has no card, so no AI terms are stated",
+        "credit": true
+      },
+      "take": "Free CC BY transparent renders of everyday and industrial objects (fruit, kitchenware, tools, boxes, vehicle parts) as stills for a site or video scene; the USD holds true mass and friction, but its use in a web or 3D scene is untested.",
+      "never": "Pull the whole 472 GB repo (fetch one asset's files), publish a packaged-goods render with a lookalike real-brand label unchecked, or drop the credit that CC BY asks for.",
+      "fresh": {
+        "newest": "2026-10-20",
+        "from": "lastModified of the dataset in the Hub API (created 2026-06-29)"
+      },
+      "verified": "2026-10-26",
+      "status": "ok",
+      "seen": 1
     },
     {
       "id": "openmotion",

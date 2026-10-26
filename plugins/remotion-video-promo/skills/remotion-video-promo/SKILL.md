@@ -4,7 +4,7 @@ description: Use when making a product promo, ad (bumper, 15 s or 30 s), teaser,
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.14.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: aa3c4614bc38 -->
+<!-- Generated from remotion-video-master 0.14.2 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 85384c8b3eed -->
 
 # Remotion promo video
 

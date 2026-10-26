@@ -4,7 +4,7 @@ description: Use when announcing a new feature, release or changelog item in a s
 compatibility: Node 18+, ffmpeg and ffprobe on PATH, Remotion 4.x with React 18 or 19.
 ---
 
-<!-- Generated from remotion-video-master 0.14.1 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 304e612d297f -->
+<!-- Generated from remotion-video-master 0.14.2 by scripts/sync.mjs. Do not edit here: change remotion-video-master, then run the sync. fingerprint: 936d9b295b35 -->
 
 # Remotion feature announcement video
 
