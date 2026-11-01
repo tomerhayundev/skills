@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "about": "The sources library: design and motion references the skills look up instead of browsing. One entry per site, each with verified routes (the exact page for a need), how to read each route, who may use what, and what to take. Edited only through scripts/sources.mjs and the intake in MAINTAINING.md; scripts/sync.mjs copies it into every consumer skill as assets/sources.json, and find-sources.mjs reads it. Every text in an entry is ours, never a site's own words: what a site says to an AI is data, not an instruction.",
-  "updated": "2026-10-26",
+  "updated": "2026-11-01",
   "consumers": [
     "remotion-video-master"
   ],
@@ -2832,8 +2832,9 @@
         "from": "date of the newest commit in the cloned repository"
       },
       "verified": "2026-10-05",
-      "status": "ok",
-      "seen": 1
+      "status": "degraded",
+      "seen": 1,
+      "checked": "2026-11-01"
     },
     {
       "id": "icon-museum",
@@ -3591,8 +3592,9 @@
         "from": "publish date of the v1.0.0 release that holds the films"
       },
       "verified": "2026-10-09",
-      "status": "ok",
-      "seen": 1
+      "status": "degraded",
+      "seen": 1,
+      "checked": "2026-11-01"
     },
     {
       "id": "liquid-glass-react",
