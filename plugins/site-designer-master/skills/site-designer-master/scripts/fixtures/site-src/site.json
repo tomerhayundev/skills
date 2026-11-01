@@ -1,0 +1,10 @@
+{
+  "name": "Test Studio",
+  "lang": "en",
+  "dir": "ltr",
+  "pages": [
+    { "path": "/", "file": "index.html", "title": "Test Studio", "description": "A test home page.", "nav": true, "label": "Home" },
+    { "path": "/about/", "file": "about.html", "title": "About", "description": "About the studio.", "nav": true, "label": "About" },
+    { "path": "/contact/", "file": "contact.html", "title": "Contact", "description": "How to reach us.", "nav": true, "label": "Contact" }
+  ]
+}

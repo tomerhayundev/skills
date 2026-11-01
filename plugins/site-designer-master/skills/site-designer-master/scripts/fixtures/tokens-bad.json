@@ -1,0 +1,78 @@
+{
+  "mode": "persuade",
+  "space": [
+    4,
+    8,
+    13,
+    16
+  ],
+  "type": {
+    "ratio": 1.1,
+    "steps": {
+      "display": 72,
+      "h1": 48,
+      "h2": 36,
+      "h3": 27,
+      "body": 15,
+      "small": 14
+    },
+    "leading": {
+      "body": 1.55,
+      "display": 1.02
+    },
+    "families": [
+      {
+        "role": "display",
+        "name": "Test Display",
+        "fallback": "serif",
+        "scripts": [
+          "latin"
+        ]
+      },
+      {
+        "role": "body",
+        "name": "Test Text",
+        "fallback": "sans-serif",
+        "scripts": [
+          "latin"
+        ]
+      },
+      {
+        "role": "accent",
+        "name": "Test Third",
+        "fallback": "serif",
+        "scripts": [
+          "latin"
+        ]
+      }
+    ]
+  },
+  "color": {
+    "ground": "#ffffff",
+    "surface": "#ffffff",
+    "surface-2": "#f1efe9",
+    "ink": "#8f8f8f",
+    "ink-muted": "#55504a",
+    "border": "#d9d4cc",
+    "accent": "#f08a5d",
+    "accent-ink": "#ffffff",
+    "focus": "#d9d4cc",
+    "danger": "#a3261c",
+    "success": "#2b6a3a",
+    "warning": "#8a5a00"
+  },
+  "radius": [
+    0,
+    6,
+    12
+  ],
+  "z": {
+    "base": 0,
+    "raised": 10,
+    "sticky": 100,
+    "dropdown": 250,
+    "overlay": 300,
+    "modal": 400,
+    "toast": 500
+  }
+}

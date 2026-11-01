@@ -1,0 +1,21 @@
+{
+  "mode": "persuade",
+  "space": [4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96, 128, 160, 192, 240],
+  "type": {
+    "ratio": 1.333,
+    "steps": { "display": 72, "h1": 48, "h2": 36, "h3": 27, "body": 18, "small": 14 },
+    "leading": { "body": 1.55, "display": 1.02 },
+    "families": [
+      { "role": "display", "name": "Test Display", "fallback": "serif", "scripts": ["latin"] },
+      { "role": "body", "name": "Test Text", "fallback": "sans-serif", "scripts": ["latin"] }
+    ]
+  },
+  "color": {
+    "ground": "#fbfaf7", "surface": "#ffffff", "surface-2": "#f1efe9",
+    "ink": "#1d1b18", "ink-muted": "#55504a", "border": "#d9d4cc",
+    "accent": "#2b5d4f", "accent-ink": "#ffffff", "focus": "#2b5d4f",
+    "danger": "#a3261c", "success": "#2b6a3a", "warning": "#8a5a00"
+  },
+  "radius": [0, 6, 12],
+  "z": { "base": 0, "raised": 10, "sticky": 100, "dropdown": 200, "overlay": 300, "modal": 400, "toast": 500 }
+}

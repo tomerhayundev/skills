@@ -309,6 +309,28 @@
       "category": "development",
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/brand-identity-master",
       "license": "CC-BY-ND-4.0"
+    },
+    {
+      "name": "site-designer-master",
+      "description": "Designs and builds a complete local website (structure, copy, states, motion, Hebrew/RTL) from real designs the owner picks in a local gallery, checked in a real browser.",
+      "source": "./plugins/site-designer-master",
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "development",
+      "keywords": [
+        "website",
+        "web-design",
+        "landing-page",
+        "redesign",
+        "ui",
+        "ux",
+        "hebrew",
+        "rtl"
+      ],
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/site-designer-master",
+      "license": "CC-BY-ND-4.0"
     }
   ],
   "renames": {

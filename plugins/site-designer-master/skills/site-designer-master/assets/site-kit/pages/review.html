@@ -1,0 +1,32 @@
+<section class="review">
+  <h1>Every state, once</h1>
+  <p>This page exists only in the development build. Each component the site uses appears here in every state, so the meter and the critic see states that are hard to reach by clicking.</p>
+
+  <h2>Buttons</h2>
+  <p class="review-row">
+    <a class="button" href="#">Book a table</a>
+    <a class="button is-hover" href="#">Hover</a>
+    <a class="button is-focus" href="#">Focus</a>
+    <a class="button is-active" href="#">Pressed</a>
+    <button class="button" type="button" disabled aria-disabled="true">Not available yet</button>
+    <button class="button" type="button" aria-busy="true">Sending</button>
+  </p>
+
+  <h2>Fields</h2>
+  <form class="review-form" action="/forms/review" method="post" novalidate>
+    <label for="r-default">Name</label>
+    <input id="r-default" name="name" autocomplete="name">
+    <label for="r-error">Email</label>
+    <input id="r-error" name="email" type="email" autocomplete="email" aria-invalid="true" aria-describedby="r-error-msg" value="name@">
+    <p class="field-error" id="r-error-msg">Enter a full email address, like name@example.org.</p>
+    <label for="r-ok">Phone</label>
+    <input id="r-ok" name="phone" type="tel" autocomplete="tel" value="050 000 0000">
+    <p class="field-ok">Looks right.</p>
+  </form>
+
+  <h2>Content states</h2>
+  <div class="state" data-state="empty"><h3>Nothing here yet</h3><p>When there is something to show, it appears here. Start by adding the first item.</p></div>
+  <div class="state" data-state="error" role="alert"><h3>That did not work</h3><p>The message was not sent. Check the connection and press send again; nothing you typed was lost.</p></div>
+  <div class="state" data-state="success" role="status"><h3>Sent</h3><p>Thank you. A reply comes by email within two working days.</p></div>
+  <div class="state" data-state="loading" aria-busy="true"><div class="skeleton" style="block-size: 1.2em; inline-size: 60%"></div><div class="skeleton" style="block-size: 1em; inline-size: 90%"></div><div class="skeleton" style="block-size: 1em; inline-size: 80%"></div></div>
+</section>

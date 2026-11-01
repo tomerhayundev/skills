@@ -1,0 +1,7 @@
+{
+  "about": "Where the picture pack lives. The pack is published as a release file of the skills repo; the picker downloads it, checks the sha256 and unpacks it, and captures pictures on this machine only when it is missing.",
+  "version": "2026-11-01",
+  "url": "https://github.com/tomerhayundev/skills/releases/download/site-designer-pack-2026-11-01/site-designer-pack-2026-11-01.bin.gz",
+  "sha256": "dbd24ab31354a1128048555561f9f2723eb74a6cc2b0dede634bfc592b79cd1c",
+  "files": 647
+}

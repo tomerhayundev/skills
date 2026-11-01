@@ -1,0 +1,1 @@
+Fonts in this folder are unmodified subsets of Heebo (by Oded Ezer, Meir Sadan) and JetBrains Mono (by JetBrains), both under the SIL Open Font License 1.1: https://openfontlicense.org

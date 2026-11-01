@@ -1,0 +1,68 @@
+/* Base for every built site. Logical properties only, so a right-to-left site needs no second stylesheet.
+   Values come from tokens.css; the fallbacks only keep a page readable while tokens load. */
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 100%; -webkit-text-size-adjust: 100%; scroll-padding-block-start: 96px; }
+body { margin: 0; background: var(--color-ground); color: var(--color-ink); font-family: var(--font-body, system-ui, sans-serif); font-size: var(--step-body); line-height: var(--leading-body, 1.5); }
+h1, h2, h3, h4 { font-family: var(--font-display, var(--font-body)); line-height: var(--leading-display, 1.1); text-wrap: balance; margin-block: 0 var(--space-3, 12px); }
+h1 { font-size: clamp(calc(var(--step-h1) * 0.75), 5vw, var(--step-h1)); }
+.hero h1 { font-size: clamp(calc(var(--step-h1) * 0.8), 6vw, var(--step-display)); }
+h2 { font-size: var(--step-h2); margin-block-start: var(--space-8, 40px); }
+h3 { font-size: var(--step-h3); margin-block-start: var(--space-6, 24px); }
+p, li { text-wrap: pretty; max-inline-size: 70ch; }
+p { margin-block: 0 var(--space-4, 16px); }
+img, svg, video { max-inline-size: 100%; block-size: auto; display: block; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+main:focus { outline: none; }
+
+.skip-link { position: absolute; inset-inline-start: var(--space-2, 8px); inset-block-start: -100px; z-index: var(--z-toast, 500); padding: var(--space-2, 8px) var(--space-4, 16px); background: var(--color-surface); color: var(--color-ink); }
+.skip-link:focus { inset-block-start: var(--space-2, 8px); }
+
+.site-header { position: sticky; inset-block-start: 0; z-index: var(--z-sticky, 100); background: var(--color-ground); border-block-end: 1px solid var(--color-border); }
+.site-header__inner, .site-footer__inner, main > section { inline-size: min(100% - 2 * clamp(16px, 4vw, 64px), 1280px); margin-inline: auto; }
+.site-header__inner { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4, 16px); min-block-size: 64px; position: relative; }
+.site-brand { font-weight: 600; text-decoration: none; padding-block: var(--space-3, 12px); }
+.site-nav ul, .site-footer nav ul, .not-found ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2, 8px) var(--space-5, 20px); }
+.site-nav a, .site-footer nav a, .not-found ul a { display: inline-block; padding-block: var(--space-3, 12px); text-decoration: none; }
+.site-nav a[aria-current="page"] { text-decoration: underline; }
+.nav-toggle { display: none; min-block-size: 44px; padding-inline: var(--space-4, 16px); font: inherit; background: none; color: inherit; border: 1px solid var(--color-border); border-radius: var(--radius-2, 6px); }
+@media (max-width: 767px) {
+  .nav-toggle { display: inline-block; }
+  .site-nav { display: none; }
+  .nav-open .site-nav { display: block; position: absolute; inset-inline: 0; inset-block-start: 100%; background: var(--color-ground); padding-block: var(--space-4, 16px); border-block-end: 1px solid var(--color-border); }
+  .nav-open .site-nav ul { flex-direction: column; }
+}
+
+main > section { padding-block: calc(clamp(48px, 8vw, 128px) * var(--density, 1)); }
+.site-footer { border-block-start: 1px solid var(--color-border); padding-block: var(--space-8, 40px); }
+
+/* Every control is a real target: at least 44px tall, even before the site styles it. A link standing alone
+   in a paragraph is a control too; a link inside a sentence is not. */
+button { font: inherit; min-block-size: 44px; padding-inline: var(--space-4, 16px); cursor: pointer; }
+p > a:only-child:first-child { display: inline-block; padding-block: var(--space-2, 8px); }
+.button { display: inline-flex; align-items: center; min-block-size: 48px; padding-inline: var(--space-6, 24px); background: var(--color-accent); color: var(--color-accent-ink); border: 0; border-radius: var(--radius-2, 6px); text-decoration: none; font: inherit; font-weight: 600; cursor: pointer; }
+label { display: block; margin-block: var(--space-5, 20px) var(--space-2, 8px); }
+input, select, textarea { font: inherit; font-size: max(16px, 1em); min-block-size: 48px; inline-size: 100%; max-inline-size: 32rem; padding-inline: var(--space-3, 12px); border: 1px solid var(--color-ink-muted); border-radius: var(--radius-2, 6px); background: var(--color-surface); color: var(--color-ink); }
+input[type="email"], input[type="tel"], input[type="url"] { direction: ltr; text-align: start; }
+form button { margin-block-start: var(--space-5, 20px); }
+[hidden] { display: none !important; }
+[data-sent] > :first-child { margin-block-start: 0; }
+[data-sent]:focus { outline: none; }
+/* States. Every site has them; the development build shows each one on /_review/. */
+.button:hover, .button.is-hover { filter: brightness(0.92); }
+.button:active, .button.is-active { transform: translateY(1px); }
+.button.is-focus { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+button:disabled, .button[aria-disabled="true"] { background: var(--color-surface-2); color: var(--color-ink-muted); cursor: not-allowed; }
+[aria-busy="true"] { cursor: progress; }
+input[aria-invalid="true"] { border-color: var(--color-danger); border-width: 2px; }
+.field-error { color: var(--color-danger); margin-block: var(--space-1, 4px) 0; }
+.field-ok { color: var(--color-success); margin-block: var(--space-1, 4px) 0; }
+.state { padding: var(--space-5, 20px); margin-block: var(--space-4, 16px); background: var(--color-surface); border-inline-start: 0; }
+.state[data-state="error"] { color: var(--color-danger); }
+.state[data-state="error"] p, .state[data-state="success"] p { color: var(--color-ink); }
+.skeleton { background: var(--color-surface-2); border-radius: var(--radius-2, 6px); margin-block: var(--space-2, 8px); }
+.review-row { display: flex; flex-wrap: wrap; gap: var(--space-3, 12px); max-inline-size: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}

@@ -1,0 +1,228 @@
+{
+  "reviewed": "2026-11-01",
+  "about": "The dated registry of AI-slop tells. Each tell names its meter rule and its fill: what to do instead, always as a procedure, never as a named font or colour to switch to, because every published replacement becomes the next wave. Re-review every release; retire a tell when it stops predicting weak pages.",
+  "tells": [
+    {
+      "id": "GRADIENT_TEXT",
+      "wave": "2023-24",
+      "status": "banned",
+      "detector": "background-clip: text over a gradient",
+      "fill": "Set the words in one solid ink and give them presence with size, weight or space; if the line needs colour, use the brand's accent as a solid."
+    },
+    {
+      "id": "HUE_GRADIENT",
+      "wave": "2023-24",
+      "status": "banned",
+      "detector": "a gradient whose saturated stops are more than 60 degrees of hue apart",
+      "fill": "Use one flat field from the palette, or a tone step inside one hue; for depth use a real photograph or material from the business."
+    },
+    {
+      "id": "AI_PALETTE",
+      "wave": "2023-24",
+      "status": "banned",
+      "detector": "violet-indigo stops (hue 244-295) or the default indigo hexes",
+      "fill": "Derive the accent from the logo, the product or the place (sample it), then build its ramp in OKLCH."
+    },
+    {
+      "id": "GLOW_SHADOW",
+      "wave": "2023-24",
+      "status": "banned",
+      "detector": "a zero-offset coloured shadow blurred 3px or more",
+      "fill": "Separate surfaces with a small lightness step or a hairline; keep shadows neutral, tinted to the ground, and only for things that float (menus, dialogs)."
+    },
+    {
+      "id": "HAIRLINE_WIDE_SHADOW",
+      "wave": "2025",
+      "status": "warned",
+      "detector": "a 1px border plus a shadow blurred 20px or more, repeated across a row",
+      "fill": "Pick one way to separate: a border, a tone step or a shadow, never two; declare it once for the site."
+    },
+    {
+      "id": "NESTED_CARDS",
+      "wave": "2025",
+      "status": "banned",
+      "detector": "a bordered or shadowed panel inside another",
+      "fill": "Flatten: the inner group becomes a list, a divider or plain spacing inside the outer panel."
+    },
+    {
+      "id": "ICON_TILE_ROW",
+      "wave": "2023-24",
+      "status": "banned",
+      "detector": "three or more small rounded icon tiles each sitting above a heading",
+      "fill": "Show the thing itself (a photo, a real screen, a number from the brief) or drop the icons and let a strong two-column list carry the points; vary item sizes by importance."
+    },
+    {
+      "id": "EYEBROW",
+      "wave": "2025",
+      "status": "banned",
+      "detector": "a small uppercase or widely tracked label directly before a heading",
+      "fill": "Make the heading say it; if a category is needed, put it in navigation or a breadcrumb."
+    },
+    {
+      "id": "CENTRED_SHARE",
+      "wave": "2023-24",
+      "status": "warned",
+      "detector": "more than 72% of the page's text centred",
+      "fill": "Align to a shared start edge; centre at most one short moment (a hero line or a closing call)."
+    },
+    {
+      "id": "OVERUSED_FONT",
+      "wave": "2026",
+      "status": "warned",
+      "detector": "a face from the dated overused list, unless it is the brand's own",
+      "fill": "Choose the face from the brand and the user's picks: read what the picked sites use, find a family with the same structure that covers every script the site needs, and check it is not on this list."
+    },
+    {
+      "id": "MIXED_FONT_HEADLINE",
+      "wave": "2025",
+      "status": "warned",
+      "detector": "one word of a headline in another family or in italic",
+      "fill": "Keep the headline in one voice; emphasis comes from the words, or from a line break."
+    },
+    {
+      "id": "BANNED_COPY",
+      "wave": "2023-24",
+      "status": "banned",
+      "detector": "phrases from the copy lists below, in any language listed",
+      "fill": "Use the business's own nouns and a concrete fact from the brief: what, for whom, where, since when."
+    },
+    {
+      "id": "PRIMARY_PER_VIEW",
+      "wave": "2023-24",
+      "status": "warned",
+      "detector": "two filled buttons in one section",
+      "fill": "One filled button per view, verb plus object; the second action becomes a text link."
+    },
+    {
+      "id": "BUTTON_TEXT",
+      "wave": "2023-24",
+      "status": "banned",
+      "detector": "a button or button-styled link that says only submit, learn more, click here and the like",
+      "fill": "Write verb plus object: what happens when it is pressed (Book a table, Get the price list)."
+    },
+    {
+      "id": "CONTENT_HIDDEN_AT_REST",
+      "wave": "2025",
+      "status": "banned",
+      "detector": "text in main still invisible when scroll-triggered reveals never fire",
+      "fill": "Render content visible by default and animate from that state; add the hidden start state only after the script has run."
+    },
+    {
+      "id": "UNSOURCED_NUMBER",
+      "wave": "2023-24",
+      "status": "banned",
+      "detector": "a number in the copy that the brief does not hold",
+      "fill": "Use a number from the brief's proof, or a visible placeholder such as [number of customers] for the owner to fill."
+    },
+    {
+      "id": "UNSOURCED_QUOTE",
+      "wave": "2023-24",
+      "status": "banned",
+      "detector": "a blockquote or q in main whose words are not in the brief",
+      "fill": "Quote a real review or customer line from the brief with its source; with none, state the proof itself (the rating and where it comes from) without putting words in anyone's mouth."
+    }
+  ],
+  "copy": {
+    "en": [
+      "elevate your",
+      "seamless",
+      "unleash",
+      "next-gen",
+      "next generation",
+      "revolutioniz",
+      "cutting-edge",
+      "cutting edge",
+      "empower",
+      "game-chang",
+      "in today's fast-paced",
+      "welcome to our website",
+      "unlock the",
+      "unlock your",
+      "supercharge",
+      "look no further",
+      "we've got you covered",
+      "world-class",
+      "state-of-the-art",
+      "best-in-class",
+      "take it to the next level",
+      "your journey",
+      "redefin"
+    ],
+    "he": [
+      "פתרונות מתקדמים",
+      "חוויה ייחודית",
+      "ברוכים הבאים לאתר",
+      "הפתרון המושלם",
+      "ברמה הגבוהה ביותר",
+      "פורץ דרך",
+      "מהפכני",
+      "חוויית משתמש מושלמת",
+      "לקחת את העסק שלך לשלב הבא",
+      "הכל במקום אחד"
+    ]
+  },
+  "buttonText": {
+    "en": [
+      "submit",
+      "learn more",
+      "click here",
+      "read more",
+      "more",
+      "click",
+      "go"
+    ],
+    "he": [
+      "שלח",
+      "שליחה",
+      "לחץ כאן",
+      "לחצו כאן",
+      "קרא עוד",
+      "קראו עוד",
+      "למידע נוסף",
+      "עוד"
+    ]
+  },
+  "overusedFonts": {
+    "reviewed": "2026-11-01",
+    "list": [
+      "Inter",
+      "Roboto",
+      "Open Sans",
+      "Lato",
+      "Montserrat",
+      "Arial",
+      "Helvetica",
+      "Fraunces",
+      "Instrument Sans",
+      "Instrument Serif",
+      "Geist",
+      "Geist Mono",
+      "Mona Sans",
+      "Plus Jakarta Sans",
+      "Space Grotesk",
+      "Recoleta",
+      "Playfair Display",
+      "Cormorant",
+      "Lora",
+      "Newsreader",
+      "Syne",
+      "Space Mono",
+      "IBM Plex Sans",
+      "IBM Plex Mono",
+      "DM Sans",
+      "DM Serif Display",
+      "Outfit",
+      "Satoshi",
+      "Cabinet Grotesk"
+    ]
+  },
+  "aiHexes": [
+    "#6366f1",
+    "#4f46e5",
+    "#4338ca",
+    "#3730a3",
+    "#8b5cf6",
+    "#7c3aed",
+    "#a855f7"
+  ]
+}

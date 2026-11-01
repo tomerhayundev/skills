@@ -1,0 +1,21 @@
+{
+  "name": "site-designer-master",
+  "version": "0.1.0",
+  "description": "Designs and builds a complete local website (structure, copy, states, motion, Hebrew/RTL) from real designs the owner picks in a local gallery, checked in a real browser.",
+  "author": {
+    "name": "Tomer Hayun",
+    "url": "https://github.com/tomerhayundev"
+  },
+  "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/site-designer-master",
+  "license": "CC-BY-ND-4.0",
+  "keywords": [
+    "website",
+    "web-design",
+    "landing-page",
+    "redesign",
+    "ui",
+    "ux",
+    "hebrew",
+    "rtl"
+  ]
+}

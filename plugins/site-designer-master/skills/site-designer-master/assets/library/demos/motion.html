@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motion demo</title>
+<style>
+  /* One small stage per motion type, chosen by ?m=<id>. Each loops so a card can show it moving. Our own demos. */
+  :root { --ink: #1d1b18; --ground: #f4f1ec; --accent: #2f5d50; --soft: #d9d2c5; --t: 1; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; block-size: 100%; }
+  body { background: var(--ground); color: var(--ink); font: 600 22px/1.2 system-ui, sans-serif; display: grid; place-items: center; overflow: hidden; }
+  .stage { inline-size: 100%; block-size: 100%; display: grid; place-items: center; position: relative; }
+  .card { inline-size: min(220px, 70vw); block-size: 140px; background: #fff; border-radius: 10px; border: 1px solid var(--soft); padding: 18px; }
+  .bar { block-size: 12px; background: var(--soft); border-radius: 6px; margin-block: 10px; }
+  .bar.short { inline-size: 60%; }
+  .row { display: flex; gap: min(14px, 3vw); }
+  .pill { inline-size: min(70px, 18vw); block-size: min(70px, 18vw); border-radius: 10px; background: var(--accent); }
+  .photo { inline-size: min(320px, 86vw); block-size: min(200px, 54vw); border-radius: 8px; background: linear-gradient(160deg, #6f8f7f, #2f5d50 60%, #1f3d35); overflow: hidden; position: relative; }
+  .photo::after { content: ""; position: absolute; inset: 30% 20% 10% 30%; background: #d9c9a8; border-radius: 50% 50% 8px 8px; opacity: 0.85; }
+  .play { animation-duration: calc(2.8s * var(--t)); animation-iteration-count: infinite; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+
+  @keyframes fadeRise { 0%, 10% { opacity: 0; transform: translateY(16px); } 40%, 85% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+  @keyframes zoom { from { transform: scale(1); } to { transform: scale(1.12); } }
+  @keyframes lift { 0%, 25% { transform: none; box-shadow: none; } 45%, 75% { transform: translateY(-6px); box-shadow: 0 10px 24px rgba(0,0,0,0.12); } 100% { transform: none; } }
+  @keyframes draw { 0%, 20% { background-size: 0% 2px; } 55%, 85% { background-size: 100% 2px; } 100% { background-size: 0% 2px; } }
+  @keyframes press { 0%, 40% { transform: none; } 48% { transform: translateY(2px) scale(0.98); } 60%, 100% { transform: none; } }
+  @keyframes curtain { 0%, 15% { clip-path: inset(0 100% 0 0); } 55%, 85% { clip-path: inset(0 0 0 0); } 100% { clip-path: inset(0 0 0 100%); } }
+  @keyframes maskRise { 0%, 10% { transform: translateY(110%); } 45%, 85% { transform: none; } 100% { transform: translateY(-110%); } }
+  @keyframes parallaxBack { from { transform: translateY(0); } to { transform: translateY(-20px); } }
+  @keyframes parallaxFront { from { transform: translateY(0); } to { transform: translateY(-60px); } }
+  @keyframes open { 0%, 20% { grid-template-rows: 0fr; } 50%, 80% { grid-template-rows: 1fr; } 100% { grid-template-rows: 0fr; } }
+  @keyframes pageFade { 0%, 40% { opacity: 1; } 50% { opacity: 0; } 60%, 100% { opacity: 1; } }
+  @keyframes slideIn { 0%, 20% { transform: translateX(-100%); } 45%, 80% { transform: none; } 100% { transform: translateX(-100%); } }
+  @keyframes chapters { 0%, 30% { background: #f4f1ec; } 40%, 63% { background: #2f5d50; color: #fff; } 73%, 100% { background: #e8d9bd; } }
+  @keyframes stack { 0%, 15% { transform: translateY(120%); } 40%, 85% { transform: none; } 100% { transform: translateY(120%); } }
+  @keyframes swap { 0%, 30% { opacity: 0; } 45%, 75% { opacity: 1; } 90%, 100% { opacity: 0; } }
+
+  .m-fade-rise .card { animation-name: fadeRise; }
+  .m-stagger .pill { animation-name: fadeRise; }
+  .m-stagger .pill:nth-child(2) { animation-delay: 0.08s; } .m-stagger .pill:nth-child(3) { animation-delay: 0.16s; } .m-stagger .pill:nth-child(4) { animation-delay: 0.24s; }
+  .m-slow-zoom .photo { animation: zoom calc(6s * var(--t)) ease-in-out infinite alternate; }
+  .m-hover-lift .card { animation-name: lift; }
+  .m-underline-draw a { color: var(--ink); text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 0% 2px no-repeat; padding-block-end: 4px; animation-name: draw; }
+  .m-button-press button { font: inherit; padding: 16px 28px; border: 0; border-radius: 8px; background: var(--accent); color: #fff; animation-name: press; }
+  .m-curtain .photo { animation-name: curtain; }
+  .m-mask-rise .line { overflow: hidden; font-size: 40px; } .m-mask-rise .line span { display: inline-block; animation-name: maskRise; }
+  .m-mask-rise .line:nth-child(2) span { animation-delay: 0.1s; }
+  .m-parallax .back { animation: parallaxBack calc(3s * var(--t)) ease-in-out infinite alternate; } .m-parallax .front { position: absolute; animation: parallaxFront calc(3s * var(--t)) ease-in-out infinite alternate; }
+  .m-accordion .acc { inline-size: 300px; background: #fff; border-radius: 8px; border: 1px solid var(--soft); padding: 14px 18px; }
+  .m-accordion .body { display: grid; animation-name: open; } .m-accordion .body > div { overflow: hidden; font-weight: 400; font-size: 16px; }
+  .m-page-fade .card { animation-name: pageFade; }
+  .m-menu-slide .menu { position: absolute; inset-block: 0; inset-inline-start: 0; inline-size: 45%; background: #fff; border-inline-end: 1px solid var(--soft); padding: 24px; animation-name: slideIn; }
+  .m-chapters { animation: chapters calc(4s * var(--t)) ease-in-out infinite; }
+  .m-sticky-stack .card { position: absolute; } .m-sticky-stack .card:nth-child(2) { animation-name: stack; background: #e8d9bd; } .m-sticky-stack .card:nth-child(3) { animation-name: stack; animation-delay: 0.6s; background: var(--accent); }
+  .m-image-swap .photo .second { position: absolute; inset: 0; background: linear-gradient(200deg, #e8d9bd, #b98b5e); animation-name: swap; z-index: 1; }
+  .m-still .card { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; } .m-mask-rise .line span { transform: none; } }
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<script>
+  var m = new URLSearchParams(location.search).get('m') || 'fade-rise';
+  var card = '<div class="card play"><div class="bar"></div><div class="bar short"></div><div class="bar"></div></div>';
+  var photo = '<div class="photo play"></div>';
+  var stages = {
+    'fade-rise': card,
+    'stagger': '<div class="row"><div class="pill play"></div><div class="pill play"></div><div class="pill play"></div><div class="pill play"></div></div>',
+    'slow-zoom': '<div style="inline-size:320px;block-size:200px;overflow:hidden;border-radius:8px">' + photo + '</div>',
+    'hover-lift': card,
+    'underline-draw': '<a class="play" href="#">See the menu</a>',
+    'button-press': '<button class="play" type="button">Book a table</button>',
+    'curtain': photo,
+    'mask-rise': '<div><div class="line"><span class="play">Bread at five,</span></div><div class="line"><span class="play">doors at half past six</span></div></div>',
+    'parallax': '<div class="photo back"></div><div class="card front"><div class="bar"></div><div class="bar short"></div></div>',
+    'accordion': '<div class="acc">Can I order for Friday?<div class="body play"><div><p>Yes, until Thursday at noon.</p></div></div></div>',
+    'page-fade': card,
+    'menu-slide': '<div class="menu play"><p>Home</p><p>Menu</p><p>Visit</p></div>',
+    'chapters': '<div style="font-size:34px">One colour per chapter</div>',
+    'sticky-stack': '<div style="position:relative;inline-size:220px;block-size:140px"><div class="card"></div><div class="card play"></div><div class="card play"></div></div>',
+    'image-swap': '<div class="photo"><div class="second play"></div></div>',
+    'still': card,
+  };
+  document.getElementById('stage').innerHTML = stages[m] || stages['fade-rise'];
+  document.body.classList.add('m-' + m);
+</script>
+</body>
+</html>

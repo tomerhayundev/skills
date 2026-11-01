@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="is-loading">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pick what you like</title>
+<link rel="preload" href="/_picker/app/fonts/heebo-400-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/_picker/app/fonts/heebo-500-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/_picker/app/fonts/heebo-700-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/_picker/app/fonts/heebo-800-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/_picker/app/fonts/jetbrains-mono-400-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/_picker/app/app.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="sheet">
+<header class="bar">
+  <div class="brand"><i aria-hidden="true"></i><span id="brand">Site picker</span></div>
+  <nav aria-label="Steps"><ol id="tabs" class="tabs"></ol></nav>
+  <a id="done-tab" class="done-tab" href="#done">Done</a>
+</header>
+<div class="layout">
+  <aside id="tray" class="tray" aria-labelledby="tray-title">
+    <div>
+      <div class="tray-head"><h2 id="tray-title"><span id="tray-name">My picks</span></h2><span id="tray-count" class="mono muted"></span></div>
+      <ul id="tray-list" class="tray-list"></ul>
+      <p id="tray-empty" class="muted">Nothing picked yet.</p>
+    </div>
+  </aside>
+  <main id="main" tabindex="-1">
+    <h1 id="h1">Pick what you like</h1>
+    <p id="intro" class="intro"></p>
+    <div id="panel"></div>
+  </main>
+</div>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<dialog id="large" class="large"></dialog>
+<script src="/_picker/app/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,776 @@
+{
+  "en": {
+    "title": "Pick what you like",
+    "intro": "Mark the designs you like. Your marks, not ours, set the direction. Press Done at any time; with nothing marked you get our recommendation.",
+    "tabs": {
+      "brief": "Your site",
+      "sites": "Site inspirations",
+      "sections": "Sections",
+      "motion": "Motion",
+      "icons": "Icons",
+      "dials": "Feel, dislikes, notes",
+      "done": "Build my site"
+    },
+    "brief": {
+      "business": "What the site is for",
+      "action": "The one thing a visitor should do",
+      "redesign": "This is a redesign of your site",
+      "keep": "Keep my pages and words, change the design",
+      "rethink": "Rethink the structure and the words too"
+    },
+    "search": "Search",
+    "sort": "Sort",
+    "sorts": {
+      "recommended": "Recommended for you",
+      "bestUse": "Best use",
+      "newest": "Newest",
+      "picked": "Most picked"
+    },
+    "filters": "Filter",
+    "clear": "Clear filters",
+    "loadMore": "Load more",
+    "count": "{shown} of {total}",
+    "empty": "Nothing matches these filters.",
+    "facetNames": {
+      "family": "Style",
+      "mood": "Mood",
+      "density": "Density",
+      "colour": "Colour",
+      "type": "Type",
+      "layout": "Layout",
+      "motion": "Motion",
+      "section": "Section",
+      "rtl": "Right to left",
+      "bestUse": "Best for"
+    },
+    "like": "I like this",
+    "liked": "Picked",
+    "likeWhat": "What do you like here? (optional)",
+    "open": "Open the site",
+    "bestFor": "Best for",
+    "tray": "My picks",
+    "trayEmpty": "Nothing picked yet.",
+    "remove": "Remove",
+    "dials": {
+      "density": [
+        "Airy",
+        "Dense"
+      ],
+      "loudness": [
+        "Quiet",
+        "Loud"
+      ],
+      "motion": [
+        "Still",
+        "Lively"
+      ]
+    },
+    "hatesTitle": "Things you do not want",
+    "hates": [
+      "Gradients",
+      "Stock photos of people",
+      "Dark mode",
+      "Soft rounded blobs",
+      "Glows",
+      "Tiny text",
+      "Carousels",
+      "Popups",
+      "Icons in boxes"
+    ],
+    "hateOther": "Something else",
+    "doneTitle": "Ready?",
+    "doneText": "Picks so far: {n}. Claude builds directions from them next.",
+    "done": "Done",
+    "doneSent": "Saved. You can close this tab; Claude carries on.",
+    "directions": "Choose a direction",
+    "layouts": "Choose a layout",
+    "thisOne": "This one",
+    "chosen": "Chosen. You can close this tab.",
+    "noOptions": "Nothing to compare yet.",
+    "close": "Close",
+    "values": {
+      "family": {
+        "fullbleed-media-overlay": "Photo or video, full screen",
+        "type-poster": "Type as the picture",
+        "giant-wordmark": "A giant name",
+        "immersive-webgl": "3D scene",
+        "centred-statement-media-below": "Statement over a big picture",
+        "product-object-centre": "One object in the centre",
+        "split-text-media": "Words beside a picture",
+        "collage-scatter": "Collage",
+        "bottom-anchored-type": "Headline at the bottom of a photo",
+        "left-statement-quiet": "Quiet statement, lots of space",
+        "editorial-masthead": "Magazine masthead",
+        "grid-index": "Index or grid of works",
+        "video-reel": "Running reel",
+        "illustration-led": "Illustration",
+        "other": "One-off ideas",
+        "quiet-minimal": "Quiet and minimal"
+      },
+      "density": {
+        "1": "Very airy",
+        "2": "Airy",
+        "3": "Balanced",
+        "4": "Dense",
+        "5": "Very dense"
+      },
+      "motion": {
+        "0": "Still",
+        "1": "Subtle",
+        "2": "Moving",
+        "3": "Lively"
+      },
+      "colour": {
+        "light": "Light",
+        "dark": "Dark",
+        "colourful": "Colourful",
+        "one-hue": "One colour"
+      },
+      "type": {
+        "serif": "Serif",
+        "sans": "Sans",
+        "display": "Display face",
+        "mixed": "Serif and sans",
+        "mono": "Monospaced"
+      },
+      "layout": {
+        "full-bleed": "Full bleed",
+        "editorial": "Editorial",
+        "asymmetric": "Asymmetric",
+        "centred": "Centred",
+        "split": "Split",
+        "grid": "Grid"
+      },
+      "rtl": {
+        "true": "Yes",
+        "false": "No"
+      },
+      "mood": {
+        "bold": "Bold",
+        "playful": "Playful",
+        "confident": "Confident",
+        "cinematic": "Cinematic",
+        "editorial": "Like a magazine",
+        "warm": "Warm",
+        "luxurious": "Luxurious",
+        "restrained": "Understated",
+        "airy": "Airy",
+        "witty": "Witty",
+        "quiet": "Quiet",
+        "technical": "Technical",
+        "precise": "Precise",
+        "glossy": "Glossy",
+        "cool": "Cool",
+        "calm": "Calm",
+        "graphic": "Graphic",
+        "stark": "Stark",
+        "nocturnal": "Night-time",
+        "dark": "Dark",
+        "clean": "Clean",
+        "tactile": "Tactile",
+        "retro": "Retro",
+        "loud": "Loud",
+        "raw": "Raw",
+        "soft": "Soft",
+        "minimal": "Minimal",
+        "polished": "Polished",
+        "friendly": "Friendly",
+        "elegant": "Elegant"
+      },
+      "bestUse": {
+        "brochure": "A business site",
+        "a strong name as the hero": "A strong name as the first thing you see",
+        "shop": "An online shop",
+        "photo or video-led first screen": "A first screen led by a photo or video",
+        "long reading and stories": "Long reading and stories",
+        "portfolio": "A portfolio",
+        "photo-led local business": "A local business told in photos",
+        "type-led page with few pictures": "A page led by words, with few pictures",
+        "event": "An event",
+        "one physical product": "One physical product",
+        "saas": "Software sold by subscription",
+        "one strong product": "One strong product",
+        "content": "Articles and stories",
+        "one clear offer with a picture": "One clear offer with a picture",
+        "a one-off idea": "A one-off idea",
+        "many small pictures, a playful brand": "Many small pictures, a playful brand",
+        "calm services": "Calm services",
+        "film and motion work": "Film and motion work",
+        "many works or items": "Many works or items",
+        "a launch or a showpiece": "A launch or a showpiece",
+        "an illustrated brand": "An illustrated brand"
+      }
+    },
+    "openDemo": "Open the demo",
+    "motionTopics": {
+      "arrive": "Things arriving on the page",
+      "touch": "Responding to a touch or a pointer",
+      "scroll": "Moving as you scroll",
+      "pages": "Between pages",
+      "none": "No motion"
+    },
+    "playHint": "Every demo plays on its own.",
+    "play": "Play",
+    "feelTitle": "The feel",
+    "feelHint": "Move a slider and watch the sketch: it is not your site, only how it would feel.",
+    "dislikesTitle": "What you do not want",
+    "dislikesHint": "The ones marked \"AI look\" are common signs of a page made by AI. We avoid them unless you say you want one: tap to allow it.",
+    "aiLook": "Typical of AI-made sites",
+    "avoid": "Avoid",
+    "allowed": "Allowed",
+    "dislikes": {
+      "gradients": {
+        "name": "Colour gradients",
+        "why": "Two colours melting into each other as decoration."
+      },
+      "gradient-text": {
+        "name": "Rainbow text",
+        "why": "Words filled with a colour fade."
+      },
+      "purple": {
+        "name": "Purple and blue tech colours",
+        "why": "The default palette of generated pages."
+      },
+      "glow": {
+        "name": "Glowing buttons",
+        "why": "Coloured light around buttons and cards."
+      },
+      "icon-boxes": {
+        "name": "Icons in little boxes",
+        "why": "Three equal cards, each with an icon above a heading."
+      },
+      "eyebrow": {
+        "name": "Tiny labels above titles",
+        "why": "Small spaced capitals over every heading."
+      },
+      "all-centred": {
+        "name": "Everything centred",
+        "why": "Every line centred, so nothing has an edge to follow."
+      },
+      "cards-in-cards": {
+        "name": "Boxes inside boxes",
+        "why": "A framed panel inside another framed panel."
+      },
+      "buzzwords": {
+        "name": "Buzzwords",
+        "why": "Big empty words that every generated page uses, instead of saying plainly what you do."
+      },
+      "fake-numbers": {
+        "name": "Made-up numbers",
+        "why": "\"500+ happy customers\" that nobody counted."
+      },
+      "stock-people": {
+        "name": "Stock photos of people",
+        "why": "Smiling strangers who are not your team or customers."
+      },
+      "dark-mode": {
+        "name": "A dark site",
+        "why": "Light text on a black ground."
+      },
+      "carousels": {
+        "name": "Sliding carousels",
+        "why": "Pictures that slide by themselves."
+      },
+      "popups": {
+        "name": "Popups",
+        "why": "A box that jumps over the page."
+      },
+      "busy-motion": {
+        "name": "Lots of movement",
+        "why": "Things moving everywhere."
+      },
+      "tiny-text": {
+        "name": "Small text",
+        "why": "Text that is hard to read on a phone."
+      }
+    },
+    "notesTitle": "Anything else",
+    "notesHint": "Anything we should know: what matters to you, what must be on the site, what you saw somewhere and loved.",
+    "picturesTitle": "Pictures",
+    "picturesHint": "Where the site’s pictures come from. Never type a password or an API key here.",
+    "ownPhotos": "Use my own photos",
+    "ownFolder": "Folder with the photos (optional)",
+    "freePhotos": "Free licensed photos where I have none",
+    "generate": "Generate pictures with:",
+    "noTools": "No image tool was found on this machine.",
+    "keyFound": "key found on this machine",
+    "connectedTool": "a tool connected to this session",
+    "otherTool": "Another service you can use (name only)",
+    "levels": {
+      "density": [
+        "Very airy: a few things, a lot of space.",
+        "Airy: room around everything.",
+        "Balanced.",
+        "Dense: more on each screen.",
+        "Very dense: a lot on each screen, like a catalogue."
+      ],
+      "loudness": [
+        "Quiet: soft colours, modest headings.",
+        "Calm: one gentle accent.",
+        "Balanced.",
+        "Bold: big headings, a strong colour.",
+        "Loud: huge type and whole bands of colour."
+      ],
+      "motion": [
+        "Still: nothing moves; everything is simply there.",
+        "Subtle: buttons answer a tap, sections fade in once.",
+        "Moving: things arrive one after another, cards lift under the pointer.",
+        "Lively: layers move at different speeds, colours change by chapter."
+      ]
+    },
+    "avoidState": "We will avoid this",
+    "allowState": "You allow this",
+    "allow": "Allow",
+    "neutralState": "Fine either way",
+    "avoided": "Avoided",
+    "brandName": "Site picker",
+    "stepOf": "Step {n} of {total}",
+    "next": "Next: {name}",
+    "pickedNotice": "Picked. {n} in your picks.",
+    "unpickedNotice": "Taken out of your picks.",
+    "undo": "Undo",
+    "saveFailed": "Not saved: the picker on this computer stopped. Your marks stay on this page; start the picker again and they save.",
+    "emptyWithout": "Nothing matches. Without the search and filters there are {n}.",
+    "doneButton": "Build my site from {n} picks",
+    "doneButtonOne": "Build my site from 1 pick",
+    "doneButtonNone": "Build my site from your recommendation",
+    "cardNo": "No. {n}",
+    "trayCount": "{n} kept",
+    "panelIntro": {
+      "brief": "Two lines about the site, then the gallery. Everything here can change later.",
+      "sites": "{sites} real sites from every field, not only yours. Tap a picture to keep it; the first ones fit your site best.",
+      "sections": "Single parts of a page: a menu, a price list, a footer. Pick the ones you would want.",
+      "motion": "How things move on the page. Every demo plays on its own; tap the ones you like.",
+      "icons": "Sets of small pictures used beside words and in buttons. Tap the ones you like.",
+      "dials": "Move the sliders and watch the sketch, mark what you do not want, and add anything else.",
+      "done": "Check the two lines about your site, then build. Everything can change later."
+    },
+    "summary": {
+      "picks": "Picks",
+      "feel": "Feel",
+      "avoided": "Things to avoid",
+      "pictures": "Pictures",
+      "notes": "Notes",
+      "title": "What your site is built from"
+    },
+    "none": "None",
+    "yes": "Yes",
+    "picturesSummary": {
+      "own": "your own",
+      "free": "free licensed",
+      "generate": "generated"
+    },
+    "leads": {
+      "sites": "Pick the sites you like. Your site is built from them.",
+      "dials": "How it should feel",
+      "done": "Ready when you are"
+    },
+    "bigger": "See it bigger",
+    "nextTitle": "What happens next",
+    "after": [
+      "Claude reads your picks and makes three directions for your site, shown side by side in this browser.",
+      "You choose one. Nothing is built before you choose.",
+      "Your picks stay saved: you can come back here and change them at any time."
+    ],
+    "refine": "Search, sort and filter",
+    "onDesktop": "On a computer",
+    "onPhone": "On a phone",
+    "tapToPick": "Tap the picture to pick",
+    "change": "Change",
+    "useWords": {
+      "brochure": "a business site",
+      "saas": "software sold by subscription",
+      "content": "articles and stories",
+      "shop": "an online shop",
+      "portfolio": "a portfolio",
+      "event": "an event",
+      "a strong name as the hero": "a strong name as the first thing you see",
+      "photo or video-led first screen": "a first screen led by a photo or video",
+      "type-led page with few pictures": "a page led by words, with few pictures",
+      "photo-led local business": "a local business told in photos",
+      "persuade pages": "pages that sell",
+      "any interface": "any site"
+    },
+    "doneShort": "Build"
+  },
+  "he": {
+    "title": "בחרו מה אתם אוהבים",
+    "intro": "סמנו את העיצובים שאתם אוהבים. הסימונים שלכם, לא שלנו, קובעים את הכיוון. אפשר ללחוץ סיום בכל רגע; בלי סימונים תקבלו את ההמלצה שלנו.",
+    "tabs": {
+      "brief": "האתר שלכם",
+      "sites": "השראה מאתרים",
+      "sections": "חלקי עמוד",
+      "motion": "תנועה",
+      "icons": "אייקונים",
+      "dials": "תחושה, מה לא, הערות",
+      "done": "לבנות את האתר"
+    },
+    "brief": {
+      "business": "בשביל מה האתר",
+      "action": "הדבר האחד שמבקר צריך לעשות",
+      "redesign": "זה עיצוב מחדש לאתר שלכם",
+      "keep": "להשאיר את הדפים והמילים, לשנות את העיצוב",
+      "rethink": "לחשוב מחדש גם על המבנה והמילים"
+    },
+    "search": "חיפוש",
+    "sort": "מיון",
+    "sorts": {
+      "recommended": "מומלץ בשבילכם",
+      "bestUse": "שימוש מתאים",
+      "newest": "החדשים",
+      "picked": "הכי נבחרים"
+    },
+    "filters": "סינון",
+    "clear": "ניקוי סינון",
+    "loadMore": "עוד",
+    "count": "{shown} מתוך {total}",
+    "empty": "אין תוצאות לסינון הזה.",
+    "facetNames": {
+      "family": "סגנון",
+      "mood": "אווירה",
+      "density": "צפיפות",
+      "colour": "צבע",
+      "type": "טיפוגרפיה",
+      "layout": "פריסה",
+      "motion": "תנועה",
+      "section": "חלק",
+      "rtl": "מימין לשמאל",
+      "bestUse": "מתאים ל"
+    },
+    "like": "אהבתי",
+    "liked": "נבחר",
+    "likeWhat": "מה אתם אוהבים כאן? (לא חובה)",
+    "open": "פתיחת האתר",
+    "bestFor": "מתאים ל",
+    "tray": "הבחירות שלי",
+    "trayEmpty": "עוד לא נבחר כלום.",
+    "remove": "הסרה",
+    "dials": {
+      "density": [
+        "אוורירי",
+        "צפוף"
+      ],
+      "loudness": [
+        "שקט",
+        "רועש"
+      ],
+      "motion": [
+        "סטטי",
+        "חי"
+      ]
+    },
+    "hatesTitle": "מה אתם לא רוצים",
+    "hates": [
+      "מעברי צבע",
+      "תמונות סטוק של אנשים",
+      "מצב כהה",
+      "צורות עגולות רכות",
+      "זוהר",
+      "טקסט קטן",
+      "קרוסלות",
+      "חלונות קופצים",
+      "אייקונים בקופסאות"
+    ],
+    "hateOther": "משהו אחר",
+    "doneTitle": "מוכנים?",
+    "doneText": "בחירות עד עכשיו: {n}. Claude בונה מהן כיוונים.",
+    "done": "סיום",
+    "doneSent": "נשמר. אפשר לסגור את הלשונית; Claude ממשיך.",
+    "directions": "בחרו כיוון",
+    "layouts": "בחרו פריסה",
+    "thisOne": "את זה",
+    "chosen": "נבחר. אפשר לסגור את הלשונית.",
+    "noOptions": "עוד אין מה להשוות.",
+    "close": "סגירה",
+    "values": {
+      "family": {
+        "fullbleed-media-overlay": "תמונה או וידאו במסך מלא",
+        "type-poster": "טיפוגרפיה כתמונה",
+        "giant-wordmark": "שם ענק",
+        "immersive-webgl": "סצנה תלת־ממדית",
+        "centred-statement-media-below": "משפט מעל תמונה גדולה",
+        "product-object-centre": "חפץ אחד במרכז",
+        "split-text-media": "מילים ליד תמונה",
+        "collage-scatter": "קולאז׳",
+        "bottom-anchored-type": "כותרת בתחתית תמונה",
+        "left-statement-quiet": "משפט שקט והרבה מרווח",
+        "editorial-masthead": "שער של מגזין",
+        "grid-index": "אינדקס או רשת עבודות",
+        "video-reel": "סרטון רץ",
+        "illustration-led": "איור",
+        "other": "רעיונות חד־פעמיים",
+        "quiet-minimal": "שקט ומינימלי"
+      },
+      "density": {
+        "1": "מאוד אוורירי",
+        "2": "אוורירי",
+        "3": "מאוזן",
+        "4": "צפוף",
+        "5": "מאוד צפוף"
+      },
+      "motion": {
+        "0": "סטטי",
+        "1": "עדין",
+        "2": "זז",
+        "3": "חי"
+      },
+      "colour": {
+        "light": "בהיר",
+        "dark": "כהה",
+        "colourful": "צבעוני",
+        "one-hue": "צבע אחד"
+      },
+      "type": {
+        "serif": "סריף",
+        "sans": "סנס",
+        "display": "גופן תצוגה",
+        "mixed": "סריף וסנס",
+        "mono": "מונו"
+      },
+      "layout": {
+        "full-bleed": "מסך מלא",
+        "editorial": "מגזיני",
+        "asymmetric": "א־סימטרי",
+        "centred": "ממורכז",
+        "split": "מפוצל",
+        "grid": "רשת"
+      },
+      "rtl": {
+        "true": "כן",
+        "false": "לא"
+      },
+      "mood": {
+        "bold": "נועז",
+        "playful": "שובב",
+        "confident": "בטוח בעצמו",
+        "cinematic": "קולנועי",
+        "editorial": "כמו מגזין",
+        "warm": "חם",
+        "luxurious": "יוקרתי",
+        "restrained": "מאופק",
+        "airy": "מאוורר",
+        "witty": "שנון",
+        "quiet": "שקט",
+        "technical": "טכני",
+        "precise": "מדויק",
+        "glossy": "מבריק",
+        "cool": "קריר",
+        "calm": "רגוע",
+        "graphic": "גרפי",
+        "stark": "חשוף",
+        "nocturnal": "לילי",
+        "dark": "כהה",
+        "clean": "נקי",
+        "tactile": "מוחשי",
+        "retro": "רטרו",
+        "loud": "רועש",
+        "raw": "גולמי",
+        "soft": "רך",
+        "minimal": "מינימלי",
+        "polished": "מלוטש",
+        "friendly": "ידידותי",
+        "elegant": "אלגנטי"
+      },
+      "bestUse": {
+        "brochure": "אתר תדמית",
+        "a strong name as the hero": "שם חזק במסך הראשון",
+        "shop": "חנות",
+        "photo or video-led first screen": "מסך ראשון שמובל על ידי תמונה או סרטון",
+        "long reading and stories": "קריאה ארוכה וסיפורים",
+        "portfolio": "תיק עבודות",
+        "photo-led local business": "עסק מקומי שמבוסס על תמונות",
+        "type-led page with few pictures": "דף שמוביל בו הטקסט, עם מעט תמונות",
+        "event": "אירוע",
+        "one physical product": "מוצר פיזי אחד",
+        "saas": "תוכנה בתשלום חודשי",
+        "one strong product": "מוצר חזק אחד",
+        "content": "אתר תוכן",
+        "one clear offer with a picture": "הצעה אחת ברורה עם תמונה",
+        "a one-off idea": "רעיון חד־פעמי",
+        "many small pictures, a playful brand": "הרבה תמונות קטנות, מותג שובב",
+        "calm services": "שירותים רגועים",
+        "film and motion work": "עבודות קולנוע ותנועה",
+        "many works or items": "הרבה עבודות או פריטים",
+        "a launch or a showpiece": "השקה או פרויקט דגל",
+        "an illustrated brand": "מותג מאויר"
+      }
+    },
+    "openDemo": "פתיחת ההדגמה",
+    "motionTopics": {
+      "arrive": "דברים שנכנסים לעמוד",
+      "touch": "תגובה למגע או לעכבר",
+      "scroll": "תנועה בזמן גלילה",
+      "pages": "מעבר בין עמודים",
+      "none": "בלי תנועה"
+    },
+    "playHint": "כל הדגמה מתנגנת לבד.",
+    "play": "הפעלה",
+    "feelTitle": "התחושה",
+    "feelHint": "הזיזו מחוון וצפו בסקיצה: זה לא האתר שלכם, רק התחושה שלו.",
+    "dislikesTitle": "מה אתם לא רוצים",
+    "dislikesHint": "אלה שמסומנים \"מראה של AI\" הם סימנים נפוצים לעמוד שנוצר ב־AI. אנחנו נמנעים מהם, אלא אם תבקשו: הקישו כדי לאפשר.",
+    "aiLook": "אופייני לאתרים שנוצרו ב־AI",
+    "avoid": "להימנע",
+    "allowed": "מותר",
+    "dislikes": {
+      "gradients": {
+        "name": "מעברי צבע",
+        "why": "שני צבעים שנמסים זה בזה, לקישוט."
+      },
+      "gradient-text": {
+        "name": "טקסט בצבעי קשת",
+        "why": "מילים שממולאות במעבר צבע."
+      },
+      "purple": {
+        "name": "סגול וכחול של הייטק",
+        "why": "הפלטה שכמעט כל עמוד שנוצר ב־AI מקבל."
+      },
+      "glow": {
+        "name": "כפתורים זוהרים",
+        "why": "אור צבעוני סביב כפתורים וכרטיסים."
+      },
+      "icon-boxes": {
+        "name": "אייקונים בקופסאות",
+        "why": "שלושה כרטיסים שווים, בכל אחד אייקון מעל כותרת."
+      },
+      "eyebrow": {
+        "name": "תוויות קטנות מעל כותרות",
+        "why": "אותיות קטנות ומרווחות מעל כל כותרת."
+      },
+      "all-centred": {
+        "name": "הכל ממורכז",
+        "why": "כל שורה במרכז, ואין קו להיאחז בו."
+      },
+      "cards-in-cards": {
+        "name": "קופסה בתוך קופסה",
+        "why": "מסגרת בתוך מסגרת."
+      },
+      "buzzwords": {
+        "name": "מילים ריקות",
+        "why": "מילים גדולות וריקות שכל אתר שנוצר אוטומטית משתמש בהן, במקום לומר בפשטות מה אתם עושים."
+      },
+      "fake-numbers": {
+        "name": "מספרים מומצאים",
+        "why": "\"500+ לקוחות מרוצים\" שאף אחד לא ספר."
+      },
+      "stock-people": {
+        "name": "תמונות סטוק של אנשים",
+        "why": "זרים מחייכים שהם לא הצוות או הלקוחות שלכם."
+      },
+      "dark-mode": {
+        "name": "אתר כהה",
+        "why": "טקסט בהיר על רקע שחור."
+      },
+      "carousels": {
+        "name": "קרוסלות",
+        "why": "תמונות שמתחלפות לבד."
+      },
+      "popups": {
+        "name": "חלונות קופצים",
+        "why": "קופסה שקופצת מעל העמוד."
+      },
+      "busy-motion": {
+        "name": "הרבה תנועה",
+        "why": "דברים זזים בכל מקום."
+      },
+      "tiny-text": {
+        "name": "טקסט קטן",
+        "why": "טקסט שקשה לקרוא בטלפון."
+      }
+    },
+    "notesTitle": "עוד משהו",
+    "notesHint": "כל מה שכדאי שנדע: מה חשוב לכם, מה חייב להיות באתר, מה ראיתם ואהבתם.",
+    "picturesTitle": "תמונות",
+    "picturesHint": "מאיפה יגיעו התמונות באתר. לעולם אל תקלידו כאן סיסמה או מפתח API.",
+    "ownPhotos": "להשתמש בתמונות שלי",
+    "ownFolder": "תיקייה עם התמונות (לא חובה)",
+    "freePhotos": "תמונות חינמיות ברישיון פתוח איפה שאין לי",
+    "generate": "ליצור תמונות עם:",
+    "noTools": "לא נמצא כלי יצירת תמונות במחשב הזה.",
+    "keyFound": "נמצא מפתח במחשב",
+    "connectedTool": "כלי שמחובר לשיחה הזו",
+    "otherTool": "שירות אחר שאפשר להשתמש בו (רק שם)",
+    "levels": {
+      "density": [
+        "מאוד אוורירי: מעט דברים והרבה מרווח.",
+        "אוורירי: מקום סביב כל דבר.",
+        "מאוזן.",
+        "צפוף: יותר בכל מסך.",
+        "מאוד צפוף: הרבה בכל מסך, כמו קטלוג."
+      ],
+      "loudness": [
+        "שקט: צבעים רכים, כותרות צנועות.",
+        "רגוע: הדגשה עדינה אחת.",
+        "מאוזן.",
+        "נועז: כותרות גדולות וצבע חזק.",
+        "רועש: טיפוגרפיה ענקית ופסים שלמים של צבע."
+      ],
+      "motion": [
+        "סטטי: שום דבר לא זז, הכל פשוט שם.",
+        "עדין: כפתורים מגיבים למגע, חלקים נכנסים פעם אחת.",
+        "זז: דברים נכנסים אחד אחרי השני, כרטיסים מתרוממים מתחת לעכבר.",
+        "חי: שכבות זזות במהירויות שונות, צבעים מתחלפים לפי פרק."
+      ]
+    },
+    "avoidState": "נימנע מזה",
+    "allowState": "אתם מאשרים את זה",
+    "allow": "לאפשר",
+    "neutralState": "לא משנה לכם",
+    "avoided": "נמנעים",
+    "brandName": "בוחר העיצוב",
+    "stepOf": "שלב {n} מתוך {total}",
+    "next": "הבא: {name}",
+    "pickedNotice": "נבחר. {n} בבחירות שלכם.",
+    "unpickedNotice": "הוצא מהבחירות שלכם.",
+    "undo": "ביטול",
+    "saveFailed": "לא נשמר: הבוחר במחשב הזה הפסיק לפעול. הסימונים שלכם נשארים בעמוד; הפעילו אותו שוב והם יישמרו.",
+    "emptyWithout": "אין התאמות. בלי החיפוש והסינון יש {n}.",
+    "doneButton": "לבנות את האתר מ־{n} בחירות",
+    "doneButtonOne": "לבנות את האתר מבחירה אחת",
+    "doneButtonNone": "לבנות את האתר לפי ההמלצה",
+    "cardNo": "מס׳ {n}",
+    "trayCount": "{n} נשמרו",
+    "panelIntro": {
+      "brief": "שתי שורות על האתר, ואז הגלריה. אפשר לשנות הכול אחר כך.",
+      "sites": "{sites} אתרים אמיתיים מכל התחומים, לא רק מהתחום שלכם. הקישו על תמונה כדי לשמור אותה; הראשונים מתאימים לאתר שלכם הכי טוב.",
+      "sections": "חלקים בודדים של עמוד: תפריט, מחירון, כותרת תחתונה. בחרו את מה שהייתם רוצים.",
+      "motion": "איך דברים זזים בעמוד. כל הדגמה מתנגנת לבד; הקישו על אלה שאהבתם.",
+      "icons": "סטים של ציורים קטנים שמופיעים ליד מילים ובכפתורים. הקישו על אלה שאהבתם.",
+      "dials": "הזיזו את המחוונים וראו את הסקיצה, סמנו מה אתם לא רוצים, והוסיפו כל דבר נוסף.",
+      "done": "בדקו את שתי השורות על האתר, ואז בונים. אפשר לשנות הכול אחר כך."
+    },
+    "summary": {
+      "picks": "בחירות",
+      "feel": "תחושה",
+      "avoided": "דברים להימנע מהם",
+      "pictures": "תמונות",
+      "notes": "הערות",
+      "title": "ממה האתר שלכם ייבנה"
+    },
+    "none": "אין",
+    "yes": "כן",
+    "picturesSummary": {
+      "own": "שלכם",
+      "free": "חופשיות לשימוש",
+      "generate": "מחוללות"
+    },
+    "leads": {
+      "sites": "בחרו את האתרים שאתם אוהבים. האתר שלכם ייבנה מהם.",
+      "dials": "איך זה צריך להרגיש",
+      "done": "מוכן כשאתם מוכנים"
+    },
+    "bigger": "להגדלה",
+    "nextTitle": "מה קורה עכשיו",
+    "after": [
+      "Claude קורא את הבחירות שלכם ומכין שלושה כיוונים לאתר, זה לצד זה, בדפדפן הזה.",
+      "אתם בוחרים אחד. שום דבר לא נבנה לפני שבחרתם.",
+      "הבחירות נשמרות: אפשר לחזור לכאן ולשנות אותן בכל רגע."
+    ],
+    "refine": "חיפוש, מיון וסינון",
+    "onDesktop": "במחשב",
+    "onPhone": "בטלפון",
+    "tapToPick": "הקישו על התמונה לבחירה",
+    "change": "שינוי",
+    "doneShort": "לבנות"
+  }
+}

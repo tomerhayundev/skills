@@ -1,0 +1,20 @@
+{
+  "en": {
+    "skip": "Skip to content",
+    "menu": "Menu",
+    "mainNav": "Main",
+    "footerNav": "Footer",
+    "notFoundTitle": "This page does not exist",
+    "notFoundText": "The link may be old, or the address has a typo. These pages do exist:",
+    "home": "Go to the home page"
+  },
+  "he": {
+    "skip": "דלגו לתוכן",
+    "menu": "תפריט",
+    "mainNav": "ראשי",
+    "footerNav": "תחתון",
+    "notFoundTitle": "הדף הזה לא קיים",
+    "notFoundText": "ייתכן שהקישור ישן או שיש טעות בכתובת. הדפים האלה קיימים:",
+    "home": "לדף הבית"
+  }
+}

@@ -1,0 +1,488 @@
+{
+  "shelf": "motion",
+  "about": "Motion styles shown by our own small demos; each card plays its demo.",
+  "entries": [
+    {
+      "id": "motion-fade-rise",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=fade-rise",
+      "description": "Content fades in and rises a little as it arrives.",
+      "bestUse": [
+        "any page",
+        "calm services"
+      ],
+      "he": {
+        "description": "התוכן מופיע בהדרגה ועולה מעט כשהוא מגיע.",
+        "bestUse": [
+          "כל דף",
+          "שירותים רגועים"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "calm",
+          "soft"
+        ],
+        "motion": 1,
+        "density": 3,
+        "topic": "arrive"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-fade-rise.webp",
+      "demo": "demos/motion.html?m=fade-rise"
+    },
+    {
+      "id": "motion-stagger",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=stagger",
+      "description": "Items arrive one after another, a few tens of milliseconds apart.",
+      "bestUse": [
+        "lists of work or dishes",
+        "persuade pages"
+      ],
+      "he": {
+        "description": "הפריטים מגיעים זה אחרי זה, בהפרש של כמה עשרות אלפיות שנייה.",
+        "bestUse": [
+          "רשימות של עבודות או מנות",
+          "דפים שמשכנעים"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "precise",
+          "friendly"
+        ],
+        "motion": 2,
+        "density": 3,
+        "topic": "arrive"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-stagger.webp",
+      "demo": "demos/motion.html?m=stagger"
+    },
+    {
+      "id": "motion-slow-zoom",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=slow-zoom",
+      "description": "A photograph slowly pushes in.",
+      "bestUse": [
+        "photo-led local business",
+        "hospitality"
+      ],
+      "he": {
+        "description": "תמונה מתקרבת לאט.",
+        "bestUse": [
+          "עסק מקומי שמבוסס על תמונות",
+          "אירוח"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "cinematic",
+          "calm"
+        ],
+        "motion": 2,
+        "density": 3,
+        "topic": "arrive"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-slow-zoom.webp",
+      "demo": "demos/motion.html?m=slow-zoom"
+    },
+    {
+      "id": "motion-hover-lift",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=hover-lift",
+      "description": "Cards lift slightly under the pointer.",
+      "bestUse": [
+        "grids of work or products"
+      ],
+      "he": {
+        "description": "כרטיסים מתרוממים מעט כשהעכבר עליהם.",
+        "bestUse": [
+          "רשתות של עבודות או מוצרים"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "friendly",
+          "polished"
+        ],
+        "motion": 1,
+        "density": 3,
+        "topic": "touch"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-hover-lift.webp",
+      "demo": "demos/motion.html?m=hover-lift"
+    },
+    {
+      "id": "motion-underline-draw",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=underline-draw",
+      "description": "Links draw their underline when pointed at.",
+      "bestUse": [
+        "editorial and reading pages"
+      ],
+      "he": {
+        "description": "קו תחתון נמתח מתחת לקישורים כשמצביעים עליהם.",
+        "bestUse": [
+          "דפי מגזין וקריאה"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "editorial",
+          "precise"
+        ],
+        "motion": 1,
+        "density": 3,
+        "topic": "touch"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-underline-draw.webp",
+      "demo": "demos/motion.html?m=underline-draw"
+    },
+    {
+      "id": "motion-button-press",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=button-press",
+      "description": "Buttons press down when tapped.",
+      "bestUse": [
+        "every site: feedback on the one action"
+      ],
+      "he": {
+        "description": "כפתורים נלחצים פנימה כשלוחצים עליהם.",
+        "bestUse": [
+          "כל אתר: תגובה על הפעולה המרכזית"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "tactile",
+          "friendly"
+        ],
+        "motion": 1,
+        "density": 3,
+        "topic": "touch"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-button-press.webp",
+      "demo": "demos/motion.html?m=button-press"
+    },
+    {
+      "id": "motion-curtain",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=curtain",
+      "description": "A picture uncovers from one side.",
+      "bestUse": [
+        "portfolio",
+        "launch pages"
+      ],
+      "he": {
+        "description": "תמונה נחשפת מצד אחד.",
+        "bestUse": [
+          "תיק עבודות",
+          "דפי השקה"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "cinematic",
+          "bold"
+        ],
+        "motion": 2,
+        "density": 3,
+        "topic": "arrive"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-curtain.webp",
+      "demo": "demos/motion.html?m=curtain"
+    },
+    {
+      "id": "motion-mask-rise",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=mask-rise",
+      "description": "Headline lines rise from behind an edge.",
+      "bestUse": [
+        "type-led first screens",
+        "launch pages"
+      ],
+      "he": {
+        "description": "שורות הכותרת עולות מאחורי קצה.",
+        "bestUse": [
+          "מסכים ראשונים שמוביל בהם הטקסט",
+          "דפי השקה"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "confident",
+          "editorial"
+        ],
+        "motion": 2,
+        "density": 3,
+        "topic": "arrive"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-mask-rise.webp",
+      "demo": "demos/motion.html?m=mask-rise"
+    },
+    {
+      "id": "motion-parallax",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=parallax",
+      "description": "Layers move at slightly different speeds.",
+      "bestUse": [
+        "showpieces and launches"
+      ],
+      "he": {
+        "description": "שכבות זזות במהירויות מעט שונות.",
+        "bestUse": [
+          "פרויקטי דגל והשקות"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "cinematic",
+          "playful"
+        ],
+        "motion": 3,
+        "density": 3,
+        "topic": "scroll"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-parallax.webp",
+      "demo": "demos/motion.html?m=parallax"
+    },
+    {
+      "id": "motion-accordion",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=accordion",
+      "description": "Answers open smoothly in place.",
+      "bestUse": [
+        "FAQ and prices",
+        "operate pages"
+      ],
+      "he": {
+        "description": "תשובות נפתחות בעדינות במקומן.",
+        "bestUse": [
+          "שאלות נפוצות ומחירים",
+          "דפים שבהם עושים פעולות"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "calm",
+          "clean"
+        ],
+        "motion": 1,
+        "density": 3,
+        "topic": "touch"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-accordion.webp",
+      "demo": "demos/motion.html?m=accordion"
+    },
+    {
+      "id": "motion-page-fade",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=page-fade",
+      "description": "Pages fade into each other.",
+      "bestUse": [
+        "brochure sites"
+      ],
+      "he": {
+        "description": "דפים מתמזגים זה בזה.",
+        "bestUse": [
+          "אתרי תדמית"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "soft",
+          "calm"
+        ],
+        "motion": 1,
+        "density": 3,
+        "topic": "pages"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-page-fade.webp",
+      "demo": "demos/motion.html?m=page-fade"
+    },
+    {
+      "id": "motion-menu-slide",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=menu-slide",
+      "description": "The phone menu slides in from the reading side.",
+      "bestUse": [
+        "every site on a phone"
+      ],
+      "he": {
+        "description": "תפריט הטלפון גולש פנימה מהצד שבו מתחילים לקרוא.",
+        "bestUse": [
+          "כל אתר בטלפון"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "clean",
+          "friendly"
+        ],
+        "motion": 1,
+        "density": 3,
+        "topic": "touch"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-menu-slide.webp",
+      "demo": "demos/motion.html?m=menu-slide"
+    },
+    {
+      "id": "motion-chapters",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=chapters",
+      "description": "The background colour changes by chapter as you scroll.",
+      "bestUse": [
+        "long story pages"
+      ],
+      "he": {
+        "description": "צבע הרקע משתנה מפרק לפרק תוך כדי גלילה.",
+        "bestUse": [
+          "דפי סיפור ארוכים"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "bold",
+          "graphic"
+        ],
+        "motion": 2,
+        "density": 3,
+        "topic": "scroll"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-chapters.webp",
+      "demo": "demos/motion.html?m=chapters"
+    },
+    {
+      "id": "motion-sticky-stack",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=sticky-stack",
+      "description": "Panels stack over each other as you scroll.",
+      "bestUse": [
+        "product stories",
+        "launch pages"
+      ],
+      "he": {
+        "description": "אזורים נערמים זה על זה תוך כדי גלילה.",
+        "bestUse": [
+          "סיפורי מוצר",
+          "דפי השקה"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "bold",
+          "technical"
+        ],
+        "motion": 3,
+        "density": 3,
+        "topic": "scroll"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-sticky-stack.webp",
+      "demo": "demos/motion.html?m=sticky-stack"
+    },
+    {
+      "id": "motion-image-swap",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=image-swap",
+      "description": "A second photograph shows under the pointer.",
+      "bestUse": [
+        "shops and portfolios"
+      ],
+      "he": {
+        "description": "תמונה שנייה מופיעה כשהעכבר עליה.",
+        "bestUse": [
+          "חנויות ותיקי עבודות"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "playful",
+          "tactile"
+        ],
+        "motion": 1,
+        "density": 3,
+        "topic": "touch"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-image-swap.webp",
+      "demo": "demos/motion.html?m=image-swap"
+    },
+    {
+      "id": "motion-still",
+      "shelf": "motion",
+      "url": "demos/motion.html?m=still",
+      "description": "No motion at all: everything is simply there.",
+      "bestUse": [
+        "reading pages",
+        "calm brands",
+        "operate pages"
+      ],
+      "he": {
+        "description": "בלי שום תנועה: הכול פשוט נמצא במקומו.",
+        "bestUse": [
+          "דפי קריאה",
+          "מותגים רגועים",
+          "דפים שבהם עושים פעולות"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "quiet",
+          "restrained"
+        ],
+        "motion": 0,
+        "density": 3,
+        "topic": "none"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "motion/motion-still.webp",
+      "demo": "demos/motion.html?m=still"
+    }
+  ]
+}

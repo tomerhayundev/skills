@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="{{lang}}" dir="{{dir}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{title}}</title>
+<link rel="stylesheet" href="/_picker/app/app.css">
+<style>
+  .options { display: grid; gap: 32px; padding: 24px clamp(16px, 3vw, 32px); }
+  .option { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+  .frames { display: flex; gap: 16px; align-items: start; overflow-x: auto; }
+  .frame { flex: none; overflow: hidden; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+  .frame iframe { border: 0; transform-origin: 0 0; display: block; }
+  .frame.phone { inline-size: 188px; block-size: 406px; }
+  .frame.phone iframe { transform: scale(0.5); }
+  .frame.desk { inline-size: 576px; block-size: 360px; }
+  .frame.desk iframe { transform: scale(0.4); }
+  [dir="rtl"] .frame iframe { transform-origin: 100% 0; }
+  .option .choose { margin-block-start: 12px; }
+</style>
+</head>
+<body>
+<main id="main" tabindex="-1">
+  <header class="bar"><h1>{{title}}</h1><p id="msg" role="status" class="sent"></p></header>
+  <div class="options" data-step="{{step}}">
+{{options}}
+  </div>
+</main>
+<script>
+  document.querySelectorAll('.choose').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var step = document.querySelector('.options').getAttribute('data-step');
+      fetch('/_picker/api/choose', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ step: step, id: b.getAttribute('data-id') }) })
+        .then(function (r) { if (r.ok) { document.getElementById('msg').textContent = '✓ ' + b.getAttribute('data-id'); } });
+    });
+  });
+</script>
+</body>
+</html>

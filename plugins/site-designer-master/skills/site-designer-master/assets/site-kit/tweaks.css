@@ -1,0 +1,16 @@
+/* The tweak panel: development builds only. Opens from the reading start (left in English, right in Hebrew). */
+/* The toggle sits at the far edge from where text starts, so it never covers a line's beginning. */
+.sdm-tweaks-toggle { position: fixed; inset-block-end: 16px; inset-inline-end: 16px; z-index: 500; min-block-size: 44px; padding-inline: 16px; font: 600 14px/1 system-ui, sans-serif; background: #111; color: #fff; border: 0; border-radius: 999px; cursor: pointer; }
+.sdm-tweaks { position: fixed; inset-block: 0; inset-inline-start: 0; z-index: 500; inline-size: min(340px, 100vw); overflow-y: auto; padding: 20px; background: #fff; color: #111; font: 14px/1.4 system-ui, sans-serif; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 8px 24px rgba(0, 0, 0, 0.12); }
+.sdm-tweaks[hidden] { display: none; }
+.sdm-tweaks h2 { font: 600 16px/1.2 system-ui, sans-serif; margin: 0 0 12px; }
+.sdm-tweaks label { display: block; margin: 14px 0 4px; font-weight: 600; }
+.sdm-tweaks input, .sdm-tweaks select { inline-size: 100%; min-block-size: 36px; font: inherit; max-inline-size: none; border-radius: 6px; }
+.sdm-tweaks output { float: inline-end; font-weight: 400; color: #555; }
+.sdm-tweaks .sdm-actions { display: flex; gap: 8px; margin-block-start: 20px; }
+.sdm-tweaks .sdm-actions button { flex: 1; min-block-size: 44px; border-radius: 6px; border: 1px solid #111; background: #fff; color: #111; font: 600 14px system-ui, sans-serif; }
+.sdm-tweaks .sdm-actions button.sdm-save { background: #111; color: #fff; }
+.sdm-tweaks .sdm-msg { margin-block-start: 12px; min-block-size: 1.4em; }
+/* The panel speaks English inside any page: each line keeps its own direction. */
+.sdm-tweaks h2, .sdm-tweaks label, .sdm-tweaks .sdm-msg, .sdm-tweaks option { unicode-bidi: plaintext; text-align: start; }
+.sdm-tweaks .sdm-msg.is-error { color: #a3261c; }

@@ -1,0 +1,22 @@
+{
+  "about": "What the Feel and dislikes panel offers. A dislike with a tell is one of the AI tells in assets/slop-catalogue.json: those marked ai start as avoided, and the user can allow any of them. Each sample is drawn by the picker in CSS, so the user sees what the words mean.",
+  "motionTopics": ["arrive", "touch", "scroll", "pages", "none"],
+  "dislikes": [
+    { "id": "gradients", "tell": "HUE_GRADIENT", "ai": true, "sample": "gradient" },
+    { "id": "gradient-text", "tell": "GRADIENT_TEXT", "ai": true, "sample": "gradient-text" },
+    { "id": "purple", "tell": "AI_PALETTE", "ai": true, "sample": "purple" },
+    { "id": "glow", "tell": "GLOW_SHADOW", "ai": true, "sample": "glow" },
+    { "id": "icon-boxes", "tell": "ICON_TILE_ROW", "ai": true, "sample": "icon-boxes" },
+    { "id": "eyebrow", "tell": "EYEBROW", "ai": true, "sample": "eyebrow" },
+    { "id": "all-centred", "tell": "CENTRED_SHARE", "ai": true, "sample": "centred" },
+    { "id": "cards-in-cards", "tell": "NESTED_CARDS", "ai": true, "sample": "nested" },
+    { "id": "buzzwords", "tell": "BANNED_COPY", "ai": true, "sample": "buzzwords" },
+    { "id": "fake-numbers", "tell": "UNSOURCED_NUMBER", "ai": true, "sample": "numbers" },
+    { "id": "stock-people", "tell": null, "ai": false, "sample": "stock" },
+    { "id": "dark-mode", "tell": null, "ai": false, "sample": "dark" },
+    { "id": "carousels", "tell": null, "ai": false, "sample": "carousel" },
+    { "id": "popups", "tell": null, "ai": false, "sample": "popup" },
+    { "id": "busy-motion", "tell": null, "ai": false, "sample": "busy" },
+    { "id": "tiny-text", "tell": null, "ai": false, "sample": "tiny" }
+  ]
+}

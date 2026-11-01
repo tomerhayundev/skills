@@ -1,0 +1,547 @@
+{
+  "shelf": "icons",
+  "about": "Open-licence icon sets, each drawn as the same 12 glyphs.",
+  "glyphs": [
+    "home",
+    "search",
+    "menu",
+    "arrow",
+    "heart",
+    "person",
+    "cart",
+    "calendar",
+    "phone",
+    "mail",
+    "pin",
+    "settings"
+  ],
+  "entries": [
+    {
+      "id": "icons-round-outline-a",
+      "shelf": "icons",
+      "url": "https://lucide.dev",
+      "description": "Rounded outline icons with even 2px strokes.",
+      "bestUse": [
+        "friendly shops and services",
+        "cafés, studios and small brands"
+      ],
+      "he": {
+        "description": "סמלים עם קו מתאר מעוגל ועובי אחיד של 2 פיקסלים.",
+        "bestUse": [
+          "חנויות ושירותים ידידותיים",
+          "בתי קפה, סטודיואים ומותגים קטנים"
+        ]
+      },
+      "tags": {
+        "family": "outline-rounded",
+        "mood": [
+          "friendly",
+          "clean"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "ISC",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-round-outline-a.webp",
+      "demo": "demos/icons/round-outline-a.html"
+    },
+    {
+      "id": "icons-round-outline-b",
+      "shelf": "icons",
+      "url": "https://tabler.io/icons",
+      "description": "Rounded outline icons on a 24px grid, slightly geometric.",
+      "bestUse": [
+        "friendly shops and services",
+        "cafés, studios and small brands"
+      ],
+      "he": {
+        "description": "סמלי מתאר מעוגלים על רשת של 24 פיקסלים, מעט גאומטריים.",
+        "bestUse": [
+          "חנויות ושירותים ידידותיים",
+          "בתי קפה, סטודיואים ומותגים קטנים"
+        ]
+      },
+      "tags": {
+        "family": "outline-rounded",
+        "mood": [
+          "clean",
+          "precise"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "MIT",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-round-outline-b.webp",
+      "demo": "demos/icons/round-outline-b.html"
+    },
+    {
+      "id": "icons-regular-outline",
+      "shelf": "icons",
+      "url": "https://phosphoricons.com",
+      "description": "Soft outline icons with generous curves.",
+      "bestUse": [
+        "friendly shops and services",
+        "cafés, studios and small brands"
+      ],
+      "he": {
+        "description": "סמלי מתאר רכים עם עיגולים נדיבים.",
+        "bestUse": [
+          "חנויות ושירותים ידידותיים",
+          "בתי קפה, סטודיואים ומותגים קטנים"
+        ]
+      },
+      "tags": {
+        "family": "outline-rounded",
+        "mood": [
+          "friendly",
+          "warm"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "MIT",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-regular-outline.webp",
+      "demo": "demos/icons/regular-outline.html"
+    },
+    {
+      "id": "icons-thin-outline",
+      "shelf": "icons",
+      "url": "https://phosphoricons.com",
+      "description": "Hairline icons, very light and elegant.",
+      "bestUse": [
+        "elegant brands and boutiques",
+        "fashion, beauty and design studios"
+      ],
+      "he": {
+        "description": "סמלים בקו דקיק, קלילים מאוד ואלגנטיים.",
+        "bestUse": [
+          "מותגים ובוטיקים אלגנטיים",
+          "אופנה, יופי וסטודיואים לעיצוב"
+        ]
+      },
+      "tags": {
+        "family": "outline-thin",
+        "mood": [
+          "elegant",
+          "quiet"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "MIT",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-thin-outline.webp",
+      "demo": "demos/icons/thin-outline.html"
+    },
+    {
+      "id": "icons-solid-soft",
+      "shelf": "icons",
+      "url": "https://phosphoricons.com",
+      "description": "Filled icons with soft corners.",
+      "bestUse": [
+        "bold, clear buttons and menus",
+        "busy shops and booking pages"
+      ],
+      "he": {
+        "description": "סמלים מלאים עם פינות רכות.",
+        "bestUse": [
+          "כפתורים ותפריטים בולטים וברורים",
+          "חנויות עמוסות ודפי הזמנה"
+        ]
+      },
+      "tags": {
+        "family": "filled",
+        "mood": [
+          "friendly",
+          "bold"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "MIT",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-solid-soft.webp",
+      "demo": "demos/icons/solid-soft.html"
+    },
+    {
+      "id": "icons-outline-ui",
+      "shelf": "icons",
+      "url": "https://heroicons.com",
+      "description": "Outline interface icons with 1.5px strokes.",
+      "bestUse": [
+        "friendly shops and services",
+        "cafés, studios and small brands"
+      ],
+      "he": {
+        "description": "סמלי מתאר לאתר בעובי קו של 1.5 פיקסלים.",
+        "bestUse": [
+          "חנויות ושירותים ידידותיים",
+          "בתי קפה, סטודיואים ומותגים קטנים"
+        ]
+      },
+      "tags": {
+        "family": "outline-rounded",
+        "mood": [
+          "clean",
+          "polished"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "MIT",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-outline-ui.webp",
+      "demo": "demos/icons/outline-ui.html"
+    },
+    {
+      "id": "icons-solid-ui",
+      "shelf": "icons",
+      "url": "https://heroicons.com",
+      "description": "Solid interface icons, compact and sturdy.",
+      "bestUse": [
+        "bold, clear buttons and menus",
+        "busy shops and booking pages"
+      ],
+      "he": {
+        "description": "סמלים מלאים לאתר, קטנים ויציבים.",
+        "bestUse": [
+          "כפתורים ותפריטים בולטים וברורים",
+          "חנויות עמוסות ודפי הזמנה"
+        ]
+      },
+      "tags": {
+        "family": "filled",
+        "mood": [
+          "confident",
+          "clean"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "MIT",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-solid-ui.webp",
+      "demo": "demos/icons/solid-ui.html"
+    },
+    {
+      "id": "icons-simple-line",
+      "shelf": "icons",
+      "url": "https://feathericons.com",
+      "description": "Simple line icons, the plainest of the outline sets.",
+      "bestUse": [
+        "friendly shops and services",
+        "cafés, studios and small brands"
+      ],
+      "he": {
+        "description": "סמלי קו פשוטים, הכי פשוטים מבין קבוצות סמלי המתאר.",
+        "bestUse": [
+          "חנויות ושירותים ידידותיים",
+          "בתי קפה, סטודיואים ומותגים קטנים"
+        ]
+      },
+      "tags": {
+        "family": "outline-rounded",
+        "mood": [
+          "minimal",
+          "calm"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "MIT",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-simple-line.webp",
+      "demo": "demos/icons/simple-line.html"
+    },
+    {
+      "id": "icons-line-geometric",
+      "shelf": "icons",
+      "url": "https://iconoir.com",
+      "description": "Geometric line icons with a slightly hand-drawn ease.",
+      "bestUse": [
+        "friendly shops and services",
+        "cafés, studios and small brands"
+      ],
+      "he": {
+        "description": "סמלי קו גאומטריים עם קלילות של ציור ביד.",
+        "bestUse": [
+          "חנויות ושירותים ידידותיים",
+          "בתי קפה, סטודיואים ומותגים קטנים"
+        ]
+      },
+      "tags": {
+        "family": "outline-rounded",
+        "mood": [
+          "playful",
+          "warm"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "MIT",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-line-geometric.webp",
+      "demo": "demos/icons/line-geometric.html"
+    },
+    {
+      "id": "icons-classic-ui",
+      "shelf": "icons",
+      "url": "https://icons.getbootstrap.com",
+      "description": "Classic interface icons, small and familiar.",
+      "bestUse": [
+        "precise tools and services",
+        "clinics, offices and technical products"
+      ],
+      "he": {
+        "description": "סמלים קלאסיים לאתר, קטנים ומוכרים.",
+        "bestUse": [
+          "כלים ושירותים מדויקים",
+          "מרפאות, משרדים ומוצרים טכניים"
+        ]
+      },
+      "tags": {
+        "family": "outline-sharp",
+        "mood": [
+          "precise",
+          "technical"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "MIT",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-classic-ui.webp",
+      "demo": "demos/icons/classic-ui.html"
+    },
+    {
+      "id": "icons-mobile-outline",
+      "shelf": "icons",
+      "url": "https://ionic.io/ionicons",
+      "description": "Rounded outline icons drawn for phone apps.",
+      "bestUse": [
+        "friendly shops and services",
+        "cafés, studios and small brands"
+      ],
+      "he": {
+        "description": "סמלי מתאר מעוגלים שנוצרו לאפליקציות בטלפון.",
+        "bestUse": [
+          "חנויות ושירותים ידידותיים",
+          "בתי קפה, סטודיואים ומותגים קטנים"
+        ]
+      },
+      "tags": {
+        "family": "outline-rounded",
+        "mood": [
+          "friendly",
+          "soft"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "MIT",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-mobile-outline.webp",
+      "demo": "demos/icons/mobile-outline.html"
+    },
+    {
+      "id": "icons-system-outlined",
+      "shelf": "icons",
+      "url": "https://fonts.google.com/icons",
+      "description": "System outline icons with crisp corners.",
+      "bestUse": [
+        "precise tools and services",
+        "clinics, offices and technical products"
+      ],
+      "he": {
+        "description": "סמלי מערכת בקו מתאר עם פינות חדות.",
+        "bestUse": [
+          "כלים ושירותים מדויקים",
+          "מרפאות, משרדים ומוצרים טכניים"
+        ]
+      },
+      "tags": {
+        "family": "outline-sharp",
+        "mood": [
+          "technical",
+          "clean"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "Apache-2.0",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-system-outlined.webp",
+      "demo": "demos/icons/system-outlined.html"
+    },
+    {
+      "id": "icons-system-rounded",
+      "shelf": "icons",
+      "url": "https://fonts.google.com/icons",
+      "description": "System icons with rounded ends.",
+      "bestUse": [
+        "friendly shops and services",
+        "cafés, studios and small brands"
+      ],
+      "he": {
+        "description": "סמלי מערכת עם קצוות מעוגלים.",
+        "bestUse": [
+          "חנויות ושירותים ידידותיים",
+          "בתי קפה, סטודיואים ומותגים קטנים"
+        ]
+      },
+      "tags": {
+        "family": "outline-rounded",
+        "mood": [
+          "friendly",
+          "clean"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "Apache-2.0",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-system-rounded.webp",
+      "demo": "demos/icons/system-rounded.html"
+    },
+    {
+      "id": "icons-soft-outline",
+      "shelf": "icons",
+      "url": "https://akveo.github.io/eva-icons",
+      "description": "Soft outline icons with round joins.",
+      "bestUse": [
+        "friendly shops and services",
+        "cafés, studios and small brands"
+      ],
+      "he": {
+        "description": "סמלי מתאר רכים עם חיבורים מעוגלים.",
+        "bestUse": [
+          "חנויות ושירותים ידידותיים",
+          "בתי קפה, סטודיואים ומותגים קטנים"
+        ]
+      },
+      "tags": {
+        "family": "outline-rounded",
+        "mood": [
+          "soft",
+          "friendly"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "MIT",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-soft-outline.webp",
+      "demo": "demos/icons/soft-outline.html"
+    },
+    {
+      "id": "icons-office-regular",
+      "shelf": "icons",
+      "url": "https://github.com/microsoft/fluentui-system-icons",
+      "description": "Light office-style outline icons.",
+      "bestUse": [
+        "friendly shops and services",
+        "cafés, studios and small brands"
+      ],
+      "he": {
+        "description": "סמלי מתאר קלילים בסגנון משרדי.",
+        "bestUse": [
+          "חנויות ושירותים ידידותיים",
+          "בתי קפה, סטודיואים ומותגים קטנים"
+        ]
+      },
+      "tags": {
+        "family": "outline-rounded",
+        "mood": [
+          "calm",
+          "polished"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "MIT",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-office-regular.webp",
+      "demo": "demos/icons/office-regular.html"
+    },
+    {
+      "id": "icons-pixel",
+      "shelf": "icons",
+      "url": "https://pixelarticons.com",
+      "description": "Pixel icons on a 24px grid, retro.",
+      "bestUse": [
+        "playful, retro brands",
+        "games, music and youth events"
+      ],
+      "he": {
+        "description": "סמלי פיקסלים על רשת של 24 פיקסלים, רטרו.",
+        "bestUse": [
+          "מותגים שובבים ורטרו",
+          "משחקים, מוזיקה ואירועי צעירים"
+        ]
+      },
+      "tags": {
+        "family": "pixel",
+        "mood": [
+          "playful",
+          "retro"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "MIT",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-pixel.webp",
+      "demo": "demos/icons/pixel.html"
+    },
+    {
+      "id": "icons-dense-outline",
+      "shelf": "icons",
+      "url": "https://pictogrammers.com/library/mdi",
+      "description": "Dense outline icons from a very large set.",
+      "bestUse": [
+        "precise tools and services",
+        "clinics, offices and technical products"
+      ],
+      "he": {
+        "description": "סמלי מתאר צפופים מתוך קבוצה גדולה מאוד.",
+        "bestUse": [
+          "כלים ושירותים מדויקים",
+          "מרפאות, משרדים ומוצרים טכניים"
+        ]
+      },
+      "tags": {
+        "family": "outline-sharp",
+        "mood": [
+          "technical",
+          "precise"
+        ],
+        "density": 3,
+        "motion": 0
+      },
+      "licence": "Apache-2.0",
+      "rights": "pack",
+      "added": "2026-11-01",
+      "preview": "icons/icons-dense-outline.webp",
+      "demo": "demos/icons/dense-outline.html"
+    }
+  ]
+}
