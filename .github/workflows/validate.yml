@@ -107,3 +107,18 @@ jobs:
             });
           ' "$PWD/$S/lib/chrome.mjs"
           node --test $S/*.test.mjs $S/lib/*.test.mjs
+
+      # Same guard as brand-identity-master: its capture, meter and snapshot tests drive headless
+      # Chrome and skip themselves without one. The three tests that need the unshipped eval
+      # fixtures and name list skip by design.
+      - name: site-designer-master scripts (engine, picker, capture, meter, pack, shared libs)
+        run: |
+          S=plugins/site-designer-master/skills/site-designer-master/scripts
+          node -e '
+            import(process.argv[1]).then((m) => {
+              const c = m.findChrome();
+              if (!c) { console.error("No Chrome on this runner: the browser tests would skip"); process.exit(1); }
+              console.log("Chrome for the browser tests:", c);
+            });
+          ' "$PWD/$S/lib/chrome.mjs"
+          node --test $S/*.test.mjs $S/lib/*.test.mjs

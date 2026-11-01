@@ -134,7 +134,8 @@ with no bump.
    `node --test scripts/*.test.mjs plugins/remotion-video-master/skills/remotion-video-master/scripts/*.test.mjs`
    (the second set needs ffmpeg).
    Also, for a `brand-identity-master` change, `node --test` over its `scripts/*.test.mjs` and
-   `scripts/lib/*.test.mjs` (needs Chrome or Edge, else the render tests skip).
+   `scripts/lib/*.test.mjs` (needs Chrome or Edge, else the render tests skip). The same for a
+   `site-designer-master` change (its capture, meter and snapshot tests need Chrome or Edge).
 6. `node <ps>/scripts/scan.mjs plugins/<name> --public` for every plugin you changed by hand.
 7. `node <ps>/scripts/test-install.mjs --repo . --plugin <name>` for each changed plugin (for a
    master change: the master and one specialist).
@@ -245,6 +246,8 @@ Change a route only from a page someone loaded, never from memory.
   skip themselves without one, so the step first fails if `findChrome` finds none (`ubuntu-latest` ships
   `google-chrome`, found on PATH; `BRAND_CHROME` overrides). The 50 font checks stay skipped (they need
   `BRAND_NET=1` and the network); any other skip in that log is a problem to fix.
+  Then the `site-designer-master` script tests (the same two globs, the same Chrome guard). Three tests skip
+  by design (two need the eval fixtures, one the name list, none of which ship); any other skip is a problem.
 - Monthly, `sources-check.yml`: the sources health check (above).
 
 ## Health check
