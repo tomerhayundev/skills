@@ -9,6 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { SKILL_DIR, parseArgs, isMain, readJson } from './lib/cli.mjs';
 import { validateTokens, tokensToCss } from './tokens.mjs';
+import { systemSheet } from './system-sheet.mjs';
 
 const KIT = path.join(SKILL_DIR, 'assets', 'site-kit');
 const MARKER = '.sdm-build';
@@ -78,8 +79,9 @@ export function buildSite(srcDir, outDir, opts = {}) {
   if (!clearOut(outDir, errors)) return { pages: [], errors };
 
   const tokensFile = path.join(srcDir, 'tokens.json');
+  let tokens = null;
   if (fs.existsSync(tokensFile)) {
-    const tokens = readJson(tokensFile);
+    tokens = readJson(tokensFile);
     const res = validateTokens(tokens, RULES());
     for (const e of res.errors) errors.push(`tokens: ${e}`);
     fs.writeFileSync(path.join(outDir, 'tokens.css'), tokensToCss(tokens));
@@ -96,7 +98,7 @@ export function buildSite(srcDir, outDir, opts = {}) {
   const partials = readPartials(srcDir);
   const layout = fs.readFileSync(path.join(KIT, 'layout.html'), 'utf8');
   const pagePaths = new Set(site.pages.map((p) => p.path));
-  if (opts.dev) pagePaths.add('/_review/');
+  if (opts.dev) { pagePaths.add('/_review/'); if (tokens) pagePaths.add('/_system/'); }
   const base = {
     // Page data: src/data.json, with --data values on top (the worst-case build swaps them in). Values are inserted as written.
     lang: site.lang, dir: site.dir, name: esc(site.name), t, year: new Date().getFullYear(),
@@ -109,6 +111,7 @@ export function buildSite(srcDir, outDir, opts = {}) {
   const jobs = site.pages.map((p) => ({ page: p, file: `pages/${p.file}`, body: fs.readFileSync(path.join(srcDir, 'pages', p.file), 'utf8'), out: outFileFor(p.path), rewrite: true }));
   const own404 = path.join(srcDir, 'pages', '404.html');
   if (opts.dev) jobs.push({ page: { path: '/_review/', title: 'Every state', description: 'Development page' }, file: 'site-kit review.html', body: fs.readFileSync(path.join(KIT, 'pages', 'review.html'), 'utf8'), out: outFileFor('/_review/'), rewrite: true });
+  if (opts.dev && tokens) jobs.push({ page: { path: '/_system/', title: 'The visual system', description: 'Development page' }, file: 'system-sheet', body: systemSheet(tokens, site), out: outFileFor('/_system/'), rewrite: true });
   jobs.push({ page: { path: '/404', title: t.notFoundTitle, description: t.notFoundTitle }, file: fs.existsSync(own404) ? 'pages/404.html' : 'site-kit 404.html', body: fs.readFileSync(fs.existsSync(own404) ? own404 : path.join(KIT, 'pages', '404.html'), 'utf8'), out: '404.html', rewrite: false });
 
   const built = [];

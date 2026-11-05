@@ -3,6 +3,7 @@
 | Rule | Check |
 | --- | --- |
 | Real contact details and a real place or person: for a local business the address, hours and a map link. | the brief's facts |
+| A generated person is never shown as a guest, a customer, staff or a reviewer: a testimonial or "our guests" section uses real photos the business gave, or no faces at all. | the critic |
 | Reviews carry a name and their source; link to where they live when possible. Only real reviews from the brief's proof. | meter rule UNSOURCED_NUMBER, the critic |
 | A privacy page; terms when the site sells; a cookie notice only when cookies are set, and then rejecting is as easy as accepting. | |
 | An accessibility statement where the country requires one (see a11y). | |

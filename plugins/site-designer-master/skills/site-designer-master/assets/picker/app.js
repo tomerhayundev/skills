@@ -107,7 +107,8 @@
     $('tray-count').textContent = state.picks.length ? fmt(S.trayCount, { n: state.picks.length }) : '';
     state.picks.forEach(function (p) {
       ul.appendChild(el('li', {}, [
-        p.preview ? el('img', { src: p.preview, alt: '', width: 72, height: 45 }) : null,
+        // A pick whose picture is still being taken keeps its place in the row with an empty frame.
+        p.preview ? el('img', { src: p.preview, alt: '', width: 72, height: 45 }) : el('div', { class: 'thumb-wait', 'aria-hidden': 'true' }),
         el('span', { text: p.description || p.id }),
         el('button', { type: 'button', class: 'link remove', 'aria-label': S.remove + ': ' + (p.description || p.id), on: { click: function () {
           var before = state.picks.slice();
@@ -195,12 +196,94 @@
       var open = refine.classList.toggle('is-open'); toggle.setAttribute('aria-expanded', String(open));
     } } });
     refine.appendChild(toggle); refine.appendChild(body);
+    if (view.shelf === 'sites') panel.appendChild(drawOwnBox());
     panel.appendChild(refine);
     drawFacets();
     panel.appendChild(el('ul', { id: 'cards', class: 'cards' }));
     panel.appendChild(el('div', { id: 'empty', class: 'empty', hidden: true }));
     panel.appendChild(el('div', { class: 'more' }, [el('p', { id: 'count', class: 'mono muted', role: 'status' }), el('button', { id: 'more', type: 'button', text: S.loadMore, on: { click: function () { view.offset += 50; load(); } } })]));
   }
+  // The user's own references: a link they like or a picture they have. A link is pictured on this machine in
+  // about a minute; until then the line under the form says so, and no card is drawn without its picture.
+  var own = { items: [], timer: null };
+  function drawOwnBox() {
+    var O = S.own;
+    var url = el('input', { id: 'own-url', type: 'url', inputmode: 'url', autocomplete: 'off', placeholder: 'https://', dir: 'ltr' });
+    var file = el('input', { id: 'own-file', type: 'file', accept: 'image/png,image/jpeg,image/webp', class: 'visually-hidden' });
+    var addLink = function (ev) {
+      ev.preventDefault();
+      var v = url.value.trim(); if (!v) { url.focus(); return; }
+      if (!/^https?:\/\//i.test(v)) v = 'https://' + v;
+      fetch('/_picker/api/own', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ url: v }) })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (res) {
+          if (!res.ok) { ownStatus(O.bad); url.focus(); return; }
+          url.value = '';
+          addOwnPick(res.j);
+          loadOwn();
+        }).catch(function () { saveProblem(true); });
+    };
+    file.addEventListener('change', function () {
+      var f = file.files[0]; if (!f) return;
+      if (f.size > 8 * 1024 * 1024) { ownStatus(O.tooBig); file.value = ''; return; }
+      fetch('/_picker/api/own-picture?name=' + encodeURIComponent(f.name), { method: 'POST', headers: { 'content-type': f.type || 'application/octet-stream' }, body: f })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (res) {
+          file.value = '';
+          if (!res.ok) { ownStatus(O.notPicture); return; }
+          addOwnPick(res.j);
+          loadOwn();
+        }).catch(function () { saveProblem(true); });
+    });
+    var box = el('section', { class: 'own', 'aria-labelledby': 'own-title' }, [
+      el('h2', { id: 'own-title', class: 'own-title', text: O.title }),
+      el('p', { class: 'muted own-hint', text: O.hint }),
+      // novalidate: people type "example.com"; the browser would refuse it before https:// is added here.
+      el('form', { class: 'own-row', novalidate: true, on: { submit: addLink } }, [
+        el('div', { class: 'field' }, [el('label', { for: 'own-url', text: O.address }), url]),
+        el('button', { type: 'submit', text: O.add }),
+        el('span', { class: 'own-or muted', text: O.or }),
+        file,
+        el('label', { for: 'own-file', class: 'button-like', text: O.picture }),
+      ]),
+      el('p', { id: 'own-status', class: 'own-status', role: 'status' }),
+      el('ul', { id: 'own-cards', class: 'cards own-cards' }),
+    ]);
+    setTimeout(loadOwn, 0);
+    return box;
+  }
+  function ownStatus(text) { var s = $('own-status'); if (s) s.textContent = text || ''; }
+  // An own reference is picked the moment it is added: bringing it is the pick.
+  function addOwnPick(item) {
+    if (picked(item.id)) return;
+    var before = state.picks.slice();
+    state.picks.push({ id: item.id, shelf: 'sites', liked: '', preview: item.preview, description: item.description });
+    save(); drawTray();
+    notice(fmt(S.pickedNotice, { n: state.picks.length }), function () { state.picks = before; save(); drawTray(); drawOwnCards(); });
+  }
+  function loadOwn() {
+    fetch('/_picker/api/own').then(function (r) { return r.json(); }).then(function (r) {
+      own.items = r.items || [];
+      // A pick added while its picture was being taken gets the picture once it exists.
+      own.items.forEach(function (it) { var p = picked(it.id); if (p && it.preview && p.preview !== it.preview) { p.preview = it.preview; save(); drawTray(); } });
+      drawOwnCards();
+      clearTimeout(own.timer);
+      if (own.items.some(function (it) { return it.status === 'capturing'; }) && $('own-cards')) own.timer = setTimeout(loadOwn, 3000);
+    }).catch(function () {});
+  }
+  function drawOwnCards() {
+    var ul = $('own-cards'); if (!ul) return;
+    ul.textContent = '';
+    var O = S.own;
+    var busy = own.items.filter(function (it) { return it.status === 'capturing'; });
+    var failed = own.items.filter(function (it) { return it.status === 'failed' && picked(it.id); });
+    var lines = busy.map(function (it) { return fmt(O.capturing, { name: it.description }); })
+      .concat(failed.map(function (it) { return fmt(O.failed, { name: it.description }); }));
+    ownStatus(lines.join(' '));
+    own.items.filter(function (it) { return it.preview; }).forEach(function (it) { ul.appendChild(card(it, 0)); });
+    ul.hidden = !ul.children.length;
+  }
+
   function clearAll() { view.filters = {}; view.q = ''; var q = $('q'); if (q) q.value = ''; drawFacets(); reload(); }
   function drawFacets() {
     var box = $('facets'); if (!box) return; box.textContent = '';
@@ -246,17 +329,17 @@
     var w = words(item);
     // The whole picture is the pick (the way people pick in any gallery); its badge always says the state.
     // Motion cards play their demo inside the same button.
-    var pick = el('button', { type: 'button', class: 'pick', 'aria-pressed': String(!!mark), 'aria-label': (mark ? S.liked : S.like) + ': ' + w.description, on: { click: function () { togglePick(item); drawCards(true); } } }, [
+    var pick = el('button', { type: 'button', class: 'pick', 'aria-pressed': String(!!mark), 'aria-label': (mark ? S.liked : S.like) + ': ' + w.description, on: { click: function () { togglePick(item); if (item.own) drawOwnCards(); else drawCards(true); } } }, [
       item.demo ? demoMedia(item, img()) : img(),
       el('span', { class: 'badge', 'aria-hidden': 'true', text: mark ? '\u2713' : '+' }),
     ]);
-    var tools = [el('a', { href: item.url, target: '_blank', rel: 'noopener', text: item.demo ? S.openDemo : S.open })];
+    var tools = item.url ? [el('a', { href: item.url, target: '_blank', rel: 'noopener', text: item.demo ? S.openDemo : S.open })] : [];
     if (!item.demo) tools.unshift(el('button', { type: 'button', class: 'link', text: S.bigger, 'aria-label': S.bigger + ': ' + w.description, on: { click: function () { showLarge(item, w); } } }));
     var kids = [
-      el('p', { class: 'num mono' }, [el('span', { text: fmt(S.cardNo, { n: pad(n) }) }), el('span', { class: 'state', text: mark ? '\u2713 ' + S.liked : S.tapToPick })]),
+      el('p', { class: 'num mono' }, [el('span', { text: item.own ? S.own.yours : fmt(S.cardNo, { n: pad(n) }) }), el('span', { class: 'state', text: mark ? '\u2713 ' + S.liked : S.tapToPick })]),
       el('div', { class: 'media' }, [pick]),
       el('h2', { class: 'desc', text: w.description }),
-      el('p', { class: 'uses' }, [S.bestFor + ': ' + w.bestUse.join(' · ')]),
+      el('p', { class: 'uses' }, [item.own ? (item.own === 'link' ? S.own.linkLine : S.own.pictureLine) : S.bestFor + ': ' + w.bestUse.join(' · ')]),
     ];
     if (mark) {
       var id = 'like-' + item.id;

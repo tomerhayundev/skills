@@ -45,8 +45,14 @@ export function walkList(siteDir, { url = 'http://127.0.0.1:4321' } = {}) {
   L('');
   L('Simple to the maker is not simple to a visitor: read it as a first-time visitor. Cuts go in the report.');
   L('');
-  for (const p of list) if (p.path !== '/_review/') L(`- ? ${p.path}: every section names its one job; what has none is cut, or the report says why it stays`);
+  for (const p of list) if (!p.path.startsWith('/_')) L(`- ? ${p.path}: every section names its one job; what has none is cut, or the report says why it stays`);
   L('');
+  if (list.some((p) => p.path === '/_system/')) {
+    L('## The system');
+    L('');
+    L('- ? /_system/ at 1440px: every page uses only these colours, sizes and corners; anything else on a page is named and fixed');
+    L('');
+  }
   L('## Use it');
   L('');
   L(`- ? Every navigation link (${navLinks.size}) reaches its page, by real clicks`);

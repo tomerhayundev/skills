@@ -141,3 +141,52 @@ test('root urls inside site.css and fonts.css become relative', () => {
   assert.match(css, /url\('assets\/room\.svg'\)/);
   assert.match(css, /url\(\/\/cdn\.example\/x\.png\)/);
 });
+
+test('a dev build draws the visual system as one page: colours with roles and contrast, every size in the real faces, space, corners', () => {
+  const out = tmp();
+  buildSite(FIX, out);
+  assert.equal(fs.existsSync(path.join(out, '_system', 'index.html')), false, 'never in the final site');
+  const dev = tmp();
+  assert.deepEqual(buildSite(FIX, dev, { dev: true }).errors, []);
+  const sys = read(dev, '_system/index.html');
+  assert.match(sys, /<h1>What every page is made from<\/h1>/);
+  // Each colour: its role, its value, drawn from the site's own variable, and the contrast of text on it.
+  assert.match(sys, /data-role="accent"[^>]*style="background: var\(--color-accent\);/);
+  assert.match(sys, /accent<\/b> #2b5d4f/);
+  assert.match(sys, /ink on ground [\d.]+:1/);
+  assert.match(sys, /accent-ink on accent [\d.]+:1/);
+  // Each size in its real face, with its value and the site's own words as the sample.
+  for (const [step, px] of [['display', 72], ['h1', 48], ['body', 18], ['small', 14]]) assert.match(sys, new RegExp(`font-size: var\\(--step-${step}\\)[^>]*>[^<]*Test Studio[^<]*<[\\s\\S]*?${step} ${px}px`), step);
+  assert.match(sys, /Test Display/);
+  assert.match(sys, /Test Text/);
+  for (const v of [4, 8, 16, 240]) assert.match(sys, new RegExp(`space-\\d+ ${v}px`));
+  assert.match(sys, /corner 12px/);
+  assert.doesNotMatch(sys, /\{\{|undefined|NaN/);
+});
+
+test('the visual system page lists motion when the tokens have it', async () => {
+  const { systemSheet } = await import('./system-sheet.mjs');
+  const html = systemSheet({ ...JSON.parse(read(FIX, 'tokens.json')), motion: { fast: '120ms', base: '240ms' } }, { name: 'X', pages: [] });
+  assert.match(html, /motion-fast 120ms/);
+  assert.match(html, /motion-base 240ms/);
+});
+
+test('every site prints cleanly: a menu or price page on paper keeps its words and contact, drops the screen chrome', () => {
+  const css = fs.readFileSync(path.join(SKILL_DIR, 'assets', 'site-kit', 'base.css'), 'utf8');
+  const print = (/@media print\s*\{([\s\S]*?)\n\}/.exec(css) || [])[1] || '';
+  assert.ok(print, 'base.css has a print block');
+  assert.match(print, /\.site-nav[^{]*\{[^}]*display:\s*none/);
+  assert.match(print, /\.skip-link/);
+  assert.match(print, /\.sdm-tweaks/);
+  assert.match(print, /\.nav-toggle/);
+  assert.match(print, /break-inside:\s*avoid/);
+  assert.match(print, /color:\s*#000/);
+  assert.doesNotMatch(print, /\.site-footer[^{]*\{[^}]*display:\s*none/, 'the footer keeps the contact on paper');
+});
+
+test('on a right-to-left site the system page reads left to right, and its samples keep the site\'s direction', async () => {
+  const { systemSheet } = await import('./system-sheet.mjs');
+  const html = systemSheet(JSON.parse(read(FIX, 'tokens.json')), { name: 'הדלת הכחולה', lang: 'he', dir: 'rtl', pages: [{ description: 'מאפייה קטנה' }] });
+  assert.match(html, /<section class="review system" lang="en" dir="ltr">/);
+  assert.match(html, /<p lang="he" dir="rtl" style="font-family: var\(--font-display\); font-size: var\(--step-display\)[^>]*>הדלת הכחולה</);
+});

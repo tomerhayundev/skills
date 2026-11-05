@@ -68,3 +68,11 @@ test('the walk checks the end of each journey as a designed moment, not only its
   assert.match(md, /\? Form "contact" on \/contact\/: the success block is a moment, not a bare "Sent": it thanks in the site's voice and says what happens next and when/);
   assert.match(md, /\? The last section before the footer on every page ends the visit on purpose \(the primary action or a closing line\)/);
 });
+
+test('development pages are not cut or checked as site pages, and the system page is looked at once', () => {
+  const out = tmp(); buildSite(path.join(SKILL_DIR, 'scripts', 'fixtures', 'site-src'), out, { dev: true });
+  const md = walkList(out, { url: 'http://127.0.0.1:4321' });
+  assert.doesNotMatch(md, /\? \/_system\/: every section/);
+  assert.doesNotMatch(md, /\? \/_review\/: every section/);
+  assert.match(md, /\? \/_system\/ at 1440px: every page uses only these colours, sizes and corners; anything else on a page is named and fixed/);
+});

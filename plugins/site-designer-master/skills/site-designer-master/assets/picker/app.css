@@ -70,7 +70,7 @@ p { margin: 0 0 12px; text-wrap: pretty; }
   .tray { padding-block: 10px; }
   .tray-list { grid-auto-flow: column; grid-auto-columns: 72px; overflow-x: auto; margin-block-start: 6px; padding-block-end: 2px; }
   .tray-list li { grid-template-columns: 1fr; padding: 0; border: 0; position: relative; }
-  .tray-list img { grid-row: auto; inline-size: 72px; block-size: 45px; }
+  .tray-list img, .tray-list .thumb-wait { grid-row: auto; inline-size: 72px; block-size: 45px; }
   .tray-list span { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   /* The remove control: a full 44px tap area at the thumbnail's corner, a small round mark drawn inside it, and its word
      kept for screen readers only. */
@@ -272,3 +272,19 @@ main h1 { max-inline-size: 24ch; }
 .summary .change { display: inline-flex; align-items: center; min-block-size: 44px; }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; } }
+
+/* The user's own references: a quiet row above the gallery, and their cards first once pictured. */
+.own { border: 1px solid var(--line); padding: 16px 18px; margin-block-end: 20px; }
+.own-title { margin: 0 0 4px; font-size: 17px; font-weight: 700; letter-spacing: 0; }
+.own-hint { margin: 0 0 12px; max-inline-size: 60ch; }
+.own-row { display: flex; flex-wrap: wrap; align-items: end; gap: 10px 12px; }
+.own-row .field { flex: 1 1 260px; margin: 0; }
+.own-or { align-self: end; line-height: 48px; }
+.button-like { display: inline-flex; align-items: center; min-block-size: 48px; padding: 0 18px; border: 1px solid var(--ink); border-radius: 2px; background: #fff; cursor: pointer; }
+.own-row button { min-block-size: 48px; }
+.own-row input[type="file"]:focus-visible + .button-like { outline: 2px solid var(--ink); outline-offset: 2px; }
+.own-status { margin: 10px 0 0; color: var(--muted); }
+.own-status:empty { display: none; }
+.own-cards { margin-block-start: 14px; }
+.own-cards[hidden] { display: none; }
+.tray-list .thumb-wait { grid-row: span 2; inline-size: 72px; block-size: 45px; border: 1px dashed var(--line-strong); background: var(--ground); }

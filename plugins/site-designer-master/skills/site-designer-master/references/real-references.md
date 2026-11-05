@@ -8,7 +8,9 @@ pages help more, because they show how the parts work together. Two sources, use
    surfaces (from the picture itself), text and accent, the type of each role (family, size, line height,
    weight, tracking), spacing steps, content width and corners. The build prompt carries these values for each
    pick. They are the starting point of the tokens, then adjusted to the brief and the floors.
-2. **The archive** (when connected): more than 800 real sites, 2,300 pages, desktop and phone, each with a
+2. **The user's own** (from the picker): a link they brought is captured and measured like the picks; a
+   picture they brought has no measured values, so look at it before choosing directions.
+3. **The archive** (when connected): more than 800 real sites, 2,300 pages, desktop and phone, each with a
    design record, plus section examples (first screens, prices, menus, footers, proof).
 
 ## How each step uses the archive
@@ -29,5 +31,8 @@ pages help more, because they show how the parts work together. Two sources, use
 - **Ignore a reference whose picture shows a pop-up, a cookie banner or a loader**: its design is hidden.
 - **Ask for directions before building.** References can drift (a coffee brief once returned health sites);
   showing directions first catches it before the build.
+- **One screenshot is not a brand.** A system built from one picture of someone else's site carries that site's
+  colours and type. Take the craft from references (layout, rhythm, how the type is set); the colours and the
+  voice come from the business's logo, photos and words.
 - **Never filter the user's choices by field.** The field is only for the line-up, to see what to avoid.
 - The archive's pictures belong to their designers: nothing from them is copied into the site.

@@ -18,7 +18,7 @@
 | Type | Pages |
 | --- | --- |
 | One-page | one page with anchored sections; still a 404 page |
-| Brochure | home, about, services or menu, prices, contact; 4-8 pages |
+| Brochure | home, about, services or menu, prices, contact; 4-8 pages. A menu or price page prints cleanly on paper (the site kit's print style): check it in print preview. |
 | Shop | home, category, product, cart, about, contact, delivery and returns |
 | Booking | home, services, booking, about, contact |
 | Portfolio | home (work), project pages, about, contact |

@@ -66,3 +66,16 @@ input[aria-invalid="true"] { border-color: var(--color-danger); border-width: 2p
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
+
+/* On paper: a menu, a price list or a page someone wants to keep. The words and the contact stay; the screen's
+   chrome goes; ink is black on white so it prints on any printer; nothing is cut across a page break. */
+@media print {
+  .site-nav, .nav-toggle, .skip-link, .sdm-tweaks, .sdm-tweaks-toggle, video, iframe { display: none !important; }
+  html, body { background: #fff !important; color: #000 !important; }
+  *, *::before, *::after { box-shadow: none !important; text-shadow: none !important; animation: none !important; transition: none !important; }
+  main, main * { color: #000 !important; background: transparent !important; }
+  h1, h2, h3 { break-after: avoid; }
+  li, tr, figure, img, .card, section > * { break-inside: avoid; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .site-header, .site-footer { border: 0; }
+}

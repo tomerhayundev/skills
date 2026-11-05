@@ -26,7 +26,7 @@ writes them relative, so the site also opens from disk.
 | --- | --- | --- |
 | Fonts | `node ${CLAUDE_SKILL_DIR}/scripts/fonts.mjs <src>` | Fetches the families in tokens.json (open licences), keeps only the scripts the language needs, writes `assets/fonts/` and `fonts.css`. Stops when a family lacks a needed script. |
 | Tokens | `node ${CLAUDE_SKILL_DIR}/scripts/tokens.mjs <src>/tokens.json --out=<dir>/tokens.css` | Checks spacing, scale, contrast, families and layers against the floors; the build runs it too. |
-| Build | `node ${CLAUDE_SKILL_DIR}/scripts/build.mjs <src> --out=<site> [--dev] [--data=<values.json>]` | Every page, the 404 page, the CSS and assets. Fails on a link to nothing, a missing partial, a missing value or broken tokens. `--dev` adds the tweak panel and /_review/. |
+| Build | `node ${CLAUDE_SKILL_DIR}/scripts/build.mjs <src> --out=<site> [--dev] [--data=<values.json>]` | Every page, the 404 page, the CSS and assets. Fails on a link to nothing, a missing partial, a missing value or broken tokens. `--dev` adds the tweak panel, /_review/ (every state) and /_system/ (the visual system on one page). |
 | Run | `node ${CLAUDE_SKILL_DIR}/scripts/serve.mjs <site> [--src=<src>] [--port=4321]` | Serves on this machine only, stores form posts, answers the tweak panel when given the source folder. |
 
 ## The site kit

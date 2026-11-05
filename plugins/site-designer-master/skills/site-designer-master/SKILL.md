@@ -5,7 +5,7 @@ description: Use when someone asks to design, build, make or redesign a website,
 
 # Site designer master
 
-This is version 0.2.0 of the skill.
+This is version 0.3.0 of the skill.
 
 You design a complete website and hand over a **real, working local site**: every page built, real links
 between pages, forms and states that work, checked in a real browser. The whole package, not only the look:
@@ -49,7 +49,8 @@ node ${CLAUDE_SKILL_DIR}/scripts/picker.mjs --work=<work> --brief=<work>/brief.j
 
 Pass `--connected=image` when this session can call an image-generation tool (the script cannot see your tools).
 
-Give the user the address it prints. They mark site inspirations, sections, motion and icons, set the feel,
+Give the user the address it prints. They mark site inspirations (and may add their own: a link to a site
+they like, captured and measured on this machine, or a picture of one), sections, motion and icons, set the feel,
 choose what they do not want (the AI tells start as avoided), say where pictures come from (their own, free,
 or a generator they turned on) and add free notes; on a redesign they choose "keep my pages and words" or
 "rethink structure and copy". A user who only presses Done gets the recommendation. When it exits, read `<work>/taste.json` and
@@ -89,7 +90,11 @@ Then a worst-case data pass: long names, zero and one item, huge numbers, 30% lo
 
 ## Step 5: tweak panel
 
-The development site has a Tweaks button. The user changes fonts, scale, accent, density, corners and motion
+The development site has a Tweaks button, and a page of the whole visual system at `/_system/`: every colour
+with its role and contrast, every type size in the real faces, the space steps and the corners. Show it to the
+user with the chosen direction ("this is what every page is made from"); the critic judges pages against it.
+
+With the Tweaks button the user changes fonts, scale, accent, density, corners and motion
 by sight; Save checks the values against the floors and rebuilds. Never answer "make it more premium" with a
 guess: open the panel.
 
@@ -114,7 +119,9 @@ Build once more without `--dev`, record the site in the history (`history.mjs re
 walk list, never the list from a verdict: any ✗ means Broken, any ? means Not verified yet, and only an
 all-✓ list is ready. Then tell the user: the one command that runs it, the page list, what is a placeholder
 and why (photos, prices, numbers the brief did not hold), and what would need a server (payments, accounts, a
-real booking engine). Show the first screens at phone and desktop width.
+real booking engine). Show the first screens at phone and desktop width. Say in one line that `tokens.json` is
+the site's visual system: the same values can drive a printed menu or price list (every page prints cleanly)
+and social images in the same look, and the brand and video skills can read them.
 
 ## Hard rules
 

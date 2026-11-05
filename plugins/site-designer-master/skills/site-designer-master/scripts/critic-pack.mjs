@@ -84,6 +84,9 @@ export function criticPack(siteDir, { brief = {}, meterReport = '', out }) {
         files.push(name);
       }
     }
+    // The visual system page of a development build: the critic judges every page against it.
+    const system = path.join(work, '_system', 'index.html');
+    if (fs.existsSync(system)) { fullPageShot(system, path.join(out, 'system-1440.png'), { width: 1440 }); files.push('system-1440.png'); }
   } finally {
     fs.rmSync(work, { recursive: true, force: true });
   }

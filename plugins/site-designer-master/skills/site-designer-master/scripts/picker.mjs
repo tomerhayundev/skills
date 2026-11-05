@@ -9,7 +9,9 @@ import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import path from 'node:path';
 import { SKILL_DIR, parseArgs, isMain, readJson } from './lib/cli.mjs';
-import { handlers, startServer } from './serve.mjs';
+import { handlers, startServer, readBody } from './serve.mjs';
+import { captureSite } from './capture.mjs';
+import { cleanDesign } from './lib/design-clean.mjs';
 import { loadLibrary, facets, queryLibrary, FACETS } from './library.mjs';
 import { buildPrompt } from './prompt.mjs';
 import { historyFile } from './history.mjs';
@@ -88,12 +90,42 @@ function pickHistory() {
   } catch { return {}; }
 }
 
+// The user's own references: a link they like (captured and measured like a library site) or a picture they
+// bring. They live in <work>/own/ and join the picks like any card.
+const OWN_PICTURE_MAX = 8 * 1024 * 1024;
+const ownFile = (work) => path.join(work, 'own', 'own.json');
+const readOwn = (work) => { try { return readJson(ownFile(work)); } catch { return []; } };
+function writeOwn(work, list) {
+  fs.mkdirSync(path.join(work, 'own'), { recursive: true });
+  fs.writeFileSync(ownFile(work), `${JSON.stringify(list, null, 2)}\n`);
+}
+function updateOwn(work, id, patch) { writeOwn(work, readOwn(work).map((e) => (e.id === id ? { ...e, ...patch } : e))); }
+const nextOwnId = (work) => `own-${readOwn(work).reduce((n, e) => Math.max(n, Number(e.id.slice(4)) || 0), 0) + 1}`;
+// Only a public web page: no files, no scripts, nothing on this machine or its home network.
+const PRIVATE_HOST = /^(localhost|.*\.localhost|.*\.local|0\.0\.0\.0|127\.\d+\.\d+\.\d+|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|169\.254\.\d+\.\d+|\[.*\])$/i;
+export function publicUrl(raw) {
+  let u;
+  try { u = new URL(String(raw || '').trim()); } catch { return null; }
+  if (!/^https?:$/.test(u.protocol) || !u.hostname.includes('.') || PRIVATE_HOST.test(u.hostname) || u.username || u.password) return null;
+  return u.href;
+}
+const PICTURE_TYPES = [['png', [0x89, 0x50, 0x4e, 0x47]], ['jpg', [0xff, 0xd8, 0xff]], ['webp', [0x52, 0x49, 0x46, 0x46]]];
+const pictureType = (buf) => (PICTURE_TYPES.find(([, magic]) => magic.every((b, i) => buf[i] === b)) || [])[0] || null;
+function ownCard(e) {
+  const at = (f) => (f ? `/_picker/work/own/${f}` : null);
+  return { id: e.id, shelf: 'sites', own: e.own, status: e.status, reason: e.reason || null, url: e.url || null, description: e.description, bestUse: [], tags: {}, preview: at(e.preview), large: at(e.large), phone: at(e.phone) };
+}
+// What the build prompt reads for an own pick: the entry with its measured design and, for a picture, its file.
+// Paths are full: own pictures sit in the work folder, not in the picture pack the library's paths start from.
+const ownEntries = (work) => readOwn(work).map((e) => ({ ...e, shelf: 'sites', file: e.own === 'picture' && e.preview ? path.join(work, 'own', e.preview) : null, phone: e.phone ? path.join(work, 'own', e.phone) : null }));
+
 function cardOf(e) {
   const own = (p) => `/_picker/library/${p}`;
   return { id: e.id, shelf: e.shelf, url: /^https?:/.test(e.url) ? e.url : own(e.url), description: e.description, bestUse: e.bestUse, he: e.he, tags: e.tags, added: e.added, preview: `/_picker/pack/${e.preview}`, large: e.large ? `/_picker/pack/${e.large}` : null, phone: e.phone ? `/_picker/pack/${e.phone}` : null, demo: e.demo ? own(e.demo) : null };
 }
 
-export function registerPicker({ work, brief, libraryDir = path.join(SKILL_DIR, 'assets', 'library'), connected = [] }) {
+// capture: how a link the user adds becomes pictures and a measured design (captureSite; tests pass their own).
+export function registerPicker({ work, brief, libraryDir = path.join(SKILL_DIR, 'assets', 'library'), connected = [], capture = captureSite }) {
   work = path.resolve(work);
   libraryDir = path.resolve(libraryDir);
   const lang = brief.lang || 'en';
@@ -132,6 +164,7 @@ export function registerPicker({ work, brief, libraryDir = path.join(SKILL_DIR, 
       if (!process.env.SITE_OFFLINE) checkAlive(me.work, r.items);
       return send(res, 200, { ...r, items: r.items.map(cardOf) });
     }
+    if (p === '/_picker/api/own') return send(res, 200, { items: readOwn(me.work).map(ownCard) });
     const cmp = /^\/_picker\/compare\/(directions|layouts)\/?$/.exec(p);
     if (cmp) return send(res, 200, comparePage(me, cmp[1]), TYPES['.html']);
     return send(res, 404, { error: 'not found' });
@@ -141,8 +174,33 @@ export function registerPicker({ work, brief, libraryDir = path.join(SKILL_DIR, 
     const me = instances.get(path.resolve(ctx.root));
     if (!me) return false;
     const p = ctx.url.pathname;
+    // A picture comes as its own bytes, larger than any other post; it is kept only if the bytes are a picture.
+    if (p === '/_picker/api/own-picture') {
+      const buf = await readBody(req, OWN_PICTURE_MAX, { raw: true });
+      const ext = pictureType(buf);
+      if (!ext) return send(res, 415, { error: 'only a PNG, JPEG or WebP picture can be added' });
+      const id = nextOwnId(me.work);
+      const name = String(ctx.url.searchParams.get('name') || 'picture').replace(/[^\p{L}\p{N} ._-]/gu, '').slice(0, 80) || 'picture';
+      const entry = { id, own: 'picture', status: 'ready', description: name, preview: `${id}.${ext}`, large: `${id}.${ext}`, added: new Date().toISOString() };
+      fs.mkdirSync(path.join(me.work, 'own'), { recursive: true });
+      fs.writeFileSync(path.join(me.work, 'own', entry.preview), buf);
+      writeOwn(me.work, [...readOwn(me.work), entry]);
+      return send(res, 200, ownCard(entry));
+    }
     let body = {};
     try { body = JSON.parse((await ctx.body()) || '{}'); } catch { return send(res, 400, { error: 'not JSON' }); }
+    if (p === '/_picker/api/own') {
+      const url = publicUrl(body.url);
+      if (!url) return send(res, 400, { error: 'paste a web address that starts with https://' });
+      const id = nextOwnId(me.work);
+      const entry = { id, own: 'link', status: 'capturing', url, description: new URL(url).hostname.replace(/^www\./, ''), added: new Date().toISOString() };
+      writeOwn(me.work, [...readOwn(me.work), entry]);
+      // About a minute: the answer comes now, the pictures when they exist (the app asks again).
+      capture(url, path.join(me.work, 'own'), id)
+        .then((r) => updateOwn(me.work, id, { status: 'ready', preview: r.preview, large: r.large, phone: r.phone, design: cleanDesign(r.design) }))
+        .catch((e) => updateOwn(me.work, id, { status: 'failed', reason: String(e.message || e).slice(0, 200) }));
+      return send(res, 200, ownCard(entry));
+    }
     if (p === '/_picker/api/state') {
       // Every save carries the revision it started from; a tab that is behind gets 409 and reloads instead of
       // overwriting what another tab saved.
@@ -164,7 +222,7 @@ export function registerPicker({ work, brief, libraryDir = path.join(SKILL_DIR, 
       }
       const taste = { ...s, picks, chosenBy, doneAt: new Date().toISOString() };
       await fsp.writeFile(path.join(me.work, 'taste.json'), `${JSON.stringify(taste, null, 2)}\n`);
-      await fsp.writeFile(path.join(me.work, 'build-prompt.md'), buildPrompt({ brief: s.brief, taste, entries: me.entries, dislikes: me.dislikeData.dislikes, imageTools: me.imageTools }));
+      await fsp.writeFile(path.join(me.work, 'build-prompt.md'), buildPrompt({ brief: s.brief, taste, entries: [...me.entries, ...ownEntries(me.work)], dislikes: me.dislikeData.dislikes, imageTools: me.imageTools }));
       return send(res, 200, { ok: true, taste: path.join(me.work, 'taste.json'), prompt: path.join(me.work, 'build-prompt.md') });
     }
     if (p === '/_picker/api/choose') {

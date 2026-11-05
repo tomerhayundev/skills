@@ -24,6 +24,11 @@ like and what they like about each, and go on with their words as the picks.
    client's industry. Every card shows its picture; a card without a picture is never shown. A tap on the
    picture picks it. "See it bigger" shows it on a computer and, when captured, on a phone side by side.
    Pictures are taken with cookie banners and pop-ups hidden; one still covered by a panel is refused.
+   Above the gallery the user can **bring their own**: paste a link to a site they like (pictured on this machine
+   in about a minute, at computer and phone width, with its design read like a library site) or add a picture of
+   one (PNG, JPEG or WebP up to 8 MB, checked by its bytes). Only public web addresses are taken: no files, nothing
+   on this machine or its home network. Their own references are picked the moment they are added and marked
+   "Yours"; they live in `<work>/own/`.
 3. **Sections**: heroes, navigation, pricing, forms, footers, 404 pages.
 4. **Motion**: our own demos grouped by topic (arriving, responding to touch, scrolling, between pages, no
    motion); every demo plays on its own in a loop, so they can be compared side by side (with reduced motion

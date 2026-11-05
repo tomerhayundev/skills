@@ -31,6 +31,12 @@ view; proof next to the ask; hierarchy you can read when squinting; a phone layo
 squeezed; rhythm (dense passages earn quiet ones); the copy in the business's own words; anything that reads
 as generated (see the slop catalogue); anything invented (numbers, reviews, names, people).
 
+## 3b. Against the system
+
+When the folder has `system-1440.png`, it shows every colour, type size, space and corner the site is made from.
+Name each place a page drifts from the system: a colour, a size or a corner that is not on that sheet, or the same
+part drawn two ways on two pages. One system used everywhere is what makes a site read as designed.
+
 ## 4. Premium is evidence
 
 Pretty gets a site chosen; evidence that it was cared for makes it feel worth more. Look for it:

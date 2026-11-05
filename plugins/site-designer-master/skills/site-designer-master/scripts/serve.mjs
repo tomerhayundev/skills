@@ -24,7 +24,8 @@ const TYPES = {
 // 'METHOD /prefix' -> async (req, res, ctx) => boolean (true when handled). ctx = { root, dataDir, srcDir, body() }.
 export const handlers = {};
 
-export function readBody(req, limit = MAX_BODY) {
+// raw: the bytes as they came (a picture), instead of text.
+export function readBody(req, limit = MAX_BODY, { raw = false } = {}) {
   return new Promise((resolve, reject) => {
     const chunks = [];
     let size = 0;
@@ -36,7 +37,7 @@ export function readBody(req, limit = MAX_BODY) {
       if (size > limit) { over = true; chunks.length = 0; reject(Object.assign(new Error('body too large'), { status: 413 })); return; }
       chunks.push(c);
     });
-    req.on('end', () => { if (!over) resolve(Buffer.concat(chunks).toString('utf8')); });
+    req.on('end', () => { if (!over) resolve(raw ? Buffer.concat(chunks) : Buffer.concat(chunks).toString('utf8')); });
     req.on('error', reject);
   });
 }

@@ -391,7 +391,23 @@
       "persuade pages": "pages that sell",
       "any interface": "any site"
     },
-    "doneShort": "Build"
+    "doneShort": "Build",
+    "own": {
+      "title": "A site you like that is not here?",
+      "hint": "Paste its address or add a picture of it. It joins your picks; the new site mixes ideas from it and never copies it.",
+      "address": "Its address",
+      "add": "Add it",
+      "or": "or",
+      "picture": "Add a picture",
+      "capturing": "Taking pictures of {name}, about a minute.",
+      "failed": "{name} could not be pictured; it stays in your picks as a link.",
+      "bad": "That is not a web address. Paste one like https://example.com.",
+      "tooBig": "That picture is over 8 MB. Add a smaller one.",
+      "notPicture": "That file is not a picture. Add a PNG, JPEG or WebP.",
+      "yours": "Yours",
+      "linkLine": "A site you brought",
+      "pictureLine": "A picture you brought"
+    }
   },
   "he": {
     "title": "בחרו מה אתם אוהבים",
@@ -771,6 +787,22 @@
     "onPhone": "בטלפון",
     "tapToPick": "הקישו על התמונה לבחירה",
     "change": "שינוי",
-    "doneShort": "לבנות"
+    "doneShort": "לבנות",
+    "own": {
+      "title": "אתר שאהבתם ולא מופיע כאן?",
+      "hint": "הדביקו את הכתובת שלו או הוסיפו תמונה שלו. הוא מצטרף לבחירות שלכם; האתר החדש לוקח ממנו רעיונות ולעולם לא מעתיק אותו.",
+      "address": "הכתובת שלו",
+      "add": "הוספה",
+      "or": "או",
+      "picture": "הוספת תמונה",
+      "capturing": "מצלמים את {name}, בערך דקה.",
+      "failed": "לא הצלחנו לצלם את {name}; הוא נשאר בבחירות שלכם כקישור.",
+      "bad": "זו לא כתובת אתר. הדביקו כתובת כמו https://example.com.",
+      "tooBig": "התמונה גדולה מ־8MB. הוסיפו תמונה קטנה יותר.",
+      "notPicture": "הקובץ הזה אינו תמונה. הוסיפו PNG, JPEG או WebP.",
+      "yours": "שלכם",
+      "linkLine": "אתר שהבאתם",
+      "pictureLine": "תמונה שהבאתם"
+    }
   }
 }

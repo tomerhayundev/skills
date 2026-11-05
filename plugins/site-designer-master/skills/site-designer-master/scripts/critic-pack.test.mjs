@@ -51,3 +51,10 @@ test('the critic names the feeling of the first screens before reading the brief
   assert.match(md, /- \*\*firstFeeling\*\*: calm \(one photo, one line\)/);
   assert.match(md, /the end of each journey/i);
 });
+
+test('the critic is told to judge pages against the system page when the pack has it', async () => {
+  const { criticIndex } = await import('./critic-pack.mjs');
+  const md = criticIndex({ brief: {}, meterReport: '', files: ['system-1440.png', 'first-375.png'] });
+  assert.match(md, /system-1440\.png/);
+  assert.match(md, /drifts from the system/i);
+});
