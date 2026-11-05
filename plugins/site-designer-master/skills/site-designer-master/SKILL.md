@@ -5,7 +5,7 @@ description: Use when someone asks to design, build, make or redesign a website,
 
 # Site designer master
 
-This is version 0.1.0 of the skill.
+This is version 0.2.0 of the skill.
 
 You design a complete website and hand over a **real, working local site**: every page built, real links
 between pages, forms and states that work, checked in a real browser. The whole package, not only the look:
@@ -26,8 +26,8 @@ line and stop before building. No API keys. Nothing is deployed or uploaded: the
    "keep my words" redesign they are used as they are.
 3. Brand: if a brand file from brand-identity-master exists, use its tokens. Else read the logo and the current
    site. Never invent a palette when a logo exists.
-4. Draft the brief ([brief](references/brief.md)): site type, mode per page, the one action, who arrives,
-   real proof, the client's own things, the sitemap with section order.
+4. Draft the brief ([brief](references/brief.md)): site type, mode per page, the one action, the first
+   feeling, who arrives, real proof, the client's own things, the sitemap with section order.
 5. The reference archive ([real references](references/real-references.md)). Look at your tools for the
    archive's (`recommend`, `search_screens`, `find_components`). If they are missing, recommend it in the
    user's language, in two plain sentences, and ask yes or no; this and the picker are the only questions:

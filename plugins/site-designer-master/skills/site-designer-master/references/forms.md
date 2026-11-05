@@ -21,6 +21,7 @@ the site kit's script then hides the form and shows the block marked `data-sent`
 | Mark the optional fields when most are required. | |
 | Validate when a field is left, not on every keystroke; the error sits under the field, says how to fix it, and is linked with `aria-describedby`. After a failed submit, an error summary at the top takes focus. | /_review/ |
 | The submit button says what happens, shows a busy state and blocks a double submit; success replaces the form with what happens next. | meter rule BUTTON_TEXT |
+| Success is a moment, not a bare "Sent": it thanks in the site's voice and says what happens next and when. People remember a visit by its best moment and its end; this is often both. | the walk list, the critic |
 | Paste and password managers always work; no puzzle a person must solve. | |
 | Phone, date and address accept local formats with spaces and dashes. | |
 | What a real back end would need (payment, accounts, a booking engine) is designed and marked as such in the handover. | Step 7 |

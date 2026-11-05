@@ -10,7 +10,12 @@ Look at `first-375.png` for five seconds, then at `first-1440.png`. Without look
 - who it is for;
 - what to do next (the one action).
 
-Compare with the brief's primary action. If any of the three is missing or wrong, the test fails.
+Then, still before reading the brief, write the one word for the feeling they give (calm, confident, warm,
+exciting…). A visitor judges the whole site by this first view: a good one lends its quality to everything behind
+it, a cheap one makes them read the rest with suspicion.
+
+Compare with the brief's primary action. If any of the three is missing or wrong, the test fails. If the brief's
+first feeling is not what you wrote, the test fails too: name what in the first screen gives the wrong feeling.
 
 ## 2. Against the user's picks
 
@@ -31,8 +36,14 @@ as generated (see the slop catalogue); anything invented (numbers, reviews, name
 Pretty gets a site chosen; evidence that it was cared for makes it feel worth more. Look for it:
 - every action says what happened, whether it can be undone, and what to do next;
 - the bad moments (an error, an empty list, a limit) are designed, with a way forward;
-- the same situation looks and reads the same on every page.
+- the same situation looks and reads the same on every page;
+- the end of each journey is designed: the success screen after the primary action thanks in the site's voice and
+  says what happens next, and every page ends on purpose, not trailing off. People remember a visit by its best
+  moment and its end, not by its average.
 A site that looks right but leaves these out is "design theater": name each gap you see.
+
+Then ask of every page, as a first-time visitor: what could be removed? Name each section, link or line whose job
+you cannot say. What is simple to the maker is often not simple to a visitor.
 
 ## 5. Score
 

@@ -331,6 +331,25 @@
       ],
       "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/site-designer-master",
       "license": "CC-BY-ND-4.0"
+    },
+    {
+      "name": "video-study",
+      "description": "Studies a video properly: the full transcript and a frame every 4 seconds as contact sheets, compared before any conclusion, then notes that end with candidates for the owner",
+      "source": "./plugins/video-study",
+      "author": {
+        "name": "Tomer Hayun",
+        "url": "https://github.com/tomerhayundev"
+      },
+      "category": "development",
+      "homepage": "https://github.com/tomerhayundev/skills/tree/main/plugins/video-study",
+      "license": "CC-BY-ND-4.0",
+      "keywords": [
+        "video",
+        "youtube",
+        "transcript",
+        "research",
+        "learning"
+      ]
     }
   ],
   "renames": {

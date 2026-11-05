@@ -55,3 +55,16 @@ test('the walk breaks things on purpose and checks that every state says what ha
   assert.match(md, /\? Every action answers three questions: what just happened, can I take it back, what do I do next/);
   assert.match(md, /\? The same situation looks and reads the same on every page/);
 });
+
+test('every page gets a removal pass: each section names its one job, and what has none is cut or defended', () => {
+  const md = walkList(built(), { url: 'http://127.0.0.1:4321' });
+  assert.match(md, /^## Remove$/m);
+  for (const p of ['/', '/about/', '/contact/']) assert.ok(md.includes(`? ${p}: every section names its one job; what has none is cut, or the report says why it stays`), p);
+  assert.match(md, /read it as a first-time visitor/);
+});
+
+test('the walk checks the end of each journey as a designed moment, not only its start', () => {
+  const md = walkList(built(), { url: 'http://127.0.0.1:4321' });
+  assert.match(md, /\? Form "contact" on \/contact\/: the success block is a moment, not a bare "Sent": it thanks in the site's voice and says what happens next and when/);
+  assert.match(md, /\? The last section before the footer on every page ends the visit on purpose \(the primary action or a closing line\)/);
+});

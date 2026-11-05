@@ -20,6 +20,7 @@ the critic reads it.
 | `facts` | Real facts the copy may use: hours, address, prices, years | "Open 7:00-14:00, closed Saturday" |
 | `ownThings` | 8-12 things only this business has: street, materials, rituals, products by name | "the 5am bake", "the blue door" |
 | `rut` | What this category always ships, and its predictable opposite; both stay out unless picked | "rustic kraft paper and script logos / sterile white minimal" |
+| `firstFeeling` | The one feeling the first screen gives, chosen from the business and the ask, and what makes it visible | `{ "word": "warm", "shows": "a photo of the morning bake, one line, honey colour" }` |
 | `checks` | Every mood word the ask uses ("modern", "premium", "warm"), turned into something that can be seen and checked; a word that cannot be checked is dropped | "premium" → "one accent, no stock photos, every price stated with what it includes" |
 | `voice` | Words the business would say, and words it would never say | `{ "would": ["baked", "by hand", "the corner"], "never": ["artisanal journey", "elevate", "cheap"] }` |
 | `sitemap` | Pages with the section order of each, chosen from the visitor's questions | |
@@ -37,6 +38,11 @@ the critic reads it.
   how it works, what it costs, objections, the ask. Choose per site type and say why in one line.
 - `proof` holds only what you can point to. A missing proof becomes a visible placeholder in the copy
   ("[number of regular customers]") for the owner to fill, never an invented number (meter rule UNSOURCED_NUMBER).
+- `firstFeeling` is one word, not three. A visitor judges the site in a fraction of a second, and that first view
+  lends its quality, good or bad, to everything behind it. The critic names the feeling of the first screens
+  before reading this field; a mismatch fails the 5-second test. It is the business's feeling, not luxury by
+  default: a bakery's may be warm, a clinic's calm, a gig's exciting. Calm comes from clear prices and hours as
+  much as from white space; never empty a page to look expensive.
 - A mood word is not a brief: two designers read "premium" in opposite ways. Each one becomes a line in `checks`
   that the critic and the walk look for.
 - On a "keep" redesign, the current pages and words go into the sitemap and the copy unchanged, even where

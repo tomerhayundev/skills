@@ -37,6 +37,8 @@ export function buildPrompt({ brief = {}, taste = {}, entries = [], dislikes = [
   L('');
   L(`Style families picked: ${list(families)}. Moods: ${list(moods)}.`);
   L('Build 4-5 directions inside these families, each different on a named axis (layout, density, type, motion, image treatment), never only on colour.');
+  const ff = brief.firstFeeling;
+  if (ff && ff.word) L(`First feeling: ${ff.word}. The first screen is built around it${ff.shows ? `: ${ff.shows}` : ''}.`);
   L('');
   L('## References');
   L('');

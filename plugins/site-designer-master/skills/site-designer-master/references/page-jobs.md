@@ -5,6 +5,7 @@ Every page and every section exists for a reason a visitor would recognise. Name
 | Rule | Check |
 | --- | --- |
 | **The 5-second test.** The first screen says what this is, who it is for, and what to do next. The headline names the offer concretely; a clever line may follow, never lead. | the critic, on first-375.png and first-1440.png |
+| **The removal pass.** Before the walk, ask of every page as a first-time visitor: what can be removed? Each section names its one job; a section, link or line with none is cut, or the report says why it stays. Simple to the maker is not simple to a visitor. | the walk list, Remove; the critic |
 | **One primary action per view.** One filled button per section; the second action is a text link. | meter rule PRIMARY_PER_VIEW |
 | Button text is a verb plus an object: what happens when it is pressed. Never "Submit", "Learn more", "Click here". | meter rule BUTTON_TEXT |
 | **Proof sits next to the ask:** a review, a number from the brief or a real photo beside each primary button after the hero. | the critic |

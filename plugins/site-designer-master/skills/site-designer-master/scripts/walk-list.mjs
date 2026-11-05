@@ -41,6 +41,12 @@ export function walkList(siteDir, { url = 'http://127.0.0.1:4321' } = {}) {
   L('');
   for (const p of list) for (const w of [375, 1440]) L(`- ? ${p.path} at ${w}px, top to bottom to the page end`);
   L('');
+  L('## Remove');
+  L('');
+  L('Simple to the maker is not simple to a visitor: read it as a first-time visitor. Cuts go in the report.');
+  L('');
+  for (const p of list) if (p.path !== '/_review/') L(`- ? ${p.path}: every section names its one job; what has none is cut, or the report says why it stays`);
+  L('');
   L('## Use it');
   L('');
   L(`- ? Every navigation link (${navLinks.size}) reaches its page, by real clicks`);
@@ -50,6 +56,7 @@ export function walkList(siteDir, { url = 'http://127.0.0.1:4321' } = {}) {
       if (p.path === '/_review/') continue;
       L(`- ? Form "${m[1]}" on ${p.path}: submit real values; the success block shows; .site-data/submissions.jsonl gains one line`);
       L(`- ? Form "${m[1]}" on ${p.path}: submit it empty or wrong; the error says how to fix it and focus goes to it`);
+      L(`- ? Form "${m[1]}" on ${p.path}: the success block is a moment, not a bare "Sent": it thanks in the site's voice and says what happens next and when`);
     }
   }
   L(`- ? 404: ${url}/no-such-page/ shows the 404 page and its links work`);
@@ -77,6 +84,7 @@ export function walkList(siteDir, { url = 'http://127.0.0.1:4321' } = {}) {
   L('- ? The console: every error read, none waved off');
   if (rtl) L('- ? Right to left: text runs right to left, email and phone inputs read left to right, panels open from the right, arrows point the reading way');
   L('- ? The page end: the footer is complete and nothing trails off');
+  L('- ? The last section before the footer on every page ends the visit on purpose (the primary action or a closing line): people remember a visit by its best moment and its end');
   L('');
   return `${lines.join('\n')}\n`;
 }

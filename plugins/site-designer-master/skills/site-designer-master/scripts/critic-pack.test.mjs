@@ -42,3 +42,12 @@ test('review 8: a full-screen hero stays one screen tall in the full-page pictur
   assert.deepEqual(px(950), [0, 255, 0]);
   assert.deepEqual(px(1890), [0, 255, 0]);
 });
+
+test('the critic names the feeling of the first screens before reading the brief\'s, and a mismatch fails the test', async () => {
+  const { criticIndex } = await import('./critic-pack.mjs');
+  const md = criticIndex({ brief: { primaryAction: 'Book a visit', firstFeeling: { word: 'calm', shows: 'one photo, one line' } }, meterReport: '', files: ['first-375.png'] });
+  assert.match(md, /write the one word for the\s+feeling they give/i);
+  assert.match(md, /the brief's\s+first feeling is not what you wrote, the test fails/i);
+  assert.match(md, /- \*\*firstFeeling\*\*: calm \(one photo, one line\)/);
+  assert.match(md, /the end of each journey/i);
+});

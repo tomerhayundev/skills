@@ -4,6 +4,10 @@ Motion has a job: feedback (this worked), orientation (where this came from), or
 persuade or experience page. Not every element. The user's motion picks set the character; these numbers
 set the limits.
 
+Delight is feedback, not decoration. A visit is remembered by its best moments and its end, and the good
+moments come from answers to what the visitor did: the press that responds, the field that confirms, the form
+that lands well. Animating everything on load and on scroll is not more care; it is the slop the catalogue lists.
+
 | Item | Default |
 | --- | --- |
 | Durations | micro feedback 100-150 ms; UI transitions 200-300 ms; one authored entrance per page up to about 600 ms; exits about 70% of entrances. |

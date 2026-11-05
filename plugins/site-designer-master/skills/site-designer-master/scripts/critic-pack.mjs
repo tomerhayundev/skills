@@ -55,7 +55,14 @@ export function fullPageShot(file, out, { width, viewport = 900 } = {}) {
 }
 
 function briefMd(brief) {
-  return Object.entries(brief || {}).map(([k, v]) => `- **${k}**: ${typeof v === 'string' ? v : JSON.stringify(v)}`).join('\n');
+  const show = (k, v) => (k === 'firstFeeling' && v?.word ? `${v.word}${v.shows ? ` (${v.shows})` : ''}` : typeof v === 'string' ? v : JSON.stringify(v));
+  return Object.entries(brief || {}).map(([k, v]) => `- **${k}**: ${show(k, v)}`).join('\n');
+}
+
+// The critic's index.md: its instructions, the brief, the meter's report and the list of screenshots.
+export function criticIndex({ brief = {}, meterReport = '', files = [] }) {
+  const prompt = fs.readFileSync(path.join(SKILL_DIR, 'assets', 'critic-prompt.md'), 'utf8');
+  return `${prompt}\n## The brief\n\n${briefMd(brief)}\n\n## The meter's report\n\n\`\`\`\n${meterReport || '(not run)'}\n\`\`\`\n\n## Screenshots\n\n${files.map((f) => `- ${f}`).join('\n')}\n`;
 }
 
 export function criticPack(siteDir, { brief = {}, meterReport = '', out }) {
@@ -80,9 +87,7 @@ export function criticPack(siteDir, { brief = {}, meterReport = '', out }) {
   } finally {
     fs.rmSync(work, { recursive: true, force: true });
   }
-  const prompt = fs.readFileSync(path.join(SKILL_DIR, 'assets', 'critic-prompt.md'), 'utf8');
-  const md = `${prompt}\n## The brief\n\n${briefMd(brief)}\n\n## The meter's report\n\n\`\`\`\n${meterReport || '(not run)'}\n\`\`\`\n\n## Screenshots\n\n${files.map((f) => `- ${f}`).join('\n')}\n`;
-  writeText(path.join(out, 'index.md'), md);
+  writeText(path.join(out, 'index.md'), criticIndex({ brief, meterReport, files }));
   files.push('index.md');
   return { files };
 }
