@@ -12,6 +12,7 @@ import { SKILL_DIR, parseArgs, isMain, readJson } from './lib/cli.mjs';
 import { handlers, startServer, readBody } from './serve.mjs';
 import { captureSite } from './capture.mjs';
 import { cleanDesign } from './lib/design-clean.mjs';
+import { checkPublic } from './lib/public-host.mjs';
 import { loadLibrary, facets, queryLibrary, FACETS } from './library.mjs';
 import { buildPrompt } from './prompt.mjs';
 import { historyFile } from './history.mjs';
@@ -125,7 +126,8 @@ function cardOf(e) {
 }
 
 // capture: how a link the user adds becomes pictures and a measured design (captureSite; tests pass their own).
-export function registerPicker({ work, brief, libraryDir = path.join(SKILL_DIR, 'assets', 'library'), connected = [], capture = captureSite }) {
+// lookup: how a name becomes addresses (the system resolver; tests pass their own).
+export function registerPicker({ work, brief, libraryDir = path.join(SKILL_DIR, 'assets', 'library'), connected = [], capture = captureSite, lookup }) {
   work = path.resolve(work);
   libraryDir = path.resolve(libraryDir);
   const lang = brief.lang || 'en';
@@ -191,12 +193,14 @@ export function registerPicker({ work, brief, libraryDir = path.join(SKILL_DIR, 
     try { body = JSON.parse((await ctx.body()) || '{}'); } catch { return send(res, 400, { error: 'not JSON' }); }
     if (p === '/_picker/api/own') {
       const url = publicUrl(body.url);
-      if (!url) return send(res, 400, { error: 'paste a web address that starts with https://' });
+      // The name is resolved too: a public-looking name can lead to this machine or its network.
+      const allow = (u) => checkPublic(u, lookup);
+      if (!url || !(await allow(url))) return send(res, 400, { error: 'paste a web address that starts with https:// and leads to a public site' });
       const id = nextOwnId(me.work);
       const entry = { id, own: 'link', status: 'capturing', url, description: new URL(url).hostname.replace(/^www\./, ''), added: new Date().toISOString() };
       writeOwn(me.work, [...readOwn(me.work), entry]);
       // About a minute: the answer comes now, the pictures when they exist (the app asks again).
-      capture(url, path.join(me.work, 'own'), id)
+      capture(url, path.join(me.work, 'own'), id, { allow })
         .then((r) => updateOwn(me.work, id, { status: 'ready', preview: r.preview, large: r.large, phone: r.phone, design: cleanDesign(r.design) }))
         .catch((e) => updateOwn(me.work, id, { status: 'failed', reason: String(e.message || e).slice(0, 200) }));
       return send(res, 200, ownCard(entry));

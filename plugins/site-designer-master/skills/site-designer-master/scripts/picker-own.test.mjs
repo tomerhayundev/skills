@@ -17,8 +17,11 @@ const captured = [];
 let release;
 const gate = new Promise((r) => { release = r; });
 // Stands in for the real capture (Chrome and the network): writes the three pictures and a measured design.
-async function fakeCapture(url, outDir, id) {
+const options = [];
+const lookup = async (host) => (host === 'internal.example' ? [{ address: '10.0.0.5' }] : [{ address: '93.184.216.34' }]);
+async function fakeCapture(url, outDir, id, opts = {}) {
   captured.push(url);
+  options.push(opts);
   await gate;
   if (/fails\.example/.test(url)) throw new Error('the page did not load');
   for (const f of [`${id}.webp`, `${id}-large.webp`, `${id}-phone.webp`]) fs.writeFileSync(path.join(outDir, f), 'WEBP');
@@ -27,7 +30,7 @@ async function fakeCapture(url, outDir, id) {
 }
 let srv;
 before(async () => {
-  registerPicker({ work, brief, libraryDir: lib, capture: fakeCapture });
+  registerPicker({ work, brief, libraryDir: lib, capture: fakeCapture, lookup });
   srv = await startServer({ root: work, dataDir: tmp(), port: 0 });
 });
 after(() => srv.close());
@@ -45,11 +48,24 @@ test('only a public web address can be added as your own reference', async () =>
   assert.deepEqual(captured, []);
 });
 
+test('a name that leads to a private address is refused before anything is fetched', async () => {
+  const r = await post('/_picker/api/own', { url: 'https://internal.example/admin' });
+  assert.equal(r.status, 400);
+  assert.match((await r.json()).error, /a web address/);
+  assert.equal(captured.includes('https://internal.example/admin'), false);
+});
+
 test('a link you add is captured in the background, shown once its pictures exist, and its measured values are cleaned', async () => {
   const r = await post('/_picker/api/own', { url: 'https://studio.example/work' });
   assert.equal(r.status, 200);
   const added = await r.json();
   assert.equal(added.status, 'capturing');
+  // The capture checks every redirect and the page it lands on with the same rule.
+  const allow = options.at(-1).allow;
+  assert.equal(typeof allow, 'function');
+  assert.equal(await allow('https://studio.example/next'), true);
+  assert.equal(await allow('http://192.168.0.1/'), false);
+  assert.equal(await allow('https://internal.example/'), false);
   assert.match(added.id, /^own-\d+$/);
   // While it is captured there is no picture, so it is not a card yet.
   const during = await (await get('/_picker/api/own')).json();
