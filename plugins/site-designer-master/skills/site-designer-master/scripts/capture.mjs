@@ -102,20 +102,10 @@ export function hashDistance(a, b) {
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36';
 const NOT_ALLOWED = (url) => new Error(`no picture: ${url} leads to this machine or its network, so it is not opened`);
-// allow: when given, every address on the way (the first and each redirect) must pass it before it is asked.
-async function reachable(url, timeoutMs, allow) {
+async function reachable(url, timeoutMs) {
   if (!/^https?:/i.test(url)) return;
-  const signal = AbortSignal.timeout(timeoutMs);
-  let at = url;
-  for (let hop = 0; hop < 6; hop++) {
-    if (allow && !(await allow(at))) throw NOT_ALLOWED(at);
-    const res = await fetch(at, { redirect: allow ? 'manual' : 'follow', signal, headers: { 'user-agent': UA } }).catch((e) => ({ ok: false, status: e.name }));
-    const next = allow && res.status >= 300 && res.status < 400 && res.headers?.get('location');
-    if (next) { at = new URL(next, at).href; continue; }
-    if (!res.ok) throw new Error(`no picture: ${url} answered ${res.status}`);
-    return;
-  }
-  throw new Error(`no picture: ${url} redirects too many times`);
+  const res = await fetch(url, { redirect: 'follow', signal: AbortSignal.timeout(timeoutMs), headers: { 'user-agent': UA } }).catch((e) => ({ ok: false, status: e.name }));
+  if (!res.ok) throw new Error(`no picture: ${url} answered ${res.status}`);
 }
 
 // The browser draws the screenshot onto a canvas and hands back WebP. The PNG goes in as a data address so the
@@ -224,17 +214,21 @@ export async function readSiteDesign(url, { timeoutMs = 60000, settleMs = 2500 }
 }
 
 // A live site: desktop and phone first screens with pop-ups hidden, and the design read from the desktop page.
-export async function captureSite(url, outDir, id, { timeoutMs = 60000, settleMs = 2500, allow } = {}) {
-  await reachable(url, Math.min(timeoutMs, 20000), allow);
+// egress: for a link nobody vetted (one the user brought). The browser then reaches the internet only through a gate
+// that refuses this machine and its network (lib/egress-proxy.mjs), and no request leaves this process unguarded:
+// the reachability check is skipped, a page that does not load says so when it is opened.
+export async function captureSite(url, outDir, id, { timeoutMs = 60000, settleMs = 2500, egress } = {}) {
+  if (egress) { if (!(await egress(new URL(url).hostname))) throw NOT_ALLOWED(url); }
+  else await reachable(url, Math.min(timeoutMs, 20000));
   const work = fs.mkdtempSync(path.join(os.tmpdir(), 'sdm-capture-'));
-  const browser = await openBrowser();
+  const browser = await openBrowser({ egress });
   try {
     const shoot = async (opts, label) => {
       let page;
-      try { page = await browser.open(url, { ...opts, loadMs: timeoutMs, settleMs, allow }); } catch (e) { throw new Error(`no picture: ${url} did not render (${e.message})`); }
+      try { page = await browser.open(url, { ...opts, loadMs: timeoutMs, settleMs }); } catch (e) { throw new Error(`no picture: ${url} did not render (${e.message})`); }
       try {
-        // Where the browser landed after its own redirects is checked again before anything is kept.
-        if (allow) { const landed = await page.eval('location.href'); if (!(await allow(landed))) throw NOT_ALLOWED(landed); }
+        // A refused host answers 403 through the gate; a page that ended up there is not kept.
+        if (egress && browser.refused.size) { const landed = new URL(await page.eval('location.href')).hostname; if (browser.refused.has(landed)) throw NOT_ALLOWED(landed); }
         let cleaned = await page.eval(CLEAN);
         // A curtain or intro that lifts by itself is waited for (up to about five seconds) before refusing.
         for (let i = 0; i < 2 && cleaned.covered > COVERED_MAX; i++) {

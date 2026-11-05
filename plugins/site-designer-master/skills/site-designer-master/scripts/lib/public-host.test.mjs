@@ -23,12 +23,15 @@ test('a name is public only when every address it leads to is public', async () 
   assert.equal(await checkPublic('file:///etc/passwd', lookup), false);
 });
 
-test('one rule per capture resolves each name once, and still refuses what is private', async () => {
-  const { publicRule } = await import('./public-host.mjs');
+test('the gate answers each host with one checked address, the same one every time, or refuses it', async () => {
+  const { hostGate } = await import('./public-host.mjs');
   let asked = 0;
-  const allow = publicRule(async (host) => { asked++; return host === 'cdn.example' ? [{ address: '151.101.1.1' }] : [{ address: '192.168.0.9' }]; });
-  for (let i = 0; i < 5; i++) assert.equal(await allow(`https://cdn.example/img-${i}.png`), true);
-  assert.equal(asked, 1);
-  assert.equal(await allow('https://router.example/'), false);
-  assert.equal(await allow('http://10.0.0.1/'), false);
+  const gate = hostGate(async (host) => { asked++; return host === 'cdn.example' ? [{ address: '151.101.1.1' }, { address: '151.101.65.1' }] : host === 'mixed.example' ? [{ address: '151.101.1.1' }, { address: '10.0.0.1' }] : [{ address: '192.168.0.9' }]; });
+  for (let i = 0; i < 5; i++) assert.equal(await gate('cdn.example'), '151.101.1.1');
+  assert.equal(asked, 1, 'resolved once, then pinned');
+  assert.equal(await gate('router.example'), null);
+  assert.equal(await gate('mixed.example'), null, 'one private answer refuses the name');
+  assert.equal(await gate('10.0.0.1'), null);
+  assert.equal(await gate('93.184.216.34'), '93.184.216.34');
+  assert.equal(await gate('localhost'), null);
 });

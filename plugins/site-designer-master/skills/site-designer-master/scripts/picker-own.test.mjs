@@ -60,12 +60,12 @@ test('a link you add is captured in the background, shown once its pictures exis
   assert.equal(r.status, 200);
   const added = await r.json();
   assert.equal(added.status, 'capturing');
-  // The capture checks every redirect and the page it lands on with the same rule.
-  const allow = options.at(-1).allow;
-  assert.equal(typeof allow, 'function');
-  assert.equal(await allow('https://studio.example/next'), true);
-  assert.equal(await allow('http://192.168.0.1/'), false);
-  assert.equal(await allow('https://internal.example/'), false);
+  // The capture's browser can only go out through a gate that pins each host to a checked public address.
+  const egress = options.at(-1).egress;
+  assert.equal(typeof egress, 'function');
+  assert.equal(await egress('studio.example'), '93.184.216.34');
+  assert.equal(await egress('192.168.0.1'), null);
+  assert.equal(await egress('internal.example'), null);
   assert.match(added.id, /^own-\d+$/);
   // While it is captured there is no picture, so it is not a card yet.
   const during = await (await get('/_picker/api/own')).json();

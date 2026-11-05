@@ -156,46 +156,33 @@ test('a loading screen still drawn over the page is hidden like a pop-up', { ski
   } finally { await browser.close(); local.close(); }
 });
 
-test('with an allow rule, every request the page makes is checked in the browser and refused ones are never sent', { skip, timeout: 60000 }, async () => {
+test('a guarded browser reaches nothing the gate refuses: frames, pictures, fetches, sockets, pop-ups and workers', { skip, timeout: 60000 }, async () => {
   const seen = [];
   const s2 = http.createServer((req, res) => {
-    seen.push(req.url);
-    res.writeHead(200, { 'content-type': 'text/html' });
-    res.end(req.url === '/page' ? '<!doctype html><body><h1>Page</h1><img src="/secret.png"><iframe src="/frame"></iframe><script>fetch("/api").catch(function(){}); document.title = "ran";</script>' : 'x');
+    seen.push(`${req.headers.host.split(':')[0]}${req.url}`);
+    res.writeHead(200, { 'content-type': req.url.endsWith('.js') ? 'text/javascript' : 'text/html' });
+    const other = `localhost:${s2.address().port}`;
+    if (req.url === '/page') return res.end(`<!doctype html><body><h1>Page</h1><img src="http://${other}/pic.png"><iframe src="http://${other}/frame"></iframe>
+<script>
+fetch("http://${other}/api").catch(function(){});
+try { new WebSocket("ws://${other}/sock"); } catch (e) {}
+try { window.open("http://${other}/popup"); } catch (e) {}
+try { new Worker("http://${other}/worker.js"); } catch (e) {}
+try { navigator.serviceWorker && navigator.serviceWorker.register("/sw.js").catch(function(){}); } catch (e) {}
+document.title = "ran";
+</script>`);
+    res.end('self.x = 1;');
   });
   await new Promise((r) => s2.listen(0, '127.0.0.1', r));
   const at = `http://127.0.0.1:${s2.address().port}`;
-  const browser = await openBrowser();
+  // The gate allows only 127.0.0.1 (the page itself) and refuses the name localhost, standing in for a private host.
+  const browser = await openBrowser({ egress: async (host) => (host === '127.0.0.1' ? '127.0.0.1' : null) });
   try {
-    const asked = [];
-    const allow = async (u) => { asked.push(u); return new URL(u).pathname === '/page'; };
-    const page = await browser.open(`${at}/page`, { allow, settleMs: 800 });
-    assert.equal(await page.eval('document.title'), 'ran', 'the allowed page still loads and runs');
-    assert.deepEqual(seen, ['/page'], 'nothing refused ever reached the server');
-    for (const p of ['/secret.png', '/frame', '/api']) assert.ok(asked.some((u) => u.endsWith(p)), `${p} was checked`);
-    await assert.rejects(browser.open(`${at}/elsewhere`, { allow }), /refused|did not open/);
-    assert.equal(seen.includes('/elsewhere'), false);
-  } finally { await browser.close(); s2.close(); }
-});
-
-test('a frame from another site is guarded too: its own refused requests never leave', { skip, timeout: 60000 }, async () => {
-  const seen = [];
-  const s3 = http.createServer((req, res) => {
-    seen.push(`${req.headers.host.split(':')[0]}${req.url}`);
-    res.writeHead(200, { 'content-type': 'text/html' });
-    const port = s3.address().port;
-    if (req.url === '/page') return res.end(`<!doctype html><body><h1>Page</h1><iframe src="http://localhost:${port}/frame"></iframe>`);
-    if (req.url === '/frame') return res.end('<!doctype html><body>frame<img src="/inner.png"><script>fetch("/inner-api").catch(function(){})</script>');
-    res.end('x');
-  });
-  await new Promise((r) => s3.listen(0, '127.0.0.1', r));
-  const at = `http://127.0.0.1:${s3.address().port}`;
-  const browser = await openBrowser();
-  try {
-    const allow = async (u) => ['/page', '/frame'].includes(new URL(u).pathname);
-    const page = await browser.open(`${at}/page`, { allow, settleMs: 1500 });
+    const page = await browser.open(`${at}/page`, { settleMs: 1500 });
+    assert.equal(await page.eval('document.title'), 'ran', 'the allowed page loads and runs');
     await page.close();
-    assert.ok(seen.includes('localhost/frame'), `the allowed frame loaded (${seen.join(', ')})`);
-    assert.equal(seen.some((p) => p.includes('/inner')), false, `nothing refused left the frame (${seen.join(', ')})`);
-  } finally { await browser.close(); s3.close(); }
+    assert.ok(seen.includes('127.0.0.1/page'), 'the page came through the gate');
+    assert.equal(seen.some((p) => p.startsWith('localhost')), false, `nothing refused got through (${seen.join(', ')})`);
+    assert.ok(browser.refused.has('localhost'), 'the gate saw and refused it');
+  } finally { await browser.close(); s2.close(); }
 });

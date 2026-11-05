@@ -154,6 +154,6 @@ test('a screen still loading is waited for before its design is read, never read
 test('a capture whose address is not allowed stops before anything is fetched or opened', async () => {
   const { captureSite } = await import('./capture.mjs');
   let asked = 0;
-  await assert.rejects(captureSite('http://127.0.0.1:9/', fs.mkdtempSync(path.join(os.tmpdir(), 'sdm-')), 'x', { allow: async () => { asked++; return false; } }), /this machine or its network/);
+  await assert.rejects(captureSite('http://127.0.0.1:9/', fs.mkdtempSync(path.join(os.tmpdir(), 'sdm-')), 'x', { egress: async () => { asked++; return null; } }), /this machine or its network/);
   assert.equal(asked, 1);
 });

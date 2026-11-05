@@ -45,18 +45,22 @@ function hextets(ip) {
   return [...H, ...Array(8 - H.length - T.length).fill(0), ...T];
 }
 
-// One rule for a whole capture: each name is resolved once and remembered for a minute, so a page with many
-// pictures does not ask the resolver for every one.
-export function publicRule(lookup = dns.lookup) {
-  const seen = new Map();
-  return (raw) => {
-    let host;
-    try { host = new URL(raw).host; } catch { return Promise.resolve(false); }
-    const hit = seen.get(host);
-    if (hit && Date.now() - hit.at < 60000) return hit.ok.then((ok) => ok && /^https?:/i.test(raw));
-    const ok = checkPublic(raw, lookup);
-    seen.set(host, { at: Date.now(), ok });
-    return ok;
+// The gate for one capture (egress-proxy asks it about every host): each host is resolved once, refused if any
+// address it has is private, and otherwise answered with one checked address, the same one for the whole capture.
+export function hostGate(lookup = dns.lookup) {
+  const pinned = new Map();
+  return (host) => {
+    host = String(host).replace(/^\[|\]$/g, '').toLowerCase();
+    if (!pinned.has(host)) pinned.set(host, (async () => {
+      if (net.isIP(host)) return isPrivateAddress(host) ? null : host;
+      if (/(^|\.)localhost$|\.local$/i.test(host)) return null;
+      try {
+        const found = await lookup(host, { all: true });
+        const list = Array.isArray(found) ? found : [found];
+        return list.length && list.every((a) => a && !isPrivateAddress(a.address)) ? list[0].address : null;
+      } catch { return null; }
+    })());
+    return pinned.get(host);
   };
 }
 

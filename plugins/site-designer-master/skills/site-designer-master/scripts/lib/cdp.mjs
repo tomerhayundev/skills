@@ -7,6 +7,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { findChrome } from './chrome.mjs';
+import { startEgressProxy } from './egress-proxy.mjs';
 
 const PHONE_UA = 'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36';
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -23,12 +24,17 @@ async function portFile(profile, timeoutMs) {
   throw new Error('The browser did not open its debugging port.');
 }
 
-export async function openBrowser({ timeoutMs = 20000 } = {}) {
+// egress: for a page nobody vetted (a link the user brought). Every connection the browser makes then goes through
+// a local gate (egress-proxy) that refuses this machine and its network and pins each name to the address it checked;
+// the browser's own bypass for this machine is removed, and WebRTC and QUIC, which would not pass the gate, are off.
+export async function openBrowser({ timeoutMs = 20000, egress } = {}) {
   const chrome = findChrome();
   if (!chrome) throw new Error('No Chrome or Edge was found. Install one, or set SITE_CHROME to its path.');
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'sdm-cdp-'));
+  const gate = egress ? await startEgressProxy(egress) : null;
+  const guarded = gate ? [`--proxy-server=http://127.0.0.1:${gate.port}`, '--proxy-bypass-list=<-loopback>', '--force-webrtc-ip-handling-policy=disable_non_proxied_udp', '--disable-quic'] : [];
   const proc = spawn(chrome, ['--headless=new', '--disable-gpu', '--no-first-run', '--no-default-browser-check', '--hide-scrollbars',
-    '--disable-extensions', '--mute-audio', '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank'], { stdio: 'ignore', windowsHide: true });
+    '--disable-extensions', '--mute-audio', ...guarded, '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank'], { stdio: 'ignore', windowsHide: true });
   const ws = new WebSocket(await portFile(profile, timeoutMs));
   await new Promise((resolve, reject) => { ws.onopen = resolve; ws.onerror = () => reject(new Error('Could not reach the browser.')); });
 
@@ -60,33 +66,10 @@ export async function openBrowser({ timeoutMs = 20000 } = {}) {
 
   // open(url): a fresh tab at an exact size. mobile: phone screen, touch and a phone user agent.
   // settleMs: time after the load event for late pictures and fonts.
-  // allow: when given, every request of the page, its frames and its workers (the page itself, redirects, pictures,
-  // scripts, fetches) is held in the browser and sent only if allow(url) says yes; a refused one never leaves.
-  async function open(url, { width = 1440, height = 900, mobile = false, reducedMotion = false, loadMs = 30000, settleMs = 1500, allow } = {}) {
+  async function open(url, { width = 1440, height = 900, mobile = false, reducedMotion = false, loadMs = 30000, settleMs = 1500 } = {}) {
     const { targetId } = await send('Target.createTarget', { url: 'about:blank' });
     const { sessionId } = await send('Target.attachToTarget', { targetId, flatten: true });
     const s = (method, params, timeoutMs) => send(method, params, sessionId, timeoutMs);
-    let guard = null;
-    if (allow) {
-      const sessions = new Set([sessionId]);
-      const check = async (sid, p) => {
-        const ok = !/^https?:/i.test(p.request.url) || await allow(p.request.url).catch(() => false);
-        await send(ok ? 'Fetch.continueRequest' : 'Fetch.failRequest', ok ? { requestId: p.requestId } : { requestId: p.requestId, errorReason: 'BlockedByClient' }, sid).catch(() => {});
-      };
-      // A frame from another site or a worker is its own target: attach to it paused, guard it, then let it run.
-      const guardSession = async (sid) => {
-        await send('Fetch.enable', { patterns: [{ urlPattern: '*', requestStage: 'Request' }] }, sid).catch(() => {});
-        await send('Target.setAutoAttach', { autoAttach: true, waitForDebuggerOnStart: true, flatten: true }, sid).catch(() => {});
-        await send('Runtime.runIfWaitingForDebugger', {}, sid).catch(() => {});
-      };
-      guard = (msg) => {
-        if (msg.method === 'Fetch.requestPaused' && sessions.has(msg.sessionId)) check(msg.sessionId, msg.params);
-        else if (msg.method === 'Target.attachedToTarget' && sessions.has(msg.sessionId)) { sessions.add(msg.params.sessionId); guardSession(msg.params.sessionId); }
-      };
-      listeners.add(guard);
-      await send('Fetch.enable', { patterns: [{ urlPattern: '*', requestStage: 'Request' }] }, sessionId);
-      await send('Target.setAutoAttach', { autoAttach: true, waitForDebuggerOnStart: true, flatten: true }, sessionId);
-    }
     await s('Page.enable');
     await s('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile });
     if (mobile) {
@@ -96,7 +79,7 @@ export async function openBrowser({ timeoutMs = 20000 } = {}) {
     if (reducedMotion) await s('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
     const loaded = once(sessionId, 'Page.loadEventFired', loadMs);
     const nav = await s('Page.navigate', { url });
-    if (nav.errorText) { if (guard) listeners.delete(guard); throw new Error(`${url} did not open (${nav.errorText === 'net::ERR_BLOCKED_BY_CLIENT' ? 'refused: it leads to this machine or its network' : nav.errorText})`); }
+    if (nav.errorText) throw new Error(`${url} did not open (${nav.errorText})`);
     await loaded;
     await wait(settleMs);
     return {
@@ -110,7 +93,7 @@ export async function openBrowser({ timeoutMs = 20000 } = {}) {
         const r = await s('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
         return Buffer.from(r.data, 'base64');
       },
-      async close() { if (guard) listeners.delete(guard); await send('Target.closeTarget', { targetId }, undefined, 10000).catch(() => {}); },
+      async close() { await send('Target.closeTarget', { targetId }, undefined, 10000).catch(() => {}); },
     };
   }
 
@@ -119,6 +102,8 @@ export async function openBrowser({ timeoutMs = 20000 } = {}) {
     try { ws.close(); } catch { /* already closed */ }
     await new Promise((r) => { if (proc.exitCode !== null) r(); else { proc.once('exit', r); setTimeout(() => { proc.kill(); r(); }, 3000); } });
     try { fs.rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); } catch { /* a locked temp profile is harmless */ }
+    if (gate) await gate.close();
   }
-  return { open, close };
+  // refused: the hosts the gate turned away (empty without egress).
+  return { open, close, refused: gate ? gate.refused : new Set() };
 }
