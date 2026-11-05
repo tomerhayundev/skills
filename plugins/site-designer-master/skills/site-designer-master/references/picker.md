@@ -27,7 +27,10 @@ like and what they like about each, and go on with their words as the picks.
    Above the gallery the user can **bring their own**: paste a link to a site they like (pictured on this machine
    in about a minute, at computer and phone width, with its design read like a library site) or add a picture of
    one (PNG, JPEG or WebP up to 8 MB, checked by its bytes). Only public web addresses are taken: no files, nothing
-   on this machine or its home network. Their own references are picked the moment they are added and marked
+   on this machine or its home network, by name or by any address the name leads to. While it is pictured, the
+   browser checks every request the page, its frames and its workers make, and refuses the private ones before
+   they are sent. What this does not close: a name whose answer changes between the check and the browser's own
+   lookup; closing that needs a filtering proxy, and the user would open the same site in their own browser anyway. Their own references are picked the moment they are added and marked
    "Yours"; they live in `<work>/own/`.
 3. **Sections**: heroes, navigation, pricing, forms, footers, 404 pages.
 4. **Motion**: our own demos grouped by topic (arriving, responding to touch, scrolling, between pages, no

@@ -231,7 +231,7 @@ export async function captureSite(url, outDir, id, { timeoutMs = 60000, settleMs
   try {
     const shoot = async (opts, label) => {
       let page;
-      try { page = await browser.open(url, { ...opts, loadMs: timeoutMs, settleMs }); } catch (e) { throw new Error(`no picture: ${url} did not render (${e.message})`); }
+      try { page = await browser.open(url, { ...opts, loadMs: timeoutMs, settleMs, allow }); } catch (e) { throw new Error(`no picture: ${url} did not render (${e.message})`); }
       try {
         // Where the browser landed after its own redirects is checked again before anything is kept.
         if (allow) { const landed = await page.eval('location.href'); if (!(await allow(landed))) throw NOT_ALLOWED(landed); }

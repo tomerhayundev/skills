@@ -7,6 +7,12 @@ test('addresses on this machine or a home or carrier network are private; public
   for (const ip of ['93.184.216.34', '8.8.8.8', '172.32.0.1', '100.128.0.1', '2606:4700::1111']) assert.equal(isPrivateAddress(ip), false, ip);
 });
 
+test('IPv6 forms that carry an IPv4 address inside are judged by it, and only the public IPv6 range passes', () => {
+  // ::a.b.c.d (IPv4-compatible), NAT64 64:ff9b::/96 and 6to4 2002::/16 carry an IPv4 address.
+  for (const ip of ['::7f00:1', '::127.0.0.1', '64:ff9b::a00:5', '64:ff9b::192.168.1.1', '2002:c0a8:0101::1', '2002:7f00:1::', 'fec0::1', '2001:db8::1', '2001:0:4136:e378::1', 'ff02::1', '100::1']) assert.equal(isPrivateAddress(ip), true, ip);
+  for (const ip of ['64:ff9b::808:808', '2002:0808:0808::1', '2a00:1450:4001:80b::200e']) assert.equal(isPrivateAddress(ip), false, ip);
+});
+
 test('a name is public only when every address it leads to is public', async () => {
   const lookup = async (host) => ({ 'studio.example': [{ address: '93.184.216.34' }], 'sneaky.example': [{ address: '93.184.216.34' }, { address: '10.0.0.5' }], 'rebind.example': [{ address: '127.0.0.1' }] })[host] || Promise.reject(new Error('ENOTFOUND'));
   assert.equal(await checkPublic('https://studio.example/a', lookup), true);
@@ -15,4 +21,14 @@ test('a name is public only when every address it leads to is public', async () 
   assert.equal(await checkPublic('https://nowhere.example/', lookup), false, 'a name that does not resolve is refused');
   assert.equal(await checkPublic('http://192.168.0.1/', lookup), false, 'an address typed as numbers is checked too');
   assert.equal(await checkPublic('file:///etc/passwd', lookup), false);
+});
+
+test('one rule per capture resolves each name once, and still refuses what is private', async () => {
+  const { publicRule } = await import('./public-host.mjs');
+  let asked = 0;
+  const allow = publicRule(async (host) => { asked++; return host === 'cdn.example' ? [{ address: '151.101.1.1' }] : [{ address: '192.168.0.9' }]; });
+  for (let i = 0; i < 5; i++) assert.equal(await allow(`https://cdn.example/img-${i}.png`), true);
+  assert.equal(asked, 1);
+  assert.equal(await allow('https://router.example/'), false);
+  assert.equal(await allow('http://10.0.0.1/'), false);
 });

@@ -12,7 +12,7 @@ import { SKILL_DIR, parseArgs, isMain, readJson } from './lib/cli.mjs';
 import { handlers, startServer, readBody } from './serve.mjs';
 import { captureSite } from './capture.mjs';
 import { cleanDesign } from './lib/design-clean.mjs';
-import { checkPublic } from './lib/public-host.mjs';
+import { publicRule } from './lib/public-host.mjs';
 import { loadLibrary, facets, queryLibrary, FACETS } from './library.mjs';
 import { buildPrompt } from './prompt.mjs';
 import { historyFile } from './history.mjs';
@@ -194,7 +194,7 @@ export function registerPicker({ work, brief, libraryDir = path.join(SKILL_DIR, 
     if (p === '/_picker/api/own') {
       const url = publicUrl(body.url);
       // The name is resolved too: a public-looking name can lead to this machine or its network.
-      const allow = (u) => checkPublic(u, lookup);
+      const allow = publicRule(lookup);
       if (!url || !(await allow(url))) return send(res, 400, { error: 'paste a web address that starts with https:// and leads to a public site' });
       const id = nextOwnId(me.work);
       const entry = { id, own: 'link', status: 'capturing', url, description: new URL(url).hostname.replace(/^www\./, ''), added: new Date().toISOString() };
