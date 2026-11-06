@@ -53,6 +53,22 @@ export function walkList(siteDir, { url = 'http://127.0.0.1:4321' } = {}) {
     L('- ? /_system/ at 1440px: every page uses only these colours, sizes and corners; anything else on a page is named and fixed');
     L('');
   }
+  const scenePages = list.filter((p) => !p.path.startsWith('/_') && /\sdata-scene="/.test(p.html));
+  if (scenePages.length) {
+    L('## 3D');
+    L('');
+    L('The meter drew one frame of each scene; these are seen in a real browser, over time.');
+    L('');
+    for (const p of scenePages) {
+      const names = [...new Set([...p.html.matchAll(/\sdata-scene="([^"]+)"/g)].map((m) => m[1]))].join(', ');
+      L(`- ? ${p.path} (${names}): the poster shows first; the scene fades in over the poster without a jump or a spinner`);
+      L(`- ? ${p.path}: the scene does the job in the brief's \`scene\` and nothing more, and the page is clearly better with it than with the photograph; if not, it is removed`);
+      L(`- ? ${p.path}: the motion is slow and the pointer response gentle; scrolled out of view it stops (the frame counter on the scene stops), and it resumes when back`);
+      L(`- ? ${p.path} with reduced motion on: the poster only, nothing moves`);
+      L(`- ? ${p.path} at 375px: the scene fits, the words beside it stay readable, scrolling past it is smooth`);
+    }
+    L('');
+  }
   L('## Use it');
   L('');
   L(`- ? Every navigation link (${navLinks.size}) reaches its page, by real clicks`);

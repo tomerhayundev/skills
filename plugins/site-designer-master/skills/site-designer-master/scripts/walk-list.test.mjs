@@ -76,3 +76,16 @@ test('development pages are not cut or checked as site pages, and the system pag
   assert.doesNotMatch(md, /\? \/_review\/: every section/);
   assert.match(md, /\? \/_system\/ at 1440px: every page uses only these colours, sizes and corners; anything else on a page is named and fixed/);
 });
+
+test('a page with a 3D scene is walked in a real browser: the poster, the fade, the pause, reduced motion, a phone', () => {
+  const src = tmp();
+  fs.cpSync(path.join(SKILL_DIR, 'scripts', 'fixtures', 'site-src'), src, { recursive: true });
+  const p = path.join(src, 'pages', 'about.html');
+  fs.writeFileSync(p, fs.readFileSync(p, 'utf8') + '<div data-scene="points"><img src="/assets/room.svg" alt="" width="1200" height="800"></div>');
+  const out = tmp();
+  assert.deepEqual(buildSite(src, out).errors, []);
+  const w = walkList(out);
+  assert.match(w, /## 3D/);
+  for (const s of ['/about/', 'fades in over the poster', 'scrolled out of view', 'reduced motion', 'at 375px', 'the job in the brief']) assert.ok(w.includes(s), s);
+  assert.doesNotMatch(walkList(built()), /## 3D/);
+});

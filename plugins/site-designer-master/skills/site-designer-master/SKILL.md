@@ -1,11 +1,11 @@
 ---
 name: site-designer-master
-description: Use when someone asks to design, build, make or redesign a website, a landing page, a homepage or a multi-page site for a business, a product, a portfolio, a person or an event, in any language, as in "make me a site for my bakery", "redesign my site" or "תעשה לי אתר", or wants a site that does not look AI-generated.
+description: Use when someone asks to design, build, make or redesign a website, a landing page, a homepage or a multi-page site for a business, a product, a portfolio, a person or an event, in any language, as in "make me a site for my bakery", "redesign my site" or "תעשה לי אתר", or wants a site that does not look AI-generated, including one with 3D, WebGL, three.js or shader scenes.
 ---
 
 # Site designer master
 
-This is version 0.3.3 of the skill.
+This is version 0.4.0 of the skill.
 
 You design a complete website and hand over a **real, working local site**: every page built, real links
 between pages, forms and states that work, checked in a real browser. The whole package, not only the look:
@@ -50,7 +50,7 @@ node ${CLAUDE_SKILL_DIR}/scripts/picker.mjs --work=<work> --brief=<work>/brief.j
 Pass `--connected=image` when this session can call an image-generation tool (the script cannot see your tools).
 
 Give the user the address it prints. They mark site inspirations (and may add their own: a link to a site
-they like, captured and measured on this machine, or a picture of one), sections, motion and icons, set the feel,
+they like, captured and measured on this machine, or a picture of one), sections, motion (with a Depth group of 3D scenes) and icons, set the feel,
 choose what they do not want (the AI tells start as avoided), say where pictures come from (their own, free,
 or a generator they turned on) and add free notes; on a redesign they choose "keep my pages and words" or
 "rethink structure and copy". A user who only presses Done gets the recommendation. When it exits, read `<work>/taste.json` and
@@ -86,6 +86,9 @@ the page jobs ([page jobs](references/page-jobs.md)), structure ([structure](ref
 responsive ([responsive](references/responsive.md)), motion ([motion](references/motion.md)), trust
 ([trust](references/trust.md)), right to left ([rtl](references/rtl.md)), speed ([performance](references/performance.md)),
 accessibility ([accessibility](references/a11y.md)), and how people decide ([decisions](references/decisions.md)).
+A 3D scene only where the user picked one from the Depth group, or the brief gives a page a job only 3D can do
+([3D](references/three-d.md)): write the job and the art direction in the brief's `scene`, use a recipe from the
+kit (never a thing drawn in code), keep it only if the page is clearly better with it than with the photograph, then draw its poster with `node ${CLAUDE_SKILL_DIR}/scripts/poster.mjs <src>` before the build.
 Then a worst-case data pass: long names, zero and one item, huge numbers, 30% longer text.
 
 ## Step 5: tweak panel
@@ -141,6 +144,7 @@ and social images in the same look, and the brand and video skills can read them
 | --- | --- |
 | The page could be any business in the category | Go back to the client's own things in the brief; run the competitor test. |
 | Three equal cards with icons, a gradient hero, a small label over every heading | The slop catalogue's fill rules ([slop catalogue](references/slop-catalogue.md)). |
+| "A 3D shape in the hero will make it premium" | 3D earns a place only with a one-sentence job in the brief; the poster first, one scene per page, the business's own thing in its own light ([3D](references/three-d.md)). |
 | A number in the copy you cannot point to in the brief | Replace it with the brief's number or a visible placeholder. |
 | "The user can add photos later" | Solve it now with what exists; ask for material only in the picker. |
 | You are about to say it is done without the meter's table and the walk report | Run the meter, walk the site, report line by line. |

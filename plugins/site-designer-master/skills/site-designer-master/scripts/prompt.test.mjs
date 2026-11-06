@@ -105,3 +105,11 @@ test('the first feeling leads the build prompt, with what makes it visible', () 
   assert.match(md, /First feeling: warm\. The first screen is built around it: a photo of the morning bake, one line, honey colour\./);
   assert.ok(md.indexOf('First feeling') < md.indexOf('## References'), 'it comes before the references');
 });
+
+test('a Depth pick reaches the build as a 3D recipe with its rules, never as decoration', () => {
+  const entry = { id: 'depth-object-clay', shelf: 'motion', description: 'One lit object, turned slowly.', bestUse: ['launch'], tags: { topic: 'depth' }, scene: { recipe: 'object', attrs: { form: 'vessel', material: 'clay' } } };
+  const out = buildPrompt({ brief: { business: 'a ceramics studio' }, taste: { picks: [{ id: entry.id, liked: 'the clay' }] }, entries: [entry] });
+  assert.match(out, /depth-object-clay[\s\S]*3D scene: recipe object \(form vessel, material clay\)/);
+  assert.match(out, /three-d\.md/);
+  assert.match(out, /job/);
+});

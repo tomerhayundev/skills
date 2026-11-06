@@ -42,6 +42,25 @@ export function render(template, vars, partials, errors = [], where = '') {
   });
 }
 
+// 3D scenes (assets/site-kit/three): each [data-scene] names a kit scene or one of the site's own (src/scenes/*.js),
+// and starts with its poster: an <img> first inside it, with width and height, never lazy.
+const SCENE_RE = /<([a-z][\w-]*)\b([^>]*?)\sdata-scene="([^"]*)"([^>]*)>(\s*<img\b[^>]*>)?/gi;
+export function sceneErrors(html, known, where) {
+  const errors = [];
+  for (const m of html.matchAll(SCENE_RE)) {
+    const name = m[3];
+    if (!known.has(name)) errors.push(`${where}: scene ${name} is not in the kit (${[...known].sort().join(', ')}) or in src/scenes/`);
+    if (name === 'object' && !/\sdata-model="[^"]+"/.test(`${m[2]} ${m[4]}`)) errors.push(`${where}: scene object shows only the business's own 3D model (data-model="/assets/<file>.glb"); without one, use its photograph and the ripple recipe`);
+    const img = m[5];
+    if (!img) { errors.push(`${where}: scene ${name} needs its poster, an <img> first inside it`); continue; }
+    if (!/\swidth="\d+"/.test(img) || !/\sheight="\d+"/.test(img)) errors.push(`${where}: the poster of scene ${name} needs width and height`);
+    if (/\sloading="lazy"/i.test(img)) errors.push(`${where}: the poster of scene ${name} is lazy; it is the first picture of the scene, so it loads at once`);
+  }
+  return errors;
+}
+const hasScene = (html) => /\sdata-scene="/.test(html);
+const sceneNames = (dir) => (fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith('.js')).map((f) => f.slice(0, -3)) : []);
+
 function navHtml(pages, current, marked) {
   const items = pages.filter((p) => p.nav).map((p) => {
     const cur = marked && p.path === current ? ' aria-current="page"' : '';
@@ -114,6 +133,19 @@ export function buildSite(srcDir, outDir, opts = {}) {
   if (opts.dev && tokens) jobs.push({ page: { path: '/_system/', title: 'The visual system', description: 'Development page' }, file: 'system-sheet', body: systemSheet(tokens, site), out: outFileFor('/_system/'), rewrite: true });
   jobs.push({ page: { path: '/404', title: t.notFoundTitle, description: t.notFoundTitle }, file: fs.existsSync(own404) ? 'pages/404.html' : 'site-kit 404.html', body: fs.readFileSync(fs.existsSync(own404) ? own404 : path.join(KIT, 'pages', '404.html'), 'utf8'), out: '404.html', rewrite: false });
 
+  // The 3D kit goes in only when a page or partial uses a scene; the site's own scenes sit beside the kit's.
+  const ownScenes = path.join(srcDir, 'scenes');
+  const knownScenes = new Set([...sceneNames(path.join(KIT, 'three', 'scenes')), ...sceneNames(ownScenes)]);
+  if (jobs.some((j) => hasScene(j.body)) || Object.values(partials).some(hasScene)) {
+    fs.cpSync(path.join(KIT, 'three'), path.join(outDir, 'three'), { recursive: true, filter: (f) => path.basename(f) !== 'VERSION' });
+    for (const f of sceneNames(ownScenes)) {
+      const js = fs.readFileSync(path.join(ownScenes, `${f}.js`), 'utf8');
+      // The stage owns the loop: it pauses off screen, in a hidden tab and with reduced motion. A scene only draws.
+      if (/\b(requestAnimationFrame|setAnimationLoop|setInterval)\s*\(/.test(js)) errors.push(`scenes/${f}.js: runs its own drawing loop; draw in render() and let the stage call it`);
+      fs.writeFileSync(path.join(outDir, 'three', 'scenes', `${f}.js`), js);
+    }
+  }
+
   const built = [];
   for (const job of jobs) {
     const { page } = job;
@@ -125,6 +157,10 @@ export function buildSite(srcDir, outDir, opts = {}) {
     vars.content = render(job.body, vars, partials, errors, job.file);
     let html = render(layout, vars, partials, errors, job.file);
     if (opts.dev) html = html.replace('</head>', '<link rel="stylesheet" href="/tweaks.css">\n<script src="/tweaks.js" defer></script>\n</head>');
+    if (hasScene(html)) {
+      errors.push(...sceneErrors(html, knownScenes, job.file));
+      html = html.replace('</head>', '<script src="/three/stage.js" defer></script>\n</head>');
+    }
     html = html.replace(/\b(href|src)="(\/[^"]*)"/g, (m, attr, url) => {
       if (SKIP.test(url)) return m;
       if (!resolves(url, pagePaths, outDir)) errors.push(`${job.file}: ${url} does not resolve to a built page`);

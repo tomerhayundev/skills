@@ -27,6 +27,7 @@ the critic reads it.
 | `objections` | The questions a visitor has before acting: price, time, risk, "is it for me" | |
 | `brandFonts` | The brand's own faces, exempt from the overused list | |
 | `redesign` | `{ "mode": "keep" or "rethink", "source": "<url>" }` when it is a redesign | |
+| `scene` | Only when a page earns 3D ([3D](three-d.md)): the page, the recipe, the one-sentence job, and the art direction (world, palette, light, material, motion, finish) | `{ "page": "/delivery/", "recipe": "points", "job": "shows the four towns the bakery delivers to, so a visitor sees at once whether they are in", "places": "from facts" }` |
 | `picks` | Filled by the picker: what the user marked and what they liked about each | |
 
 ## How to fill it

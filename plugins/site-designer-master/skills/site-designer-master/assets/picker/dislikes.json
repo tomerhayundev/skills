@@ -1,6 +1,6 @@
 {
   "about": "What the Feel and dislikes panel offers. A dislike with a tell is one of the AI tells in assets/slop-catalogue.json: those marked ai start as avoided, and the user can allow any of them. Each sample is drawn by the picker in CSS, so the user sees what the words mean.",
-  "motionTopics": ["arrive", "touch", "scroll", "pages", "none"],
+  "motionTopics": ["arrive", "touch", "scroll", "pages", "depth", "none"],
   "dislikes": [
     { "id": "gradients", "tell": "HUE_GRADIENT", "ai": true, "sample": "gradient" },
     { "id": "gradient-text", "tell": "GRADIENT_TEXT", "ai": true, "sample": "gradient-text" },

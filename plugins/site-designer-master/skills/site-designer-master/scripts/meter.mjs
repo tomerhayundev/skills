@@ -13,16 +13,19 @@ import { probeAtWidth, findChrome } from './lib/chrome.mjs';
 import { qualityRules, cssRules } from './meter/rules-quality.mjs';
 import { slopRules } from './meter/rules-slop.mjs';
 import { contentRules } from './meter/rules-content.mjs';
+import { sceneRules } from './meter/rules-scene.mjs';
 
 const PROBE = fs.readFileSync(path.join(SKILL_DIR, 'scripts', 'meter', 'probe.js'), 'utf8');
 const PROBE_SLOP = fs.readFileSync(path.join(SKILL_DIR, 'scripts', 'meter', 'probe-slop.js'), 'utf8');
 const AXE = path.join(SKILL_DIR, 'assets', 'vendor', 'axe.min.js');
-export const RULE_MODULES = [qualityRules, slopRules, contentRules];
+export const RULE_MODULES = [qualityRules, slopRules, contentRules, sceneRules];
 // Extra runs at the widest width, each a fresh page load: { name, head: html at the top of <head>, flags: browser switches }.
 export const PASSES = [
   // Scroll-triggered reveals never fire: whatever is still invisible would stay invisible when a script fails.
   { name: 'stubio', head: '<script>window.IntersectionObserver=function(){return{observe:function(){},unobserve:function(){},disconnect:function(){},takeRecords:function(){return[]}}};</script>' },
   { name: 'motion', flags: ['--force-prefers-reduced-motion'] },
+  // A page with a 3D scene, opened by a browser without WebGL: the poster must show.
+  { name: 'nowebgl', flags: ['--disable-webgl', '--disable-3d-apis'], when: (html) => /\sdata-scene="/.test(html) },
 ];
 
 function htmlFiles(dir, base = dir) {
@@ -59,7 +62,7 @@ export function measure(siteDir, { widths, brief = null, axeWidths = [375, 1440]
       if (rel === '404.html') html = html.replace(/\b(href|src)="\/(?!\/)/g, '$1="./');
       for (const width of widths) {
         const runs = [{ pass: 'main', opts: { width, axe: axeWidths.includes(width), pass: 'main' } }];
-        if (width === Math.max(...widths)) for (const p of PASSES) runs.push({ pass: p.name, opts: { width, axe: false, pass: p.name }, head: p.head, flags: p.flags });
+        if (width === Math.max(...widths)) for (const p of PASSES.filter((q) => !q.when || q.when(html))) runs.push({ pass: p.name, opts: { width, axe: false, pass: p.name }, head: p.head, flags: p.flags });
         for (const run of runs) {
           const probeFile = path.join(path.dirname(file), `__sdm_${run.pass}_${width}.html`);
           fs.writeFileSync(probeFile, inject(html, run.opts, run.head));

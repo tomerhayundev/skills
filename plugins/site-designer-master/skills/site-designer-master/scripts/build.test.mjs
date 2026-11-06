@@ -190,3 +190,69 @@ test('on a right-to-left site the system page reads left to right, and its sampl
   assert.match(html, /<section class="review system" lang="en" dir="ltr">/);
   assert.match(html, /<p lang="he" dir="rtl" style="font-family: var\(--font-display\); font-size: var\(--step-display\)[^>]*>הדלת הכחולה</);
 });
+
+// 3D scenes: the stage, the bundled library and the scenes are copied only when a page uses one.
+const withScene = (body, { own = null } = {}) => {
+  const src = copySrc();
+  const p = path.join(src, 'pages', 'about.html');
+  fs.writeFileSync(p, fs.readFileSync(p, 'utf8') + body);
+  if (own) { fs.mkdirSync(path.join(src, 'scenes')); fs.writeFileSync(path.join(src, 'scenes', `${own}.js`), `SDMStage.scene('${own}', {}, function () { return { render: function () {} }; });`); }
+  return src;
+};
+const POSTER = '<img src="/assets/room.svg" alt="" width="1200" height="800">';
+
+test('a page with a scene gets the stage; the kit is copied once; pages without scenes stay without', () => {
+  const out = tmp();
+  const r = buildSite(withScene(`<div class="scene" data-scene="points">${POSTER}</div>`), out);
+  assert.deepEqual(r.errors, []);
+  assert.match(read(out, 'about/index.html'), /<script src="\.\.\/three\/stage\.js" defer><\/script>\s*<\/head>/);
+  assert.doesNotMatch(read(out, 'index.html'), /stage\.js/);
+  for (const f of ['three/stage.js', 'three/three.min.js', 'three/three-LICENSE.txt', 'three/scenes/points.js', 'three/scenes/object.js']) assert.ok(fs.existsSync(path.join(out, f)), f);
+});
+
+test('a site without scenes carries no 3D files', () => {
+  const out = tmp();
+  buildSite(FIX, out);
+  assert.equal(fs.existsSync(path.join(out, 'three')), false);
+});
+
+test('a scene the kit and the site do not have stops the build', () => {
+  const r = buildSite(withScene(`<div data-scene="torus-knot">${POSTER}</div>`), tmp());
+  assert.ok(r.errors.some((e) => /scene torus-knot/.test(e)), r.errors.join('\n'));
+});
+
+test('a scene needs its poster first inside it, sized and never lazy', () => {
+  const none = buildSite(withScene('<div data-scene="points"><p>no picture</p></div>'), tmp());
+  assert.ok(none.errors.some((e) => /points.*poster/.test(e)), none.errors.join('\n'));
+  const lazy = buildSite(withScene('<div data-scene="points"><img src="/assets/room.svg" alt="" width="1200" height="800" loading="lazy"></div>'), tmp());
+  assert.ok(lazy.errors.some((e) => /lazy/.test(e)), lazy.errors.join('\n'));
+  const unsized = buildSite(withScene('<div data-scene="points"><img src="/assets/room.svg" alt=""></div>'), tmp());
+  assert.ok(unsized.errors.some((e) => /width and height/.test(e)), unsized.errors.join('\n'));
+});
+
+test('the site\'s own scenes (src/scenes/*.js) are copied next to the kit\'s and can be named', () => {
+  const out = tmp();
+  const r = buildSite(withScene(`<div data-scene="bakery-loaf">${POSTER}</div>`, { own: 'bakery-loaf' }), out);
+  assert.deepEqual(r.errors, []);
+  assert.ok(fs.existsSync(path.join(out, 'three', 'scenes', 'bakery-loaf.js')));
+});
+
+test('a site\'s own scene that runs its own drawing loop stops the build: the stage owns the loop', () => {
+  const src = withScene(`<div data-scene="spin">${POSTER}</div>`, { own: 'spin' });
+  fs.writeFileSync(path.join(src, 'scenes', 'spin.js'), "SDMStage.scene('spin', { three: true }, function (ctx) { var r = new ctx.THREE.WebGLRenderer({ canvas: ctx.canvas }); r.setAnimationLoop(function () {}); return { render: function () {} }; });");
+  const r = buildSite(src, tmp());
+  assert.ok(r.errors.some((e) => /spin.*loop/.test(e)), r.errors.join('\n'));
+});
+
+test('an object scene shows only the business\'s own 3D model: without one the build stops, never a drawn stand-in', () => {
+  const r = buildSite(withScene(`<div data-scene="object" data-material="clay">${POSTER}</div>`), tmp());
+  assert.ok(r.errors.some((e) => /object.*own 3D model/.test(e)), r.errors.join('\n'));
+  const ok = buildSite(withScene(`<div data-scene="object" data-model="/assets/room.svg">${POSTER}</div>`), tmp());
+  assert.deepEqual(ok.errors, []);
+});
+
+test('the kit has no drawn shapes and no background field: only what looks right', () => {
+  const kit = path.join(SKILL_DIR, 'assets', 'site-kit', 'three', 'scenes');
+  assert.deepEqual(fs.readdirSync(kit).sort(), ['object.js', 'points.js', 'ripple.js']);
+  assert.doesNotMatch(fs.readFileSync(path.join(kit, 'object.js'), 'utf8'), /LatheGeometry|TorusGeometry|ExtrudeGeometry/);
+});

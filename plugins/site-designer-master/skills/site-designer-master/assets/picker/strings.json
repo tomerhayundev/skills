@@ -207,6 +207,7 @@
       "touch": "Responding to a touch or a pointer",
       "scroll": "Moving as you scroll",
       "pages": "Between pages",
+      "depth": "Depth: 3D scenes (one per page, at most)",
       "none": "No motion"
     },
     "playHint": "Every demo plays on its own.",
@@ -617,6 +618,7 @@
       "touch": "תגובה למגע או לעכבר",
       "scroll": "תנועה בזמן גלילה",
       "pages": "מעבר בין עמודים",
+      "depth": "עומק: סצנות תלת־ממד (לכל היותר אחת בעמוד)",
       "none": "בלי תנועה"
     },
     "playHint": "כל הדגמה מתנגנת לבד.",

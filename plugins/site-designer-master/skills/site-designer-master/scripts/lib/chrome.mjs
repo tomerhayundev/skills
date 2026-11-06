@@ -113,7 +113,8 @@ export const MIN_WINDOW = 500;
 function hostFor(file, width, height, scrollY = 0) {
   const html = fs.readFileSync(file, 'utf8');
   const scroll = scrollY ? `<script>addEventListener('load',function(){scrollTo(0,${Number(scrollY)})});</script>` : '';
-  const forward = `<script>window.__emit=function(o){parent.__emit(o)};</script><style>html{scrollbar-width:none;scroll-behavior:auto!important}</style>${scroll}`;
+  // SDM_ONE_FRAME: a 3D scene draws one frame and no loop; on this virtual clock a drawing loop never lets the page finish.
+  const forward = `<script>window.SDM_ONE_FRAME=2;window.__emit=function(o){parent.__emit(o)};</script><style>html{scrollbar-width:none;scroll-behavior:auto!important}</style>${scroll}`;
   const inner = /<head[^>]*>/i.test(html) ? html.replace(/<head([^>]*)>/i, `<head$1>${forward}`) : forward + html;
   const srcdoc = inner.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
   const host = path.join(path.dirname(file), `__sdm_host_${process.pid}_${Math.random().toString(36).slice(2)}.html`);

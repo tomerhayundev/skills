@@ -483,6 +483,78 @@
       "added": "2026-11-01",
       "preview": "motion/motion-still.webp",
       "demo": "demos/motion.html?m=still"
+    },
+    {
+      "id": "depth-points",
+      "shelf": "motion",
+      "url": "demos/depth.html?d=points",
+      "description": "A sphere of dots with the business's real places joined by arcs.",
+      "bestUse": [
+        "delivery or shipping areas",
+        "a business in several places"
+      ],
+      "he": {
+        "description": "כדור של נקודות שעליו המקומות האמיתיים של העסק, מחוברים בקשתות.",
+        "bestUse": [
+          "אזורי משלוח",
+          "עסק בכמה מקומות"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "calm",
+          "precise"
+        ],
+        "motion": 1,
+        "density": 3,
+        "topic": "depth"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-06",
+      "preview": "depth/depth-points.webp",
+      "demo": "demos/depth.html?d=points",
+      "scene": {
+        "recipe": "points",
+        "attrs": {
+          "points": "from the brief"
+        }
+      }
+    },
+    {
+      "id": "depth-ripple",
+      "shelf": "motion",
+      "url": "demos/depth.html?d=ripple",
+      "description": "The page's one key picture answers the pointer with a soft lens.",
+      "bestUse": [
+        "a portfolio piece",
+        "one signature dish or room"
+      ],
+      "he": {
+        "description": "התמונה המרכזית בעמוד מגיבה לסמן בעדשה רכה.",
+        "bestUse": [
+          "עבודה בתיק העבודות",
+          "מנה או חדר אחד שמייצגים"
+        ]
+      },
+      "tags": {
+        "mood": [
+          "playful",
+          "crafted"
+        ],
+        "motion": 2,
+        "density": 3,
+        "topic": "depth"
+      },
+      "licence": "ours",
+      "rights": "pack",
+      "added": "2026-11-06",
+      "preview": "depth/depth-ripple.webp",
+      "demo": "demos/depth.html?d=ripple",
+      "scene": {
+        "recipe": "ripple",
+        "attrs": {}
+      }
     }
   ]
 }

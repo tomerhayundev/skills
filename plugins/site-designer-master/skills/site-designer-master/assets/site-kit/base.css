@@ -67,6 +67,12 @@ input[aria-invalid="true"] { border-color: var(--color-danger); border-width: 2p
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 
+/* 3D scenes (three/stage.js): the poster fills the scene and keeps its proportions; the stage lays its canvas
+   over it. The scene's size is the poster's, unless the site gives the scene its own. */
+[data-scene] { position: relative; overflow: hidden; }
+[data-scene] > img:first-child { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; }
+[data-scene] > canvas { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; display: block; }
+
 /* On paper: a menu, a price list or a page someone wants to keep. The words and the contact stay; the screen's
    chrome goes; ink is black on white so it prints on any printer; nothing is cut across a page break. */
 @media print {
@@ -78,4 +84,6 @@ input[aria-invalid="true"] { border-color: var(--color-danger); border-width: 2p
   li, tr, figure, img, .card, section > * { break-inside: avoid; }
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
   .site-header, .site-footer { border: 0; }
+  [data-scene] > canvas { display: none; }
+  [data-scene] > img:first-child { visibility: visible !important; }
 }

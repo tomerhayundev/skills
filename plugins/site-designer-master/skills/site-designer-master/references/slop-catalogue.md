@@ -33,6 +33,7 @@ a meter rule, a status (banned fails the page, warned must be defended) and a **
 | CONTENT_HIDDEN_AT_REST | text invisible until a scroll trigger fires | visible by default; hide only after the script runs |
 | UNSOURCED_NUMBER | a number the brief does not hold | the brief's number, or a visible placeholder |
 | UNSOURCED_QUOTE | a quote nobody said | a real review from the brief with its source, or the proof stated plainly |
+| SCENE_COUNT | more than one 3D scene on a page, 3D as decoration | one scene with a one-sentence job, or none; the 3D tells and their fills are in [3D](three-d.md) |
 
 ## Looks that are saturated right now (self-check, not rules)
 

@@ -9,7 +9,7 @@ Speed is part of the experience. The meter measures layout shift (CLS fails abov
 | Interaction to next paint | under 200 ms |
 | Cumulative layout shift | under 0.1 (meter rule CLS) |
 | Fonts | at most 2 families, at most 4 files above the fold, subset to the scripts used (fonts.mjs keeps only those) |
-| JavaScript | at most 100 KB compressed for a brochure site; no framework runtime for static pages |
+| JavaScript | at most 100 KB compressed for a brochure site; no framework runtime for static pages. A 3D scene's library loads after the page has loaded and has its own budget ([3D](three-d.md)) |
 | Third parties | deferred; none blocks the first render; no chat widget covering the primary button on a phone |
 
 | Rule | Check |

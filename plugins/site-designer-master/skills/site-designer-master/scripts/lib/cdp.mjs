@@ -27,14 +27,17 @@ async function portFile(profile, timeoutMs) {
 // egress: for a page nobody vetted (a link the user brought). Every connection the browser makes then goes through
 // a local gate (egress-proxy) that refuses this machine and its network and pins each name to the address it checked;
 // the browser's own bypass for this machine is removed, and WebRTC and QUIC, which would not pass the gate, are off.
-export async function openBrowser({ timeoutMs = 20000, egress } = {}) {
+// local: our own built site opened from disk may read its own files (a 3D model, a picture drawn into a scene).
+// Never together with egress: a page nobody vetted gets no file access.
+export async function openBrowser({ timeoutMs = 20000, egress, local = false } = {}) {
+  if (local && egress) throw new Error('a page from outside never gets file access');
   const chrome = findChrome();
   if (!chrome) throw new Error('No Chrome or Edge was found. Install one, or set SITE_CHROME to its path.');
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'sdm-cdp-'));
   const gate = egress ? await startEgressProxy(egress) : null;
   const guarded = gate ? [`--proxy-server=http://127.0.0.1:${gate.port}`, '--proxy-bypass-list=<-loopback>', '--force-webrtc-ip-handling-policy=disable_non_proxied_udp', '--disable-quic'] : [];
   const proc = spawn(chrome, ['--headless=new', '--disable-gpu', '--no-first-run', '--no-default-browser-check', '--hide-scrollbars',
-    '--disable-extensions', '--mute-audio', ...guarded, '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank'], { stdio: 'ignore', windowsHide: true });
+    '--disable-extensions', '--mute-audio', ...guarded, ...(local ? ['--allow-file-access-from-files'] : []), '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank'], { stdio: 'ignore', windowsHide: true });
   const ws = new WebSocket(await portFile(profile, timeoutMs));
   await new Promise((resolve, reject) => { ws.onopen = resolve; ws.onerror = () => reject(new Error('Could not reach the browser.')); });
 
@@ -89,8 +92,9 @@ export async function openBrowser({ timeoutMs = 20000, egress } = {}) {
         if (r.exceptionDetails) throw new Error((r.exceptionDetails.exception && r.exceptionDetails.exception.description) || r.exceptionDetails.text);
         return r.result.value;
       },
-      async shot() {
-        const r = await s('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+      // clip: { x, y, width, height } in page coordinates; format png, jpeg or webp.
+      async shot({ clip, format = 'png', quality } = {}) {
+        const r = await s('Page.captureScreenshot', { format, ...(quality ? { quality } : {}), captureBeyondViewport: false, ...(clip ? { clip: { ...clip, scale: 1 } } : {}) });
         return Buffer.from(r.data, 'base64');
       },
       async close() { await send('Target.closeTarget', { targetId }, undefined, 10000).catch(() => {}); },

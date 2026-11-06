@@ -187,3 +187,11 @@ test('review 7: choosing the same option again is still a new choice, and a half
   fs.writeFileSync(path.join(w, 'choices.json'), '{"directions": {"id": "a", "at"');
   assert.equal(doneSignature(w, 'directions'), null);
 });
+
+test('a 3D demo gets the stage and its scenes from the kit, and a picture shipped with the skill is served', async () => {
+  for (const p of ['/_picker/library/three/stage.js', '/_picker/library/three/scenes/points.js', '/_picker/library/three/three.min.js']) assert.equal((await get(p)).status, 200, p);
+  assert.equal((await get('/_picker/library/three/../../../package.json')).status === 200, false);
+  fs.mkdirSync(path.join(lib, 'previews', 'depth'), { recursive: true });
+  fs.writeFileSync(path.join(lib, 'previews', 'depth', 'shipped.webp'), 'RIFF....WEBP');
+  assert.equal((await get('/_picker/pack/depth/shipped.webp')).status, 200);
+});

@@ -14,7 +14,7 @@ that lands well. Animating everything on load and on scroll is not more care; it
 | Easing | ease-out for entering (a fast-start curve such as `cubic-bezier(0.16, 1, 0.3, 1)`), ease-in for leaving, linear only for progress; no bounce or elastic. |
 | Properties | `transform` and `opacity` only; never animate width, height, top or left. |
 | Stagger | 40-80 ms between items, at most about 6 items; rise distance 8-24 px. |
-| Budget by mode | Persuade and experience: one signature moment plus light reveals. Operate and read: feedback only. Never scroll-jacking; no endless loops near text people read. |
+| Budget by mode | Persuade and experience: one signature moment plus light reveals. Operate and read: feedback only. Never scroll-jacking; no endless loops near text people read. A 3D scene counts as the page's signature moment ([3D](three-d.md)). |
 | Tweak panel | `--motion-scale` multiplies durations, so the user can calm or lift the whole site by sight. |
 
 ## Floors (the meter fails these)

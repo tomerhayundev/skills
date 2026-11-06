@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3D demo</title>
+<style>
+  /* One 3D recipe from the site kit per demo, chosen by ?d=<id>, in neutral demo colours. Our own demos. */
+  :root { --color-ground: #f4f1ec; --color-surface: #e6ddcf; --color-accent: #2f5d50; --color-ink: #1d1b18; --color-ink-muted: #6f675d; }
+  html, body { margin: 0; block-size: 100%; background: var(--color-ground); overflow: hidden; }
+  [data-scene] { position: relative; inline-size: 100%; block-size: 100vh; overflow: hidden; }
+  [data-scene] > img { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; }
+  [data-scene] > canvas { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; display: block; }
+</style>
+<script>
+  // The demo's settings come from a fixed list: the address only chooses which one.
+  (function () {
+    var DEMOS = {
+      'points': { scene: 'points', points: '51.5,-0.1;48.9,2.4;40.7,-74;35.7,139.7', colors: 'ink-muted accent' },
+      'ripple': { scene: 'ripple', picture: 'depth-photo.webp', lens: '0.56,0.5', strength: '1.5' },
+    };
+    var id = new URLSearchParams(location.search).get('d');
+    window.__demo = DEMOS[id] ? { id: id, d: DEMOS[id] } : { id: 'points', d: DEMOS.points };
+  })();
+</script>
+<script src="../three/stage.js" defer></script>
+</head>
+<body>
+<div id="scene"><img alt="" width="1280" height="800"></div>
+<script>
+  (function () {
+    var el = document.getElementById('scene'), d = window.__demo.d, img = el.querySelector('img');
+    for (var k in d) if (k !== 'scene' && k !== 'picture') el.setAttribute('data-' + k, d[k]);
+    // The poster is the demo's own preview picture; the ripple's poster is its photograph.
+    img.src = d.picture ? d.picture : '../../pack/depth/depth-' + window.__demo.id + '.webp';
+    el.setAttribute('data-scene', d.scene);
+  })();
+</script>
+</body>
+</html>

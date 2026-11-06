@@ -95,3 +95,26 @@ test('an entry hidden by curation is not loaded', () => {
   fs.writeFileSync(f, JSON.stringify(j));
   assert.equal(loadLibrary(dir).entries.some((e) => e.id === j.entries[0].id), false);
 });
+
+test('a picture shipped with the skill (previews/) counts when the pack does not have it', () => {
+  const dir = makeLibrary(tmp(), { sites: 2 });
+  fs.writeFileSync(path.join(dir, 'motion.json'), JSON.stringify({ shelf: 'motion', entries: [{ id: 'depth-x', shelf: 'motion', url: 'demos/depth.html?d=x', description: 'A scene.', bestUse: ['launch'], tags: { topic: 'depth' }, added: '2026-11-06', preview: 'depth/depth-x.webp' }] }));
+  assert.equal(loadLibrary(dir).entries.some((e) => e.id === 'depth-x'), false);
+  fs.mkdirSync(path.join(dir, 'previews', 'depth'), { recursive: true });
+  fs.writeFileSync(path.join(dir, 'previews', 'depth', 'depth-x.webp'), 'RIFF');
+  assert.equal(loadLibrary(dir).entries.some((e) => e.id === 'depth-x'), true);
+});
+
+test('the real library has a Depth group: every 3D recipe with its demo and a picture shipped with the skill', () => {
+  const dir = path.join(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..', 'assets', 'library');
+  const motion = JSON.parse(fs.readFileSync(path.join(dir, 'motion.json'), 'utf8')).entries.filter((e) => e.tags.topic === 'depth');
+  const recipes = new Set(motion.map((e) => e.scene && e.scene.recipe));
+  assert.deepEqual([...recipes].sort(), ['points', 'ripple']);
+  // Nothing drawn as a stand-in for a real thing: an object scene only ever shows the business's own model.
+  for (const e of motion) assert.notEqual(e.scene.recipe, 'object', e.id);
+  for (const e of motion) {
+    assert.ok(fs.statSync(path.join(dir, 'previews', e.preview)).size > 1000, e.preview);
+    assert.match(e.demo, /^demos\/depth\.html\?d=[a-z-]+$/);
+    assert.ok(e.he && e.he.description, `${e.id} he`);
+  }
+});

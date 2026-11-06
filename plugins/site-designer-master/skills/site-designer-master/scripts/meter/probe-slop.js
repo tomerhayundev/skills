@@ -4,6 +4,13 @@ window.__SDM_EXTRA = async function (h) {
   var PASS = (window.__SDM_OPTS || {}).pass || 'main';
   var all = [].slice.call(document.querySelectorAll('body *')).filter(function (e) { return !/^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE|HEAD|META|LINK)$/.test(e.tagName); });
   var px = function (v) { return parseFloat(v) || 0; };
+  var scenes = await sceneFacts(h);
+  var canvases = [].slice.call(document.querySelectorAll('canvas')).filter(function (c) { return !c.closest('[data-scene]') && h.visible(c) && c.getAttribute('aria-hidden') !== 'true'; })
+    .filter(function (c) { return !(c.getAttribute('role') === 'img' && (c.getAttribute('aria-label') || '').trim()); }).map(function (c) { return { sel: h.sel(c) }; });
+  var base = { scenes: scenes, canvases: canvases };
+  var withBase = function (o) { for (var k in base) o[k] = base[k]; return o; };
+
+  if (PASS === 'nowebgl') return withBase({});
 
   if (PASS === 'stubio') {
     // Scroll-triggered reveals never fire here: text that is still invisible would stay invisible for anyone whose script fails.
@@ -20,7 +27,7 @@ window.__SDM_EXTRA = async function (h) {
       }
       if (op < 0.1 || !vis) hidden.push({ sel: h.sel(el), sample: own.slice(0, 50) });
     });
-    return { hidden: hidden };
+    return withBase({ hidden: hidden });
   }
 
   if (PASS === 'motion') {
@@ -32,7 +39,7 @@ window.__SDM_EXTRA = async function (h) {
         if (t.iterations === Infinity || (t.duration || 0) > 100) running.push({ sel: a.effect && a.effect.target ? h.sel(a.effect.target) : '?', name: a.animationName || a.id || a.constructor.name, infinite: t.iterations === Infinity });
       });
     } catch (e) { /* no animations API */ }
-    return { running: running };
+    return withBase({ running: running });
   }
 
   var gradText = [], gradients = [], shadows = [], cards = [], tiles = 0, eyebrows = [], filled = [], buttons = [], mixed = [], colors = {};
@@ -93,11 +100,30 @@ window.__SDM_EXTRA = async function (h) {
   }
   [].forEach.call(clone.querySelectorAll('script,style,noscript,template,[hidden],[aria-hidden=true],a[href^="tel:"],a[href^="mailto:"]'), function (n) { n.remove(); });
   [].forEach.call(clone.querySelectorAll('footer p, footer small, footer div'), function (n) { if (/©|&copy;|copyright/i.test(n.textContent)) n.remove(); });
-  return {
+  return withBase({
     gradText: gradText, gradients: gradients, shadows: shadows, nestedCards: cards, iconTiles: tiles, eyebrows: eyebrows, filled: filled,
     buttons: buttons, mixedHeadlines: mixed, colors: Object.keys(colors),
     // The quoted words only: the attribution (footer, cite, caption) is not part of the quote.
     quotes: [].map.call(document.querySelectorAll('main blockquote, main q'), function (q) { var c = q.cloneNode(true); [].forEach.call(c.querySelectorAll('footer, cite, figcaption'), function (n) { n.remove(); }); return c.textContent.replace(/\s+/g, ' ').trim(); }).filter(Boolean),
     copy: visibleCopy(), numbersText: clone.textContent.replace(/\s+/g, ' '),
-  };
+  });
 };
+
+// 3D scenes (three/stage.js): waits until each has started, kept its poster or failed, then reports what shows.
+async function sceneFacts(h) {
+  var els = [].slice.call(document.querySelectorAll('[data-scene]'));
+  if (!els.length) return [];
+  for (var n = 0; n < 80; n++) {
+    var busy = els.some(function (e) { return !e.__sdm || e.__sdm.state === 'waiting' || e.__sdm.state === 'loading'; });
+    if (!busy) break;
+    await new Promise(function (r) { setTimeout(r, 100); });
+  }
+  return els.map(function (e) {
+    var img = e.querySelector('img'), canvas = e.querySelector('canvas'), st = e.__sdm || {};
+    var sample = null;
+    if ((st.state === 'running' || st.state === 'still') && st.sample) { try { sample = st.sample(); } catch (err) { sample = { error: String(err && err.message) }; } }
+    var posterShown = !!img && img.complete && img.naturalWidth > 0 && getComputedStyle(img).visibility !== 'hidden' && getComputedStyle(img).display !== 'none' && Number(getComputedStyle(img).opacity) > 0.1;
+    return { name: e.getAttribute('data-scene'), sel: h.sel(e), state: st.state || 'no stage', canvas: !!canvas, canvasHidden: !canvas || canvas.getAttribute('aria-hidden') === 'true',
+      poster: !!img, posterLazy: !!img && img.loading === 'lazy', posterShown: posterShown, sample: sample };
+  });
+}

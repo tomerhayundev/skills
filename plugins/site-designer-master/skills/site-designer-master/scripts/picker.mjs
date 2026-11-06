@@ -146,7 +146,13 @@ export function registerPicker({ work, brief, libraryDir = path.join(SKILL_DIR, 
     const p = ctx.url.pathname;
     if (p === '/_picker' || p === '/_picker/') return file(res, APP, 'index.html');
     if (p.startsWith('/_picker/app/')) return file(res, APP, p.slice('/_picker/app'.length));
-    if (p.startsWith('/_picker/pack/')) return file(res, path.join(me.libraryDir, 'pack'), p.slice('/_picker/pack'.length));
+    if (p.startsWith('/_picker/pack/')) {
+      const rel = p.slice('/_picker/pack'.length);
+      const packed = inside(path.join(me.libraryDir, 'pack'), decodeURIComponent(rel));
+      return file(res, path.join(me.libraryDir, packed && fs.existsSync(packed) ? 'pack' : 'previews'), rel);
+    }
+    // The 3D demos run on the site kit's own stage and scenes.
+    if (p.startsWith('/_picker/library/three/')) return file(res, path.join(SKILL_DIR, 'assets', 'site-kit', 'three'), p.slice('/_picker/library/three'.length));
     if (p.startsWith('/_picker/library/demos/')) return file(res, path.join(me.libraryDir, 'demos'), p.slice('/_picker/library/demos'.length));
     if (p.startsWith('/_picker/work/')) return file(res, me.work, p.slice('/_picker/work'.length));
     if (p === '/_picker/api/state') {

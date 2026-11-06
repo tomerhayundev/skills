@@ -37,6 +37,20 @@ When the folder has `system-1440.png`, it shows every colour, type size, space a
 Name each place a page drifts from the system: a colour, a size or a corner that is not on that sheet, or the same
 part drawn two ways on two pages. One system used everywhere is what makes a site read as designed.
 
+## 3c. A 3D scene
+
+When the brief has a `scene`, find it on its page (the meter drew one frame of it). Judge it against the job
+sentence and the art direction in the brief:
+- Does it show the business's own thing, in the site's colours, lit like a real object, and sitting in the grid
+  with the words beside it?
+- Or is it one of the 3D tells: a tutorial object, a violet glass world, glow behind the headline, flat default
+  light, stock 3D shown as the product?
+
+Then hold it to the bar: is the page clearly better with the scene than with the business's photograph in its
+place? Fine, tidy or "not bad" is a no, and the fix is "replace the scene with the photograph". Anything drawn in
+code to stand for a real thing (a product, a food, a plant) is a no. A page whose only idea is the scene fails the
+5-second test.
+
 ## 4. Premium is evidence
 
 Pretty gets a site chosen; evidence that it was cared for makes it feel worth more. Look for it:

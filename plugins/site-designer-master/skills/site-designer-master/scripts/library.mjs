@@ -10,6 +10,13 @@ export const FACETS = ['family', 'mood', 'density', 'colour', 'type', 'layout', 
 export const PAGE = 50;
 const REQUIRED = ['id', 'shelf', 'url', 'description', 'bestUse', 'tags', 'added', 'preview'];
 
+// A picture lives in the downloaded pack, or ships with the skill in previews/ (pictures newer than the pack).
+export function picturePath(dir, rel) {
+  const inPack = path.join(dir, 'pack', rel);
+  if (fs.existsSync(inPack)) return inPack;
+  return path.join(dir, 'previews', rel);
+}
+
 export function loadLibrary(dir) {
   const entries = [];
   const errors = [];
@@ -20,7 +27,7 @@ export function loadLibrary(dir) {
       const missing = REQUIRED.filter((k) => e[k] === undefined);
       if (missing.length) { errors.push(`${e.id || '?'}: missing ${missing.join(', ')}`); continue; }
       if (e.hidden) continue; // curation: the picture is a loader, a banner or a blocked page
-      const pic = path.join(dir, 'pack', e.preview);
+      const pic = picturePath(dir, e.preview);
       const st = fs.existsSync(pic) ? fs.statSync(pic) : null;
       if (!st || st.size === 0) continue;
       entries.push(e);

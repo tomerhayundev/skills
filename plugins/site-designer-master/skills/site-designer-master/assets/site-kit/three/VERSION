@@ -1,0 +1,9 @@
+three.js 0.187.0 (MIT, see three-LICENSE.txt), bundled once into one classic script so a site works from disk
+and in the meter (module scripts do not load from file://). Contents: everything exported by 'three', plus
+RoomEnvironment and GLTFLoader from three/addons, on the global THREE.
+Made with esbuild 0.25.10:
+  entry.js:  export * from 'three';
+             export { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+             export { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+  npx esbuild entry.js --bundle --format=iife --global-name=THREE --minify --legal-comments=eof --target=es2020 --outfile=three.min.js
+three.min.js sha256 379e72ccc66d4ec300fb161ce729ca51c16541ee90e73398abb62c1970444265

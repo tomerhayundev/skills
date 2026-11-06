@@ -120,6 +120,13 @@
       "status": "banned",
       "detector": "a blockquote or q in main whose words are not in the brief",
       "fill": "Quote a real review or customer line from the brief with its source; with none, state the proof itself (the rating and where it comes from) without putting words in anyone's mouth."
+    },
+    {
+      "id": "SCENE_COUNT",
+      "wave": "2025-26",
+      "status": "warned",
+      "detector": "more than one [data-scene] on a page",
+      "fill": "Keep one scene with a one-sentence job written in the brief, tied to the business's own thing or places; every other moment on the page is a photograph, a real number or the words themselves."
     }
   ],
   "copy": {

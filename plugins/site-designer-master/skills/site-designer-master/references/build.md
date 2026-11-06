@@ -36,6 +36,18 @@ strings for English and Hebrew, `base.css` (logical properties, focus ring, stat
 controls) and `site.js` (phone menu, the sent-form message). Override a partial in `<src>/partials/`
 instead of editing the kit.
 
+## 3D scenes
+
+A page that names a scene (`data-scene`, see [3D](three-d.md)) gets the stage in its head, and the build copies
+the 3D kit into `three/` (only then). The build stops on a scene the kit does not have, a scene without its poster
+first inside it, a poster without width and height or a lazy one, and an `object` scene without the business's own
+3D model. (A scene the user brings already made can go in `src/scenes/<name>.js`; it may not run its own drawing
+loop.)
+
+| Step | Command | What it does |
+| --- | --- | --- |
+| Posters | `node ${CLAUDE_SKILL_DIR}/scripts/poster.mjs <src>` | Draws each scene once and writes its poster at the path its `<img>` names, inside `assets/`. Run before the build, and again after a scene changes. |
+
 ## Worst-case data
 
 Before verifying, build once with `--data=<worst-case.json>` holding the longest real names, a category with

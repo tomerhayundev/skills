@@ -49,6 +49,10 @@ export function buildPrompt({ brief = {}, taste = {}, entries = [], dislikes = [
     if (p.entry.own === 'picture') { L(`- ${p.id} (a picture the user brought: ${p.entry.file}): look at it before choosing directions; it has no measured values.${liked}`); continue; }
     if (p.entry.own === 'link') L(`- ${p.id} (the user's own link, ${p.entry.url}): mix its parts like any pick, never copy it.${p.entry.status === 'failed' ? ' It could not be captured; open it yourself.' : ''}${liked}`);
     else L(`- ${p.id} (${p.entry.shelf}): ${describe(p.entry)}. Best for: ${list(p.entry.bestUse)}.${liked}`);
+    if (p.entry.scene && /^[a-z-]+$/.test(p.entry.scene.recipe || '')) {
+      const attrs = Object.entries(p.entry.scene.attrs || {}).filter(([k, v]) => /^[a-z]+$/.test(k) && /^[\w ,.;-]+$/.test(String(v))).map(([k, v]) => `${k} ${v}`).join(', ');
+      L(`  3D scene: recipe ${p.entry.scene.recipe}${attrs ? ` (${attrs})` : ''}. Only on a page where it has a job only 3D can do, and only if the page is clearly better with it than with the business's photograph: write the job and the art direction in the brief's scene first, in the site's own colours; nothing drawn in code (references/three-d.md).`);
+    }
     if (p.entry.design) measured(p.id, p.entry.design).forEach(L);
     if (p.entry.phone) L(`  phone picture: ${p.entry.phone} (how it holds at phone width).`);
   }

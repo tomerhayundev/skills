@@ -340,6 +340,48 @@
       "severity": "warn",
       "since": "2026-11-01",
       "source": "final review: text on pictures or gradients cannot be measured"
+    },
+    "SCENE_BLANK": {
+      "area": "3d",
+      "category": "quality",
+      "severity": "fail",
+      "since": "2026-11-06",
+      "source": "three-d.md"
+    },
+    "SCENE_POSTER": {
+      "area": "3d",
+      "category": "quality",
+      "severity": "fail",
+      "since": "2026-11-06",
+      "source": "three-d.md; performance.md (LCP)"
+    },
+    "SCENE_FALLBACK": {
+      "area": "3d",
+      "category": "quality",
+      "severity": "fail",
+      "since": "2026-11-06",
+      "source": "three-d.md; motion.md (reduced motion)"
+    },
+    "SCENE_COUNT": {
+      "area": "3d",
+      "category": "slop",
+      "severity": "warn",
+      "since": "2026-11-06",
+      "source": "three-d.md (one 3D idea per page)"
+    },
+    "SCENE_UNCHECKED": {
+      "area": "3d",
+      "category": "quality",
+      "severity": "warn",
+      "since": "2026-11-06",
+      "source": "three-d.md"
+    },
+    "CANVAS_ARIA": {
+      "area": "a11y",
+      "category": "quality",
+      "severity": "fail",
+      "since": "2026-11-06",
+      "source": "a11y.md; three-d.md"
     }
   }
 }
