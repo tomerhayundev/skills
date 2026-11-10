@@ -256,3 +256,12 @@ test('the kit has no drawn shapes and no background field: only what looks right
   assert.deepEqual(fs.readdirSync(kit).sort(), ['object.js', 'points.js', 'ripple.js']);
   assert.doesNotMatch(fs.readFileSync(path.join(kit, 'object.js'), 'utf8'), /LatheGeometry|TorusGeometry|ExtrudeGeometry/);
 });
+
+test('the phone menu grows from the header that holds its button, never from nowhere, and closes at once', () => {
+  const css = fs.readFileSync(path.join(SKILL_DIR, 'assets', 'site-kit', 'base.css'), 'utf8');
+  const phone = (/@media \(max-width: 767px\)\s*\{([\s\S]*?)\n\}/.exec(css) || [])[1] || '';
+  const open = (/\.nav-open \.site-nav \{([^}]*)\}/.exec(phone) || [])[1] || '';
+  assert.match(open, /transform-origin:\s*top/, 'it opens from its top edge, where the button is');
+  assert.match(open, /transition:[^;]*opacity[^;]*transform/);
+  assert.match(phone, /@starting-style\s*\{\s*\.nav-open \.site-nav\s*\{[^}]*opacity:\s*0[^}]*transform:/);
+});

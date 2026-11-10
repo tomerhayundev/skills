@@ -89,3 +89,9 @@ test('a page with a 3D scene is walked in a real browser: the poster, the fade, 
   for (const s of ['/about/', 'fades in over the poster', 'scrolled out of view', 'reduced motion', 'at 375px', 'the job in the brief']) assert.ok(w.includes(s), s);
   assert.doesNotMatch(walkList(built()), /## 3D/);
 });
+
+test('every menu and message is walked for where it comes from: the control that opened it, not the screen centre', () => {
+  const md = walkList(built(), { url: 'http://127.0.0.1:4321' });
+  assert.match(md, /\? Origin: open every menu, dropdown and popover: it grows from the control that opened it, never from the screen centre, and closes faster than it opened/);
+  assert.match(md, /a message \(a sent form, a notice\) arrives from where it sits; only a dialog comes from the centre/);
+});

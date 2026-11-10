@@ -29,7 +29,9 @@ main:focus { outline: none; }
 @media (max-width: 767px) {
   .nav-toggle { display: inline-block; }
   .site-nav { display: none; }
-  .nav-open .site-nav { display: block; position: absolute; inset-inline: 0; inset-block-start: 100%; background: var(--color-ground); padding-block: var(--space-4, 16px); border-block-end: 1px solid var(--color-border); }
+  /* The menu grows down from the header that holds its button (never from the screen centre), and closes at once. */
+  .nav-open .site-nav { display: block; position: absolute; inset-inline: 0; inset-block-start: 100%; background: var(--color-ground); padding-block: var(--space-4, 16px); border-block-end: 1px solid var(--color-border); transform-origin: top; transition: opacity calc(180ms * var(--motion-scale, 1)) ease-out, transform calc(180ms * var(--motion-scale, 1)) cubic-bezier(0.16, 1, 0.3, 1); }
+  @starting-style { .nav-open .site-nav { opacity: 0; transform: translateY(-4px) scaleY(0.97); } }
   .nav-open .site-nav ul { flex-direction: column; }
 }
 

@@ -5,7 +5,7 @@ description: Use when someone asks to design, build, make or redesign a website,
 
 # Site designer master
 
-This is version 0.4.0 of the skill.
+This is version 0.4.1 of the skill.
 
 You design a complete website and hand over a **real, working local site**: every page built, real links
 between pages, forms and states that work, checked in a real browser. The whole package, not only the look:

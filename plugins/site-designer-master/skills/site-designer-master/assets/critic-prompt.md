@@ -31,6 +31,12 @@ view; proof next to the ask; hierarchy you can read when squinting; a phone layo
 squeezed; rhythm (dense passages earn quiet ones); the copy in the business's own words; anything that reads
 as generated (see the slop catalogue); anything invented (numbers, reviews, names, people).
 
+Then zoom in on the details, where a page feels cheap without anyone saying why: inside a card or form, is the
+title set apart by weight and ink, or by a pile of sizes (more than 3 in one component is a finding)? Are the
+greys tinted toward the brand, or dead grey? Is a shadow two soft layers that are barely there, or one dark blur
+with a dark border? In the frames over time, does every menu grow from the control that opened it, or fade up
+from nowhere?
+
 ## 3b. Against the system
 
 When the folder has `system-1440.png`, it shows every colour, type size, space and corner the site is made from.

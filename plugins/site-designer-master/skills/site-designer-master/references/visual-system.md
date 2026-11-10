@@ -88,7 +88,8 @@ experience (portfolio, launch).
 | Uppercase | only short labels/nav, with +0.04 to +0.08 em; never body (>= 80 chars in caps = fail) |
 | Headline length | hero 4-8 words; <= 2 lines at 1440, <= 3 at 390 |
 | Wrapping | `text-wrap: balance` on headings, `pretty` on body; no one-word last line on display type |
-| Weights | hierarchy by size and space first; display may be regular; <= 3 weights per family on a page |
+| Weights | between sections of a page, hierarchy by size and space first; display may be regular; <= 3 weights per family on a page |
+| Inside a component | a card, form, list row or price block builds hierarchy from weight and ink, not size: its title is at most one step larger than its body (often the same size), one weight heavier and in `ink`; secondary lines in `ink-muted`. At most 3 font sizes inside one component; five sizes on one card is the generated look. |
 | Numbers | `font-variant-numeric: tabular-nums` in tables, prices lists, anything compared |
 | Paragraph rhythm | space between paragraphs = 0.75-1 em of body, or a first-line indent, never both |
 | Light text on dark | +0.05 line height, one weight step heavier |
@@ -105,6 +106,7 @@ experience (portfolio, launch).
 | Proportion | ground 70-90% of a screen; accent < 5% and on the action plus at most one detail. |
 | Contrast floors | body and small text 4.5:1; large text (>= 24 px, or >= 19 px bold) 3:1; UI parts, icons, focus ring, input borders 3:1. Default for running text: >= 7:1. |
 | Muted text | still >= 4.5:1; on a coloured surface, tint muted text from that hue, never plain grey. |
+| Neutrals | every neutral role (`ground`, `surface`, `surface-2`, `border`, `ink`, `ink-muted`) carries the accent's hue at very low chroma (OKLCH chroma about 0.005-0.02), so the greys belong to the brand and none is a dead grey. A brand whose own greys are cool or warm keeps them. |
 | Surfaces | separated by a small lightness step (2-6 L points) before lines or shadows. |
 | Pure black / white | grounds use tinted near-black/near-white; pure #000 text on #fff is allowed for Read mode. |
 | Dark theme | designed, not inverted: `color-scheme: dark`, deep tinted ground, depth by surface steps, muted text re-checked. Only when the picks or brand ask for it. |
@@ -118,7 +120,7 @@ experience (portfolio, launch).
 | Radius system | chosen once, from the picks: all square (0-2), soft (6-12), or round (pill buttons, 16-24 panels). At most 3 radius values for panels. |
 | Nested radius | inner = outer - padding. |
 | Borders | 1 px hairline in `border` role; one separation method per surface: border OR shadow OR tone step, never hairline + wide shadow. |
-| Elevation scale | 0 (flat, default), 1 (sticky header, dropdown: small soft shadow), 2 (popover), 3 (modal). Shadows tinted to the ground hue, never coloured glows; no resting shadows on cards by default. |
+| Elevation scale | 0 (flat, default), 1 (sticky header, dropdown: small soft shadow), 2 (popover), 3 (modal). Shadows tinted to the ground hue, never coloured glows; no resting shadows on cards by default. Each level is two layers, a tight faint contact shadow under a wider softer one, never one big dark blur: level 1 `0 1px 2px <ink at 6%>, 0 2px 8px <ink at 6%>`; level 2 `0 1px 3px <8%>, 0 8px 24px <8%>`; level 3 `0 2px 6px <10%>, 0 24px 48px <12%>`, colours from the `ink` role. |
 | Cards | only when elevation means something; never nested; rows of equal cards with icon tiles are a tell. |
 | Coloured side stripes | no `border-inline-start` > 1 px as an accent on cards or alerts. |
 | Z-index scale | base 0, raised 10, sticky 100, dropdown 200, overlay 300, modal 400, toast 500. No other values. |

@@ -85,6 +85,9 @@ export function walkList(siteDir, { url = 'http://127.0.0.1:4321' } = {}) {
   L('- ? Keyboard: Tab from the top reaches the skip link first, then every control in visual order, each with a visible focus ring never hidden under the header');
   if (fs.existsSync(path.join(siteDir, 'tweaks.js'))) L('- ? Tweak panel: change the accent, Save, the page reloads with it; a value the floors refuse shows its error and is not saved');
   L('- ? Motion: frames over time (several screenshots or a recording) on every page that moves; with reduced motion on, nothing keeps moving');
+  if (list.some((p) => /class="nav-toggle"|<form\b|<details\b|\bpopover\b|aria-haspopup|role="(menu|dialog|status|alert)"/.test(p.html))) {
+    L('- ? Origin: open every menu, dropdown and popover: it grows from the control that opened it, never from the screen centre, and closes faster than it opened; a message (a sent form, a notice) arrives from where it sits; only a dialog comes from the centre');
+  }
   L('- ? Every button and link that promises something does it (a phone link dials, a map link opens the map, a download downloads)');
   L('');
   L('## Break it on purpose');
