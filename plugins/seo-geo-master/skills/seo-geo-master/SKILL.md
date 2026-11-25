@@ -7,7 +7,7 @@ description: Use when someone asks about SEO, GEO, AEO or AI search visibility, 
 
 One place for search visibility: classic search (Google, Bing) and generative search (AI Overviews, AI Mode, ChatGPT, Claude, Perplexity, Copilot). Google says its AI features are rooted in the same ranking and quality systems and retrieve from the same index as Search, so GEO starts with sound SEO; what changes is what you measure, who may crawl, and how citable the content is. Each job has its own file in `jobs/`; the rules below apply to all of them.
 
-This is version 0.2.0 of the skill. Asked which version is loaded, answer with this line.
+This is version 0.2.1 of the skill. Asked which version is loaded, answer with this line.
 
 ## 1. Read before asking
 

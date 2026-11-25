@@ -25,7 +25,7 @@ The site already ranks and the ask is to grow it, or Search Console data exists:
    - An AI answer or another feature absorbs the click: position holds while clicks fall. Watch it; do not rewrite.
    - Intent mismatch: the page answers a different question than the query asks (`jobs/page.md` step 2).
    - A generic or truncated title (judge on the live result) or a stale year in the title or snippet.
-   - A question the page never answers plainly (questions below the curve in the Query types section of `gsc.md`): add it as a heading in the searcher's words with the answer right under it, on the page that ranks, when it fits what that page is about. A new page per question, or FAQ markup for a rich result, is not the fix.
+   - A question the page never answers plainly (questions below the curve in the Query types section of `gsc.md`): add it as a heading in the searcher's words with the answer right under it, on the page that ranks, when it fits what that page is about. A new page per question is not the fix, and FAQ markup brings no rich result (they ended on 2026-05-07).
 4. **Decay**, with `--compare` on equal periods. The other columns point to the cause: impressions falling means demand or lost visibility, position falling means ranking, clicks falling alone means CTR or the result page.
    - Hypotheses: outdated content, a stronger competitor, an intent shift, cannibalization, an AI answer now answering the query.
    - Check each before acting: dates and figures on the page, who moved up and why, whether the result format changed, the query and page data, whether an AI answer now shows.
