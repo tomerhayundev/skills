@@ -681,3 +681,39 @@ test('decay: a page that lost 700 clicks (35%) is listed before 40 pages that lo
   assert.match(text, /most clicks lost/i, 'the section says how it is ordered');
   assert.equal(text.split('\n').filter(l => l.startsWith('| /')).length, 30);
 });
+
+test('query types: a section with every type, its Search Console filter, and the questions the site appears for', () => {
+  const qs = 'Top queries,Clicks,Impressions,CTR,Position\n'
+    + 'oak table,40,800,5%,4.1\nwalnut table,45,900,5%,4.4\noak bench,50,1000,5%,4.8\n'
+    + 'how to oil an oak table,2,1100,0.18%,4.6\nאיך לשמן שולחן אלון,30,950,3.16%,5.0\noak vs walnut,9,600,1.5%,8.0\n';
+  const dir = basicExport({ 'Queries.csv': qs });
+  const qp = path.join(dir, 'pairs.txt');
+  fs.writeFileSync(qp, 'Query,Page,Clicks,Impressions,CTR,Position\nhow to oil an oak table,https://shop.test/care,2,1100,0.18%,4.6\n');
+  const r = analyzeExport(dir, { updates: [], breaks: [], queryPageFile: qp });
+  assert.deepEqual(r.queryTypes.questions.map(q => q.query), ['how to oil an oak table', 'איך לשמן שולחן אלון']);
+  assert.equal(r.queryTypes.questions[0].belowCurve, true);
+  assert.equal(r.queryTypes.questions[0].page, 'https://shop.test/care');
+  assert.equal(r.queryTypes.questions[1].page, null);
+  const md = section(renderGscMarkdown(r), 'Query types');
+  assert.match(md, /\| Questions \| 2 \| 33\.3% \|/);
+  assert.match(md, /Comparison: \\b\(vs\|versus/, 'the filter is printed as it is pasted, not escaped for a table');
+  assert.match(md, /Search Console knows only English letters/);
+  assert.match(md, /\| how to oil an oak table \| questions \| 4\.6 \| 1,100 \| 2 \| 0\.2% \| yes \| https:\/\/shop\.test\/care \|/);
+  assert.match(md, /\| איך לשמן שולחן אלון \| questions \|.*\| not in the file \|/);
+  assert.doesNotMatch(md, /Incomplete/);
+});
+
+test('query types: a capped queries export says to filter in Search Console and export again', () => {
+  const rows = Array.from({ length: 1000 }, (_, i) => `query ${i},1,100,1%,9`).join('\n');
+  const dir = basicExport({ 'Queries.csv': 'Top queries,Clicks,Impressions,CTR,Position\n' + rows + '\n' });
+  const md = section(renderGscMarkdown(analyzeExport(dir, { updates: [], breaks: [] })), 'Query types');
+  assert.match(md, /Incomplete \(1,000-row cap\).*paste one pattern from the list below and export again/);
+  assert.match(md, /None found\./);
+});
+
+test('query types: a pages-only export has no query types section', () => {
+  const dir = writeExport({ 'Pages.csv': 'Top pages,Clicks,Impressions,CTR,Position\nhttps://shop.test/,100,3000,3.33%,3.0\n', 'Chart.csv': chartCsv('2026-01-01', 30) });
+  const r = analyzeExport(dir, { updates: [], breaks: [] });
+  assert.equal(r.queryTypes, null);
+  assert.doesNotMatch(renderGscMarkdown(r), /## Query types/);
+});

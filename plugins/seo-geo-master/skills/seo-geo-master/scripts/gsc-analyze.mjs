@@ -4,6 +4,7 @@ import path from 'node:path';
 import { readGscTable, parseCsv } from './lib/csv.mjs';
 import { loadData } from './lib/data.mjs';
 import { parseArgs, isMain, writeJson, writeText } from './lib/report.mjs';
+import { queryTypes, topPageByQuery } from './lib/query-types.mjs';
 
 const HELP = `Usage: node gsc-analyze.mjs <export-dir> [--compare <older-export-dir>] [--query-page <file.csv>]
                          [--brand "name,other name"] [--min-impressions N] [--out seo/gsc]
@@ -11,8 +12,10 @@ const HELP = `Usage: node gsc-analyze.mjs <export-dir> [--compare <older-export-
 Reads Search Console Performance exports (CSV, English or Hebrew headers) from a folder (unzip the
 download first): Queries, Pages and Chart or Dates are analysed; Countries, Devices and Search
 appearance files are recognised but not analysed. Reports data breaks in the date range, a drop check,
-striking distance (positions 4-7 and 8-20), low CTR against the site's own curve, decay (with --compare)
-and cannibalization (with --query-page or a query+page export). Every number comes from the export; an
+striking distance (positions 4-7 and 8-20), low CTR against the site's own curve, query types
+(questions, prompt-style, comparison, price, problem, 8+ words; English and Hebrew) with the Search
+Console regex filter for each, decay (with --compare) and cannibalization (with --query-page or a
+query+page export). Every number comes from the export; an
 export of 1,000 rows or more is called incomplete. Writes gsc.json and gsc.md to --out (default seo/gsc).
 --brand leaves queries that contain a brand name out of the CTR curve and the low CTR list. Decay rows
 are ordered by the clicks a page lost, with the percentage as a column. Exports written with decimal
@@ -334,7 +337,12 @@ export function analyzeExport(dir, opts = {}) {
     pagesFloor: impressionFloor(pages, opts.minImpressions),
     lowCtrPages: pages.length ? lowCtr(pages, pagesCurve, impressionFloor(pages, opts.minImpressions)) : [],
     compare: null, decay: null, cannibalization: null, cannibalizationFile: null,
+    queryTypes: null,
   };
+  if (queries.length) {
+    const med = Object.fromEntries(curve.map(c => [c.bucket, c.n >= 3 ? c.medianCtr : null]));
+    result.queryTypes = queryTypes(queries, { floor, medianOf: p => med[bucketOf(p)] ?? null, ctrOf });
+  }
 
   if (opts.compareDir) {
     const c = readExportDir(opts.compareDir);
@@ -387,6 +395,11 @@ export function analyzeExport(dir, opts = {}) {
   if (qp) {
     result.cannibalization = cannibalization(qp.rows, floor);
     result.cannibalizationFile = qp.file;
+    if (result.queryTypes) {
+      const top = topPageByQuery(qp.rows);
+      for (const q of result.queryTypes.questions) q.page = top.get(q.query) ?? null;
+      result.queryTypes.pagesFrom = qp.file;
+    }
   }
   result.unrecognised = unrecognised;
   return result;
@@ -515,6 +528,29 @@ export function renderGscMarkdown(o) {
     L.push(`| ${key === 'query' ? 'Query' : 'Page'} | Position | Impressions | CTR | Bucket median | Clicks lost |`, '| --- | --- | --- | --- | --- | --- |');
     for (const r of rows.slice(0, 20)) L.push(`| ${cell(r[key])} | ${pos1(r.position)} | ${n0(r.impressions)} | ${pct(r.ctr)} | ${pct(r.bucketMedian)} | ${n0(r.lostClicks)} |`);
     if (rows.length > 20) L.push('', cutNote(rows.length, 20));
+  }
+
+  if (o.queryTypes) {
+    const qt = o.queryTypes;
+    L.push('', '## Query types', '');
+    L.push(`Measured from the queries export (${range}): each query is tagged by its words, in English and Hebrew, and a query can carry several tags. Shares are of the ${n0(qt.total.queries)} queries in this export.`, '');
+    if (o.capped?.queries) L.push(...incomplete('the export holds only the top 1,000 queries, which leaves out most long and question queries. In Search Console, add a Query filter with Custom (regex), paste one pattern from the list below and export again: that export holds up to 1,000 rows of that type alone.'));
+    L.push(...caution(o.measurementBreaks));
+    L.push('| Type | Queries | Share of queries | Impressions | Clicks | CTR |', '| --- | --- | --- | --- | --- | --- |');
+    for (const t of qt.types) L.push(`| ${t.name} | ${n0(t.queries)} | ${pct(qt.total.queries ? t.queries / qt.total.queries : null)} | ${n0(t.impressions)} | ${n0(t.clicks)} | ${t.impressions ? pct(t.clicks / t.impressions) : 'none'} |`);
+    L.push('', 'Prompt-style and 8+ word queries are typed the way people talk to a chat assistant. Their share says how people search for this site; it does not measure AI visibility (jobs/geo.md does).', '');
+    L.push('Search Console filters, one per type (Performance > Add filter > Query > Custom (regex), Matches regex). Matching ignores case. The Hebrew part ends on a space or the end of the query, because \\b in Search Console knows only English letters:', '', '```');
+    for (const t of qt.types) L.push(`${t.name}: ${t.regex}`);
+    L.push('```', '');
+    L.push(`### Questions the site already appears for (impression floor ${n0(o.floor)}, positions up to 20)`, '');
+    L.push(`Question and prompt-style queries, the most impressions first. Below the curve: CTR under 70% of the median of its position bucket in the curve above (blank when the bucket has too few rows).${qt.pagesFrom ? ` Page: the page with the most impressions for the query in ${cell(qt.pagesFrom)}.` : ' Which page ranks for each needs a query+page export (--query-page), or in Search Console click the query and open the Pages tab.'} Before answering one on a page, read its live result: an AI answer or another feature on top while the position holds means the click goes there, so watch it instead of rewriting. Add a question only where it fits what the page is about, as a heading in the searcher's words with the answer right under it; never a page per question, never FAQ markup for a rich result.`, '');
+    if (!qt.questions.length) L.push('None found.');
+    else {
+      L.push(`| Query | Types | Position | Impressions | Clicks | CTR | Below the curve |${qt.pagesFrom ? ' Page |' : ''}`, `| --- | --- | --- | --- | --- | --- | --- |${qt.pagesFrom ? ' --- |' : ''}`);
+      const names = Object.fromEntries(qt.types.map(t => [t.id, t.name.toLowerCase()]));
+      for (const q of qt.questions.slice(0, 20)) L.push(`| ${cell(q.query)} | ${q.types.map(id => names[id]).join(', ')} | ${pos1(q.position)} | ${n0(q.impressions)} | ${n0(q.clicks)} | ${pct(q.ctr)} | ${q.belowCurve === null ? '' : q.belowCurve ? 'yes' : 'no'} |${qt.pagesFrom ? ` ${q.page ? cell(q.page) : 'not in the file'} |` : ''}`);
+      if (qt.questions.length > 20) L.push('', cutNote(qt.questions.length, 20));
+    }
   }
 
   if (o.decay) {

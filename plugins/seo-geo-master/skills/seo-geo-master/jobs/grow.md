@@ -9,7 +9,7 @@ The site already ranks and the ask is to grow it, or Search Console data exists:
 `<skill>` is this skill's folder. `<out>` is `seo` when the owner agreed to the project file, else the scratch folder. In Git Bash, write export paths without a leading `/`, or start the command with `MSYS_NO_PATHCONV=1`.
 
 - `node <skill>/scripts/gsc-analyze.mjs <export dir> [--compare <older export dir>] [--query-page <file>] [--brand "<brand names>"] --out <out>/gsc`. The export is the unzipped Performance export folder (`references/data-sources.md`). The older folder for `--compare` covers an equal period. `--brand` keeps brand queries out of the CTR curve.
-- Read `<out>/gsc/gsc.md` in this order: data breaks, drop check, striking distance, the site's own CTR curve, low CTR, decay, cannibalization. An export of 1,000 rows or more is incomplete: say so in the report.
+- Read `<out>/gsc/gsc.md` in this order: data breaks, drop check, striking distance, the site's own CTR curve, low CTR, query types, decay, cannibalization. An export of 1,000 rows or more is incomplete: say so in the report, and for questions and long queries filter before export (`references/data-sources.md`).
 - `seo/brief.md` (money pages, conversion events), `baseline.md`, `changelog.md` and `decisions.md` for what was already tried.
 - Before any rewrite: the page itself (`node <skill>/scripts/crawl.mjs <url> --max 1 --out <out>/page`) and the live results for each query a change targets, with query, country, language, device and date.
 - `references/measurement.md` for change windows and the data breaks.
@@ -25,6 +25,7 @@ The site already ranks and the ask is to grow it, or Search Console data exists:
    - An AI answer or another feature absorbs the click: position holds while clicks fall. Watch it; do not rewrite.
    - Intent mismatch: the page answers a different question than the query asks (`jobs/page.md` step 2).
    - A generic or truncated title (judge on the live result) or a stale year in the title or snippet.
+   - A question the page never answers plainly (questions below the curve in the Query types section of `gsc.md`): add it as a heading in the searcher's words with the answer right under it, on the page that ranks, when it fits what that page is about. A new page per question, or FAQ markup for a rich result, is not the fix.
 4. **Decay**, with `--compare` on equal periods. The other columns point to the cause: impressions falling means demand or lost visibility, position falling means ranking, clicks falling alone means CTR or the result page.
    - Hypotheses: outdated content, a stronger competitor, an intent shift, cannibalization, an AI answer now answering the query.
    - Check each before acting: dates and figures on the page, who moved up and why, whether the result format changed, the query and page data, whether an AI answer now shows.
